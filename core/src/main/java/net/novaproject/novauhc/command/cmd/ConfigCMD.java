@@ -179,17 +179,15 @@ public class ConfigCMD extends Command {
         uhc.setTimerpvp(config.getPvpTime());
         uhc.setReducSpeed(config.getTimereduc());
 
+        // Scenarios configs
         config.getScenarioConfigs().forEach((name, doc) -> {
-            ScenarioManager.get().getScenarioByName(name).ifPresent(scenario -> {
-                scenario.docToScenario(doc);
-            });
+            ScenarioManager.get().getScenarioByName(name).ifPresent(scenario -> scenario.docToScenario(doc));
         });
 
+        // Enable scenarios
         config.getEnabledScenarios().forEach(name -> {
             ScenarioManager.get().getScenarioByName(name).ifPresent(scenario -> {
-                if (!scenario.isActive()) {
-                    scenario.enable();
-                }
+                if (!scenario.isActive()) scenario.enable();
             });
         });
 
@@ -205,22 +203,33 @@ public class ConfigCMD extends Command {
             Main.getDatabaseManager().getConfigManager().applyPotionStatesToEnum(config.getPotionStates());
         }
 
-        player.sendMessage(ChatColor.GREEN + "✓ Configuration " + ChatColor.GOLD + config.getName() + ChatColor.GREEN + " chargée!");
-        String scenariosStr = String.join(", ", config.getEnabledScenarios());
-        player.sendMessage(ChatColor.YELLOW + "Scénarios: " + ChatColor.WHITE + scenariosStr);
+        player.sendMessage("");
+        player.sendMessage(ChatColor.DARK_GREEN + "╔══════════════════════════════╗");
+        player.sendMessage(ChatColor.GREEN + "   ✓ Configuration chargée : "
+                + ChatColor.GOLD + config.getName());
+        player.sendMessage(ChatColor.DARK_GREEN + "╠══════════════════════════════╣");
+
+        player.sendMessage(ChatColor.YELLOW + "Scénarios activés: "
+                + ChatColor.WHITE + (config.getEnabledScenarios().isEmpty() ? "Aucun"
+                : String.join(", ", config.getEnabledScenarios())));
 
         player.sendMessage(ChatColor.YELLOW + "Taille des équipes: " + ChatColor.WHITE + config.getTeamSize());
-        player.sendMessage(ChatColor.YELLOW + "Taille initiale de la bordure: " + ChatColor.WHITE + config.getBorderSize());
-        player.sendMessage(ChatColor.YELLOW + "Taille finale de la bordure: " + ChatColor.WHITE + config.getFinalsize());
-        player.sendMessage(ChatColor.YELLOW + "Temps PvP: " + ChatColor.WHITE + getFormattedTime(config.getPvpTime()));
-        player.sendMessage(ChatColor.YELLOW + "Activation bordure: " + ChatColor.WHITE + config.getBordecactivation() + " minutes");
+        player.sendMessage(ChatColor.YELLOW + "Bordure initiale: " + ChatColor.WHITE + config.getBorderSize());
+        player.sendMessage(ChatColor.YELLOW + "Bordure finale: " + ChatColor.WHITE + config.getFinalsize());
+        player.sendMessage(ChatColor.YELLOW + "PvP: " + ChatColor.WHITE + getFormattedTime(config.getPvpTime()));
+        player.sendMessage(ChatColor.YELLOW + "Activation bordure: " + ChatColor.WHITE + config.getBordecactivation() + " min");
 
         player.sendMessage(ChatColor.YELLOW + "Protection max: " + ChatColor.WHITE + config.getProtection());
         player.sendMessage(ChatColor.YELLOW + "Diamants max: " + ChatColor.WHITE + config.getDiamant());
         player.sendMessage(ChatColor.YELLOW + "Limite de diamants: " + ChatColor.WHITE + config.getLimiteD());
         player.sendMessage(ChatColor.YELLOW + "Slots max: " + ChatColor.WHITE + config.getSlot());
 
-        player.sendMessage(ChatColor.YELLOW + "Types de stuff: " + ChatColor.WHITE + String.join(", ", config.getStuff().keySet()));
+        player.sendMessage(ChatColor.YELLOW + "Types de stuff: "
+                + ChatColor.WHITE + (config.getStuff().isEmpty() ? "Aucun"
+                : String.join(", ", config.getStuff().keySet())));
+
+        player.sendMessage(ChatColor.DARK_GREEN + "╚══════════════════════════════╝");
+        player.sendMessage("");
     }
 
     private void deleteConfig(Player player, UUID playerUUID, String configName) {

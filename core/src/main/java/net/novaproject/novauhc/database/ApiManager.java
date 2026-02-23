@@ -18,7 +18,7 @@ public class ApiManager {
     private final Plugin plugin;
     private final String apiUrl;
     private final String apiKey;
-    private final Logger log;
+    public final Logger log;
     private final Gson gson;
     private final ScheduledExecutorService scheduler;
 
@@ -82,7 +82,6 @@ public class ApiManager {
                     game.addProperty("uuid", currentGameUuid);
                     body.add("currentGame", game);
                 }
-
                 callAsync("POST", "/server/heartbeat", body);
             } catch (Exception ignored) {}
         }, 30, 30, TimeUnit.SECONDS);
@@ -93,52 +92,126 @@ public class ApiManager {
             post("/server/shutdown", null);
             scheduler.shutdown();
             scheduler.awaitTermination(3, TimeUnit.SECONDS);
+            log.info("Server shut down successfully");
         } catch (Exception ignored) {}
     }
 
     // ═══════════════════════════ GAME ═══════════════════════════
 
-    public CompletableFuture<String> gameStart(String mode, List<String> scenarios,
-                                               Map<String, JsonObject> scenarioConfig,
-                                               int border, List<PlayerInfo> players) {
+// ═══════════════════════════════════════════════════════════════════
+//  GAME MANAGEMENT
+// ═══════════════════════════════════════════════════════════════════
 
+    /**
+     * Démarre une partie
+     */
+    public CompletableFuture<String> gameStart(
+            String mode,
+            String scenario,
+            List<String> scenarios,
+            JsonObject scenarioConfig,
+            int border,
+            List<PlayerInfo> players
+    ) {
         JsonObject body = new JsonObject();
         body.addProperty("mode", mode);
+
+        if (scenario != null && !scenario.isEmpty()) {
+            body.addProperty("scenario", scenario);
+        }
+
         body.add("scenarios", gson.toJsonTree(scenarios));
-        body.add("scenarioConfig", gson.toJsonTree(scenarioConfig));
+        body.add("scenarioConfig", scenarioConfig);
         body.addProperty("border", border);
 
-        JsonArray arr = new JsonArray();
+        JsonArray playerArray = new JsonArray();
         for (PlayerInfo p : players) {
-            JsonObject o = new JsonObject();
-            o.addProperty("uuid", p.uuid());
-            o.addProperty("name", p.name());
-            arr.add(o);
+            JsonObject playerJson = new JsonObject();
+            playerJson.addProperty("uuid", p.uuid());
+            playerJson.addProperty("name", p.name());
+            playerArray.add(playerJson);
         }
-        body.add("players", arr);
+        body.add("players", playerArray);
+
+        log.info("Starting " + mode + " game" + (scenario != null ? " (" + scenario + ")" : ""));
 
         return callAsync("POST", "/game/start", body)
-                .thenApply(r -> {
-                    currentGameUuid = r.getAsJsonObject("data").get("gameUuid").getAsString();
+                .thenApply(response -> {
+                    JsonObject data = response.getAsJsonObject("data");
+                    currentGameUuid = data.get("gameUuid").getAsString();
+                    log.info("Game started with UUID: " + currentGameUuid);
                     return currentGameUuid;
                 });
     }
 
-    public CompletableFuture<JsonObject> gameEnd(WinnerInfo winner,
-                                                 List<PlayerStats> playerStats,
-                                                 int duration) {
-
+    /**
+     * Termine une partie (méthode unifiée)
+     */
+    public CompletableFuture<JsonObject> gameEnd(
+            String mode,
+            String scenario,
+            String winCondition,
+            List<WinnerInfo> winners,
+            List<PlayerStats> playerStats,
+            int duration,
+            Map<String, Object> specialData
+    ) {
         JsonObject body = new JsonObject();
         body.addProperty("gameUuid", currentGameUuid);
-        body.add("winner", gson.toJsonTree(winner));
+        body.addProperty("mode", mode);
+        body.addProperty("winCondition", winCondition);
+
+        if (scenario != null && !scenario.isEmpty()) {
+            body.addProperty("scenario", scenario);
+        }
+
+        body.add("winners", gson.toJsonTree(winners));
         body.add("players", gson.toJsonTree(playerStats));
         body.addProperty("duration", duration);
+
+        if (specialData != null && !specialData.isEmpty()) {
+            JsonObject special = gson.toJsonTree(specialData).getAsJsonObject();
+            body.add("specialData", special);
+        }
+
+        log.info("Ending " + mode + " game with " + winners.size() + " winner(s)" +
+                (scenario != null ? " (scenario: " + scenario + ")" : ""));
 
         return callAsync("POST", "/game/end", body)
                 .thenApply(r -> {
                     currentGameUuid = null;
                     return r;
                 });
+    }
+
+// ═══ HELPERS ═══
+
+    public CompletableFuture<JsonObject> gameEndSolo(
+            WinnerInfo winner,
+            List<PlayerStats> playerStats,
+            int duration
+    ) {
+        return gameEnd("Solo", null, "solo", List.of(winner), playerStats, duration, null);
+    }
+
+    public CompletableFuture<JsonObject> gameEndTeam(
+            int teamSize,
+            List<WinnerInfo> teamWinners,
+            List<PlayerStats> playerStats,
+            int duration
+    ) {
+        return gameEnd("Team " + teamSize, null, "team", teamWinners, playerStats, duration, null);
+    }
+
+    public CompletableFuture<JsonObject> gameEndSpecial(
+            String scenarioName,
+            String winCondition,
+            List<WinnerInfo> winners,
+            List<PlayerStats> playerStats,
+            int duration,
+            Map<String, Object> specialData
+    ) {
+        return gameEnd("Special", scenarioName, winCondition, winners, playerStats, duration, specialData);
     }
 
     // ═══════════════════════════ STATS ═══════════════════════════
@@ -156,6 +229,8 @@ public class ApiManager {
         body.addProperty("amount", amount);
         return callAsync("POST", "/player/stat/add", body);
     }
+
+
 
     // ═══════════════════════════ CONFIGS ═══════════════════════════
 
@@ -182,6 +257,7 @@ public class ApiManager {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
+
     // ═══════════════════════════ HTTP CORE ═══════════════════════════
 
     private JsonObject post(String endpoint, JsonObject body) throws IOException {
@@ -192,7 +268,7 @@ public class ApiManager {
         return request("POST", endpoint, body, true);
     }
 
-    private CompletableFuture<JsonObject> callAsync(String method, String endpoint, JsonObject body) {
+    public CompletableFuture<JsonObject> callAsync(String method, String endpoint, JsonObject body) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 return request(method, endpoint, body, false);
@@ -274,6 +350,6 @@ public class ApiManager {
     // ═══════════════════════════ RECORDS ═══════════════════════════
 
     public record PlayerInfo(String uuid, String name) {}
-    public record WinnerInfo(String type, String uuid, String name, int kills) {}
-    public record PlayerStats(String uuid, String name, int kills, int deaths, int placement) {}
+    public record PlayerStats(String uuid, String name, int kills, int deaths, int placement, String camp) {}
+    public record WinnerInfo(String type, String uuid, String name, int kills, String camp) {}
 }

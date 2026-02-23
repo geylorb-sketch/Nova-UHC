@@ -1,6 +1,10 @@
 package net.novaproject.novauhc.database;
 
+import com.google.gson.JsonObject;
+import org.bson.Document;
+
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -44,6 +48,14 @@ public class DatabaseManager {
         configManager.saveConfig(uuid, config);
     }
 
+    public JsonObject configToJson(UHCGameConfiguration config) {
+        return configManager.configToJson(config);
+    }
+
+    public JsonObject documentToJson(Map<String , Document> documents) {
+        return configManager.documentMapToJson(documents);
+    }
+
     public CompletableFuture<UHCGameConfiguration> getUHCConfig(UUID uuid, String configName) {
         return configManager.getConfig(uuid, configName);
     }
@@ -64,7 +76,23 @@ public class DatabaseManager {
     //  MÉTHODES NON SUPPORTÉES
     // ═══════════════════════════════════════════════════════════════════
 
-    public void connectPlayer(UUID uuid) {}
+    public void connectPlayer(UUID uuid, String name) {
+        JsonObject body = new JsonObject();
+        body.addProperty("uuid", uuid.toString());
+        body.addProperty("name", name);
+
+        api.callAsync("POST", "/player/connect", body)
+                .thenAccept(response -> {
+                    if (response.get("success").getAsBoolean()) {
+                        api.log.fine("Player connected: " + name);
+                    }
+                })
+                .exceptionally(ex -> {
+                    api.log.warning("Failed to connect player: " + ex.getMessage());
+                    return null;
+                });
+    }
+
     public String gradeName(UUID uuid) { return "§fJoueur"; }
     public String getName(UUID uuid) { return org.bukkit.Bukkit.getOfflinePlayer(uuid).getName(); }
 }

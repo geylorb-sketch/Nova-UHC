@@ -37,6 +37,7 @@ public class ApiConfigManager {
         });
     }
 
+
     public CompletableFuture<UHCGameConfiguration> getConfig(UUID uuid, String configName) {
         return api.getConfig(configName).thenApply(response -> {
             try {
@@ -93,7 +94,7 @@ public class ApiConfigManager {
         });
     }
 
-    private JsonObject configToJson(UHCGameConfiguration config) {
+    public JsonObject configToJson(UHCGameConfiguration config) {
         JsonObject json = new JsonObject();
         json.addProperty("teamSize", config.getTeamSize());
         json.addProperty("borderSize", config.getBorderSize());
@@ -207,7 +208,7 @@ public class ApiConfigManager {
         }
     }
 
-    private JsonObject documentMapToJson(Map<String, Document> map) {
+    public JsonObject documentMapToJson(Map<String, Document> map) {
         JsonObject json = new JsonObject();
         for (Map.Entry<String, Document> entry : map.entrySet()) {
             String docJson = entry.getValue().toJson();

@@ -58,7 +58,7 @@ public class Main extends JavaPlugin {
         if (apiUrl == null || apiKey == null) {
             getLogger().severe("❌ Configuration API manquante dans config.yml !");
             getLogger().severe("Ajoutez : api.url et api.apiKey");
-            Bukkit.getPluginManager().disablePlugin(this);
+            Bukkit.shutdown();
             return;
         }
 
@@ -75,8 +75,6 @@ public class Main extends JavaPlugin {
         }
 
         new NMSPatcher(this);
-
-        getLogger().info("✅ NovaUHC démarré avec API REST");
     }
 
     @Override

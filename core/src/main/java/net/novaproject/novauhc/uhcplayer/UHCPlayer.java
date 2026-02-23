@@ -211,7 +211,10 @@ public class UHCPlayer {
             }
             TeamsTagsManager.setNameTag(player, "", "", "");
             PermissionAttachment attachment = player.addAttachment(Main.get());
-            Main.getDatabaseManager().connectPlayer(player.getUniqueId());
+
+            // ✅ CORRECTION : Ajoute le nom du joueur
+            Main.getDatabaseManager().connectPlayer(player.getUniqueId(), player.getName());
+
             if (player.equals(PlayerConnectionEvent.getHost())) {
                 if (!player.hasPermission("novauhc.host")) {
                     attachment.setPermission("novauhc.host", true);
@@ -238,7 +241,6 @@ public class UHCPlayer {
                 TeamsTagsManager.setNameTag(player, "zzzzz", "§8§lSPEC §r§8", "");
                 CommonString.WELCOME_SPECTATOR.send(player);
 
-
             } else {
 
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
@@ -248,7 +250,6 @@ public class UHCPlayer {
             }
 
         }
-
 
     }
 
@@ -311,15 +312,20 @@ public class UHCPlayer {
         Player player = getPlayer();
         Location location = player.getLocation();
         uhcManager.checkVictory();
+
         if (killer != null) {
             killer.setKill(killer.getKill() + 1);
-            Main.getDatabaseManager().addKills(killer.getUniqueId(), 1);
+
+            // ✅ CORRECTION : Track le kill/death dans le statsTracker
+            UHCManager.get().onPlayerKill(killer.getPlayer(), player);
+
             this.killer = killer.getPlayer();
             ScenarioManager.get().getActiveScenarios()
                     .forEach(scenario -> scenario.onKill(killer, this));
+        } else {
+            // Si pas de killer (chute, lave, etc.), track quand même la mort
+            UHCManager.get().getStatsTracker().addDeath(player.getUniqueId());
         }
-
-        Main.getDatabaseManager().addDeath(player.getUniqueId(), 1);
 
         TeamsTagsManager.setNameTag(player, "zzzzz", "§8§lSPEC §r§8", "");
 
@@ -356,6 +362,5 @@ public class UHCPlayer {
 
         uhcManager.checkVictory();
     }
-
 }
 

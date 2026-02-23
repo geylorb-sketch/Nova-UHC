@@ -1,7 +1,3 @@
-mongodb:
-  connectionString: "mongodb://uhcnova:UNPmuIhCl8F2ybZy@minecraft-shard-00-00.ljf2r.mongodb.net:27017,minecraft-shard-00-01.ljf2r.mongodb.net:27017,minecraft-shard-00-02.ljf2r.mongodb.net:27017/?ssl=true&replicaSet=atlas-tt3bwt-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Minecraft"
-
-  name: "playerdata"
 serverinfo:
   servertag:
     "§f[§6SERV§f] "
@@ -15,7 +11,8 @@ serverinfo:
     "§f[§6HELP§f] "
 api:
   url: "http://91.134.136.202:3000"
-  key: "mc_lezombie3d.9b315f9c006aacbdaa1637f2f60cba0a221252ea461c273a5a5d449b8e59c168"
+  key: ""
+  server-name: "Nova-UHC"
 mumble:
   port: ""
   ip: ""

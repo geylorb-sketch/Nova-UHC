@@ -1,9 +1,11 @@
 package net.novaproject.novauhc;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
 import net.novaproject.novauhc.ability.AbilityManager;
 import net.novaproject.novauhc.command.CommandManager;
+import net.novaproject.novauhc.database.ApiManager;
 import net.novaproject.novauhc.listener.ListenerManager;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
@@ -14,9 +16,12 @@ import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.uhcteam.UHCTeamManager;
 import net.novaproject.novauhc.ui.config.Enchants;
 import net.novaproject.novauhc.utils.ConfigUtils;
+
+import net.novaproject.novauhc.utils.GameStatsTracker;
 import net.novaproject.novauhc.utils.Titles;
 import net.novaproject.novauhc.utils.UHCUtils;
 import net.novaproject.novauhc.world.utils.SimpleBorder;
+import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -25,9 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -37,6 +40,10 @@ public class UHCManager {
     public static UHCManager get() {
         return Main.getUHCManager();
     }
+
+    // ═══ NOUVEAU ═══
+    private GameStatsTracker statsTracker = new GameStatsTracker();
+    private String currentGameUuid = null;
 
     public Map<String, ItemStack[]> start = new HashMap<>();
     public Map<String, ItemStack[]> death = new HashMap<>();
@@ -65,7 +72,6 @@ public class UHCManager {
     private boolean canceled = false;
 
     public void setup() {
-
         uhcPlayerManager = new UHCPlayerManager();
         uhcTeamManager = new UHCTeamManager();
         (scenarioManager = new ScenarioManager()).setup();
@@ -76,8 +82,6 @@ public class UHCManager {
         Bukkit.getWhitelistedPlayers().forEach(wl -> {
             wl.setWhitelisted(false);
         });
-
-
     }
 
     public String getTimerFormatted() {
@@ -109,8 +113,8 @@ public class UHCManager {
                         p.setLevel(0);
                     }
                     gameState = GameState.LOBBY;
-
                 }
+
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     String title = "";
                     String subtitle = "§cAttention..";
@@ -152,9 +156,10 @@ public class UHCManager {
                     p.setExp(ratio);
                     p.setLevel((int) (remaining));
                     new Titles().sendActionText(p, "§8●§fDébut de la partie dans §c" + countdown + "secondes§8●");
-
                 }
+
                 countdown--;
+
                 if (countdown < 0) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         new Titles().sendTitle(p, "§6Bonne chance !", "", 60);
@@ -166,13 +171,54 @@ public class UHCManager {
                     world.setTime(1200);
                     world.setThundering(false);
                     world.setWeatherDuration(Integer.MAX_VALUE);
+
+                    // ═══ INITIALISE LE STATS TRACKER ═══
+                    statsTracker.startGame();
+                    for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
+                        statsTracker.addPlayer(uhcPlayer.getUuid(), uhcPlayer.getPlayer().getName());
+                    }
+
+                    String mode = team_size == 1 ? "Solo" : "Team " + team_size;
+                    String scenario = null;
+                    if (!ScenarioManager.get().getActiveSpecialScenarios().isEmpty()) {
+                        mode = "Special";
+                        scenario = ScenarioManager.get().getActiveSpecialScenarios().get(0).getName();
+                    }
+
+                    Map<String, Document> scenarioConfig = ScenarioManager.get().getActiveScenarios()
+                            .stream()
+                            .collect(Collectors.toMap(
+                                    Scenario::getName,
+                                    Scenario::scenarioToDoc
+                            ));
+
+                    JsonObject scenarioJson = Main.getDatabaseManager().documentToJson(scenarioConfig);
+                    int borderSize = (int) Common.get().getArena().getWorldBorder().getSize();
+
+                    List<ApiManager.PlayerInfo> apiPlayers = UHCPlayerManager.get().getPlayingOnlineUHCPlayers().stream()
+                            .map(p -> new ApiManager.PlayerInfo(p.getUuid().toString(), p.getPlayer().getName()))
+                            .toList();
+
+
+                    ApiManager.get().gameStart(
+                            mode,
+                            scenario,
+                            ScenarioManager.get().getActiveScenarios().stream()
+                                    .map(Scenario::getName)
+                                    .collect(Collectors.toList()),
+                            scenarioJson,
+                            borderSize,
+                            apiPlayers
+                    ).thenAccept(gameUuid -> {
+                        currentGameUuid = gameUuid;
+                        Main.get().getLogger().info("Game started with UUID: " + gameUuid);
+                    });
                 }
             }
         }.runTaskTimer(Main.get(), 0, 20);
     }
 
     public void onSec(){
-
         timer++;
 
         if (timer == 30) {
@@ -187,17 +233,14 @@ public class UHCManager {
 
         if (timer == timerpvp - 300) {
             Bukkit.broadcastMessage(CommonString.PVP_START_IN.getMessage().replace("%time_before%", UHCUtils.getFormattedTime(300)));
-
         }
         if (timer == timerpvp - 60) {
             Bukkit.broadcastMessage(CommonString.PVP_START_IN.getMessage().replace("%time_before%", UHCUtils.getFormattedTime(60)));
         }
         if (timer == timerpvp) {
-
             Common.get().getArena().setPVP(true);
             Bukkit.broadcastMessage(CommonString.PVP_START.getMessage());
             ScenarioManager.get().getActiveScenarios().forEach(Scenario::onPvP);
-
         }
         if (timer == timerborder - 6000) {
             Bukkit.broadcastMessage(CommonString.MEETUP_START_IN.getMessage().replace("%time_before%", UHCUtils.getFormattedTime(6000)));
@@ -209,9 +252,7 @@ public class UHCManager {
             WorldBorder border = Common.get().getArena().getWorldBorder();
             new SimpleBorder(border).startReduce(targetSize, reducSpeed);
         }
-
     }
-
 
     public boolean isLobby() {
         return gameState == GameState.LOBBY || gameState == GameState.SCATTERING;
@@ -226,56 +267,83 @@ public class UHCManager {
     }
 
     private void endGame() {
-
         StringBuilder killmessage = new StringBuilder();
         UHCManager.get().setGameState(GameState.ENDING);
-        UHCPlayer player = null;
+
+        UHCPlayer winner = null;
         for (UHCPlayer uhcPlayer : uhcPlayerManager.getPlayingOnlineUHCPlayers()) {
-            player = uhcPlayer;
+            winner = uhcPlayer;
             break;
         }
-        player.getPlayer().teleport(Common.get().getLobbySpawn());
-        fireWork(player.getPlayer());
 
-        if (player.getTeam().isPresent()) {
-            UHCTeam team = player.getTeam().get();
+        if (winner == null) {
+            return;
+        }
+
+        winner.getPlayer().teleport(Common.get().getLobbySpawn());
+        fireWork(winner.getPlayer());
+
+
+        List<ApiManager.WinnerInfo> winners = new ArrayList<>();
+
+        if (winner.getTeam().isPresent()) {
+            // Mode Team
+            UHCTeam team = winner.getTeam().get();
             for (UHCPlayer teamMember : team.getPlayers()) {
                 if (teamMember.getPlayer() != null) {
-
                     killmessage.append(teamMember.getPlayer().getDisplayName())
                             .append(" : ")
                             .append(teamMember.getKill())
                             .append(" kills\n");
-                    Main.getDatabaseManager().addWins(teamMember.getUniqueId(), 1);
-                    Main.getDatabaseManager().addCoins(teamMember.getUniqueId(), 300);
 
+                    winners.add(new ApiManager.WinnerInfo(
+                            "player",
+                            teamMember.getUuid().toString(),
+                            teamMember.getPlayer().getName(),
+                            teamMember.getKill(),
+                            null
+                    ));
                 }
             }
         } else {
-            killmessage.append(player.getPlayer().getDisplayName())
+            // Mode Solo
+            killmessage.append(winner.getPlayer().getDisplayName())
                     .append(" : ")
-                    .append(player.getKill())
+                    .append(winner.getKill())
                     .append(" kills\n");
-            Main.getDatabaseManager().addWins(player.getUniqueId(), 1);
-            Main.getDatabaseManager().addCoins(player.getUniqueId(), 300);
 
+            winners.add(new ApiManager.WinnerInfo(
+                    "player",
+                    winner.getUuid().toString(),
+                    winner.getPlayer().getName(),
+                    winner.getKill(),
+                    null
+            ));
         }
 
         Bukkit.broadcastMessage(ChatColor.AQUA + killmessage.toString());
 
+
+        List<ApiManager.PlayerStats> playerStats = statsTracker.getPlayerStats();
+        int duration = statsTracker.getGameDuration();
+
+        String mode = team_size == 1 ? "Solo" : "Team " + team_size;
+        String scenario = null;
+        String winCondition = mode.equals("Solo") ? "solo" : "team";
+
+        if (!ScenarioManager.get().getActiveSpecialScenarios().isEmpty()) {
+            mode = "Special";
+            scenario = ScenarioManager.get().getActiveSpecialScenarios().get(0).getName();
+            winCondition = "custom";
+        }
+
+        ApiManager.get().gameEnd(mode, scenario, winCondition, winners, playerStats, duration, null);
+
+        // Téléporte tout le monde au lobby
         for (UHCPlayer loser : UHCPlayerManager.get().getOnlineUHCPlayers()) {
             loser.getPlayer().teleport(Common.get().getLobbySpawn());
-            if (loser != player.getPlayer() && !loser.isPlaying()) {
-                if (player.getTeam().isPresent()) {
-                    if (player.getTeam().get().getPlayers().contains(loser)) {
-                        return;
-                    }
-                }
-
-                Main.getDatabaseManager().addLose(loser.getUniqueId(), 1);
-                Main.getDatabaseManager().removeCoins(loser.getUniqueId(), 50);
-            }
         }
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -283,6 +351,12 @@ public class UHCManager {
                 Bukkit.getServer().shutdown();
             }
         }.runTaskLater(Main.get(), 20 * 60);
+    }
+
+
+    public void onPlayerKill(Player killer, Player victim) {
+        statsTracker.addKill(killer.getUniqueId());
+        statsTracker.addDeath(victim.getUniqueId());
     }
 
     public void checkVictory() {
@@ -304,7 +378,6 @@ public class UHCManager {
                 }
                 win = true;
             }
-
         } else {
             // Mode équipe
             List<UHCTeam> aliveTeams = uhcTeamManager.getAliveTeams();
@@ -335,9 +408,7 @@ public class UHCManager {
         }
     }
 
-
     private void fireWork(Player p) {
-
         Firework f = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
         f.detonate();
 
@@ -354,7 +425,6 @@ public class UHCManager {
         fM.addEffect(effect);
         fM.setPower(1);
         f.setFireworkMeta(fM);
-
     }
 
     public void setSlot(int slot) {
@@ -376,8 +446,6 @@ public class UHCManager {
         }
     }
 
-
-
     public void applyLimitsFromList(List<Integer> limites) {
         if (limites == null || limites.size() < Enchants.values().length) return;
         for (int i = 0; i < Enchants.values().length; i++) {
@@ -392,5 +460,4 @@ public class UHCManager {
     public enum WaitState {
         WAIT_STATE, LOBBY_STATE
     }
-
 }
