@@ -1,8 +1,9 @@
 package net.novaproject.novauhc.listener.player;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.TeamsTagsManager;
 import org.bukkit.Bukkit;
@@ -86,13 +87,13 @@ public class PlayerConnectionEvent implements Listener {
         }
 
         if (Bukkit.hasWhitelist() && !Bukkit.getWhitelistedPlayers().contains(player)) {
-            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, CommonString.KICK_WHITELIST.getMessage());
+            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, LangManager.get().get(CommonLang.KICK_WHITELIST));
             return;
         }
 
         if (!UHCManager.get().isSpectator() && UHCManager.get().isGame()) {
             if (UHCPlayerManager.get().getPlayer(player) == null) {
-                event.disallow(PlayerLoginEvent.Result.KICK_OTHER, CommonString.KICK_SPEC.getMessage());
+                event.disallow(PlayerLoginEvent.Result.KICK_OTHER, LangManager.get().get(CommonLang.KICK_SPEC));
                 return;
             }
         }
@@ -101,7 +102,7 @@ public class PlayerConnectionEvent implements Listener {
         int playersize = UHCPlayerManager.get().getPlayingOnlineUHCPlayers().size();
 
         if (playersize >= slot) {
-            event.disallow(PlayerLoginEvent.Result.KICK_FULL, CommonString.KICK_FULL.getMessage());
+            event.disallow(PlayerLoginEvent.Result.KICK_FULL, LangManager.get().get(CommonLang.KICK_FULL));
         }
     }
 

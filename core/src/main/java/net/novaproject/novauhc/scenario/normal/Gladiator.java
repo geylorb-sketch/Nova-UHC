@@ -1,12 +1,12 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.GladiatorLang;
+import net.novaproject.novauhc.lang.scenario.GladiatorLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -80,11 +80,6 @@ public class Gladiator extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return GladiatorLang.values();
-    }
-
-    @Override
     public void onHit(Entity entity, Entity damager, EntityDamageByEntityEvent event) {
         if (!isActive()) return;
         if (!(entity instanceof Player victim) || !(damager instanceof Player attacker)) return;
@@ -122,16 +117,14 @@ public class Gladiator extends Scenario {
         player1.teleport(pos1);
         player2.teleport(pos2);
 
-        UHCPlayer uhcPlayer1 = UHCPlayerManager.get().getPlayer(player1);
-        UHCPlayer uhcPlayer2 = UHCPlayerManager.get().getPlayer(player2);
 
-        ScenarioLangManager.send(uhcPlayer1, GladiatorLang.COMBAT_STARTED);
-        ScenarioLangManager.send(uhcPlayer2, GladiatorLang.COMBAT_STARTED);
+        LangManager.get().send(GladiatorLang.COMBAT_STARTED, player1);
+        LangManager.get().send(GladiatorLang.COMBAT_STARTED, player2);
 
         Map<String, Object> placeholders = new HashMap<>();
         placeholders.put("%player1%", player1.getName());
         placeholders.put("%player2%", player2.getName());
-        ScenarioLangManager.sendAll(GladiatorLang.ARENA_CREATED, placeholders);
+        LangManager.get().sendAll(GladiatorLang.ARENA_CREATED, placeholders);
 
         new BukkitRunnable() {
             @Override

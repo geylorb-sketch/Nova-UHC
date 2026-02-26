@@ -1,8 +1,9 @@
 package net.novaproject.novauhc.arena;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.UHCUtils;
@@ -84,7 +85,7 @@ public class ArenaUHC implements Listener {
 
         players.put(player, zone);
 
-        CommonString.ARENA_JOIN.send(player);
+        LangManager.get().send(CommonLang.ARENA_JOIN, player);
         player.setFallDistance(0);
 
         PlayerInventory inventory = player.getInventory();
@@ -171,14 +172,14 @@ public class ArenaUHC implements Listener {
         if (dead) {
             if (event instanceof EntityDamageByEntityEvent entityEvent) {
                 if (entityEvent.getDamager() instanceof Player damager) {
-                    broadcast(CommonString.ARENA_KILL.getMessage(),
+                    broadcast(LangManager.get().get(CommonLang.ARENA_KILL),
                             new SimpleEntry<>("%player_arena%", player.getName()),
                             new SimpleEntry<>("%killer_arena%", damager.getName()));
 
                     damager.setHealth(damager.getMaxHealth());
                 }
             } else {
-                broadcast(CommonString.ARENA_DEATH.getMessage(),
+                broadcast(LangManager.get().get(CommonLang.ARENA_DEATH),
                         new SimpleEntry<>("%player_arena%", player.getName()));
             }
 

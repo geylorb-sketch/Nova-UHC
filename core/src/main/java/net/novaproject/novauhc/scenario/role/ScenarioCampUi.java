@@ -1,5 +1,7 @@
 package net.novaproject.novauhc.scenario.role;
 
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
 import net.novaproject.novauhc.scenario.role.camps.Camps;
 import net.novaproject.novauhc.ui.config.ScenariosUi;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
@@ -9,6 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ScenarioCampUi<T extends Role> extends CustomInventory {
 
@@ -21,24 +24,16 @@ public class ScenarioCampUi<T extends Role> extends CustomInventory {
 
     @Override
     public void setup() {
-
         fillCorner(0);
-        List<Camps> mainCamps = new ArrayList<>();
-        for (Camps camp : scenario.getCamps()) {
-            if (camp.isMainCamp()) mainCamps.add(camp);
-        }
-
+        List<Camps> mainCamps = getMainCamps();
         int numCamps = mainCamps.size();
+
         int[] slots;
         int returnSlot;
-
-
-        if (numCamps >= 1 && numCamps <= 3) {
-
+        if (numCamps <= 3) {
             slots = new int[]{11, 13, 15};
             returnSlot = 18;
-        } else if (numCamps >= 4 && numCamps <= 5) {
-
+        } else if (numCamps <= 5) {
             slots = new int[]{11, 13, 15, 21, 23};
             returnSlot = 27;
         } else {
@@ -47,9 +42,9 @@ public class ScenarioCampUi<T extends Role> extends CustomInventory {
         }
 
         for (int i = 0; i < mainCamps.size(); i++) {
-            int slot = i < slots.length ? slots[i] : -1;
-            if (slot == -1) break;
+            if (i >= slots.length) break;
             Camps camp = mainCamps.get(i);
+            int slot = slots[i];
             addItem(new ActionItem(slot, camp.getItem()) {
                 @Override
                 public void onClick(InventoryClickEvent e) {
@@ -61,25 +56,30 @@ public class ScenarioCampUi<T extends Role> extends CustomInventory {
         addReturn(returnSlot, new ScenariosUi(getPlayer(), true));
     }
 
-    @Override
-    public String getTitle() {
-        return scenario.getName() + " §f§l| Choisir un Camps";
-    }
-
-    @Override
-    public int getLines() {
+    private List<Camps> getMainCamps() {
         List<Camps> mainCamps = new ArrayList<>();
         for (Camps camp : scenario.getCamps()) {
             if (camp.isMainCamp()) mainCamps.add(camp);
         }
-        int numCamps = mainCamps.size();
-        if (numCamps >= 1 && numCamps <= 3) return 3;
-        if (numCamps >= 4 && numCamps <= 5) return 4;
-        return 5;
+        return mainCamps;
     }
 
     @Override
-    public boolean isRefreshAuto() {
-        return false;
+    public String getTitle() {
+        return LangManager.get().get(
+                ScenarioVariableUiLang.CAMP_UI_TITLE,
+                getPlayer(),
+                Map.of("%scenario%", scenario.getName())
+        );
     }
+
+    @Override
+    public int getLines() {
+        int n = getMainCamps().size();
+        if (n <= 3) return 3;
+        if (n <= 5) return 4;
+        return 5;
+    }
+
+    @Override public boolean isRefreshAuto() { return false; }
 }

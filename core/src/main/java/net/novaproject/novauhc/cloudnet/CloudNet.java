@@ -16,9 +16,11 @@ import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import eu.cloudnetservice.modules.bridge.player.PlayerManager;
 import eu.cloudnetservice.modules.bridge.player.executor.PlayerExecutor;
 import eu.cloudnetservice.wrapper.impl.holder.WrapperServiceInfoHolder;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
 import net.novaproject.novauhc.listener.player.PlayerConnectionEvent;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -179,20 +181,20 @@ public class CloudNet {
                             if (event.getSlot() == AnvilUi.AnvilSlot.OUTPUT) {
                                 String enteredText = event.getName();
                                 gameName = enteredText.replaceAll("&","§");
-                                CommonString.SUCCESSFUL_MODIFICATION.send(getPlayer());
+                                LangManager.get().send(CommonLang.SUCCESSFUL_MODIFICATION, getPlayer());
                                 openAll();
                             }
 
                         }).setSlot("Nom de la partie").open();
                     }
                 });
-                addItem(new StaticItem(11, UHCUtils.createCustomButon(SOON," §8§l┃ §f§lSoon", Arrays.asList("", CommonString.CLICK_HERE_TO_ACCESS.getMessage()))));
-                addItem(new StaticItem(15, UHCUtils.createCustomButon(SOON," §8§l┃ §f§lSoon", Arrays.asList("", CommonString.CLICK_HERE_TO_ACCESS.getMessage()))));
+                addItem(new StaticItem(11, UHCUtils.createCustomButon(SOON," §8§l┃ §f§lSoon", Arrays.asList("", LangManager.get().get(CommonLang.CLICK_HERE_TO_ACCESS)))));
+                addItem(new StaticItem(15, UHCUtils.createCustomButon(SOON," §8§l┃ §f§lSoon", Arrays.asList("", LangManager.get().get(CommonLang.CLICK_HERE_TO_ACCESS)))));
             }
 
             @Override
             public String getTitle() {
-                return getConfig().getString("menu.cloudnet.title", "CloudNet • Paramètres");
+                return LangManager.get().get(UiTitleLang.CLOUDNET_TITLE, getPlayer());
             }
 
             @Override

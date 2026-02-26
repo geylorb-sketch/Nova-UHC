@@ -1,7 +1,10 @@
 package net.novaproject.novauhc.task;
 
-import net.novaproject.novauhc.CommonString;
+
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.lang.TaskLang;
 import net.novaproject.novauhc.utils.ProgressBar;
 import net.novaproject.novauhc.utils.Titles;
 import net.novaproject.novauhc.world.generation.ChunkUnloadListener;
@@ -54,7 +57,7 @@ public class LoadingChunkTask extends BukkitRunnable {
         LoadingChunkTask task = new LoadingChunkTask(overworld, nether, radius);
         task.runTaskTimer(Main.get(), 0L, 5L);
         task.state = LoadingTaskState.RUNNING;
-        Bukkit.broadcastMessage(CommonString.PREGEN_STARTED.getMessage());
+        LangManager.get().sendAll(CommonLang.PREGEN_STARTED);
         return task;
     }
 
@@ -63,7 +66,7 @@ public class LoadingChunkTask extends BukkitRunnable {
             instance.setCanceled(true);
             instance.cancel();
             ChunkUnloadListener.keepChunk.clear();
-            Bukkit.broadcastMessage(CommonString.PREGEN_FINISHED.getMessage());
+            LangManager.get().sendAll(CommonLang.PREGEN_FINISHED);
         }
     }
 
@@ -91,7 +94,7 @@ public class LoadingChunkTask extends BukkitRunnable {
 
         if (finished) {
             state = LoadingTaskState.FINISHED;
-            Bukkit.broadcastMessage(CommonString.PREGEN_FINISHED.getMessage());
+            LangManager.get().sendAll(CommonLang.PREGEN_FINISHED);
             cancel();
         }
     }
@@ -132,7 +135,7 @@ public class LoadingChunkTask extends BukkitRunnable {
         String progressBar = ProgressBar.getProgressBar((int) percent, 100, 40, "|", ChatColor.GREEN, ChatColor.GRAY);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            new Titles().sendActionText(player, ChatColor.GRAY + "Prégénération: " + ChatColor.GREEN + formatted + "% §8[§r" + progressBar + "§8]");
+            new Titles().sendActionText(player, LangManager.get().get(TaskLang.PREGEN_ACTION_BAR, player, java.util.Map.of("%percent%", formatted, "%bar%", progressBar)));
         }
     }
 

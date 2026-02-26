@@ -1,6 +1,8 @@
 package net.novaproject.novauhc.scenario.normal;
 
 import net.novaproject.novauhc.Main;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.scenario.NineSlotLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
@@ -22,256 +24,103 @@ public class NineSlot extends Scenario {
 
     private final Map<UUID, BukkitRunnable> inventoryTasks = new HashMap<>();
 
-    @Override
-    public String getName() {
-        return "NineSlot";
-    }
+    private String t(NineSlotLang key, Player p) { return LangManager.get().get(key, p); }
+
+    @Override public String getName() { return "NineSlot"; }
+    @Override public String getDescription() { return "Seule la hotbar peut être utilisée. L'inventaire principal est inaccessible !"; }
+    @Override public ItemCreator getItem() { return new ItemCreator(Material.CHEST); }
 
     @Override
-    public String getDescription() {
-        return "Seule la hotbar peut être utilisée. L'inventaire principal est inaccessible !";
-    }
-
-    @Override
-    public ItemCreator getItem() {
-        return new ItemCreator(Material.CHEST);
-    }
-
-    @Override
-    public void onGameStart() {
-        restrictAllPlayersInventory();
-    }
+    public void onGameStart() { restrictAllPlayersInventory(); }
 
     @Override
     public void onStart(Player player) {
         if (!isActive()) return;
-
         restrictPlayerInventory(player);
-        player.sendMessage("§8[NineSlot] §fVotre inventaire est maintenant limité à la hotbar !");
+        player.sendMessage(t(NineSlotLang.START, player));
     }
 
     private void restrictAllPlayersInventory() {
-        for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
-            restrictPlayerInventory(uhcPlayer.getPlayer());
-        }
-
-        Bukkit.broadcastMessage("§8[NineSlot] §fTous les inventaires sont maintenant limités à 9 slots !");
+        for (UHCPlayer p : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) restrictPlayerInventory(p.getPlayer());
+        Bukkit.broadcastMessage(LangManager.get().get(NineSlotLang.START_ALL));
     }
 
     private void unrestrictAllPlayersInventory() {
-        for (UUID playerUuid : inventoryTasks.keySet()) {
-            BukkitRunnable task = inventoryTasks.get(playerUuid);
-            if (task != null) {
-                task.cancel();
-            }
-        }
+        inventoryTasks.values().forEach(BukkitRunnable::cancel);
         inventoryTasks.clear();
-
-        Bukkit.broadcastMessage("§8[NineSlot] §fLes inventaires sont maintenant libres !");
+        Bukkit.broadcastMessage(LangManager.get().get(NineSlotLang.UNLOCK_ALL));
     }
 
     private void restrictPlayerInventory(Player player) {
-        UUID playerUuid = player.getUniqueId();
-
-        // Cancel existing task if any
-        BukkitRunnable existingTask = inventoryTasks.get(playerUuid);
-        if (existingTask != null) {
-            existingTask.cancel();
-        }
-
-        // Clear main inventory (slots 9-35) and move items to hotbar or drop them
+        UUID uuid = player.getUniqueId();
+        BukkitRunnable existing = inventoryTasks.get(uuid);
+        if (existing != null) existing.cancel();
         moveMainInventoryToHotbar(player);
-
-        // Start monitoring task
-        BukkitRunnable monitorTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!player.isOnline() || !isActive()) {
-                    cancel();
-                    inventoryTasks.remove(playerUuid);
-                    return;
-                }
-
-                // Check and clear main inventory slots
+        BukkitRunnable task = new BukkitRunnable() {
+            @Override public void run() {
+                if (!player.isOnline() || !isActive()) { cancel(); inventoryTasks.remove(uuid); return; }
                 clearMainInventorySlots(player);
             }
         };
-
-        inventoryTasks.put(playerUuid, monitorTask);
-        monitorTask.runTaskTimer(Main.get(), 0, 5); // Check every 5 ticks (0.25 seconds)
+        inventoryTasks.put(uuid, task);
+        task.runTaskTimer(Main.get(), 0, 5);
     }
 
     private void moveMainInventoryToHotbar(Player player) {
         ItemStack[] contents = player.getInventory().getContents();
-
-        // Try to move items from main inventory (slots 9-35) to hotbar (slots 0-8)
         for (int i = 9; i < 36; i++) {
             ItemStack item = contents[i];
-            if (item != null && item.getType() != Material.AIR) {
-                // Try to find empty hotbar slot
-                boolean moved = false;
-                for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
-                    if (contents[hotbarSlot] == null || contents[hotbarSlot].getType() == Material.AIR) {
-                        contents[hotbarSlot] = item.clone();
-                        contents[i] = null;
-                        moved = true;
-                        break;
-                    }
-                }
-
-                // If couldn't move to hotbar, drop the item
-                if (!moved) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), item);
-                    contents[i] = null;
-                    player.sendMessage("§8[NineSlot] §fObjet jeté : inventaire plein !");
-                }
+            if (item == null || item.getType() == Material.AIR) continue;
+            boolean moved = false;
+            for (int h = 0; h < 9; h++) {
+                if (contents[h] == null || contents[h].getType() == Material.AIR) { contents[h] = item.clone(); contents[i] = null; moved = true; break; }
             }
+            if (!moved) { player.getWorld().dropItemNaturally(player.getLocation(), item); contents[i] = null; player.sendMessage(t(NineSlotLang.ITEM_DROPPED, player)); }
         }
-
         player.getInventory().setContents(contents);
     }
 
     private void clearMainInventorySlots(Player player) {
         ItemStack[] contents = player.getInventory().getContents();
-        boolean foundItems = false;
-
-        // Check main inventory slots (9-35)
+        boolean found = false;
         for (int i = 9; i < 36; i++) {
             ItemStack item = contents[i];
-            if (item != null && item.getType() != Material.AIR) {
-                foundItems = true;
-
-                // Try to move to hotbar first
-                boolean moved = false;
-                for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
-                    ItemStack hotbarItem = contents[hotbarSlot];
-                    if (hotbarItem == null || hotbarItem.getType() == Material.AIR) {
-                        contents[hotbarSlot] = item.clone();
-                        contents[i] = null;
-                        moved = true;
-                        break;
-                    } else if (hotbarItem.getType() == item.getType() &&
-                            hotbarItem.getDurability() == item.getDurability() &&
-                            hotbarItem.getAmount() < hotbarItem.getMaxStackSize()) {
-                        // Try to stack with existing item
-                        int spaceLeft = hotbarItem.getMaxStackSize() - hotbarItem.getAmount();
-                        int toMove = Math.min(spaceLeft, item.getAmount());
-
-                        hotbarItem.setAmount(hotbarItem.getAmount() + toMove);
-                        item.setAmount(item.getAmount() - toMove);
-
-                        if (item.getAmount() <= 0) {
-                            contents[i] = null;
-                            moved = true;
-                            break;
-                        }
-                    }
-                }
-
-                // If couldn't move to hotbar, drop the item
-                if (!moved) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), item);
-                    contents[i] = null;
+            if (item == null || item.getType() == Material.AIR) continue;
+            found = true;
+            boolean moved = false;
+            for (int h = 0; h < 9; h++) {
+                ItemStack hi = contents[h];
+                if (hi == null || hi.getType() == Material.AIR) { contents[h] = item.clone(); contents[i] = null; moved = true; break; }
+                else if (hi.getType() == item.getType() && hi.getDurability() == item.getDurability() && hi.getAmount() < hi.getMaxStackSize()) {
+                    int space = hi.getMaxStackSize() - hi.getAmount(); int toMove = Math.min(space, item.getAmount());
+                    hi.setAmount(hi.getAmount() + toMove); item.setAmount(item.getAmount() - toMove);
+                    if (item.getAmount() <= 0) { contents[i] = null; moved = true; break; }
                 }
             }
+            if (!moved) { player.getWorld().dropItemNaturally(player.getLocation(), item); contents[i] = null; }
         }
-
-        if (foundItems) {
-            player.getInventory().setContents(contents);
-        }
+        if (found) player.getInventory().setContents(contents);
     }
 
-    // Handle inventory click events
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!isActive()) return;
-
-        if (!(event.getWhoClicked() instanceof Player player)) return;
-
-        // Block access to main inventory slots
-        if (event.getSlotType() == InventoryType.SlotType.CONTAINER &&
-                event.getSlot() >= 9 && event.getSlot() <= 35) {
-            event.setCancelled(true);
-            player.sendMessage("§8[NineSlot] §cVous ne pouvez pas utiliser l'inventaire principal !");
+        if (!isActive() || !(event.getWhoClicked() instanceof Player player)) return;
+        if (event.getSlotType() == InventoryType.SlotType.CONTAINER && event.getSlot() >= 9 && event.getSlot() <= 35) {
+            event.setCancelled(true); player.sendMessage(t(NineSlotLang.CANNOT_USE_INV, player));
         }
-
-        // Also block shift-clicking into main inventory
         if (event.isShiftClick() && event.getSlot() < 9) {
-            event.setCancelled(true);
-            player.sendMessage("§8[NineSlot] §cVous ne pouvez pas déplacer d'objets vers l'inventaire principal !");
+            event.setCancelled(true); player.sendMessage(t(NineSlotLang.CANNOT_MOVE, player));
         }
     }
 
     @Override
     public void onDrop(PlayerDropItemEvent event) {
         if (!isActive()) return;
-
-        // Allow dropping items normally
-        Player player = event.getPlayer();
-        player.sendMessage("§8[NineSlot] §fObjet jeté pour faire de la place !");
+        event.getPlayer().sendMessage(t(NineSlotLang.ITEM_DROPPED2, event.getPlayer()));
     }
 
-    // Clean up when player disconnects
-    public void onPlayerDisconnect(Player player) {
-        UUID playerUuid = player.getUniqueId();
-        BukkitRunnable task = inventoryTasks.get(playerUuid);
-        if (task != null) {
-            task.cancel();
-            inventoryTasks.remove(playerUuid);
-        }
-    }
-
-    // Get available hotbar slots for a player
-    public int getAvailableHotbarSlots(Player player) {
-        int available = 0;
-        for (int i = 0; i < 9; i++) {
-            ItemStack item = player.getInventory().getItem(i);
-            if (item == null || item.getType() == Material.AIR) {
-                available++;
-            }
-        }
-        return available;
-    }
-
-    // Check if player can pick up an item
-    public boolean canPlayerPickupItem(Player player, ItemStack item) {
-        // Check if there's space in hotbar
-        for (int i = 0; i < 9; i++) {
-            ItemStack hotbarItem = player.getInventory().getItem(i);
-            if (hotbarItem == null || hotbarItem.getType() == Material.AIR) {
-                return true;
-            } else if (hotbarItem.getType() == item.getType() &&
-                    hotbarItem.getDurability() == item.getDurability() &&
-                    hotbarItem.getAmount() < hotbarItem.getMaxStackSize()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Force clear a player's main inventory (admin command)
     public void forceClearMainInventory(Player player) {
-        if (isActive()) {
-            for (int i = 9; i < 36; i++) {
-                player.getInventory().setItem(i, null);
-            }
-            player.sendMessage("§8[NineSlot] §fInventaire principal vidé par un administrateur !");
-        }
-    }
-
-    // Get hotbar contents as string (for debugging)
-    public String getHotbarContents(Player player) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("§8[NineSlot] Hotbar de ").append(player.getName()).append(": ");
-
-        for (int i = 0; i < 9; i++) {
-            ItemStack item = player.getInventory().getItem(i);
-            if (item != null && item.getType() != Material.AIR) {
-                sb.append(item.getType().name()).append("x").append(item.getAmount()).append(" ");
-            } else {
-                sb.append("VIDE ");
-            }
-        }
-
-        return sb.toString();
+        if (!isActive()) return;
+        for (int i = 9; i < 36; i++) player.getInventory().setItem(i, null);
+        player.sendMessage(t(NineSlotLang.ADMIN_CLEARED, player));
     }
 }

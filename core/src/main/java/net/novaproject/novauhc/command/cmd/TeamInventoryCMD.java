@@ -1,9 +1,10 @@
 package net.novaproject.novauhc.command.cmd;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.Command;
 import net.novaproject.novauhc.command.CommandArguments;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.normal.TeamInv;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -21,7 +22,7 @@ public class TeamInventoryCMD extends Command {
             if (uhcPlayer.getTeam().isPresent() && uhcPlayer.isPlaying() && UHCManager.get().getGameState() == UHCManager.GameState.INGAME) {
                 player.openInventory(TeamInv.inventory.get(uhcPlayer.getTeam().get()));
             } else {
-                CommonString.DISABLE_ACTION.send(player);
+                LangManager.get().send(CommonLang.DISABLE_ACTION, player);
             }
         }
     }

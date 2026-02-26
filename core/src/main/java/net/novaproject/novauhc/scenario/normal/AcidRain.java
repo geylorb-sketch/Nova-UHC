@@ -1,11 +1,11 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.lang.AcidRainLang;
+import net.novaproject.novauhc.lang.scenario.AcidRainLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -52,11 +52,6 @@ public class AcidRain extends Scenario {
     @Override
     public String getPath() {
         return "acidrain";
-    }
-
-    @Override
-    public ScenarioLang[] getLang() {
-        return AcidRainLang.values();
     }
 
 
@@ -145,7 +140,7 @@ public class AcidRain extends Scenario {
             world.setWeatherDuration(Integer.MAX_VALUE);
         }
 
-        ScenarioLangManager.sendAll(AcidRainLang.ACID_RAIN_START);
+        LangManager.get().sendAll(AcidRainLang.ACID_RAIN_START);
 
         for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
             Player player = uhcPlayer.getPlayer();

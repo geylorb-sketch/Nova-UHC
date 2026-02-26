@@ -1,10 +1,10 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.OreSwapLang;
+import net.novaproject.novauhc.lang.scenario.OreSwapLang;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -60,11 +60,6 @@ public class OreSwap extends Scenario {
     @Override
     public String getPath() {
         return "oreswap";
-    }
-
-    @Override
-    public ScenarioLang[] getLang() {
-        return OreSwapLang.values();
     }
 
 
@@ -156,7 +151,7 @@ public class OreSwap extends Scenario {
                 // Shuffle the ore mapping
                 initializeOreMapping();
 
-                ScenarioLangManager.sendAll(OreSwapLang.SWAP_ANNOUNCEMENT);
+                LangManager.get().sendAll(OreSwapLang.SWAP_ANNOUNCEMENT);
             }
         };
 
@@ -173,7 +168,7 @@ public class OreSwap extends Scenario {
     }
 
     private void broadcastOreMapping() {
-        ScenarioLangManager.sendAll(OreSwapLang.NEW_MAPPING);
+        LangManager.get().sendAll(OreSwapLang.NEW_MAPPING);
 
         for (Map.Entry<Material, Material> entry : currentOreMapping.entrySet()) {
             Material original = entry.getKey();
@@ -185,9 +180,9 @@ public class OreSwap extends Scenario {
             placeholders.put("%original%", originalName);
             placeholders.put("%swapped%", swappedName);
             if (!original.equals(swapped)) {
-                ScenarioLangManager.sendAll(OreSwapLang.MAPPING_LINE, placeholders);
+                LangManager.get().sendAll(OreSwapLang.MAPPING_LINE, placeholders);
             } else {
-                ScenarioLangManager.sendAll(OreSwapLang.MAPPING_UNCHANGED, placeholders);
+                LangManager.get().sendAll(OreSwapLang.MAPPING_UNCHANGED, placeholders);
             }
         }
     }

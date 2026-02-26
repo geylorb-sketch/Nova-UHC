@@ -1,11 +1,11 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.NinjaLang;
+import net.novaproject.novauhc.lang.scenario.NinjaLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
@@ -51,18 +51,13 @@ public class Ninja extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return NinjaLang.values();
-    }
-
-    @Override
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
         if (!isActive()) return;
 
         if (killer != null) {
             Player killerPlayer = killer.getPlayer();
             killerPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, invisibilityDuration, invisibilityLevel));
-            ScenarioLangManager.send(killer, NinjaLang.KILL_INVISIBILITY);
+            LangManager.get().send(NinjaLang.KILL_INVISIBILITY, killerPlayer);
         }
     }
 }

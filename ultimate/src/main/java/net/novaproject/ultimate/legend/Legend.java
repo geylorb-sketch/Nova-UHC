@@ -2,7 +2,6 @@ package net.novaproject.ultimate.legend;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.CommandManager;

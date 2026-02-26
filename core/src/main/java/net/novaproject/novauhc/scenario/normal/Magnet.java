@@ -3,8 +3,7 @@ package net.novaproject.novauhc.scenario.normal;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.lang.MagnetLang;
+import net.novaproject.novauhc.lang.scenario.MagnetLang;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,11 +52,6 @@ public class Magnet extends Scenario {
     @Override
     public String getPath() {
         return "magnet";
-    }
-
-    @Override
-    public ScenarioLang[] getLang() {
-        return MagnetLang.values();
     }
 
     @Override

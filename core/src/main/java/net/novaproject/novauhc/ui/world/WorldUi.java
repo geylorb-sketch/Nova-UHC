@@ -1,8 +1,11 @@
 package net.novaproject.novauhc.ui.world;
 
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.Main;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
+import net.novaproject.novauhc.lang.ui.WorldUiLang;
 import net.novaproject.novauhc.task.LoadingChunkTask;
 import net.novaproject.novauhc.ui.DefaultUi;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -13,81 +16,82 @@ import net.novaproject.novauhc.world.generation.WorldGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class WorldUi extends CustomInventory {
 
+    private final String accessHost = LangManager.get().get(CommonLang.ACCESS_HOST);
 
-    private final World arenaWorld = Common.get().getArena();
-    private final World spawn = Common.get().getLobby();
     public WorldUi(Player player) {
         super(player);
+    }
+
+    private String t(WorldUiLang key) {
+        return LangManager.get().get(key, getPlayer());
     }
 
     @Override
     public void setup() {
         fillCorner(getConfig().getInt("menu.world.color"));
 
+        String clickAccess = LangManager.get().get(CommonLang.CLICK_HERE_TO_ACCESS, getPlayer());
+
         ItemCreator orepop = new ItemCreator(Material.DIAMOND_PICKAXE)
-                .setName("§8┃ §fBoost des §6§lMinerais")
+                .setName(t(WorldUiLang.ORE_NAME))
                 .addLore("")
-                .addLore(" §8» §fAccès §f: §6§lHost")
+                .addLore(LangManager.get().get(CommonLang.ACCESS_HOST, getPlayer()))
                 .addLore("")
-                .addLore("  §8┃ §fPermet de configurer les")
-                .addLore("  §8┃ §fparamètres des boosts des §2minerais§r.")
+                .addLore(t(WorldUiLang.ORE_DESC1))
+                .addLore(t(WorldUiLang.ORE_DESC2))
                 .addLore("")
-                .addLore(CommonString.CLICK_HERE_TO_ACCESS.getMessage())
+                .addLore(clickAccess)
                 .addLore("");
+
         ItemCreator world = new ItemCreator(Material.ENDER_PEARL)
-                .setName("§8┃ §fRecréer l'"+Common.get().getMainColor()+"Arena")
+                .setName(t(WorldUiLang.ARENA_NAME))
                 .addLore("")
-                .addLore(" §8» §fAccès §f: §6§lHost")
+                .addLore(LangManager.get().get(CommonLang.ACCESS_HOST, getPlayer()))
                 .addLore("")
-                .addLore("  §8┃ §fPermet de recréer l'arène.")
-                .addLore("  §8┃ §c§lAttention, cela effacera l'arène existante.")
+                .addLore(t(WorldUiLang.ARENA_DESC1))
+                .addLore(t(WorldUiLang.ARENA_DESC2))
                 .addLore("")
-                .addLore(CommonString.CLICK_HERE_TO_ACCESS.getMessage())
+                .addLore(clickAccess)
                 .addLore("");
 
         ItemCreator pregen = new ItemCreator(Material.GRASS)
-                .setName("§8┃ §fRedémarrer la"+Common.get().getMainColor()+" Prégénération")
+                .setName(t(WorldUiLang.PREGEN_NAME))
                 .addLore("")
-                .addLore(" §8» §fAccès §f: §6§lHost")
+                .addLore(LangManager.get().get(CommonLang.ACCESS_HOST, getPlayer()))
                 .addLore("")
-                .addLore("  §8┃ §fPermet de redémarrer la prégénération.")
+                .addLore(t(WorldUiLang.PREGEN_DESC))
                 .addLore("")
-                .addLore(CommonString.CLICK_HERE_TO_ACCESS.getMessage())
+                .addLore(clickAccess)
                 .addLore("");
 
-        String name = getPlayer().getWorld().getName().equals(Common.get().getArenaName())
-                ? "§8┃ §fTéléportation au §a§llobby"
-                : "§8┃ §fTéléportation au monde " + Common.get().getMainColor() + "§lArena";
-
-        String destination = getPlayer().getWorld().getName().equals(Common.get().getArenaName())
-                ? "au §a§llobby"
-                : "au monde " + Common.get().getMainColor() + "§lArena";
+        boolean inArena = getPlayer().getWorld().getName().equals(Common.get().getArenaName());
+        String tpName = inArena ? t(WorldUiLang.TP_LOBBY_NAME) : t(WorldUiLang.TP_ARENA_NAME);
+        String tpDesc = inArena ? t(WorldUiLang.TP_LOBBY_DESC) : t(WorldUiLang.TP_ARENA_DESC);
 
         ItemCreator prev = new ItemCreator(Material.WOOD_DOOR)
-                .setName(name)
+                .setName(tpName)
                 .addLore("")
-                .addLore(" §8» §fAccès §f: §6§lHost")
+                .addLore(LangManager.get().get(CommonLang.ACCESS_HOST, getPlayer()))
                 .addLore("")
-                .addLore("  §8┃ §fPermet de " + destination + ".")
+                .addLore(tpDesc)
                 .addLore("")
-                .addLore(CommonString.CLICK_HERE_TO_ACCESS.getMessage())
+                .addLore(clickAccess)
                 .addLore("");
+
         ItemCreator changeSpawn = new ItemCreator(Material.SAPLING)
-                .setName("§8┃ §fChanger le "+Common.get().getMainColor()+"Type de Centre")
+                .setName(t(WorldUiLang.CENTER_NAME))
                 .addLore("")
-                .addLore(" §8» §fAccès §f: §6§lHost")
+                .addLore(LangManager.get().get(CommonLang.ACCESS_HOST, getPlayer()))
                 .addLore("")
-                .addLore("  §8┃ §fPermet de Changer le type de centre")
-                .addLore("  §8┃ §fde l'"+Common.get().getMainColor()+"arène.")
+                .addLore(t(WorldUiLang.CENTER_DESC1))
+                .addLore(t(WorldUiLang.CENTER_DESC2))
                 .addLore("")
-                .addLore(CommonString.CLICK_HERE_TO_ACCESS.getMessage())
+                .addLore(clickAccess)
                 .addLore("");
 
         addItem(new ActionItem(22, prev) {
@@ -100,20 +104,24 @@ public class WorldUi extends CustomInventory {
                 } else {
                     getPlayer().teleport(new Location(Common.get().getArena(), 0, 100, 0));
                     getPlayer().getInventory().clear();
-                    getPlayer().getInventory().setItem(0,Common.get().getRegenArena().getItemstack());
-                    getPlayer().getInventory().setItem(4,Common.get().getChangeSpawn().getItemstack());
-                    getPlayer().getInventory().setItem(8,new ItemCreator(Material.WOOD_DOOR).setName(name).getItemstack());
+                    getPlayer().getInventory().setItem(0, Common.get().getRegenArena().getItemstack());
+                    getPlayer().getInventory().setItem(4, Common.get().getChangeSpawn().getItemstack());
+                    getPlayer().getInventory().setItem(8, new ItemCreator(Material.WOOD_DOOR).setName(tpName).getItemstack());
                 }
                 openAll();
             }
         });
+
         addItem(new ActionItem(10, pregen) {
             @Override
             public void onClick(InventoryClickEvent e) {
                 openAll();
-                LoadingChunkTask.create(Common.get().getArena(), Bukkit.getWorld(Common.get().getArenaName() + "_nether"), (int) Common.get().getArena().getWorldBorder().getSize() / 2);
+                LoadingChunkTask.create(Common.get().getArena(),
+                        Bukkit.getWorld(Common.get().getArenaName() + "_nether"),
+                        (int) Common.get().getArena().getWorldBorder().getSize() / 2);
             }
         });
+
         addItem(new ActionItem(2, world) {
             @Override
             public void onClick(InventoryClickEvent e) {
@@ -124,24 +132,17 @@ public class WorldUi extends CustomInventory {
 
         addReturn(18, new DefaultUi(getPlayer()));
         addMenu(6, orepop, new OrePopulatorUi(getPlayer()));
-        addMenu(16,changeSpawn,new CenterUi(getPlayer(),this));
-
+        addMenu(16, changeSpawn, new CenterUi(getPlayer(), this));
     }
-
 
     @Override
     public String getTitle() {
-        return getConfig().getString("menu.world.title");
+        return LangManager.get().get(UiTitleLang.WORLD_TITLE, getPlayer());
     }
 
     @Override
-    public int getLines() {
-        return 3;
-    }
+    public int getLines() { return 3; }
 
     @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
-
+    public boolean isRefreshAuto() { return false; }
 }

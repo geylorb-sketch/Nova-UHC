@@ -1,6 +1,7 @@
 package net.novaproject.novauhc.uhcteam;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -52,7 +53,7 @@ public record UHCTeam(DyeColor dyeColor, String prefix, String name, Pattern[] p
         }
 
         lore.add("");
-        lore.add(CommonString.CLICK_HERE_TO_APPLY.getMessage());
+        lore.add(LangManager.get().get(CommonLang.CLICK_HERE_TO_APPLY));
         lore.add("");
 
         ItemStack banner = new ItemStack(Material.BANNER);

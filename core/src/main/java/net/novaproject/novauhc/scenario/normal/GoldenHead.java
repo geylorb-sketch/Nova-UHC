@@ -1,5 +1,7 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.scenario.GoldenHeadLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -18,120 +20,63 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Map;
+
 public class GoldenHead extends Scenario {
     private ShapedRecipe recipe;
 
-    @ScenarioVariable(
-            name = "Durée Absorption Golden Head (s)",
-            description = "Durée de l'effet Absorption pour la Golden Head",
-            type = VariableType.TIME
-    )
+    @ScenarioVariable(name="Durée Absorption Golden Head (s)", description="Durée de l'effet Absorption pour la Golden Head", type=VariableType.TIME)
     private int absorptionDurationGoldenHead = 20 * 60 * 2;
-
-    @ScenarioVariable(
-            name = "Niveau Absorption Golden Head",
-            description = "Niveau de l'effet Absorption pour la Golden Head",
-            type = VariableType.INTEGER
-    )
+    @ScenarioVariable(name="Niveau Absorption Golden Head", description="Niveau de l'effet Absorption pour la Golden Head", type=VariableType.INTEGER)
     private int absorptionAmplifierGoldenHead = 1;
-
-    @ScenarioVariable(
-            name = "Durée Régénération Golden Head (s)",
-            description = "Durée de l'effet Régénération pour la Golden Head",
-            type = VariableType.TIME
-    )
+    @ScenarioVariable(name="Durée Régénération Golden Head (s)", description="Durée de l'effet Régénération pour la Golden Head", type=VariableType.TIME)
     private int regenerationDurationGoldenHead = 20 * 6;
-
-    @ScenarioVariable(
-            name = "Niveau Régénération Golden Head",
-            description = "Niveau de l'effet Régénération pour la Golden Head",
-            type = VariableType.INTEGER
-    )
+    @ScenarioVariable(name="Niveau Régénération Golden Head", description="Niveau de l'effet Régénération pour la Golden Head", type=VariableType.INTEGER)
     private int regenerationAmplifierGoldenHead = 1;
-
-    @ScenarioVariable(
-            name = "Durée Absorption Apple (s)",
-            description = "Durée de l'effet Absorption pour les pommes dorées normales",
-            type = VariableType.TIME
-    )
+    @ScenarioVariable(name="Durée Absorption Apple (s)", description="Durée de l'effet Absorption pour les pommes dorées normales", type=VariableType.TIME)
     private int absorptionDurationApple = 20 * 60 * 2;
-
-    @ScenarioVariable(
-            name = "Niveau Absorption Apple",
-            description = "Niveau de l'effet Absorption pour les pommes dorées normales",
-            type = VariableType.INTEGER
-    )
+    @ScenarioVariable(name="Niveau Absorption Apple", description="Niveau de l'effet Absorption pour les pommes dorées normales", type=VariableType.INTEGER)
     private int absorptionAmplifierApple = 0;
-
-    @ScenarioVariable(
-            name = "Durée Régénération Apple (s)",
-            description = "Durée de l'effet Régénération pour les pommes dorées normales",
-            type = VariableType.TIME
-    )
+    @ScenarioVariable(name="Durée Régénération Apple (s)", description="Durée de l'effet Régénération pour les pommes dorées normales", type=VariableType.TIME)
     private int regenerationDurationApple = 20 * 4;
-
-    @ScenarioVariable(
-            name = "Niveau Régénération Apple",
-            description = "Niveau de l'effet Régénération pour les pommes dorées normales",
-            type = VariableType.INTEGER
-    )
+    @ScenarioVariable(name="Niveau Régénération Apple", description="Niveau de l'effet Régénération pour les pommes dorées normales", type=VariableType.INTEGER)
     private int regenerationAmplifierApple = 1;
 
-    @Override
-    public String getName() {
-        return "Golden Head";
-    }
+    private String t(GoldenHeadLang key) { return LangManager.get().get(key); }
+    private String t(GoldenHeadLang key, Map<String,Object> p) { return LangManager.get().get(key, p); }
 
-    @Override
-    public String getDescription() {
-        return "Les têtes de joueurs morts peuvent être craftées en pommes dorées spéciales.";
-    }
-
-    @Override
-    public ItemCreator getItem() {
-        return new ItemCreator(Material.GOLDEN_APPLE);
-    }
+    @Override public String getName() { return "Golden Head"; }
+    @Override public String getDescription() { return "Les têtes de joueurs morts peuvent être craftées en pommes dorées spéciales."; }
+    @Override public ItemCreator getItem() { return new ItemCreator(Material.GOLDEN_APPLE); }
 
     @Override
     public void toggleActive() {
         super.toggleActive();
         ShapedRecipe goldenHead = new ShapedRecipe(new ItemCreator(Material.GOLDEN_APPLE)
-                .setName(ChatColor.GOLD + "Golden Head")
-                .getItemstack());
+                .setName(t(GoldenHeadLang.ITEM_NAME)).getItemstack());
         goldenHead.shape("GGG", "GHG", "GGG");
         goldenHead.setIngredient('G', Material.GOLD_INGOT);
         goldenHead.setIngredient('H', new MaterialData(Material.SKULL_ITEM, (byte) 3));
         recipe = goldenHead;
-        if (isActive()) {
-            Bukkit.addRecipe(goldenHead);
-        }
+        if (isActive()) Bukkit.addRecipe(goldenHead);
     }
 
     @Override
     public void onConsume(Player player, ItemStack item, PlayerItemConsumeEvent event) {
         if (item.getType() == Material.GOLDEN_APPLE && item.hasItemMeta()
                 && item.getItemMeta().hasDisplayName()
-                && item.getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Golden Head")) {
-
-            for (PotionEffect potionEffect : player.getActivePotionEffects()) {
-                if (potionEffect.getType().equals(PotionEffectType.REGENERATION) ||
-                        potionEffect.getType().equals(PotionEffectType.ABSORPTION)) {
-                    player.removePotionEffect(potionEffect.getType());
-                }
+                && item.getItemMeta().getDisplayName().equals(t(GoldenHeadLang.ITEM_NAME))) {
+            for (PotionEffect e : player.getActivePotionEffects()) {
+                if (e.getType().equals(PotionEffectType.REGENERATION) || e.getType().equals(PotionEffectType.ABSORPTION))
+                    player.removePotionEffect(e.getType());
             }
-
             player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*absorptionDurationGoldenHead, absorptionAmplifierGoldenHead, false, true));
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*regenerationDurationGoldenHead, regenerationAmplifierGoldenHead, false, true));
-
         } else if (item.getType() == Material.GOLDEN_APPLE) {
-
-            for (PotionEffect potionEffect : player.getActivePotionEffects()) {
-                if (potionEffect.getType().equals(PotionEffectType.REGENERATION) ||
-                        potionEffect.getType().equals(PotionEffectType.ABSORPTION)) {
-                    player.removePotionEffect(potionEffect.getType());
-                }
+            for (PotionEffect e : player.getActivePotionEffects()) {
+                if (e.getType().equals(PotionEffectType.REGENERATION) || e.getType().equals(PotionEffectType.ABSORPTION))
+                    player.removePotionEffect(e.getType());
             }
-
             player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*absorptionDurationApple, absorptionAmplifierApple, false, true));
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*regenerationDurationApple, regenerationAmplifierApple, false, true));
         }
@@ -142,7 +87,7 @@ public class GoldenHead extends Scenario {
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
         meta.setOwner(uhcPlayer.getPlayer().getName());
-        meta.setDisplayName("§6✦ Tête de " + uhcPlayer.getPlayer().getName());
+        meta.setDisplayName(t(GoldenHeadLang.SKULL_NAME, Map.of("%player%", uhcPlayer.getPlayer().getName())));
         skull.setItemMeta(meta);
         uhcPlayer.getPlayer().getWorld().dropItemNaturally(uhcPlayer.getPlayer().getLocation(), skull);
     }

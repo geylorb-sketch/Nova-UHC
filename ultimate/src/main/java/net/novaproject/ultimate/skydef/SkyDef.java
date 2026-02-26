@@ -3,7 +3,6 @@ package net.novaproject.ultimate.skydef;
 import lombok.Getter;
 import lombok.Setter;
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.scenario.Scenario;

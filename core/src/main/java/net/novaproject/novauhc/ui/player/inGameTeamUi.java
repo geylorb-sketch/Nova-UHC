@@ -1,7 +1,8 @@
 package net.novaproject.novauhc.ui.player;
 
-
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
 import net.novaproject.novauhc.listener.player.PlayerConnectionEvent;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.uhcteam.UHCTeamManager;
@@ -26,8 +27,8 @@ public class inGameTeamUi extends CustomInventory {
         fillLine(1, getConfig().getInt("menu.teams.ingame.color"));
         addClose(8);
 
-
-        addItem(new ActionItem(0, new ItemCreator(Material.PAPER).setName(CommonString.RANDOM_TEAMS_BUTTON.getRawMessage())) {
+        addItem(new ActionItem(0, new ItemCreator(Material.PAPER)
+                .setName(LangManager.get().get(CommonLang.RANDOM_TEAMS_BUTTON, getPlayer()))) {
             @Override
             public void onClick(InventoryClickEvent e) {
                 getUHCPlayer().setTeam(Optional.empty());
@@ -47,13 +48,10 @@ public class inGameTeamUi extends CustomInventory {
         }
 
         int currentTeam = 0;
-
         for (UHCTeam team : UHCTeamManager.get().getTeams()) {
             currentTeam++;
             int categoryForThisItem = (int) Math.ceil((double) currentTeam / teamsPerPage);
-
             int positionInCategory = (currentTeam - 1) % teamsPerPage;
-
             int slot = 9 + positionInCategory;
 
             addItem(new ActionItem(categoryForThisItem, slot, team.getItem()) {
@@ -66,7 +64,6 @@ public class inGameTeamUi extends CustomInventory {
         }
     }
 
-
     @Override
     public int getCategories() {
         int totalTeams = UHCTeamManager.get().getTeams().size();
@@ -76,7 +73,7 @@ public class inGameTeamUi extends CustomInventory {
 
     @Override
     public String getTitle() {
-        return getConfig().getString("menu.teams.ingame.title");
+        return LangManager.get().get(UiTitleLang.TEAM_INGAME_TITLE, getPlayer());
     }
 
     @Override
@@ -85,28 +82,14 @@ public class inGameTeamUi extends CustomInventory {
     }
 
     @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    public boolean isRefreshAuto() { return false; }
 
     @Override
     public void open() {
-        /*if (ScenarioManager.get().getScenarioByName("SkyDef").map(Scenario::isActive).orElse(false)) {
-            super.open();
-            return;
-        } else if (ScenarioManager.get().getScenarioByName("BeatTheSanta").map(Scenario::isActive).orElse(false)) {
-            super.open();
-            return;
-        } else if (UHCManager.get().getTeam_size() == 1) {
-            CommonString.DISABLE_ACTION.send(getPlayer());
-            return;
-        }*/
         if (UHCTeamManager.get().getTeams().isEmpty()) {
-            CommonString.DISABLE_ACTION.send(getPlayer());
+            LangManager.get().send(CommonLang.DISABLE_ACTION, getPlayer());
             return;
         }
         super.open();
-
     }
-
 }

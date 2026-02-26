@@ -3,8 +3,6 @@ package net.novaproject.novauhc.scenario;
 import lombok.Getter;
 import lombok.Setter;
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
@@ -161,16 +159,6 @@ public abstract class Scenario {
 
         YamlConfiguration config = file.exists() ? YamlConfiguration.loadConfiguration(file) : new YamlConfiguration();
 
-        if (getLang() != null) {
-            for (ScenarioLang lang : getLang()) {
-                lang.setConfig(config);
-                if (!config.contains(lang.getPath())) {
-                    config.set(lang.getPath(), lang.getDefaultMessage());
-                }
-            }
-            ScenarioLangManager.loadMessages(config, getLang());
-        }
-
         config.options().copyDefaults(true);
 
         if (!file.exists()) {
@@ -187,10 +175,6 @@ public abstract class Scenario {
     }
 
 
-
-    public ScenarioLang[] getLang() {
-        return null;
-    }
 
 
     public void onBreak(Player player, Block block, BlockBreakEvent event) {

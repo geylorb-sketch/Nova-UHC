@@ -1,9 +1,12 @@
 package net.novaproject.novauhc.task;
 
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.lang.TaskLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -61,7 +64,7 @@ public class ScatterTask extends BukkitRunnable {
 
         UHCManager.get().setGameState(UHCManager.GameState.INGAME);
 
-        Bukkit.broadcastMessage(Common.get().getServertag() + "§aLa partie commence !");
+        Bukkit.broadcastMessage(LangManager.get().get(TaskLang.GAME_START, (Player)null, Map.of("%servertag%", Common.get().getServertag())));
 
 
         UHCPlayerManager.get().getPlayingOnlineUHCPlayers().forEach(player -> {
@@ -125,7 +128,7 @@ public class ScatterTask extends BukkitRunnable {
         player.setGameMode(GameMode.SURVIVAL);
         player.getInventory().clear();
 
-        Bukkit.broadcastMessage(CommonString.TP_MESSAGE.getMessage(player));
+        LangManager.get().sendAll(CommonLang.TP_MESSAGE, Map.of("%player%", player.getName()));
         Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.playSound(onlinePlayer.getLocation(), Sound.NOTE_STICKS, 1, 1));
 
     }

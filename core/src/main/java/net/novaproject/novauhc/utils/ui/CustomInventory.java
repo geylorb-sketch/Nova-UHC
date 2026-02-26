@@ -1,6 +1,9 @@
 package net.novaproject.novauhc.utils.ui;
 
 import net.novaproject.novauhc.Main;
+import net.novaproject.novauhc.lang.Lang;
+import net.novaproject.novauhc.lang.LangManager;
+import java.util.Map;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ConfigUtils;
@@ -60,6 +63,16 @@ public abstract class CustomInventory {
 
     public UHCPlayer getUHCPlayer() {
         return uhcPlayer;
+    }
+
+    /** Traduit une clé dans la langue du joueur qui ouvre ce menu. */
+    public String t(Lang key) {
+        return LangManager.get().get(key, player);
+    }
+
+    /** Traduit avec placeholders extra. */
+    public String t(Lang key, Map<String, Object> extra) {
+        return LangManager.get().get(key, player, extra);
     }
 
     public void open(int tick){

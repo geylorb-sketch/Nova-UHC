@@ -1,7 +1,8 @@
 package net.novaproject.novauhc.scenario.role;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.RoleVariableProcessor;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.role.camps.Camps;
@@ -127,7 +128,7 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
 
     public void giveRoles() {
 
-        Bukkit.broadcastMessage(CommonString.GIVING_ROLES.getMessage());
+        Bukkit.broadcastMessage(LangManager.get().get(CommonLang.GIVING_ROLES));
 
         List<T> pool = new ArrayList<>();
 

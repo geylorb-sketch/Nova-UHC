@@ -1,7 +1,6 @@
 package net.novaproject.ultimate.fallenkigdom;
 
 
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.ui.config.ScenariosUi;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.ui.CustomInventory;

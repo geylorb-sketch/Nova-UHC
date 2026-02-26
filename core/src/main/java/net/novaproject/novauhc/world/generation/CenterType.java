@@ -1,5 +1,7 @@
 package net.novaproject.novauhc.world.generation;
 
+import net.novaproject.novauhc.Common;
+import net.novaproject.novauhc.task.LoadingChunkTask;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.TreeType;
 
@@ -25,6 +27,7 @@ public enum CenterType {
         FLAT {
             @Override
             public void generate(WorldPopulator populator) {
+                LoadingChunkTask.create(Common.get().getArena(), Common.get().getNether(), (int) (Common.get().getArena().getWorldBorder().getSize() / 2));
             }
         };
 

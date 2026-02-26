@@ -5,18 +5,18 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.Command;
 import net.novaproject.novauhc.command.CommandArguments;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.uhcteam.UHCTeamManager;
 import net.novaproject.novauhc.ui.ConfirmMenu;
 import net.novaproject.novauhc.ui.DefaultUi;
-import net.novaproject.novauhc.ui.config.ScenariosUi;
 import net.novaproject.novauhc.ui.player.LimiteStuffbyPlayerUi;
 import net.novaproject.novauhc.utils.TeamsTagsManager;
 import net.novaproject.novauhc.utils.Titles;
@@ -60,7 +60,7 @@ public class HCMD extends Command {
         switch (subCommand) {
             case "give":
                 if (!UHCManager.get().isGame()) {
-                    CommonString.DISABLE_ACTION.send(player);
+                    LangManager.get().send(CommonLang.DISABLE_ACTION, player);
                     return;
                 }
                 ItemStack item = player.getItemInHand().clone();
@@ -72,7 +72,7 @@ public class HCMD extends Command {
                 UHCPlayerManager.get().getPlayingOnlineUHCPlayers().forEach(p -> {
                     Location loc = p.getPlayer().getLocation();
                     loc.getWorld().dropItemNaturally(loc, item).setPickupDelay(0);
-                    String lang = CommonString.HOST_GIVE.getMessage().replace("%item%", item.getType().name()).replace("%amont%", "" + item.getAmount());
+                    String lang = LangManager.get().get(CommonLang.HOST_GIVE).replace("%item%", item.getType().name()).replace("%amont%", "" + item.getAmount());
                     p.getPlayer().sendMessage(lang);
                 });
                 break;
@@ -86,7 +86,7 @@ public class HCMD extends Command {
                 if (arguments.length >= 2) {
                     broadcastMessage(arguments, player);
                 } else {
-                    CommonString.HOST_SAY_USAGE.send(player);
+                    LangManager.get().send(CommonLang.HOST_SAY_USAGE, player);
                 }
                 break;
             case "title":
@@ -96,7 +96,7 @@ public class HCMD extends Command {
                 if (arguments.length >= 3) {
                     manageCohost(player, arguments[1].toLowerCase(), arguments[2]);
                 } else {
-                    CommonString.HOST_COHOST_USAGE.send(player);
+                    LangManager.get().send(CommonLang.HOST_COHOST_USAGE, player);
                 }
                 break;
             case "revive":
@@ -327,11 +327,11 @@ public class HCMD extends Command {
         for (UHCPlayer player : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
             player.getPlayer().setHealth(player.getPlayer().getMaxHealth());
         }
-        Bukkit.broadcastMessage(CommonString.HEAL_BROADCAST.getMessage());
+        Bukkit.broadcastMessage(LangManager.get().get(CommonLang.HEAL_BROADCAST));
     }
 
     private void sendHelpMessage(Player player) {
-        CommonString.HOST_HELP_MESSAGE.send(player);
+        LangManager.get().send(CommonLang.HOST_HELP_MESSAGE, player);
     }
 
     private void handleConfigCommand(Player player) {
@@ -345,7 +345,7 @@ public class HCMD extends Command {
             new ConfirmMenu(player, "§cEtes-vous sur de vouloir sur de prendre le risque ?", () -> {
                 new DefaultUi(player).open();
             }, () -> {
-                CommonString.CONFIG_CANNOT_INGAME.send(player);
+                LangManager.get().send(CommonLang.CONFIG_CANNOT_INGAME, player);
             }, null).open();
         }
     }
@@ -356,10 +356,10 @@ public class HCMD extends Command {
         boolean bypassed = host.isBypassed();
 
         if (bypassed) {
-            CommonString.HOST_BYPASS_ENABLED.send(player);
+            LangManager.get().send(CommonLang.HOST_BYPASS_ENABLED, player);
             player.setGameMode(GameMode.CREATIVE);
         } else {
-            CommonString.HOST_BYPASS_DISABLED.send(player);
+            LangManager.get().send(CommonLang.HOST_BYPASS_DISABLED, player);
             GameMode newGameMode = UHCManager.get().isGame() ? GameMode.SURVIVAL : GameMode.ADVENTURE;
             player.setGameMode(newGameMode);
         }
@@ -523,7 +523,7 @@ public class HCMD extends Command {
             }
             inventory.addItem(item);
         }
-        Bukkit.broadcastMessage(CommonString.REVIVE_MESSAGE.getMessage(target.getPlayer()));
+        Bukkit.broadcastMessage(LangManager.get().get(CommonLang.REVIVE_MESSAGE, target.getPlayer()));
         target.getPlayer().sendMessage(ChatColor.RED + "Oublier pas de refaire votre Inventaire ! ");
     }
 

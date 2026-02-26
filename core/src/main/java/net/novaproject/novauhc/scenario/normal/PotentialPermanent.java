@@ -1,10 +1,10 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.PotentialPermanentLang;
+import net.novaproject.novauhc.lang.scenario.PotentialPermanentLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -78,11 +78,6 @@ public class PotentialPermanent extends Scenario {
         return "potentialpermanent";
     }
 
-    @Override
-    public ScenarioLang[] getLang() {
-        return PotentialPermanentLang.values();
-    }
-
 
     @Override
     public void onStart(Player player) {
@@ -95,13 +90,13 @@ public class PotentialPermanent extends Scenario {
 
         applyHealth(player);
 
-        UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
+
         Map<String, Object> placeholders = new HashMap<>();
         placeholders.put("%permanent_hearts%", startingPermanentHealth / 2);
         placeholders.put("%absorption_hearts%", startingAbsorptionHealth / 2);
 
-        ScenarioLangManager.send(uhcPlayer, PotentialPermanentLang.STARTING_HEALTH, placeholders);
-        ScenarioLangManager.send(uhcPlayer, PotentialPermanentLang.CONVERSION_INFO);
+        LangManager.get().send(PotentialPermanentLang.STARTING_HEALTH, player, placeholders);
+        LangManager.get().send(PotentialPermanentLang.CONVERSION_INFO, player);
     }
 
     @Override

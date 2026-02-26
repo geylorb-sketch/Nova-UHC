@@ -5,10 +5,11 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.command.Command;
 import net.novaproject.novauhc.command.CommandArguments;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import org.bukkit.entity.Player;
 
 
@@ -17,12 +18,12 @@ public class DocumentCMD extends Command {
     @Override
     public void execute(CommandArguments args) {
         Player player = (Player) args.getSender();
-        TextComponent base = new TextComponent(CommonString.DOCUMENT_MESSAGE.getMessage(player));
+        TextComponent base = new TextComponent(LangManager.get().get(CommonLang.DOCUMENT_MESSAGE, player));
 
         TextComponent linkConfig = new TextComponent(" §f[" + Common.get().getMainColor() + "Document§f]§r");
         linkConfig.setHoverEvent(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(CommonString.DOCUMENT_MESSAGE_HOVER.getMessage(player)).create()
+                new ComponentBuilder(LangManager.get().get(CommonLang.DOCUMENT_MESSAGE_HOVER, player)).create()
         ));
         linkConfig.setClickEvent(new ClickEvent(
                 ClickEvent.Action.OPEN_URL,
@@ -32,7 +33,7 @@ public class DocumentCMD extends Command {
         TextComponent linkOfficial = new TextComponent(" §f[§3§lNova Code§f]§r");
         linkOfficial.setHoverEvent(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(CommonString.DOCUMENT_MESSAGE_HOVER.getMessage(player)).create()
+                new ComponentBuilder(LangManager.get().get(CommonLang.DOCUMENT_MESSAGE_HOVER, player)).create()
         ));
         linkOfficial.setClickEvent(new ClickEvent(
                 ClickEvent.Action.OPEN_URL,

@@ -1,7 +1,8 @@
 package net.novaproject.novauhc.scenario.normal;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.utils.VariableType;
@@ -65,7 +66,7 @@ public class FinalHeal extends Scenario {
                     player.setSaturation(20f);
                 }
             }
-            Bukkit.broadcastMessage(CommonString.FINAL_HEAL_BROADCAST.getMessage());
+            Bukkit.broadcastMessage(LangManager.get().get(CommonLang.FINAL_HEAL_BROADCAST));
         }
     }
 }

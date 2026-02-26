@@ -1,5 +1,7 @@
 package net.novaproject.novauhc.ui.config;
 
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
 import net.novaproject.novauhc.ui.GameUi;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
 import net.novaproject.novauhc.utils.ui.item.ActionItem;
@@ -30,16 +32,12 @@ public class DropUi extends CustomInventory {
 
     @Override
     public String getTitle() {
-        return getConfig().getString("menu.drop.title");
+        return LangManager.get().get(UiTitleLang.DROP_TITLE, getPlayer());
     }
 
     @Override
-    public int getLines() {
-        return 3;
-    }
+    public int getLines() { return 3; }
 
     @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    public boolean isRefreshAuto() { return false; }
 }

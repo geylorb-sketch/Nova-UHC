@@ -1,7 +1,9 @@
 package net.novaproject.novauhc.ui;
 
-import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.ConfigVarUiLang;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.UHCUtils;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public abstract class ConfigVarUi extends CustomInventory {
 
@@ -19,7 +22,6 @@ public abstract class ConfigVarUi extends CustomInventory {
     private final Number max_plus, mid_plus, min_plus;
     private final Number limitMin, limitMax;
     private final CustomInventory parent;
-
     private Number change;
     private final Class<?> numberType;
 
@@ -29,16 +31,11 @@ public abstract class ConfigVarUi extends CustomInventory {
                        Number change, Number limitMin, Number limitMax,
                        CustomInventory parent) {
         super(player);
-        this.max_minus = max_minus;
-        this.mid_minus = mid_minus;
-        this.min_minus = min_minus;
-        this.max_plus = max_plus;
-        this.mid_plus = mid_plus;
-        this.min_plus = min_plus;
-        this.change = change;
-        this.limitMin = limitMin;
-        this.limitMax = limitMax;
-        this.parent = parent;
+        this.max_minus = max_minus; this.mid_minus = mid_minus; this.min_minus = min_minus;
+        this.max_plus  = max_plus;  this.mid_plus  = mid_plus;  this.min_plus  = min_plus;
+        this.change    = change;
+        this.limitMin  = limitMin;  this.limitMax  = limitMax;
+        this.parent    = parent;
         this.numberType = change.getClass();
     }
 
@@ -46,35 +43,30 @@ public abstract class ConfigVarUi extends CustomInventory {
 
     private void updateValue(Number delta) {
         double result = change.doubleValue() + delta.doubleValue();
-
         if (limitMax.doubleValue() != 0) {
             if (result < limitMin.doubleValue() || result > limitMax.doubleValue()) return;
         }
-
-        if (numberType == Integer.class) {
-            change = (int) Math.round(result);
-        } else if (numberType == Double.class) {
-            change = result;
-        } else if (numberType == Float.class) {
-            change = (float) result;
-        } else if (numberType == Long.class) {
-            change = (long) result;
-        } else {
-            change = result;
-        }
-
+        if      (numberType == Integer.class) change = (int) Math.round(result);
+        else if (numberType == Double.class)  change = result;
+        else if (numberType == Float.class)   change = (float) result;
+        else if (numberType == Long.class)    change = (long) result;
+        else                                  change = result;
         onChange(change);
         refresh();
     }
 
+    private String t(ConfigVarUiLang key, Map<String, Object> params) {
+        return LangManager.get().get(key, getPlayer(), params);
+    }
+
     private ActionItem plusButton(int slot, Number value, String label) {
         return new ActionItem(slot, UHCUtils.greenPlus(Arrays.asList(
-                "§8┃ §fAjouter §a" + value,
+                t(ConfigVarUiLang.PLUS_BUTTON_NAME, Map.of("%value%", value)),
                 "",
-                "  §8┃ §fPermet d'augmenter la valeur",
-                "  §8┃ §fde §a" + value + "§f.",
+                t(ConfigVarUiLang.PLUS_DESC1, Map.of()),
+                t(ConfigVarUiLang.PLUS_DESC2, Map.of("%value%", value)),
                 "",
-                CommonString.CLICK_HERE_TO_MODIFY.getMessage()
+                LangManager.get().get(CommonLang.CLICK_HERE_TO_MODIFY, getPlayer())
         ), label)) {
             @Override
             public void onClick(InventoryClickEvent e) {
@@ -86,12 +78,12 @@ public abstract class ConfigVarUi extends CustomInventory {
 
     private ActionItem minusButton(int slot, Number value, String label) {
         return new ActionItem(slot, UHCUtils.redMinus(Arrays.asList(
-                "§8┃ §fRetirer " + Common.get().getMainColor() + value,
+                t(ConfigVarUiLang.MINUS_BUTTON_NAME, Map.of("%value%", value)),
                 "",
-                "  §8┃ §fPermet de diminuer la valeur",
-                "  §8┃ §fde " + Common.get().getMainColor() + value + "§f.",
+                t(ConfigVarUiLang.MINUS_DESC1, Map.of()),
+                t(ConfigVarUiLang.MINUS_DESC2, Map.of("%value%", value)),
                 "",
-                CommonString.CLICK_HERE_TO_MODIFY.getMessage()
+                LangManager.get().get(CommonLang.CLICK_HERE_TO_MODIFY, getPlayer())
         ), label)) {
             @Override
             public void onClick(InventoryClickEvent e) {
@@ -103,20 +95,22 @@ public abstract class ConfigVarUi extends CustomInventory {
 
     @Override
     public void setup() {
-        addItem(plusButton(10, min_plus, "§a+" + min_plus));
-        addItem(plusButton(11, mid_plus, "§a+" + mid_plus));
-        addItem(plusButton(12, max_plus, "§a+" + max_plus));
+        addItem(plusButton(10, min_plus,  "§a+" + min_plus));
+        addItem(plusButton(11, mid_plus,  "§a+" + mid_plus));
+        addItem(plusButton(12, max_plus,  "§a+" + max_plus));
+
+        String limitsLine = limitMax.doubleValue() == 0
+                ? t(ConfigVarUiLang.LIMITS_INFINITE, Map.of("%min%", limitMin))
+                : t(ConfigVarUiLang.LIMITS_BOUNDED,  Map.of("%min%", limitMin, "%max%", limitMax));
 
         addItem(new StaticItem(13, new ItemCreator(Material.PAPER)
-                .setName("§8┃ §fValeur actuelle : §e" + change)
+                .setName(t(ConfigVarUiLang.CURRENT_VALUE, Map.of("%value%", change)))
                 .setLores(Arrays.asList(
                         "",
-                        "  §8┃ §fAffiche la valeur actuelle",
-                        "  §8┃ §fde la configuration.",
+                        t(ConfigVarUiLang.CURRENT_VALUE_DESC1, Map.of()),
+                        t(ConfigVarUiLang.CURRENT_VALUE_DESC2, Map.of()),
                         "",
-                        limitMax.doubleValue() == 0
-                                ? "  §7Limites : " + Common.get().getMainColor() + limitMin + " §7→ §a§l∞"
-                                : "  §7Limites : " + Common.get().getMainColor() + limitMin + " §7→ §a" + limitMax
+                        limitsLine
                 ))));
 
         addItem(minusButton(14, max_minus, "§c-" + max_minus));
@@ -129,16 +123,12 @@ public abstract class ConfigVarUi extends CustomInventory {
 
     @Override
     public String getTitle() {
-        return "§8┃ §fConfiguration";
+        return LangManager.get().get(UiTitleLang.CONFIGVAR_TITLE, getPlayer());
     }
 
     @Override
-    public int getLines() {
-        return 3;
-    }
+    public int getLines() { return 3; }
 
     @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    public boolean isRefreshAuto() { return false; }
 }

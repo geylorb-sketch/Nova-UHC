@@ -10,8 +10,8 @@ serverinfo:
   helpop:
     "§f[§6HELP§f] "
 api:
-  url: "http://91.134.136.202:3000"
-  key: ""
+  url: "http://91.134.136.202:3000/api/v1/plugin"
+  key: "TA CLEF API ICI"
   server-name: "Nova-UHC"
 mumble:
   port: ""

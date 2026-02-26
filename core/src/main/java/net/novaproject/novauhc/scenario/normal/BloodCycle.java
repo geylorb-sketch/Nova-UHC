@@ -1,11 +1,11 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.lang.BloodCycleLang;
+import net.novaproject.novauhc.lang.scenario.BloodCycleLang;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;
@@ -36,11 +36,6 @@ public class BloodCycle extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return BloodCycleLang.values();
-    }
-
-    @Override
     public String getPath() {
         return "bloodcycle";
     }
@@ -55,22 +50,22 @@ public class BloodCycle extends Scenario {
         cache[5] = Material.REDSTONE_ORE;
         switch (cache[i]) {
             case DIAMOND_ORE:
-                ScenarioLangManager.send(player, BloodCycleLang.DIAMOND);
+                LangManager.get().send(BloodCycleLang.DIAMOND, player);
                 break;
             case GOLD_ORE:
-                ScenarioLangManager.send(player, BloodCycleLang.GOLD);
+                LangManager.get().send(BloodCycleLang.GOLD, player);
                 break;
             case IRON_ORE:
-                ScenarioLangManager.send(player, BloodCycleLang.IRON);
+                LangManager.get().send(BloodCycleLang.IRON, player);
                 break;
             case COAL_ORE:
-                ScenarioLangManager.send(player, BloodCycleLang.COAL);
+                LangManager.get().send(BloodCycleLang.COAL, player);
                 break;
             case LAPIS_ORE:
-                ScenarioLangManager.send(player, BloodCycleLang.LAPIS);
+                LangManager.get().send(BloodCycleLang.LAPIS, player);
                 break;
             case REDSTONE_ORE:
-                ScenarioLangManager.send(player, BloodCycleLang.REDSTONE);
+                LangManager.get().send(BloodCycleLang.REDSTONE, player);
                 break;
         }
         new BukkitRunnable() {
@@ -81,22 +76,22 @@ public class BloodCycle extends Scenario {
                     i = 0;
                 switch (cache[i]) {
                     case DIAMOND_ORE:
-                        ScenarioLangManager.send(player, BloodCycleLang.DIAMOND);
+                        LangManager.get().send(BloodCycleLang.DIAMOND, player);
                         break;
                     case GOLD_ORE:
-                        ScenarioLangManager.send(player, BloodCycleLang.GOLD);
+                        LangManager.get().send(BloodCycleLang.GOLD, player);
                         break;
                     case IRON_ORE:
-                        ScenarioLangManager.send(player, BloodCycleLang.IRON);
+                        LangManager.get().send(BloodCycleLang.IRON, player);
                         break;
                     case COAL_ORE:
-                        ScenarioLangManager.send(player, BloodCycleLang.COAL);
+                        LangManager.get().send(BloodCycleLang.COAL, player);
                         break;
                     case LAPIS_ORE:
-                        ScenarioLangManager.send(player, BloodCycleLang.LAPIS);
+                        LangManager.get().send(BloodCycleLang.LAPIS, player);
                         break;
                     case REDSTONE_ORE:
-                        ScenarioLangManager.send(player, BloodCycleLang.REDSTONE);
+                        LangManager.get().send(BloodCycleLang.REDSTONE, player);
                         break;
                 }
 
@@ -108,7 +103,7 @@ public class BloodCycle extends Scenario {
     public void onBreak(Player player, Block block, BlockBreakEvent event) {
         if (block.getType().equals(cache[i])) {
             player.damage(1);
-            ScenarioLangManager.send(player, BloodCycleLang.TAKE_DAMAGE);
+            LangManager.get().send(BloodCycleLang.TAKE_DAMAGE, player);
         }
     }
 }

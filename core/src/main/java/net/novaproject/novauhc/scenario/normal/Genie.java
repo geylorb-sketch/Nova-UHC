@@ -1,12 +1,12 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.GenieLang;
+import net.novaproject.novauhc.lang.scenario.GenieLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -96,19 +96,13 @@ public class Genie extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return GenieLang.values();
-    }
-
-    @Override
     public void onStart(Player player) {
         if (!isActive()) return;
 
         playerWishes.put(player.getUniqueId(), maxWishes);
         playerKills.put(player.getUniqueId(), 0);
 
-        UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
-        ScenarioLangManager.send(uhcPlayer, GenieLang.WISHES_RECEIVED);
+        LangManager.get().send(GenieLang.WISHES_RECEIVED, player);
     }
 
     @Override
@@ -129,14 +123,14 @@ public class Genie extends Scenario {
         int wishesLeft = playerWishes.getOrDefault(playerUuid, 0);
 
         if (wishesLeft <= 0) {
-            ScenarioLangManager.send(UHCPlayerManager.get().getPlayer(player), GenieLang.NO_WISHES_LEFT);
+            LangManager.get().send(GenieLang.NO_WISHES_LEFT, player);
             return false;
         }
 
         int kills = playerKills.getOrDefault(playerUuid, 0);
 
         if (!canMakeWish(wishType, kills)) {
-            ScenarioLangManager.send(UHCPlayerManager.get().getPlayer(player), GenieLang.NOT_ENOUGH_KILLS);
+            LangManager.get().send(GenieLang.NOT_ENOUGH_KILLS, player);
             return false;
         }
 
@@ -146,11 +140,11 @@ public class Genie extends Scenario {
             playerWishes.put(playerUuid, wishesLeft - 1);
             Map<String, Object> placeholders = new HashMap<>();
             placeholders.put("%remaining%", String.valueOf(wishesLeft - 1));
-            ScenarioLangManager.send(UHCPlayerManager.get().getPlayer(player), GenieLang.WISH_GRANTED, placeholders);
+            LangManager.get().send(GenieLang.WISH_GRANTED, player, placeholders);
 
             Map<String, Object> broadcastPlaceholders = new HashMap<>();
             broadcastPlaceholders.put("%player%", player.getName());
-            ScenarioLangManager.sendAll(GenieLang.WISH_ANNOUNCED, broadcastPlaceholders);
+            LangManager.get().sendAll(GenieLang.WISH_ANNOUNCED, broadcastPlaceholders);
         }
 
         return success;
@@ -186,24 +180,24 @@ public class Genie extends Scenario {
         switch (wishType.toLowerCase()) {
             case "heal":
                 player.setHealth(player.getMaxHealth());
-                ScenarioLangManager.send(UHCPlayerManager.get().getPlayer(player), GenieLang.HEAL_GRANTED);
+                LangManager.get().send(GenieLang.HEAL_GRANTED, player);
                 return true;
             case "food":
                 player.setFoodLevel(20);
                 player.setSaturation(20);
-                ScenarioLangManager.send(UHCPlayerManager.get().getPlayer(player), GenieLang.FOOD_GRANTED);
+                LangManager.get().send(GenieLang.FOOD_GRANTED, player);
                 return true;
             case "speed":
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedDuration, 1));
                 Map<String, Object> speedPlaceholders = new HashMap<>();
                 speedPlaceholders.put("%duration%", String.valueOf(speedDuration / 20 / 60));
-                ScenarioLangManager.send(UHCPlayerManager.get().getPlayer(player), GenieLang.SPEED_GRANTED, speedPlaceholders);
+                LangManager.get().send(GenieLang.SPEED_GRANTED, player, speedPlaceholders);
                 return true;
             case "strength":
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, strengthDuration, 0));
                 Map<String, Object> strengthPlaceholders = new HashMap<>();
                 strengthPlaceholders.put("%duration%", String.valueOf(strengthDuration / 20 / 60));
-                ScenarioLangManager.send(UHCPlayerManager.get().getPlayer(player), GenieLang.STRENGTH_GRANTED, strengthPlaceholders);
+                LangManager.get().send(GenieLang.STRENGTH_GRANTED, player, strengthPlaceholders);
                 return true;
             case "resistance":
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 6000, 0));

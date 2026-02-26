@@ -1,6 +1,5 @@
 package net.novaproject.ultimate.teamatfirstseigth;
 
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;

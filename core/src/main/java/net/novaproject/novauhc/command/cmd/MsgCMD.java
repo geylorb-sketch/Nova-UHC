@@ -1,8 +1,9 @@
 package net.novaproject.novauhc.command.cmd;
 
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.utils.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -20,24 +21,24 @@ public class MsgCMD implements CommandExecutor {
         if (!(sender instanceof Player player)) return false;
 
         if (args.length < 2) {
-            CommonString.MSG_USAGE.send(player);
+            LangManager.get().send(CommonLang.MSG_USAGE, player);
             return true;
         }
 
         Player target = Bukkit.getPlayerExact(args[0]);
 
         if (target == null || !target.isOnline()) {
-            CommonString.MSG_PLAYER_OFFLINE.send(player);
+            LangManager.get().send(CommonLang.MSG_PLAYER_OFFLINE, player);
             return true;
         }
 
         if (target == player) {
-            CommonString.MSG_CANNOT_MESSAGE_SELF.send(player);
+            LangManager.get().send(CommonLang.MSG_CANNOT_MESSAGE_SELF, player);
             return true;
         }
 
         if (UHCManager.get().isChatdisbale()) {
-            CommonString.CHAT_DISABLED.send(player);
+            LangManager.get().send(CommonLang.CHAT_DISABLED, player);
             return true;
         }
 
@@ -47,13 +48,13 @@ public class MsgCMD implements CommandExecutor {
         Map<String, Object> senderPlaceholders = new HashMap<>();
         senderPlaceholders.put("%target%", target.getName());
         senderPlaceholders.put("%message%", message);
-        CommonString.MSG_SENT_FORMAT.send(player, senderPlaceholders);
+        LangManager.get().send(CommonLang.MSG_SENT_FORMAT, player, senderPlaceholders);
 
         // Envoyer le message au destinataire
         Map<String, Object> targetPlaceholders = new HashMap<>();
         targetPlaceholders.put("%sender%", player.getName());
         targetPlaceholders.put("%message%", message);
-        CommonString.MSG_RECEIVED_FORMAT.send(target, targetPlaceholders);
+        LangManager.get().send(CommonLang.MSG_RECEIVED_FORMAT, target, targetPlaceholders);
 
         MessageManager.setLastMessage(player.getUniqueId(), target.getUniqueId());
         return true;

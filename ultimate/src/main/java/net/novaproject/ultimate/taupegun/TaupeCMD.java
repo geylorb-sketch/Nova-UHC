@@ -1,6 +1,5 @@
 package net.novaproject.ultimate.taupegun;
 
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.Command;
 import net.novaproject.novauhc.command.CommandArguments;

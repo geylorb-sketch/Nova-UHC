@@ -4,8 +4,7 @@ import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.lang.DemocracyLang;
+import net.novaproject.novauhc.lang.scenario.DemocracyLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -94,11 +93,6 @@ public class Democracy extends Scenario {
     @Override
     public String getPath() {
         return "democracy";
-    }
-
-    @Override
-    public ScenarioLang[] getLang() {
-        return DemocracyLang.values();
     }
 
     @Override

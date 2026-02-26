@@ -1,12 +1,12 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.BloodLustLang;
+import net.novaproject.novauhc.lang.scenario.BloodLustLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Bukkit;
@@ -95,11 +95,6 @@ public class BloodLust extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return BloodLustLang.values();
-    }
-
-    @Override
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
         if (!isActive() || killer == null) return;
 
@@ -107,7 +102,7 @@ public class BloodLust extends Scenario {
         cancelBloodLustEffect(killerPlayer.getUniqueId());
         applyBloodLustEffect(killerPlayer);
 
-        ScenarioLangManager.send(killer, BloodLustLang.KILL_BOOST);
+        LangManager.get().send(BloodLustLang.KILL_BOOST, killerPlayer);
         Bukkit.broadcastMessage("§c[BloodLust] §f" + killerPlayer.getName() + " §fest en état de soif de sang !");
     }
 

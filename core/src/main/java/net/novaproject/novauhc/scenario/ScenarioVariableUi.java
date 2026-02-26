@@ -1,5 +1,7 @@
 package net.novaproject.novauhc.scenario;
 
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
 import net.novaproject.novauhc.ui.ConfigVarUi;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.UHCUtils;
@@ -11,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 public class ScenarioVariableUi extends CustomInventory {
 
@@ -21,6 +24,13 @@ public class ScenarioVariableUi extends CustomInventory {
         super(player);
         this.scenario = scenario;
         this.parent = parent;
+    }
+
+    private String t(ScenarioVariableUiLang key) {
+        return LangManager.get().get(key, getPlayer());
+    }
+    private String t(ScenarioVariableUiLang key, Map<String, Object> p) {
+        return LangManager.get().get(key, getPlayer(), p);
     }
 
     @Override
@@ -55,9 +65,9 @@ public class ScenarioVariableUi extends CustomInventory {
                         .setName("§e" + annotation.name())
                         .addLore("§7" + annotation.description())
                         .addLore("")
-                        .addLore("§7Valeur actuelle: §b" + displayValue)
+                        .addLore(t(ScenarioVariableUiLang.CURRENT_VALUE, Map.of("%value%", displayValue)))
                         .addLore("")
-                        .addLore("§a▶ Clic pour changer");
+                        .addLore(t(ScenarioVariableUiLang.CLICK_CHANGE));
 
                 if (rawValue instanceof Boolean) {
                     addItem(new ActionItem(slot, icon) {
@@ -85,26 +95,17 @@ public class ScenarioVariableUi extends CustomInventory {
                                         ex.printStackTrace();
                                     }
                                 }
-                            }).setSlot("Nouvelle valeur").open();
+                            }).setSlot(t(ScenarioVariableUiLang.ANVIL_NEW_VALUE)).open();
                         }
                     });
 
                 } else if (rawValue instanceof Number number) {
                     addMenu(slot, icon,
-                            new ConfigVarUi(
-                                    getPlayer(),
-                                    10, 5, 1,
-                                    10, 5, 1,
-                                    number,
-                                    0,
-                                    0,
-                                    ScenarioVariableUi.this
-                            ) {
+                            new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, number, 0, 0, ScenarioVariableUi.this) {
                                 @Override
                                 public void onChange(Number newValue) {
                                     try {
                                         Class<?> type = field.getType();
-
                                         if (type == int.class || type == Integer.class)
                                             field.set(scenario, newValue.intValue());
                                         else if (type == double.class || type == Double.class)
@@ -113,9 +114,8 @@ public class ScenarioVariableUi extends CustomInventory {
                                             field.set(scenario, newValue.floatValue());
                                         else if (type == long.class || type == Long.class)
                                             field.set(scenario, newValue.longValue());
-
-                                    } catch (IllegalAccessException e) {
-                                        e.printStackTrace();
+                                    } catch (IllegalAccessException ex) {
+                                        ex.printStackTrace();
                                     }
                                 }
                             });
@@ -130,21 +130,14 @@ public class ScenarioVariableUi extends CustomInventory {
             }
         }
 
-        addReturn(49,parent);
+        addReturn(49, parent);
     }
 
     @Override
     public String getTitle() {
-        return "§8Config: §6" + scenario.getName();
+        return t(ScenarioVariableUiLang.CONFIG_TITLE, Map.of("%name%", scenario.getName()));
     }
 
-    @Override
-    public int getLines() {
-        return 6;
-    }
-
-    @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    @Override public int getLines() { return 6; }
+    @Override public boolean isRefreshAuto() { return false; }
 }

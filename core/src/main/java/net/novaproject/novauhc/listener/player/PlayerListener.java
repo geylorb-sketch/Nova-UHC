@@ -1,8 +1,9 @@
 package net.novaproject.novauhc.listener.player;
 
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -59,7 +60,7 @@ public class PlayerListener implements Listener {
         if (fromWorld.getName().equalsIgnoreCase("arena")) {
             World netherWorld = Bukkit.getWorld(Common.get().getArenaName() + "_nether");
             if (netherWorld == null) {
-                CommonString.DIM_NOT_ACCEIBLE.send(player);
+                LangManager.get().send(CommonLang.DIM_NOT_ACCEIBLE, player);
                 event.setCancelled(true);
                 return;
             }
@@ -80,7 +81,7 @@ public class PlayerListener implements Listener {
         if (fromWorld.getName().equalsIgnoreCase(Common.get().getArenaName() + "_nether")) {
             World overworld = Common.get().getArena();
             if (overworld == null) {
-                CommonString.DIM_NOT_ACCEIBLE.send(player);
+                LangManager.get().send(CommonLang.DIM_NOT_ACCEIBLE, player);
                 event.setCancelled(true);
                 return;
             }
@@ -101,7 +102,7 @@ public class PlayerListener implements Listener {
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL) {
             World endWorld = Bukkit.getWorld(Common.get().getArenaName() + "_the_end");
             if (endWorld == null) {
-                CommonString.DIM_NOT_ACCEIBLE.send(player);
+                LangManager.get().send(CommonLang.DIM_NOT_ACCEIBLE, player);
                 event.setCancelled(true);
                 return;
             }
@@ -166,18 +167,18 @@ public class PlayerListener implements Listener {
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
 
         if (UHCManager.get().getGameState() != UHCManager.GameState.INGAME) {
-            event.setFormat(CommonString.LOBBY_CHAT_FORMAT.getMessage(player));
+            event.setFormat(LangManager.get().get(CommonLang.LOBBY_CHAT_FORMAT, player));
             return;
         }
 
         if (!uhcPlayer.isPlaying()) {
-            CommonString.CANT_TALK_DEATH.send(player);
+            LangManager.get().send(CommonLang.CANT_TALK_DEATH, player);
             event.setCancelled(true);
             return;
         }
 
         if (UHCManager.get().isChatdisbale()) {
-            CommonString.CHAT_DISABLED.send(player);
+            LangManager.get().send(CommonLang.CHAT_DISABLED, player);
             event.setCancelled(true);
             return;
         }
@@ -192,13 +193,13 @@ public class PlayerListener implements Listener {
         }
 
         if (!uhcPlayer.getTeam().isPresent()) {
-            event.setFormat(CommonString.SOLO_CHAT_FORMAT.getMessage(player));
+            event.setFormat(LangManager.get().get(CommonLang.SOLO_CHAT_FORMAT, player));
             return;
         }
 
         if (message.startsWith("!")) {
             event.setMessage(message.substring(1));
-            event.setFormat(CommonString.CHAT_GLOBAL_FORMAT.getMessage(player));
+            event.setFormat(LangManager.get().get(CommonLang.CHAT_GLOBAL_FORMAT, player));
             return;
         }
 
@@ -207,7 +208,7 @@ public class PlayerListener implements Listener {
         event.getRecipients().removeIf(p ->
                 team.getPlayers().stream().noneMatch(u -> u.getPlayer().equals(p))
         );
-        event.setFormat(CommonString.TEAM_CHAT_FORMAT.getMessage(player));
+        event.setFormat(LangManager.get().get(CommonLang.TEAM_CHAT_FORMAT, player));
     }
 
 

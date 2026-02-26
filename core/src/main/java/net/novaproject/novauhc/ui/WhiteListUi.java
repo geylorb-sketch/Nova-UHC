@@ -1,9 +1,11 @@
 package net.novaproject.novauhc.ui;
 
-import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.cloudnet.CloudNet;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
+import net.novaproject.novauhc.lang.ui.WhiteListUiLang;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.ui.AnvilUi;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
@@ -20,86 +22,90 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class WhiteListUi extends CustomInventory {
     public WhiteListUi(Player player) {
         super(player);
     }
 
+    private String t(WhiteListUiLang key) {
+        return LangManager.get().get(key, getPlayer());
+    }
+
+    private String t(WhiteListUiLang key, Map<String, Object> params) {
+        return LangManager.get().get(key, getPlayer(), params);
+    }
+
     @Override
     public void setup() {
         fillCorner(getConfig().getInt("menu.whitelist.corner"));
-
         addReturn(45, new DefaultUi(getPlayer()));
 
+        String accessHost  = LangManager.get().get(CommonLang.ACCESS_HOST, getPlayer());
+        String clickAccess = LangManager.get().get(CommonLang.CLICK_HERE_TO_ACCESS, getPlayer());
+        String clickModify = LangManager.get().get(CommonLang.CLICK_HERE_TO_MODIFY, getPlayer());
+
+        // Disable whitelist button
         ItemStack disableWool = new ItemStack(Material.WOOL, 1, (byte) 14);
         ItemMeta disableMeta = disableWool.getItemMeta();
         if (disableMeta != null) {
-            disableMeta.setDisplayName(CommonString.WHITELIST_DISABLE_BUTTON.getRawMessage());
+            disableMeta.setDisplayName(t(WhiteListUiLang.DISABLE_BUTTON));
             disableWool.setItemMeta(disableMeta);
         }
-
-        ItemStack enableWool = new ItemStack(Material.WOOL, 1, (byte) 5);
-        ItemMeta enableMeta = enableWool.getItemMeta();
-        if (enableMeta != null) {
-            enableMeta.setDisplayName(CommonString.WHITELIST_ENABLE_BUTTON.getRawMessage());
-            enableWool.setItemMeta(enableMeta);
-        }
-
         addItem(new ActionItem(7, disableWool) {
             @Override
             public void onClick(InventoryClickEvent e) {
                 Bukkit.getServer().setWhitelist(false);
-                CommonString.SUCCESSFUL_DESACTIVATION.send(getPlayer());
+                LangManager.get().send(CommonLang.SUCCESSFUL_DESACTIVATION, getPlayer());
             }
         });
 
+        // Enable whitelist button
+        ItemStack enableWool = new ItemStack(Material.WOOL, 1, (byte) 5);
+        ItemMeta enableMeta = enableWool.getItemMeta();
+        if (enableMeta != null) {
+            enableMeta.setDisplayName(t(WhiteListUiLang.ENABLE_BUTTON));
+            enableWool.setItemMeta(enableMeta);
+        }
         addItem(new ActionItem(8, enableWool) {
             @Override
             public void onClick(InventoryClickEvent e) {
                 Bukkit.getServer().setWhitelist(true);
-                CommonString.SUCCESSFUL_ACTIVATION.send(getPlayer());
+                LangManager.get().send(CommonLang.SUCCESSFUL_ACTIVATION, getPlayer());
             }
         });
 
-        addItem(new ActionItem(0, new ItemCreator(Material.PAPER).setName("§2Ajouter un joueur")) {
+        // Add player button
+        addItem(new ActionItem(0, new ItemCreator(Material.PAPER).setName(t(WhiteListUiLang.ADD_PLAYER_BUTTON))) {
             @Override
             public void onClick(InventoryClickEvent e) {
                 new AnvilUi(getPlayer(), event -> {
                     if (event.getSlot() == AnvilUi.AnvilSlot.OUTPUT) {
-                        String enteredText = event.getName();
-                        Bukkit.getOfflinePlayer(enteredText).setWhitelisted(true);
-                        CommonString.SUCCESSFUL_MODIFICATION.send(getPlayer());
+                        Bukkit.getOfflinePlayer(event.getName()).setWhitelisted(true);
+                        LangManager.get().send(CommonLang.SUCCESSFUL_MODIFICATION, getPlayer());
                         openAll();
                         return;
                     }
                     new WhiteListUi(getPlayer()).open();
-                }).setSlot("Nom du joueur").open();
+                }).setSlot(t(WhiteListUiLang.ADD_PLAYER_ANVIL_HINT)).open();
             }
         });
 
-        List<OfflinePlayer> whitelistedPlayers = new ArrayList<>();
-        for (OfflinePlayer p : Bukkit.getWhitelistedPlayers()) {
-            whitelistedPlayers.add(p);
-        }
-
-        int playersPerPage = 24;
-        int totalCategories = (int) Math.ceil((double) whitelistedPlayers.size() / playersPerPage);
-
-        if (totalCategories > 1) {
-            addPage(4);
-        }
+        // Player list
+        List<OfflinePlayer> whitelistedPlayers = new ArrayList<>(Bukkit.getWhitelistedPlayers());
+        int playersPerPage   = 24;
+        int totalCategories  = (int) Math.ceil((double) whitelistedPlayers.size() / playersPerPage);
+        if (totalCategories > 1) addPage(4);
 
         for (int i = 0; i < whitelistedPlayers.size(); i++) {
-            OfflinePlayer p = whitelistedPlayers.get(i);
-
-            int categoryForThisPlayer = (int) Math.ceil((double) (i + 1) / playersPerPage);
-            int positionInCategory = i % playersPerPage;
-
-            int slot = calculateSlot(positionInCategory);
+            OfflinePlayer p              = whitelistedPlayers.get(i);
+            int categoryForThisPlayer    = (int) Math.ceil((double) (i + 1) / playersPerPage);
+            int positionInCategory       = i % playersPerPage;
+            int slot                     = calculateSlot(positionInCategory);
 
             ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-            SkullMeta meta = (SkullMeta) skull.getItemMeta();
+            SkullMeta meta  = (SkullMeta) skull.getItemMeta();
             meta.setOwner(p.getName());
             meta.setDisplayName(ChatColor.GOLD + p.getName());
             skull.setItemMeta(meta);
@@ -109,36 +115,32 @@ public class WhiteListUi extends CustomInventory {
                 public void onClick(InventoryClickEvent e) {
                     if (p.isWhitelisted()) {
                         new ConfirmMenu(getPlayer(),
-                                "§cÊtes-vous sûr de vouloir retirer " + p.getName() + " de la Whitelist ?",
+                                t(WhiteListUiLang.CONFIRM_REMOVE, Map.of("%player%", p.getName())),
                                 () -> {
                                     p.setWhitelisted(false);
-
                                     if (p.isOnline() && p.getPlayer() != null) {
-                                        Player onlinePlayer = p.getPlayer();
-                                        String kickMessage = CommonString.KICKED.getMessage();
-                                        onlinePlayer.kickPlayer(kickMessage);
-                                        Bukkit.broadcastMessage(CommonString.KICKED_MESSAGE.getMessage().replace("%player%", p.getName()));
+                                        p.getPlayer().kickPlayer(LangManager.get().get(CommonLang.KICKED, p.getPlayer()));
+                                        Bukkit.broadcastMessage(LangManager.get().get(CommonLang.KICKED_MESSAGE).replace("%player%", p.getName()));
                                     }
-
                                     openAll();
                                 },
-                                () -> {
-                                    openAll();
-                                }, new WhiteListUi(getPlayer())).open();
+                                () -> openAll(),
+                                new WhiteListUi(getPlayer())).open();
                     }
                 }
             });
         }
+
+        // CloudNet button
         if (Main.get().getCloudNet() != null) {
             ItemCreator cloud = new ItemCreator(Material.SLIME_BALL)
-                    .setName("§8┃ §fModifier l'affichage "+Common.get().getMainColor()+"Lobby")
+                    .setName(t(WhiteListUiLang.CLOUD_ITEM_NAME))
                     .addLore("")
-                    .addLore(" §8» §fAccès §f: §6§lHost")
+                    .addLore(accessHost)
                     .addLore("")
-                    .addLore("  §8┃ §fPermet de Modifier l'"+ Common.get().getMainColor()+"affichage §fde la")
-                    .addLore("  §8┃ §fpartie dans les §6§lLobby.")
+                    .addLore(t(WhiteListUiLang.CLOUD_ITEM_DESC))
                     .addLore("")
-                    .addLore(CommonString.CLICK_HERE_TO_ACCESS.getMessage())
+                    .addLore(clickAccess)
                     .addLore("");
             addMenu(53, cloud, CloudNet.get().getCloudNetUi(getPlayer()));
         }
@@ -152,23 +154,18 @@ public class WhiteListUi extends CustomInventory {
 
     @Override
     public int getCategories() {
-        int playersCount = Bukkit.getWhitelistedPlayers().size();
         int playersPerPage = 24;
-        return Math.max(1, (int) Math.ceil((double) playersCount / playersPerPage));
+        return Math.max(1, (int) Math.ceil((double) Bukkit.getWhitelistedPlayers().size() / playersPerPage));
     }
 
     @Override
     public String getTitle() {
-        return getConfig().getString("menu.whitelist.title");
+        return LangManager.get().get(UiTitleLang.WHITELIST_TITLE, getPlayer());
     }
 
     @Override
-    public int getLines() {
-        return 6;
-    }
+    public int getLines() { return 6; }
 
     @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    public boolean isRefreshAuto() { return false; }
 }

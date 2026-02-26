@@ -1,6 +1,7 @@
 package net.novaproject.novauhc.ui.config;
 
-import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
 import net.novaproject.novauhc.ui.GameUi;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 public class StuffUi extends CustomInventory {
     private final Map<String, ItemStack[]> savedInventory;
+
     public StuffUi(Player player, Map<String, ItemStack[]> savedInventory) {
         super(player);
         this.savedInventory = savedInventory;
@@ -20,7 +22,6 @@ public class StuffUi extends CustomInventory {
 
     @Override
     public void setup() {
-
         addReturn(53, new GameUi(getPlayer()));
         ItemCreator glassPane = new ItemCreator(Material.STAINED_GLASS_PANE).setName(" ").setDurability((short) 7);
 
@@ -30,13 +31,11 @@ public class StuffUi extends CustomInventory {
 
         if (savedInventory.containsKey("inventory")) {
             ItemStack[] contents = savedInventory.get("inventory");
-
             for (int i = 0; i < 9; i++) {
                 if (contents[i] != null && contents[i].getType() != Material.AIR) {
                     addItem(new StaticItem(i, contents[i]));
                 }
             }
-
             for (int i = 9; i < contents.length && i + 9 < 45; i++) {
                 if (contents[i] != null && contents[i].getType() != Material.AIR) {
                     addItem(new StaticItem(i + 9, contents[i]));
@@ -60,16 +59,12 @@ public class StuffUi extends CustomInventory {
 
     @Override
     public String getTitle() {
-        return getConfig().getString("menu.stuff.title");
+        return LangManager.get().get(UiTitleLang.STUFF_TITLE, getPlayer());
     }
 
     @Override
-    public int getLines() {
-        return 6;
-    }
+    public int getLines() { return 6; }
 
     @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    public boolean isRefreshAuto() { return false; }
 }

@@ -1,12 +1,12 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Common;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.VampireLang;
+import net.novaproject.novauhc.lang.scenario.VampireLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -53,11 +53,6 @@ public class Vampire extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return VampireLang.values();
-    }
-
-    @Override
     public void onGameStart() {
         Common.get().getArena().setTime(12000);
         startSunDamageTask();
@@ -79,7 +74,7 @@ public class Vampire extends Scenario {
             Map<String, Object> placeholders = new HashMap<>();
             placeholders.put("%victim%", uhcPlayer.getPlayer().getName());
             placeholders.put("%heal_hearts%", String.valueOf(healAmount / 2));
-            ScenarioLangManager.send(killerPlayer, VampireLang.KILL_HEAL, placeholders);
+            LangManager.get().send(VampireLang.KILL_HEAL, killerPlayer, placeholders);
 
         }
     }
@@ -112,7 +107,7 @@ public class Vampire extends Scenario {
                                 player.damage(sunDamage);
                                 Map<String, Object> sunPlaceholders = new HashMap<>();
                                 sunPlaceholders.put("%sun_damage%", String.valueOf(sunDamage));
-                                ScenarioLangManager.send(uhcPlayer.getPlayer(), VampireLang.SUN_DAMAGE, sunPlaceholders);
+                                LangManager.get().send(VampireLang.SUN_DAMAGE, uhcPlayer.getPlayer(), sunPlaceholders);
 
                                 player.setFireTicks(40);
                             }

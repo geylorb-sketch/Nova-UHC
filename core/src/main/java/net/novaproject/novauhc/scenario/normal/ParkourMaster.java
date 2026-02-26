@@ -1,13 +1,13 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.ParkourMasterLang;
+import net.novaproject.novauhc.lang.scenario.ParkourMasterLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import org.bukkit.Bukkit;
@@ -85,11 +85,6 @@ public class ParkourMaster extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return ParkourMasterLang.values();
-    }
-
-    @Override
     public void onGameStart() {
         initializeRewards();
         startParkourTask();
@@ -107,11 +102,11 @@ public class ParkourMaster extends Scenario {
             if (challenge.isCompleted()) {
                 completeParkour(player, challenge);
             } else {
-                UHCPlayer uhc = UHCPlayerManager.get().getPlayer(player);
+
                 Map<String, Object> placeholders = new HashMap<>();
                 placeholders.put("%current%", String.valueOf(challenge.getCurrentCheckpoint()));
                 placeholders.put("%total%", String.valueOf(challenge.getTotalCheckpoints()));
-                ScenarioLangManager.send(uhc, ParkourMasterLang.CHECKPOINT_REACHED, placeholders);
+                LangManager.get().send(ParkourMasterLang.CHECKPOINT_REACHED, player, placeholders);
                 player.getWorld().playSound(loc, org.bukkit.Sound.ORB_PICKUP, 1.0f, 1.5f);
             }
         }

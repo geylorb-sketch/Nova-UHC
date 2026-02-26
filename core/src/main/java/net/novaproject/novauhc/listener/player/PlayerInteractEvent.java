@@ -1,9 +1,10 @@
 package net.novaproject.novauhc.listener.player;
 
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.normal.GoldenHead;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -95,7 +96,7 @@ public class PlayerInteractEvent implements Listener {
             if (currentDiamondPieces >= UHCManager.get().getDiamondArmor()) {
                 event.setCancelled(true);
                 player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
-                CommonString.EXEDED_LIMITE.send(player);
+                LangManager.get().send(CommonLang.EXEDED_LIMITE, player);
             }
         }
 
@@ -134,7 +135,7 @@ public class PlayerInteractEvent implements Listener {
                 if (exceedsDiamondLimit(player, uhcPlayer)) {
                     event.setCancelled(true);
                     player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
-                    CommonString.EXEDED_LIMITE.send(player);
+                    LangManager.get().send(CommonLang.EXEDED_LIMITE, player);
                     player.updateInventory();
                 }
             }
@@ -154,7 +155,7 @@ public class PlayerInteractEvent implements Listener {
                 if (currentPieces >= uhcPlayer.getDiamondArmor()) {
                     event.setCancelled(true);
                     player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
-                    CommonString.EXEDED_LIMITE.send(player);
+                    LangManager.get().send(CommonLang.EXEDED_LIMITE, player);
                     player.updateInventory();
                 }
             }

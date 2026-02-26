@@ -2,15 +2,14 @@ package net.novaproject.novauhc.uhcplayer;
 
 import fr.mrmicky.fastboard.FastBoard;
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.ScoreboardLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
-import net.novaproject.novauhc.ui.config.Enchants;
 import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.TabListManager;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -20,43 +19,26 @@ public class UHCPlayerManager {
 
     private boolean tasks = false;
 
-    public static UHCPlayerManager get(){
+    public static UHCPlayerManager get() {
         return UHCManager.get().getUhcPlayerManager();
     }
-
 
     private final Map<UUID, UHCPlayer> players = new HashMap<>();
     private final Map<UUID, FastBoard> boards = new HashMap<>();
 
     public List<UHCPlayer> getOnlineUHCPlayers() {
-
         List<UHCPlayer> result = new ArrayList<>();
-
         for (UHCPlayer player : players.values()) {
-
-            if (player.isOnline()) {
-                result.add(player);
-            }
-
+            if (player.isOnline()) result.add(player);
         }
-
         return result;
     }
 
-
     public List<UHCPlayer> getPlayingOnlineUHCPlayers() {
-
         List<UHCPlayer> result = new ArrayList<>();
         for (UHCPlayer player : getOnlineUHCPlayers()) {
-
-            if (player.isPlaying()) {
-
-                result.add(player);
-
-            }
-
+            if (player.isPlaying()) result.add(player);
         }
-
         return result;
     }
 
@@ -64,21 +46,13 @@ public class UHCPlayerManager {
         return players.get(player.getUniqueId());
     }
 
-
-
     public void connect(Player player) {
-
         UHCPlayer uhcPlayer = new UHCPlayer(player);
-
         players.putIfAbsent(player.getUniqueId(), uhcPlayer);
-
         uhcPlayer = getPlayer(player);
-
         uhcPlayer.connect(player);
 
         FastBoard board = new FastBoard(player);
-
-
         boards.put(player.getUniqueId(), board);
 
         if (!tasks) {
@@ -89,63 +63,119 @@ public class UHCPlayerManager {
                     0, 1L
             );
         }
-
     }
 
     public void disconnect(Player player) {
-
         UHCPlayer uhcPlayer = getPlayer(player);
-
         uhcPlayer.disconnect(player);
 
         if (UHCManager.get().isLobby()) {
             players.remove(player.getUniqueId());
         }
         FastBoard board = boards.remove(player.getUniqueId());
-        if (board != null) {
-            board.delete();
-        }
-
+        if (board != null) board.delete();
     }
 
     private void updateBoard(FastBoard board) {
         Player player = board.getPlayer();
         UHCManager uhcManager = UHCManager.get();
 
-
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
         if (uhcPlayer == null) return;
 
-        FileConfiguration config = ConfigUtils.getGeneralConfig();
+        LangManager lm = LangManager.get();
+        boolean showTab = ConfigUtils.getGeneralConfig().getBoolean("message.tab.show", true);
+        boolean isRole = ScenarioManager.get().getActiveSpecialScenarios().stream()
+                .anyMatch(s -> s instanceof ScenarioRole);
 
-        String phase = uhcManager.isLobby() ? "lobby" : (uhcManager.isGame() ? "game" : "end");
-        boolean tabIsActive = config.getBoolean("message.tab.show", true);
+        String ip = Common.get().getServerIp();
 
-        String header = CommonString.getMessage(config.getString("message.tab." + phase + ".header", ""), uhcPlayer);
-        String footer = CommonString.getMessage(config.getString("message.tab." + phase + ".footer", ""), uhcPlayer);
+        if (uhcManager.isLobby()) {
+            // ─── LOBBY ───────────────────────────────────────────────────────
+            board.updateTitle(lm.get(ScoreboardLang.SB_LOBBY_TITLE, player));
+            board.updateLines(lines(lm, player, ip,
+                    ScoreboardLang.SB_LOBBY_L1,
+                    ScoreboardLang.SB_LOBBY_L2,
+                    ScoreboardLang.SB_LOBBY_L3,
+                    ScoreboardLang.SB_LOBBY_L4,
+                    ScoreboardLang.SB_LOBBY_L5));
 
-        String title = config.getString("message.scoreboard." + phase + ".title", "§6NovaUHC");
-        title = CommonString.getMessage(title, uhcPlayer);
+            if (showTab) {
+                TabListManager.sendTab(player,
+                        lm.get(ScoreboardLang.TAB_LOBBY_HEADER, player),
+                        lm.get(ScoreboardLang.TAB_LOBBY_FOOTER, player));
+            }
 
-        List<String> lines = config.getStringList("message.scoreboard." + phase + ".lines");
-        if (ScenarioManager.get().getActiveSpecialScenarios().stream()
-                .anyMatch(scenario -> scenario instanceof ScenarioRole)) {
-            lines = config.getStringList("message.scoreboard." + phase + ".lines_role");
-            title = config.getString("message.scoreboard." + phase + ".title_role", "§6NovaUHC");
-            title = CommonString.getMessage(title, uhcPlayer);
+        } else if (uhcManager.isGame()) {
+            // ─── GAME ─────────────────────────────────────────────────────────
+            if (isRole) {
+                board.updateTitle(lm.get(ScoreboardLang.SB_GAME_ROLE_TITLE, player));
+                board.updateLines(lines(lm, player, ip,
+                        ScoreboardLang.SB_GAME_ROLE_L1,
+                        ScoreboardLang.SB_GAME_ROLE_L2,
+                        ScoreboardLang.SB_GAME_ROLE_L3,
+                        ScoreboardLang.SB_GAME_ROLE_L4,
+                        ScoreboardLang.SB_GAME_ROLE_L5,
+                        ScoreboardLang.SB_GAME_ROLE_L6,
+                        ScoreboardLang.SB_GAME_ROLE_L7,
+                        ScoreboardLang.SB_GAME_ROLE_L8,
+                        ScoreboardLang.SB_GAME_ROLE_L9,
+                        ScoreboardLang.SB_GAME_ROLE_L10,
+                        ScoreboardLang.SB_GAME_ROLE_L11,
+                        ScoreboardLang.SB_GAME_ROLE_L12,
+                        ScoreboardLang.SB_GAME_ROLE_L13));
+            } else {
+                board.updateTitle(lm.get(ScoreboardLang.SB_GAME_TITLE, player));
+                board.updateLines(lines(lm, player, ip,
+                        ScoreboardLang.SB_GAME_L1,
+                        ScoreboardLang.SB_GAME_L2,
+                        ScoreboardLang.SB_GAME_L3,
+                        ScoreboardLang.SB_GAME_L4,
+                        ScoreboardLang.SB_GAME_L5,
+                        ScoreboardLang.SB_GAME_L6,
+                        ScoreboardLang.SB_GAME_L7,
+                        ScoreboardLang.SB_GAME_L8,
+                        ScoreboardLang.SB_GAME_L9,
+                        ScoreboardLang.SB_GAME_L10,
+                        ScoreboardLang.SB_GAME_L11,
+                        ScoreboardLang.SB_GAME_L12));
+            }
+
+            if (showTab) {
+                TabListManager.sendTab(player,
+                        lm.get(ScoreboardLang.TAB_GAME_HEADER, player),
+                        lm.get(ScoreboardLang.TAB_GAME_FOOTER, player));
+            }
+
+        } else {
+            // ─── END ──────────────────────────────────────────────────────────
+            board.updateTitle(lm.get(ScoreboardLang.SB_END_TITLE, player));
+            board.updateLines(lines(lm, player, ip,
+                    ScoreboardLang.SB_END_L1,
+                    ScoreboardLang.SB_END_L2,
+                    ScoreboardLang.SB_END_L3,
+                    ScoreboardLang.SB_END_L4,
+                    ScoreboardLang.SB_END_L5,
+                    ScoreboardLang.SB_END_L6,
+                    ScoreboardLang.SB_END_L7,
+                    ScoreboardLang.SB_END_L8,
+                    ScoreboardLang.SB_END_L9));
+
+            if (showTab) {
+                TabListManager.sendTab(player,
+                        lm.get(ScoreboardLang.TAB_END_HEADER, player),
+                        lm.get(ScoreboardLang.TAB_END_FOOTER, player));
+            }
         }
-        List<String> processedLines = lines.stream()
-                .map(line -> {
-                    line = line.replace("<ip>", Common.get().getServerIp());
-                    return CommonString.getMessage(line, uhcPlayer);
-                })
+    }
+
+    /**
+     * Résout une liste de clés ScoreboardLang pour un joueur,
+     * en remplaçant les placeholders et <ip>.
+     */
+    private List<String> lines(LangManager lm, Player player, String ip, ScoreboardLang... keys) {
+        return Arrays.stream(keys)
+                .map(key -> lm.get(key, player).replace("<ip>", ip))
                 .collect(Collectors.toList());
-
-        board.updateTitle(title);
-        board.updateLines(processedLines);
-
-        if (tabIsActive) {
-            TabListManager.sendTab(player, header, footer);
-        }
     }
 }

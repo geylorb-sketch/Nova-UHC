@@ -1,7 +1,6 @@
 package net.novaproject.ultimate.slavemarket;
 
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;

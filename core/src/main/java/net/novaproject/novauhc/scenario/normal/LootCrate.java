@@ -1,12 +1,12 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.LootCrateLang;
+import net.novaproject.novauhc.lang.scenario.LootCrateLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -107,11 +107,6 @@ public class LootCrate extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return LootCrateLang.values();
-    }
-
-    @Override
     public void onGameStart() {
         startLootCrateTask();
     }
@@ -136,8 +131,8 @@ public class LootCrate extends Scenario {
                 }
 
                 int timeUntilNext = spawnInterval - timer;
-                if (timeUntilNext == 60) ScenarioLangManager.sendAll(LootCrateLang.CRATES_WARNING_1MIN);
-                else if (timeUntilNext == 10) ScenarioLangManager.sendAll(LootCrateLang.CRATES_WARNING_10SEC);
+                if (timeUntilNext == 60) LangManager.get().sendAll(LootCrateLang.CRATES_WARNING_1MIN);
+                else if (timeUntilNext == 10) LangManager.get().sendAll(LootCrateLang.CRATES_WARNING_10SEC);
             }
         };
 
@@ -159,8 +154,8 @@ public class LootCrate extends Scenario {
 
         Map<String, Object> placeholders = new HashMap<>();
         placeholders.put("%count%", String.valueOf(activeCrates.size()));
-        ScenarioLangManager.sendAll(LootCrateLang.CRATES_SPAWNED, placeholders);
-        ScenarioLangManager.sendAll(LootCrateLang.CRATES_ANNOUNCEMENT);
+        LangManager.get().sendAll(LootCrateLang.CRATES_SPAWNED, placeholders);
+        LangManager.get().sendAll(LootCrateLang.CRATES_ANNOUNCEMENT);
 
         for (UHCPlayer uhcPlayer : playingPlayers) {
             Player player = uhcPlayer.getPlayer();

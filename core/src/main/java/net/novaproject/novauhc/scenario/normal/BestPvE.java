@@ -1,11 +1,11 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.lang.BestPvELang;
+import net.novaproject.novauhc.lang.scenario.BestPvELang;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;
@@ -49,22 +49,17 @@ public class BestPvE extends Scenario {
         return "bestpve";
     }
 
-    @Override
-    public ScenarioLang[] getLang() {
-        return BestPvELang.values();
-    }
-
     private void bestPvE(Player player) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (listPve.contains(player)) {
                     player.setMaxHealth(player.getMaxHealth() + getConfig().getInt("heart_gain"));
-                    ScenarioLangManager.send(player, BestPvELang.GAIN_MESSAGE);
+                    LangManager.get().send(BestPvELang.GAIN_MESSAGE, player);
                 } else if (listOutPve.contains(player)) {
                     listOutPve.remove(player);
                     listPve.add(player);
-                    ScenarioLangManager.send(player, BestPvELang.LIST_JOIN);
+                    LangManager.get().send(BestPvELang.LIST_JOIN, player);
                 }
 
             }
@@ -78,7 +73,7 @@ public class BestPvE extends Scenario {
                 listPve.remove(player);
                 if (!listOutPve.contains(player)) {
                     listOutPve.add(player);
-                    ScenarioLangManager.send(player, BestPvELang.LIST_QUIT);
+                    LangManager.get().send(BestPvELang.LIST_QUIT, player);
                 }
             }
         }

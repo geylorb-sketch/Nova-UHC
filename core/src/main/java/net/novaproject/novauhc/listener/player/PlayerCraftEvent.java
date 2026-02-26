@@ -1,8 +1,9 @@
 package net.novaproject.novauhc.listener.player;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.normal.GoldenHead;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -51,7 +52,7 @@ public class PlayerCraftEvent implements Listener {
         GoldenHead golden = ScenarioManager.get().getScenario(GoldenHead.class);
 
         if (golden.isActive() && item.isSimilar(goldenHead.getResult())) {
-            CommonString.BLOCKED_CRAFT_ITEM.send(player);
+            LangManager.get().send(CommonLang.BLOCKED_CRAFT_ITEM, player);
             event.setCancelled(true);
             player.updateInventory();
             return;
@@ -87,13 +88,13 @@ public class PlayerCraftEvent implements Listener {
                 int level = event.getEnchantsToAdd().get(Enchantment.PROTECTION_ENVIRONMENTAL);
                 if (level <= uhcPlayer.getProtectionMax()) {
                     event.setCancelled(true);
-                    CommonString.BLOCKED_ENCHANT.send(player);
+                    LangManager.get().send(CommonLang.BLOCKED_ENCHANT, player);
                     return;
                 }
             }
 
             event.setCancelled(true);
-            CommonString.BLOCKED_ENCHANT.send(player);
+            LangManager.get().send(CommonLang.BLOCKED_ENCHANT, player);
         }
     }
 
@@ -117,13 +118,13 @@ public class PlayerCraftEvent implements Listener {
                 int level = result.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
                 if (level > uhcPlayer.getProtectionMax()) {
                     result.removeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL);
-                    CommonString.EXEDED_LIMITE.send(player);
+                    LangManager.get().send(CommonLang.EXEDED_LIMITE, player);
                 }
             } else {
                 getBlockedEnchant(uhcPlayer, result.getEnchantments())
                         .keySet()
                         .forEach(result::removeEnchantment);
-                CommonString.BLOCKED_ENCHANT.send(player);
+                LangManager.get().send(CommonLang.BLOCKED_ENCHANT, player);
             }
         }
     }
@@ -160,7 +161,7 @@ public class PlayerCraftEvent implements Listener {
                 if (result.getType() == potion.getMaterial() && !potion.isEnabled()) {
                     event.getInventory().remove(result);
                     event.setCancelled(true);
-                    CommonString.BLOCKED_POTION.send(player);
+                    LangManager.get().send(CommonLang.BLOCKED_POTION, player);
                     player.closeInventory();
                 }
             }

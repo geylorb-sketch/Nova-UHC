@@ -1,5 +1,7 @@
 package net.novaproject.novauhc.scenario.role;
 
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
 import net.novaproject.novauhc.scenario.role.camps.CampUtils;
 import net.novaproject.novauhc.scenario.role.camps.Camps;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -32,25 +34,16 @@ public class ScenarioRoleUi<T extends Role> extends CustomInventory {
 
     @Override
     public void setup() {
-
         fillDesign(0);
         addReturn(RETURN_SLOT, new ScenarioCampUi<>(getPlayer(), scenario));
 
-        List<T> roles = new ArrayList<>();
-        for (Map.Entry<T, Integer> entry : scenario.getDefault_roles().entrySet()) {
-            T role = entry.getKey();
-            boolean belongsToParent = role.getCamp() == parentCamp
-                    || CampUtils.getSubCamps(parentCamp, scenario.getCamps()).contains(role.getCamp());
-            if (belongsToParent) roles.add(role);
-        }
-
+        List<T> roles = getRolesForCamp();
         int totalCategories = (int) Math.ceil((double) roles.size() / ROLES_PER_PAGE);
 
         for (int i = 0; i < roles.size(); i++) {
             T role = roles.get(i);
             int categoryForThisRole = (int) Math.ceil((double) (i + 1) / ROLES_PER_PAGE);
-            int positionInPage = (i % ROLES_PER_PAGE);
-            int slot = ROLE_SLOTS[positionInPage];
+            int slot = ROLE_SLOTS[i % ROLES_PER_PAGE];
 
             ItemCreator item = role.getItem()
                     .setName(role.getColor() + role.getName() + " : " + scenario.getDefault_roles().get(role))
@@ -61,49 +54,47 @@ public class ScenarioRoleUi<T extends Role> extends CustomInventory {
                 public void onClick(InventoryClickEvent e) {
                     Class<? extends T> roleClass = (Class<? extends T>) role.getClass();
                     int amount = scenario.getDefault_roles().get(role);
-                    if(e.isShiftClick()) {
-                        new RoleConfigUi(getPlayer(),role,ScenarioRoleUi.this).open();
-                        return;
-                    } else
-                    if (e.isRightClick() && amount > 0) {
+                    if (e.isShiftClick()) {
+                        new RoleConfigUi(getPlayer(), role, ScenarioRoleUi.this).open();
+                    } else if (e.isRightClick() && amount > 0) {
                         scenario.decrementRole(roleClass);
+                        new ScenarioRoleUi<>(getPlayer(), scenario, parentCamp).open();
                     } else if (e.isLeftClick()) {
                         scenario.incrementRole(roleClass);
+                        new ScenarioRoleUi<>(getPlayer(), scenario, parentCamp).open();
                     }
-                    new ScenarioRoleUi<>(getPlayer(), scenario, parentCamp).open();
                 }
             });
         }
 
-        if (totalCategories > 1) {
-            addPage(40);
+        if (totalCategories > 1) addPage(40);
+    }
+
+    private List<T> getRolesForCamp() {
+        List<T> roles = new ArrayList<>();
+        for (Map.Entry<T, Integer> entry : scenario.getDefault_roles().entrySet()) {
+            T role = entry.getKey();
+            boolean belongs = role.getCamp() == parentCamp
+                    || CampUtils.getSubCamps(parentCamp, scenario.getCamps()).contains(role.getCamp());
+            if (belongs) roles.add(role);
         }
+        return roles;
     }
 
     @Override
     public String getTitle() {
-        return "§f§l | Rôles du camp : " + parentCamp.getName();
-    }
-
-    @Override
-    public int getLines() {
-        return 5;
+        return LangManager.get().get(
+                ScenarioVariableUiLang.ROLE_UI_TITLE,
+                getPlayer(),
+                Map.of("%camp%", parentCamp.getName())
+        );
     }
 
     @Override
     public int getCategories() {
-        List<T> roles = new ArrayList<>();
-        for (Map.Entry<T, Integer> entry : scenario.getDefault_roles().entrySet()) {
-            T role = entry.getKey();
-            boolean belongsToParent = role.getCamp() == parentCamp
-                    || CampUtils.getSubCamps(parentCamp, scenario.getCamps()).contains(role.getCamp());
-            if (belongsToParent) roles.add(role);
-        }
-        return Math.max(1, (int) Math.ceil((double) roles.size() / ROLES_PER_PAGE));
+        return Math.max(1, (int) Math.ceil((double) getRolesForCamp().size() / ROLES_PER_PAGE));
     }
 
-    @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    @Override public int getLines() { return 5; }
+    @Override public boolean isRefreshAuto() { return false; }
 }

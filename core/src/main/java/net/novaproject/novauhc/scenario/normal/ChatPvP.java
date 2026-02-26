@@ -1,7 +1,8 @@
 package net.novaproject.novauhc.scenario.normal;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
@@ -29,7 +30,7 @@ public class ChatPvP extends Scenario {
         int timerpvp = UHCManager.get().getTimerpvp();
         if (timer == timerpvp) {
             UHCManager.get().setChatdisbale(true);
-            CommonString.CHAT_DISABLED.send(p);
+            LangManager.get().send(CommonLang.CHAT_DISABLED, p);
         }
 
     }

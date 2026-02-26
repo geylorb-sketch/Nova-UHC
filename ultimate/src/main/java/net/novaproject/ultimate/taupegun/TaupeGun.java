@@ -2,7 +2,6 @@ package net.novaproject.ultimate.taupegun;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.CommandManager;
 import net.novaproject.novauhc.scenario.Scenario;

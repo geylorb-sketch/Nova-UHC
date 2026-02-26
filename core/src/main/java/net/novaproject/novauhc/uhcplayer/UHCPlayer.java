@@ -3,20 +3,18 @@ package net.novaproject.novauhc.uhcplayer;
 import lombok.Getter;
 import lombok.Setter;
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.arena.ArenaUHC;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.listener.player.PlayerConnectionEvent;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
-import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.ui.config.Enchants;
 import net.novaproject.novauhc.utils.*;
-import net.novaproject.novauhc.utils.fastboard.FastBoard;
 import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -71,6 +69,23 @@ public class UHCPlayer {
     private int minedDiamond = 0;
     private int kill = 0;
 
+    // ── Langue du joueur ──────────────────────────────────────────────────────
+    /** null = locale serveur par défaut */
+    private String locale = null;
+
+    public String getLocale() {
+        if (locale != null) return locale;
+        try {
+            return LangManager.get().getServerDefaultLocale();
+        } catch (Exception e) {
+            return "fr_FR";
+        }
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
 
     public void setTeam(Optional<UHCTeam> team) {
 
@@ -79,7 +94,7 @@ public class UHCPlayer {
         if (!team.isPresent()) {
 
             this.team.ifPresent(uhcTeam -> {
-                CommonString.SUCCESSFUL_MODIFICATION.send(getPlayer());
+                LangManager.get().send(CommonLang.SUCCESSFUL_MODIFICATION, getPlayer());
                 uhcTeam.getTeam().removePlayer(getOfflinePlayer());
             });
 
@@ -92,7 +107,7 @@ public class UHCPlayer {
             UHCTeam next = team.get();
 
             if (next.getPlayers().size() == team_size && team_size != 1) {
-                CommonString.DISABLE_ACTION.send(getPlayer());
+                LangManager.get().send(CommonLang.DISABLE_ACTION, getPlayer());
             } else {
 
                 this.team.ifPresent(uhcTeam -> {
@@ -100,7 +115,7 @@ public class UHCPlayer {
                 });
 
                 this.team = team;
-                CommonString.SUCCESSFUL_MODIFICATION.send(getPlayer());
+                LangManager.get().send(CommonLang.SUCCESSFUL_MODIFICATION, getPlayer());
                 next.getTeam().addPlayer(getOfflinePlayer());
 
             }
@@ -147,7 +162,7 @@ public class UHCPlayer {
         if (!team.isPresent()) {
 
             this.team.ifPresent(uhcTeam -> {
-                CommonString.SUCCESSFUL_MODIFICATION.send(getPlayer());
+                LangManager.get().send(CommonLang.SUCCESSFUL_MODIFICATION, getPlayer());
                 uhcTeam.getTeam().removePlayer(getOfflinePlayer());
             });
 
@@ -220,12 +235,12 @@ public class UHCPlayer {
                     attachment.setPermission("novauhc.host", true);
                 }
 
-                CommonString.WELCOME_HOST.send(player);
-                System.out.println(CommonString.WELCOME_HOST.getMessage(player));
+                LangManager.get().send(CommonLang.WELCOME_HOST, player);
+                System.out.println(LangManager.get().get(CommonLang.WELCOME_HOST, player));
                 TeamsTagsManager.setNameTag(player, "host", "§c§lHOST §r§c", "");
             } else {
                 attachment.unsetPermission("novauhc.host");
-                CommonString.WELCOME.send(player);
+                LangManager.get().send(CommonLang.WELCOME, player);
             }
 
             UHCUtils.giveLobbyItems(getPlayer());
@@ -239,12 +254,12 @@ public class UHCPlayer {
                 player.teleport(new Location(Common.get().getArena(), 0, 100, 0));
                 player.setGameMode(GameMode.SPECTATOR);
                 TeamsTagsManager.setNameTag(player, "zzzzz", "§8§lSPEC §r§8", "");
-                CommonString.WELCOME_SPECTATOR.send(player);
+                LangManager.get().send(CommonLang.WELCOME_SPECTATOR, player);
 
             } else {
 
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                    new Titles().sendActionText(player1, CommonString.CONNECTION_GAME.getMessage(getPlayer()));
+                    new Titles().sendActionText(player1, LangManager.get().get(CommonLang.CONNECTION_GAME, getPlayer()));
                 }
 
             }
@@ -286,7 +301,7 @@ public class UHCPlayer {
 
         if (uhcManager.isLobby()) {
             for (Player player1 : Bukkit.getOnlinePlayers()) {
-                new Titles().sendActionText(player1, CommonString.DECONNECTION_LOBBY.getMessage(getPlayer()));
+                new Titles().sendActionText(player1, LangManager.get().get(CommonLang.DECONNECTION_LOBBY, getPlayer()));
             }
             setTeam(Optional.empty());
 
@@ -294,7 +309,7 @@ public class UHCPlayer {
 
             if (playing) {
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                    new Titles().sendActionText(player1, CommonString.DECONNECTION_GAME.getMessage(getPlayer()));
+                    new Titles().sendActionText(player1, LangManager.get().get(CommonLang.DECONNECTION_GAME, getPlayer()));
                 }
 
                 uhcManager.checkVictory();
@@ -354,11 +369,11 @@ public class UHCPlayer {
         }
 
         if (getTeam().isPresent()) {
-            Bukkit.broadcastMessage(CommonString.DEATH_MESSAGE_TEAM.getMessage(getPlayer()));
+            Bukkit.broadcastMessage(LangManager.get().get(CommonLang.DEATH_MESSAGE_TEAM, getPlayer()));
             uhcManager.checkVictory();
             return;
         }
-        Bukkit.broadcastMessage(CommonString.DEATH_MESSAGE.getMessage(getPlayer()));
+        Bukkit.broadcastMessage(LangManager.get().get(CommonLang.DEATH_MESSAGE, getPlayer()));
 
         uhcManager.checkVictory();
     }

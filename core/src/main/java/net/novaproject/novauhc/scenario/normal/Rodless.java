@@ -1,6 +1,7 @@
 package net.novaproject.novauhc.scenario.normal;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
@@ -31,7 +32,7 @@ public class Rodless extends Scenario {
         ItemStack item = event.getItem();
         if (item != null && item.getType() == Material.FISHING_ROD) {
             event.setCancelled(true);
-            CommonString.DISABLE_ACTION.send(player);
+            LangManager.get().send(CommonLang.DISABLE_ACTION, player);
         }
     }
 
@@ -40,7 +41,7 @@ public class Rodless extends Scenario {
         ItemStack item = event.getRecipe().getResult();
         if (item.getType() == Material.FISHING_ROD) {
             event.setCancelled(true);
-            CommonString.BLOCKED_CRAFT_ITEM.send((Player) event.getWhoClicked());
+            LangManager.get().send(CommonLang.BLOCKED_CRAFT_ITEM, (Player) event.getWhoClicked());
         }
     }
 }

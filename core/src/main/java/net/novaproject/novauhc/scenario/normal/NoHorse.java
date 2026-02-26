@@ -1,6 +1,7 @@
 package net.novaproject.novauhc.scenario.normal;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
@@ -28,7 +29,7 @@ public class NoHorse extends Scenario {
     public void onPlayerInteractonEntity(Player player, PlayerInteractEntityEvent event) {
         if (event.getRightClicked().getType() == EntityType.HORSE) {
             event.setCancelled(true);
-            CommonString.DISABLE_ACTION.send(player);
+            LangManager.get().send(CommonLang.DISABLE_ACTION, player);
         }
     }
 

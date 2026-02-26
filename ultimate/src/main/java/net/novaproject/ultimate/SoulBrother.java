@@ -1,7 +1,6 @@
 package net.novaproject.ultimate;
 
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.scenario.Scenario;
@@ -30,6 +29,7 @@ public class SoulBrother extends Scenario {
 
     private final Map<UUID, World> playerWorlds = new HashMap<>();
     private final Map<UUID, UUID> soulBrothers = new HashMap<>();
+
     private int REUNION_TIME;
     private boolean reunionTime = false;
     private BukkitTask soulBrotherTask;
@@ -63,7 +63,6 @@ public class SoulBrother extends Scenario {
             UHCManager.get().setTeam_size(2);
             LobbyCreator.cloneWorld(Common.get().getArenaName(), "world1");
             LobbyCreator.cloneWorld(Common.get().getArenaName(), "world2");
-            REUNION_TIME = getConfig().getInt("reunion_time");
 
         }
     }

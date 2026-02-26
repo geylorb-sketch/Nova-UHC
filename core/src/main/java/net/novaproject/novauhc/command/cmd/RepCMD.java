@@ -1,52 +1,36 @@
 package net.novaproject.novauhc.command.cmd;
 
+import net.novaproject.novauhc.command.Command;
+import net.novaproject.novauhc.command.CommandArguments;
+import net.novaproject.novauhc.lang.lang.CommandLang;
+import net.novaproject.novauhc.lang.LangManager;
 
-import net.novaproject.novauhc.CommonString;
-import net.novaproject.novauhc.UHCManager;
-import net.novaproject.novauhc.utils.MessageManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class RepCMD implements CommandExecutor {
+public class RepCMD extends Command {
+
+    private static final Map<UUID, UUID> lastMessaged = new HashMap<>();
+
+    public static void setLastMessaged(UUID from, UUID to) { lastMessaged.put(from, to); }
+
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) return false;
+    public void execute(CommandArguments args) {
+        Player player = (Player) args.getSender();
 
-        if (args.length < 1) {
-            player.sendMessage("§cUsage: /r <message>");
-            return true;
-        }
-
-        UUID targetUUID = MessageManager.getLastMessage(player.getUniqueId());
-
-        if (targetUUID == null) {
-            player.sendMessage("§cPersonne à qui répondre.");
-            return true;
-        }
-
-        Player target = Bukkit.getPlayer(targetUUID);
-
-        if (target == null || !target.isOnline()) {
-            player.sendMessage("§cCe joueur est hors ligne.");
-            return true;
-        }
-
-        if (UHCManager.get().isChatdisbale()) {
-            CommonString.CHAT_DISABLED.send(player);
-            return true;
-        }
-
-        String message = String.join(" ", args);
-
-        player.sendMessage("§8│ §7§lMoi §7→ §7§l" + target.getName() + " §f" + message);
-        target.sendMessage("§8│ §7§l" + player.getName() + " → Moi §f" + message);
-
-        MessageManager.setLastMessage(player.getUniqueId(), target.getUniqueId());
-        return true;
+        LangManager lm = LangManager.get();
+        if (args.getArguments().length < 1) { player.sendMessage(lm.get(CommandLang.REP_USAGE, player)); return; }
+        UUID targetId = lastMessaged.get(player.getUniqueId());
+        if (targetId == null) { player.sendMessage(lm.get(CommandLang.REP_NO_TARGET, player)); return; }
+        Player target = Bukkit.getPlayer(targetId);
+        if (target == null) { player.sendMessage(lm.get(CommandLang.REP_OFFLINE, player)); return; }
+        String message = String.join(" ", args.getArguments());
+        player.sendMessage(lm.get(CommandLang.REP_SENT, player, Map.of("%target%", target.getName(), "%message%", message)));
+        target.sendMessage(lm.get(CommandLang.REP_RECEIVED, target, Map.of("%sender%", player.getName(), "%message%", message)));
+        lastMessaged.put(target.getUniqueId(), player.getUniqueId());
     }
 }

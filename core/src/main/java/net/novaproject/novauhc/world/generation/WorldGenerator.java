@@ -1,6 +1,8 @@
 package net.novaproject.novauhc.world.generation;
 
 import net.novaproject.novauhc.Common;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.TaskLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.task.LoadingChunkTask;
@@ -104,7 +106,7 @@ public class WorldGenerator {
         String netherName = arenaName + "_nether";
         safeDeleteWorld(netherName);
 
-        Bukkit.broadcastMessage(ChatColor.YELLOW + "Création du Nether...");
+        LangManager.get().sendAll(TaskLang.NETHER_GENERATION);
 
         WorldCreator creator = new WorldCreator(netherName);
         creator.environment(World.Environment.NETHER);
@@ -124,7 +126,7 @@ public class WorldGenerator {
         String endName = arenaName + "_the_end";
         deleteFolder(new File(endName));
 
-        Bukkit.broadcastMessage(ChatColor.YELLOW + "Cr\u00E9ation du End...");
+        LangManager.get().sendAll(TaskLang.END_GENERATION);
 
         WorldCreator creator = new WorldCreator(endName);
         creator.environment(World.Environment.THE_END);

@@ -1,8 +1,9 @@
 package net.novaproject.novauhc.scenario.normal;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -18,9 +19,6 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TimeBombe extends Scenario {
 
@@ -111,9 +109,8 @@ public class TimeBombe extends Scenario {
 
                 if (time <= 0) {
                     Bukkit.broadcastMessage(
-                            CommonString.getMessage(
-                                    CommonString.TIMEBOMB_EXPLOSION.getRawMessage(),
-                                    uhcPlayer
+                            LangManager.get().get(CommonLang.valueOf(
+                                    LangManager.get().get(CommonLang.TIMEBOMB_EXPLOSION)), uhcPlayer.getPlayer()
                             )
                     );
 

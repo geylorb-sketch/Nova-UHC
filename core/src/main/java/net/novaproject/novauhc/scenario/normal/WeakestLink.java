@@ -1,11 +1,11 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
-import net.novaproject.novauhc.scenario.lang.lang.WeakestLinkLang;
+import net.novaproject.novauhc.lang.scenario.WeakestLinkLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -51,11 +51,6 @@ public class WeakestLink extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return WeakestLinkLang.values();
-    }
-
-    @Override
     public void onGameStart() {
         startUpdateTask();
     }
@@ -85,10 +80,10 @@ public class WeakestLink extends Scenario {
 
             event.setDamage(originalDamage * multiplier);
 
-            UHCPlayer uhcVictim = UHCPlayerManager.get().getPlayer(victim);
+
             Map<String, Object> placeholders = new HashMap<>();
             placeholders.put("%multiplier%", String.valueOf(multiplier));
-            ScenarioLangManager.send(uhcVictim, WeakestLinkLang.DAMAGE_TAKEN, placeholders);
+            LangManager.get().send(WeakestLinkLang.DAMAGE_TAKEN, victim, placeholders);
         }
     }
 
@@ -149,12 +144,12 @@ public class WeakestLink extends Scenario {
                 weakestLinks.append(uhcPlayer.getPlayer().getName());
                 weakestCount++;
 
-                ScenarioLangManager.send(uhcPlayer, WeakestLinkLang.WEAKEST_PLAYER, Map.of("%multiplier%", multiplier));
+                LangManager.get().send(WeakestLinkLang.WEAKEST_PLAYER, uhcPlayer.getPlayer(), Map.of("%multiplier%", multiplier));
             }
         }
 
         if (weakestCount > 0) {
-            ScenarioLangManager.sendAll(WeakestLinkLang.WEAKEST_PLAYER, Map.of("%players%", weakestLinks.toString()));
+            LangManager.get().sendAll(WeakestLinkLang.WEAKEST_PLAYER, Map.of("%players%", weakestLinks.toString()));
         }
     }
 

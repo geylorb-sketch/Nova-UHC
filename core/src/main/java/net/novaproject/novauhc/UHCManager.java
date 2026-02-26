@@ -6,6 +6,9 @@ import lombok.Setter;
 import net.novaproject.novauhc.ability.AbilityManager;
 import net.novaproject.novauhc.command.CommandManager;
 import net.novaproject.novauhc.database.ApiManager;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.lang.TaskLang;
 import net.novaproject.novauhc.listener.ListenerManager;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
@@ -16,7 +19,6 @@ import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.uhcteam.UHCTeamManager;
 import net.novaproject.novauhc.ui.config.Enchants;
 import net.novaproject.novauhc.utils.ConfigUtils;
-
 import net.novaproject.novauhc.utils.GameStatsTracker;
 import net.novaproject.novauhc.utils.Titles;
 import net.novaproject.novauhc.utils.UHCUtils;
@@ -91,9 +93,6 @@ public class UHCManager {
                 : String.format("%02d:%02d", seconds / 60, seconds % 60);
     }
 
-    public void reset() {
-        Bukkit.getServer().shutdown();
-    }
 
     public void onStart() {
         gameState = GameState.SCATTERING;
@@ -155,14 +154,14 @@ public class UHCManager {
                     float ratio = Math.min(1f, (float) remaining / ConfigUtils.getGeneralConfig().getInt("timer.timer_before_start"));
                     p.setExp(ratio);
                     p.setLevel((int) (remaining));
-                    new Titles().sendActionText(p, "§8●§fDébut de la partie dans §c" + countdown + "secondes§8●");
+                    new Titles().sendActionText(p,LangManager.get().get(TaskLang.START_ACTION_BAR,Map.of("%countdown%", countdown)));
+
                 }
 
                 countdown--;
 
                 if (countdown < 0) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        new Titles().sendTitle(p, "§6Bonne chance !", "", 60);
                         p.playSound(p.getLocation(), Sound.LEVEL_UP, 1.0f, 1.0f);
                     }
                     cancel();
@@ -172,7 +171,6 @@ public class UHCManager {
                     world.setThundering(false);
                     world.setWeatherDuration(Integer.MAX_VALUE);
 
-                    // ═══ INITIALISE LE STATS TRACKER ═══
                     statsTracker.startGame();
                     for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
                         statsTracker.addPlayer(uhcPlayer.getUuid(), uhcPlayer.getPlayer().getName());
@@ -199,7 +197,6 @@ public class UHCManager {
                             .map(p -> new ApiManager.PlayerInfo(p.getUuid().toString(), p.getPlayer().getName()))
                             .toList();
 
-
                     ApiManager.get().gameStart(
                             mode,
                             scenario,
@@ -218,11 +215,11 @@ public class UHCManager {
         }.runTaskTimer(Main.get(), 0, 20);
     }
 
-    public void onSec(){
+    public void onSec() {
         timer++;
 
         if (timer == 30) {
-            Bukkit.broadcastMessage(CommonString.INVULNERABLE_OFF.getMessage());
+            LangManager.get().sendAll(CommonLang.INVULNERABLE_OFF);
         }
 
         ScenarioManager.get().getActiveScenarios().forEach(scenario -> {
@@ -232,21 +229,21 @@ public class UHCManager {
         });
 
         if (timer == timerpvp - 300) {
-            Bukkit.broadcastMessage(CommonString.PVP_START_IN.getMessage().replace("%time_before%", UHCUtils.getFormattedTime(300)));
+            LangManager.get().sendAll(CommonLang.PVP_START_IN, Map.of("%time_before%", UHCUtils.getFormattedTime(300)));
         }
         if (timer == timerpvp - 60) {
-            Bukkit.broadcastMessage(CommonString.PVP_START_IN.getMessage().replace("%time_before%", UHCUtils.getFormattedTime(60)));
+            LangManager.get().sendAll(CommonLang.PVP_START_IN, Map.of("%time_before%", UHCUtils.getFormattedTime(60)));
         }
         if (timer == timerpvp) {
             Common.get().getArena().setPVP(true);
-            Bukkit.broadcastMessage(CommonString.PVP_START.getMessage());
+            LangManager.get().sendAll(CommonLang.PVP_START);
             ScenarioManager.get().getActiveScenarios().forEach(Scenario::onPvP);
         }
         if (timer == timerborder - 6000) {
-            Bukkit.broadcastMessage(CommonString.MEETUP_START_IN.getMessage().replace("%time_before%", UHCUtils.getFormattedTime(6000)));
+            LangManager.get().sendAll(CommonLang.MEETUP_START_IN, Map.of("%time_before%", UHCUtils.getFormattedTime(6000)));
         }
         if (timer == timerborder - 60) {
-            Bukkit.broadcastMessage(CommonString.MEETUP_START_IN.getMessage().replace("%time_before%", UHCUtils.getFormattedTime(60)));
+            LangManager.get().sendAll(CommonLang.MEETUP_START_IN, Map.of("%time_before%", UHCUtils.getFormattedTime(60)));
         }
         if (timer == timerborder) {
             WorldBorder border = Common.get().getArena().getWorldBorder();
@@ -283,11 +280,9 @@ public class UHCManager {
         winner.getPlayer().teleport(Common.get().getLobbySpawn());
         fireWork(winner.getPlayer());
 
-
         List<ApiManager.WinnerInfo> winners = new ArrayList<>();
 
         if (winner.getTeam().isPresent()) {
-            // Mode Team
             UHCTeam team = winner.getTeam().get();
             for (UHCPlayer teamMember : team.getPlayers()) {
                 if (teamMember.getPlayer() != null) {
@@ -306,7 +301,6 @@ public class UHCManager {
                 }
             }
         } else {
-            // Mode Solo
             killmessage.append(winner.getPlayer().getDisplayName())
                     .append(" : ")
                     .append(winner.getKill())
@@ -323,7 +317,6 @@ public class UHCManager {
 
         Bukkit.broadcastMessage(ChatColor.AQUA + killmessage.toString());
 
-
         List<ApiManager.PlayerStats> playerStats = statsTracker.getPlayerStats();
         int duration = statsTracker.getGameDuration();
 
@@ -339,7 +332,6 @@ public class UHCManager {
 
         ApiManager.get().gameEnd(mode, scenario, winCondition, winners, playerStats, duration, null);
 
-        // Téléporte tout le monde au lobby
         for (UHCPlayer loser : UHCPlayerManager.get().getOnlineUHCPlayers()) {
             loser.getPlayer().teleport(Common.get().getLobbySpawn());
         }
@@ -352,7 +344,6 @@ public class UHCManager {
             }
         }.runTaskLater(Main.get(), 20 * 60);
     }
-
 
     public void onPlayerKill(Player killer, Player victim) {
         statsTracker.addKill(killer.getUniqueId());
@@ -367,19 +358,16 @@ public class UHCManager {
         boolean win = false;
 
         if (team_size == 1) {
-            // Mode solo
             List<UHCPlayer> alivePlayers = uhcPlayerManager.getPlayingOnlineUHCPlayers();
 
             if (alivePlayers.size() <= 1) {
                 if (alivePlayers.size() == 1) {
                     UHCPlayer player = alivePlayers.get(0);
-                    Bukkit.broadcastMessage(ChatColor.GOLD + " Félicitations au joueur : "
-                            + player.getPlayer().getDisplayName());
+                    LangManager.get().sendAll(CommonLang.SOLO_WIN, Map.of("%player%", player.getPlayer().getName()));
                 }
                 win = true;
             }
         } else {
-            // Mode équipe
             List<UHCTeam> aliveTeams = uhcTeamManager.getAliveTeams();
             List<UHCPlayer> soloPlayers = uhcPlayerManager.getPlayingOnlineUHCPlayers().stream()
                     .filter(p -> p.getTeam().isEmpty())
@@ -387,12 +375,39 @@ public class UHCManager {
 
             if (aliveTeams.size() == 1 && soloPlayers.isEmpty()) {
                 UHCTeam team = aliveTeams.get(0);
-                String teamMembers = team.getPlayers().stream()
-                        .map(p -> p.getPlayer().getName())
-                        .collect(Collectors.joining(", "));
 
-                Bukkit.broadcastMessage(ChatColor.GOLD + " Félicitations à l'équipe "
-                        + team.name() + " : " + teamMembers);
+                List<UHCPlayer> sorted = new ArrayList<>(team.getPlayers());
+                sorted.sort((a, b) -> Integer.compare(b.getKill(), a.getKill()));
+
+                LangManager.get().sendAll(CommonLang.TEAM_WIN,Map.of("%team%",team.name()));
+                int rank = 1;
+                int total = 0;
+
+                for (UHCPlayer member : sorted) {
+
+                    String prefix = rank == 1 ? "§6⭐ " : "  ";
+
+                    Bukkit.broadcastMessage(
+                            LangManager.get().get(
+                                    CommonLang.TEAM_RANK_LINE,
+                                    null,
+                                    Map.of(
+                                            "%prefix%", prefix,
+                                            "%rank%", String.valueOf(rank),
+                                            "%player%", member.getPlayer().getName(),
+                                            "%kills%", String.valueOf(member.getKill())
+                                    )
+                            )
+                    );
+
+                    total += member.getKill();
+                    rank++;
+                }
+
+                LangManager.get().sendAll(
+                        CommonLang.TEAM_TOTAL_KILLS,
+                        Map.of("%total%", String.valueOf(total))
+                );
                 win = true;
             }
         }

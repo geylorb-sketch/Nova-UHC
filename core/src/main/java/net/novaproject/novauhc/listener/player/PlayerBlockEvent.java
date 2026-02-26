@@ -1,7 +1,8 @@
 package net.novaproject.novauhc.listener.player;
 
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
@@ -45,12 +46,12 @@ public class PlayerBlockEvent implements Listener {
                 && (UHCManager.get().getDimamondLimit() != 0 || uhcPlayer.getDimamondLimit() != 0)) {
             if (uhcPlayer.getDiamondmined() < uhcPlayer.getDimamondLimit()) {
                 uhcPlayer.setMinedDiamond(uhcPlayer.getDiamondmined() + 1);
-                new Titles().sendActionText(player, CommonString.DIAMOND_LIMIT_INCREASED.getMessage(uhcPlayer.getPlayer()));
+                new Titles().sendActionText(player, LangManager.get().get(CommonLang.DIAMOND_LIMIT_INCREASED, uhcPlayer.getPlayer()));
             } else {
                 event.setCancelled(true);
                 block.setType(Material.AIR);
                 dropNaturally(block, new ItemStack(Material.GOLD_INGOT, 2));
-                CommonString.DIAMOND_LIMIT_REACHED.send(player);
+                LangManager.get().send(CommonLang.DIAMOND_LIMIT_REACHED, player);
                 return;
             }
         }

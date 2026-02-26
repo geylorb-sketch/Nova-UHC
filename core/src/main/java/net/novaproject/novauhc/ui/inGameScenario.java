@@ -1,5 +1,8 @@
 package net.novaproject.novauhc.ui;
 
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.UiTitleLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -13,8 +16,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class inGameScenario extends CustomInventory {
 
     private final boolean special;
-    private final String NEXT = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGJmOGI2Mjc3Y2QzNjI2NjI4M2NiNWE5ZTY5NDM5NTNjNzgzZTZmZjdkNmEyZDU5ZDE1YWQwNjk3ZTkxZDQzYyJ9fX0=";
+    private final String NEXT     = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGJmOGI2Mjc3Y2QzNjI2NjI4M2NiNWE5ZTY5NDM5NTNjNzgzZTZmZjdkNmEyZDU5ZDE1YWQwNjk3ZTkxZDQzYyJ9fX0=";
     private final String PREVIOUS = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjc2MjMwYTBhYzUyYWYxMWU0YmM4NDAwOWM2ODkwYTQwMjk0NzJmMzk0N2I0ZjQ2NWI1YjU3MjI4ODFhYWNjNyJ9fX0=";
+
     public inGameScenario(Player player, boolean special) {
         super(player);
         this.special = special;
@@ -26,9 +30,10 @@ public class inGameScenario extends CustomInventory {
 
     @Override
     public void setup() {
+        ItemCreator prevButton = UHCUtils.createCustomButon(PREVIOUS, LangManager.get().get(CommonLang.PAGE_PREVIOUS, getPlayer()), null);
+        ItemCreator nextButton = UHCUtils.createCustomButon(NEXT,     LangManager.get().get(CommonLang.PAGE_NEXT,     getPlayer()), null);
+
         int color;
-        ItemCreator prevButton = UHCUtils.createCustomButon(PREVIOUS, "§8§l┃ §f§lPage Précédente", null);
-        ItemCreator nextButton = UHCUtils.createCustomButon(NEXT, "§8§l┃ §f§lPage Suivante", null);
         int slotprev = 39;
         int slotnext = 41;
         if (special) {
@@ -40,21 +45,10 @@ public class inGameScenario extends CustomInventory {
         }
         fillCadre(color);
 
-        int totalScenarios = 0;
-        for (Scenario scenario : ScenarioManager.get().getActiveScenarios()) {
-            if (scenario.isSpecial() == special) {
-                totalScenarios++;
-            }
-        }
-
         int scenariosPerPage = 28;
-        int totalCategories = (int) Math.ceil((double) totalScenarios / scenariosPerPage);
-
-
         int currentScenario = 0;
         for (Scenario scenario : ScenarioManager.get().getActiveScenarios()) {
             if (scenario.isSpecial() != special) continue;
-
             currentScenario++;
             int categoryForThisItem = (int) Math.ceil((double) currentScenario / scenariosPerPage);
             int positionInCategory = (currentScenario - 1) % scenariosPerPage;
@@ -62,31 +56,24 @@ public class inGameScenario extends CustomInventory {
 
             ItemCreator item = scenario.getItem();
             item.setName("§8┃ §f" + scenario.getName());
-
             addItem(new StaticItem(categoryForThisItem, slot, item));
         }
+
         if (getCategories() > 1) {
             for (int page = 1; page <= getCategories(); page++) {
                 if (page > 1) {
                     addItem(new ActionItem(page, slotprev, prevButton) {
-                        @Override public void onClick(InventoryClickEvent e) {
-                            previousCategory();
-                            refresh();
-                        }
+                        @Override public void onClick(InventoryClickEvent e) { previousCategory(); refresh(); }
                     });
                 }
                 if (page < getCategories()) {
                     addItem(new ActionItem(page, slotnext, nextButton) {
-                        @Override public void onClick(InventoryClickEvent e) {
-                            nextCategory();
-                            refresh();
-                        }
+                        @Override public void onClick(InventoryClickEvent e) { nextCategory(); refresh(); }
                     });
                 }
             }
         }
     }
-
 
     private int calculateSlot(int position) {
         int row = position / 7;
@@ -98,29 +85,24 @@ public class inGameScenario extends CustomInventory {
     public int getCategories() {
         int totalScenarios = 0;
         for (Scenario scenario : ScenarioManager.get().getActiveScenarios()) {
-            if (scenario.isSpecial() == special) {
-                totalScenarios++;
-            }
+            if (scenario.isSpecial() == special) totalScenarios++;
         }
-
         return (int) Math.ceil((double) totalScenarios / 27);
     }
 
     @Override
     public String getTitle() {
-        if (special) {
-            return getConfig().getString("menu.scenario.special.ig.title");
-        }
-        return getConfig().getString("menu.scenario.ig.title");
+        if (special) return LangManager.get().get(UiTitleLang.SCENARIO_SPECIAL_IG_TITLE, getPlayer());
+        return LangManager.get().get(UiTitleLang.SCENARIO_IG_TITLE, getPlayer());
     }
 
     @Override
     public int getLines() {
-        return special ? (ScenarioManager.get().getSpecialScenarios().size() > 9 * 5 ? 6 : 5) : (ScenarioManager.get().getActiveScenarios().size() > 9 * 5 ? 6 : 5);
+        return special
+                ? (ScenarioManager.get().getSpecialScenarios().size() > 9 * 5 ? 6 : 5)
+                : (ScenarioManager.get().getActiveScenarios().size() > 9 * 5 ? 6 : 5);
     }
 
     @Override
-    public boolean isRefreshAuto() {
-        return true;
-    }
+    public boolean isRefreshAuto() { return true; }
 }

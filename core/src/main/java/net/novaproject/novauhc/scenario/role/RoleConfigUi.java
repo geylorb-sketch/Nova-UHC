@@ -3,7 +3,8 @@ package net.novaproject.novauhc.scenario.role;
 import net.novaproject.novauhc.ability.utils.AbbilityConfigUi;
 import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
-
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
 import net.novaproject.novauhc.ui.ConfigVarUi;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.UHCUtils;
@@ -16,15 +17,24 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Map;
 
 public class RoleConfigUi extends CustomInventory {
 
     private final Role role;
     private final CustomInventory parent;
-    public RoleConfigUi(Player player, Role role,CustomInventory parent) {
+
+    public RoleConfigUi(Player player, Role role, CustomInventory parent) {
         super(player);
         this.role = role;
         this.parent = parent;
+    }
+
+    private String t(ScenarioVariableUiLang key) {
+        return LangManager.get().get(key, getPlayer());
+    }
+    private String t(ScenarioVariableUiLang key, Map<String, Object> p) {
+        return LangManager.get().get(key, getPlayer(), p);
     }
 
     @Override
@@ -40,25 +50,27 @@ public class RoleConfigUi extends CustomInventory {
 
             try {
                 Object rawValue = field.get(role);
-                if(rawValue instanceof Ability ability){
-                    for (Field abilityField : ability.getClass().getDeclaredFields()){
-                        if(abilityField.isAnnotationPresent(AbilityVariable.class)){
-                            addItem(new ActionItem(slot, new ItemCreator(Material.PAPER)
-                                    .setName("§8» §fConfigurer " + ability.getName() + " §8«").setLores(Arrays.asList(
-                                            "§8┃ §fCliquez pour configurer",
-                                            "",
-                                            "  §8┃ §fPermet de configurer les options de",
-                                            "  §8┃ §fle pouvoir " +ability.getName()
-                                    ))) {
-                                 @Override
-                                 public void onClick(InventoryClickEvent e) {
-                                     new AbbilityConfigUi(getPlayer(), ability, RoleConfigUi.this).open();
-                                 }
 
+                if (rawValue instanceof Ability ability) {
+                    for (Field abilityField : ability.getClass().getDeclaredFields()) {
+                        if (abilityField.isAnnotationPresent(AbilityVariable.class)) {
+                            addItem(new ActionItem(slot, new ItemCreator(Material.PAPER)
+                                    .setName(t(ScenarioVariableUiLang.CONFIG_BUTTON, Map.of("%name%", ability.getName())))
+                                    .setLores(Arrays.asList(
+                                            t(ScenarioVariableUiLang.CONFIG_LORE),
+                                            "",
+                                            t(ScenarioVariableUiLang.CONFIG_ABILITY_DESC1),
+                                            t(ScenarioVariableUiLang.CONFIG_ABILITY_DESC2, Map.of("%name%", ability.getName()))
+                                    ))) {
+                                @Override
+                                public void onClick(InventoryClickEvent e) {
+                                    new AbbilityConfigUi(getPlayer(), ability, RoleConfigUi.this).open();
+                                }
                             });
                         }
                     }
                 }
+
                 String displayValue = rawValue.toString();
                 switch (annotation.type()) {
                     case TIME -> {
@@ -77,9 +89,9 @@ public class RoleConfigUi extends CustomInventory {
                         .setName("§e" + annotation.name())
                         .addLore("§7" + annotation.description())
                         .addLore("")
-                        .addLore("§7Valeur actuelle: §b" + displayValue)
+                        .addLore(t(ScenarioVariableUiLang.CURRENT_VALUE, Map.of("%value%", displayValue)))
                         .addLore("")
-                        .addLore("§a▶ Clic pour changer");
+                        .addLore(t(ScenarioVariableUiLang.CLICK_CHANGE));
 
                 if (rawValue instanceof Boolean) {
                     addItem(new ActionItem(slot, icon) {
@@ -107,27 +119,17 @@ public class RoleConfigUi extends CustomInventory {
                                         ex.printStackTrace();
                                     }
                                 }
-                            }).setSlot("Nouvelle valeur").open();
+                            }).setSlot(t(ScenarioVariableUiLang.ANVIL_NEW_VALUE)).open();
                         }
                     });
 
                 } else if (rawValue instanceof Number number) {
                     addMenu(slot, icon,
-                            new ConfigVarUi(
-                                    getPlayer(),
-                                    10, 5, 1,
-                                    10, 5, 1,
-                                    number,
-                                    0,
-                                    0,
-                                    RoleConfigUi.this
-
-                            ) {
+                            new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, number, 0, 0, RoleConfigUi.this) {
                                 @Override
                                 public void onChange(Number newValue) {
                                     try {
                                         Class<?> type = field.getType();
-
                                         if (type == int.class || type == Integer.class)
                                             field.set(role, newValue.intValue());
                                         else if (type == double.class || type == Double.class)
@@ -136,13 +138,13 @@ public class RoleConfigUi extends CustomInventory {
                                             field.set(role, newValue.floatValue());
                                         else if (type == long.class || type == Long.class)
                                             field.set(role, newValue.longValue());
-
-                                    } catch (IllegalAccessException e) {
-                                        e.printStackTrace();
+                                    } catch (IllegalAccessException ex) {
+                                        ex.printStackTrace();
                                     }
                                 }
                             });
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -150,25 +152,14 @@ public class RoleConfigUi extends CustomInventory {
             slot++;
             if ((slot + 1) % 9 == 0) slot += 2;
             if (slot >= 44) break;
-
         }
-
-        }
+    }
 
     @Override
     public String getTitle() {
-        return "Configuration de " + role.getName();
+        return t(ScenarioVariableUiLang.ROLE_CONFIG_TITLE, Map.of("%name%", role.getName()));
     }
 
-    @Override
-    public int getLines() {
-        return 5;
-    }
-
-
-    @Override
-    public boolean isRefreshAuto() {
-        return false;
-    }
+    @Override public int getLines() { return 5; }
+    @Override public boolean isRefreshAuto() { return false; }
 }
-

@@ -2,7 +2,8 @@ package net.novaproject.novauhc.world.utils;
 
 import lombok.Getter;
 import net.novaproject.novauhc.Common;
-import net.novaproject.novauhc.CommonString;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -25,7 +26,7 @@ public class SimpleBorder extends AbstractBorder {
             this.finalSize = finalSize;
             this.blocksSecond = blocksSecond;
             play();
-            Bukkit.broadcastMessage(CommonString.MEETUP_START.getMessage());
+            Bukkit.broadcastMessage(LangManager.get().get(CommonLang.MEETUP_START));
             World endWorld = Bukkit.getWorld(Common.get().getArenaName() + "_the_end");
             WorldBorder endWorldBorder = endWorld.getWorldBorder();
             endWorldBorder.setSize(1000000.0D);

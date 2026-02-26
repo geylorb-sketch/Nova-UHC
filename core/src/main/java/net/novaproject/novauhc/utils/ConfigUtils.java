@@ -2,7 +2,6 @@ package net.novaproject.novauhc.utils;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.novaproject.novauhc.CommonString;
 import net.novaproject.novauhc.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,7 +37,6 @@ public class ConfigUtils {
         registerConfig(MENU_CONFIG);
         saveAllSchems();
         createDefaultFiles();
-        CommonString.loadMessages(getLangConfig());
     }
 
     public static void registerConfig(String path) {
