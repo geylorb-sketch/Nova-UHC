@@ -14,10 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Passif Archer : Bonus dégâts + Slowness sur flèche.
- * S'active automatiquement via onAttack() quand l'event provient d'une Arrow.
- */
+
 public class ArcherBowPassive extends Ability {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ARCHER_BOW_BONUS_NAME", descKey = "ARCHER_BOW_BONUS_DESC", type = VariableType.DOUBLE)
@@ -29,7 +26,7 @@ public class ArcherBowPassive extends Ability {
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ARCHER_SLOW_DURATION_NAME", descKey = "ARCHER_SLOW_DURATION_DESC", type = VariableType.TIME)
     private int slowDuration = 5;
 
-    // État temporaire stocké entre onAttack() et onEnable()
+
     private Player pendingVictim;
     private EntityDamageByEntityEvent pendingEvent;
 
@@ -38,7 +35,7 @@ public class ArcherBowPassive extends Ability {
 
     @Override
     public void onAttack(UHCPlayer victimP, EntityDamageByEntityEvent event) {
-        // On n'intervient que si le dégât vient d'une flèche dont le tireur est un joueur
+
         if (!(event.getDamager() instanceof Arrow arrow)) return;
         if (!(arrow.getShooter() instanceof Player shooter)) return;
 

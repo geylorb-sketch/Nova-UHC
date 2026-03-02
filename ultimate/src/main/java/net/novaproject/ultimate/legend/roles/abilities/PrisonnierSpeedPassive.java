@@ -9,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Prisonnier : Speed I permanente.
- * PassiveAbility.onSec() → tryUse() → onEnable() chaque seconde (cooldown 0).
- */
+
 public class PrisonnierSpeedPassive extends PassiveAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "PRISONNIER_SPEED_LEVEL_NAME", descKey = "PRISONNIER_SPEED_LEVEL_DESC", type = VariableType.INTEGER)

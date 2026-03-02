@@ -3,9 +3,7 @@ package net.novaproject.novauhc.lang.special;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario BeatTheSanta.
- */
+
 public enum BeatTheSantaLang implements Lang {
 
     WARNING_LUTIN(

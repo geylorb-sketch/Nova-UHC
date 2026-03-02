@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario OreSwap.
- * Remplace l'ancienne classe scenario/lang/lang/OreSwapLang.java
- */
+
 public enum OreSwapLang implements Lang {
 
     SWAP_ANNOUNCEMENT(

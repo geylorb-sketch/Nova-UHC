@@ -12,7 +12,7 @@ import net.novaproject.ultimate.legend.roles.abilities.ZeusEffectsActive;
 import net.novaproject.ultimate.legend.roles.abilities.ZeusLightningPassive;
 import org.bukkit.Material;
 
-// onHit supprimé : ZeusLightningPassive gère lui-même éclair + speed via onAttack → tryUse → onEnable
+
 public class Zeus extends LegendRole {
 
     @RoleVariable(lang = ScenarioVarLang.class, nameKey = "ZEUS_LIGHTNING_NAME", type = VariableType.ABILITY)

@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario LootCrate.
- * Remplace l'ancienne classe scenario/lang/lang/LootCrateLang.java
- */
+
 public enum LootCrateLang implements Lang {
 
     CRATES_SPAWNED(

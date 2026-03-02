@@ -14,7 +14,7 @@ import net.novaproject.ultimate.legend.roles.abilities.DragonFireballActive;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-// onHit supprimé : DragonFirePassive gère lui-même la chance d'ignition via onAttack → tryUse → onEnable
+
 public class Dragon extends LegendRole {
 
     @RoleVariable(lang = ScenarioVarLang.class, nameKey = "DRAGON_EXTRA_HEARTS_NAME", descKey = "DRAGON_EXTRA_HEARTS_DESC", type = VariableType.INTEGER)

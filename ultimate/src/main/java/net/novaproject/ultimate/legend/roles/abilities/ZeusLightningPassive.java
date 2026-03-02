@@ -13,10 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Passif Zeus : 10% chance d'éclair + 20% chance de Speed I 10s à chaque frappe mêlée.
- * onAttack → tryUse → onEnable (cooldown 0 = s'applique à chaque coup).
- */
+
 public class ZeusLightningPassive extends Ability {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ZEUS_LIGHTNING_CHANCE_NAME", descKey = "ZEUS_LIGHTNING_CHANCE_DESC", type = VariableType.PERCENTAGE)
@@ -25,7 +22,7 @@ public class ZeusLightningPassive extends Ability {
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ZEUS_SPEED_CHANCE_NAME", descKey = "ZEUS_SPEED_CHANCE_DESC", type = VariableType.PERCENTAGE)
     private double speedChance = 0.20;
 
-    // Stockage temporaire entre onAttack() et onEnable()
+
     private Player pendingAttacker;
     private Player pendingVictim;
 

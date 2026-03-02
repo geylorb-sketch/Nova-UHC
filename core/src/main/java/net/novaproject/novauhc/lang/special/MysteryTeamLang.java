@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.special;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario MysteryTeam.
- * Remplace l'ancienne classe scenario/lang/lang/MysteryTeamLang.java
- */
+
 public enum MysteryTeamLang implements Lang {
 
 

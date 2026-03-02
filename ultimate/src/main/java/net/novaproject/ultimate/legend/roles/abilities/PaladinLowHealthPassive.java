@@ -11,10 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Paladin : Résistance I à faible vie + Force I près des alliés.
- * PassiveAbility.onSec() → tryUse() → onEnable() chaque seconde (cooldown 0).
- */
+
 public class PaladinLowHealthPassive extends PassiveAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "PALADIN_LOW_HP_THRESHOLD_NAME", descKey = "PALADIN_LOW_HP_THRESHOLD_DESC", type = VariableType.DOUBLE)
@@ -32,14 +29,14 @@ public class PaladinLowHealthPassive extends PassiveAbility {
     public boolean onEnable(Player player) {
         boolean applied = false;
 
-        // Résistance I si vie basse
+
         if (player.getHealth() <= threshold) {
             player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 0, false, false));
             applied = true;
         }
 
-        // Force I si au moins un allié à portée
+
         UHCPlayer owner = UHCPlayerManager.get().getPlayer(player);
         if (owner != null && owner.getTeam().isPresent()) {
             long nearby = owner.getTeam().get().getPlayers().stream()

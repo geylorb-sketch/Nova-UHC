@@ -14,7 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
-// onHit supprimé : ArcherBowPassive gère lui-même la détection flèche via onAttack → tryUse → onEnable
+
 public class Archer extends LegendRole {
 
     @RoleVariable(lang = ScenarioVarLang.class, nameKey = "ARCHER_BOW_POWER_NAME", descKey = "ARCHER_BOW_POWER_DESC", type = VariableType.INTEGER)

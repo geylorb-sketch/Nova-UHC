@@ -70,7 +70,7 @@ public class UHCPlayer {
     private int kill = 0;
 
     
-    /** null = locale serveur par défaut */
+
     private String locale = null;
 
     public String getLocale() {

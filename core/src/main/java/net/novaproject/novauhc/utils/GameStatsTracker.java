@@ -28,24 +28,18 @@ public class GameStatsTracker {
         }
     }
 
-    /**
-     * Initialise le tracker au début de la partie
-     */
+
     public void startGame() {
         stats.clear();
         gameStartTime = System.currentTimeMillis();
     }
 
-    /**
-     * Ajoute un joueur au tracker
-     */
+
     public void addPlayer(UUID uuid, String name) {
         stats.put(uuid, new PlayerGameStats(uuid, name));
     }
 
-    /**
-     * Ajoute un kill à un joueur
-     */
+
     public void addKill(UUID killer) {
         PlayerGameStats stat = stats.get(killer);
         if (stat != null) {
@@ -53,9 +47,7 @@ public class GameStatsTracker {
         }
     }
 
-    /**
-     * Ajoute une mort à un joueur
-     */
+
     public void addDeath(UUID victim) {
         PlayerGameStats stat = stats.get(victim);
         if (stat != null) {
@@ -64,9 +56,7 @@ public class GameStatsTracker {
         }
     }
 
-    /**
-     * Définit le camp d'un joueur (pour modes Special)
-     */
+
     public void setCamp(UUID uuid, String camp) {
         PlayerGameStats stat = stats.get(uuid);
         if (stat != null) {
@@ -74,24 +64,18 @@ public class GameStatsTracker {
         }
     }
 
-    /**
-     * Récupère les stats d'un joueur
-     */
+
     public PlayerGameStats getStats(UUID uuid) {
         return stats.get(uuid);
     }
 
-    /**
-     * Récupère la durée de la partie en secondes
-     */
+
     public int getGameDuration() {
         if (gameStartTime == 0) return 0;
         return (int) ((System.currentTimeMillis() - gameStartTime) / 1000);
     }
 
-    /**
-     * Convertit les stats en format API
-     */
+
     public List<ApiManager.PlayerStats> getPlayerStats() {
         List<ApiManager.PlayerStats> list = new ArrayList<>();
 
@@ -118,18 +102,14 @@ public class GameStatsTracker {
         return list;
     }
 
-    /**
-     * Récupère tous les joueurs vivants
-     */
+
     public List<PlayerGameStats> getAlivePlayers() {
         return stats.values().stream()
                 .filter(s -> s.isAlive)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Récupère les gagnants (pour modes Solo/Team)
-     */
+
     public List<ApiManager.WinnerInfo> getWinners(List<UUID> winnerUuids) {
         List<ApiManager.WinnerInfo> winners = new ArrayList<>();
         for (UUID uuid : winnerUuids) {
@@ -147,9 +127,7 @@ public class GameStatsTracker {
         return winners;
     }
 
-    /**
-     * Récupère les gagnants par camp (pour modes Special)
-     */
+
     public List<ApiManager.WinnerInfo> getWinnersByCamp(String winnerCamp) {
         return stats.values().stream()
                 .filter(s -> s.isAlive && winnerCamp.equals(s.camp))
@@ -157,9 +135,7 @@ public class GameStatsTracker {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Reset le tracker
-     */
+
     public void reset() {
         stats.clear();
         gameStartTime = 0;

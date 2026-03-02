@@ -4,12 +4,7 @@ import net.novaproject.novauhc.lang.Lang;
 
 import java.util.Map;
 
-/**
- * Traductions centralisées des descriptions de tous les scénarios.
- *
- * Les descriptions dynamiques utilisent des placeholders : %value%
- * Exemple : "Ores within a %radius% block radius come to you."
- */
+
 public enum ScenarioDescLang implements Lang {
 
     

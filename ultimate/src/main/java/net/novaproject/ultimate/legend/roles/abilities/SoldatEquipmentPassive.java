@@ -11,17 +11,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Soldat :
- *  - Résistance I permanente → onSec direct (pas de cooldown géré par tryUse).
- *  - Bonus dégâts épée → onAttack → tryUse → onEnable (stockage temporaire de l'event).
- */
+
 public class SoldatEquipmentPassive extends Ability {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "SOLDAT_BONUS_DAMAGE_NAME", descKey = "SOLDAT_BONUS_DAMAGE_DESC", type = VariableType.DOUBLE)
     private double bonusDamage = 1.0;
 
-    // Stockage temporaire entre onAttack() et onEnable()
+
     private EntityDamageByEntityEvent pendingEvent;
     private Player pendingAttacker;
 
@@ -30,7 +26,7 @@ public class SoldatEquipmentPassive extends Ability {
     @Override public String getName() { return "Discipline Militaire"; }
     @Override public Material getMaterial() { return null; }
 
-    /** Aura appliquée directement chaque seconde. */
+
     @Override
     public void onSec(Player player) {
         player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
@@ -38,7 +34,7 @@ public class SoldatEquipmentPassive extends Ability {
         super.onSec(player);
     }
 
-    /** Déclenché par le framework à chaque coup en mêlée. */
+
     @Override
     public void onAttack(UHCPlayer victimP, EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player attacker)) return;
@@ -47,7 +43,7 @@ public class SoldatEquipmentPassive extends Ability {
         tryUse(attacker);
     }
 
-    /** Applique le bonus si l'arme tenue est une épée. */
+
     @Override
     public boolean onEnable(Player player) {
         if (pendingEvent == null || pendingAttacker == null) return false;

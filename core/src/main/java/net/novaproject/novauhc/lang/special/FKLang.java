@@ -4,10 +4,7 @@ import net.novaproject.novauhc.lang.Lang;
 
 import java.util.Map;
 
-/**
- * Traductions du mode FallenKingdom.
- * Placeholders : %enemy_team%, %capturing_team%, %remaining_time%
- */
+
 public enum FKLang implements Lang {
 
     

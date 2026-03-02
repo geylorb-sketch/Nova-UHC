@@ -10,12 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Mage : Régénère 3 potions toutes les N secondes.
- * PassiveAbility.onSec() → tryUse() → onEnable().
- * Le ShortCooldownManager gère l'intervalle : la première exécution est immédiate
- * (pas encore de cooldown en mémoire), puis regenInterval secondes entre chaque lot.
- */
+
 public class MagePotionPassive extends PassiveAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "MAGE_REGEN_INTERVAL_NAME", descKey = "MAGE_REGEN_INTERVAL_DESC", type = VariableType.TIME)
@@ -28,8 +23,8 @@ public class MagePotionPassive extends PassiveAbility {
 
     @Override
     public boolean onEnable(Player player) {
-        // Le cooldown est mis à jour après onEnable → l'intervalle est respecté automatiquement
-        setCooldown(regenInterval); // au cas où la variable a été modifiée en cours de jeu
+
+        setCooldown(regenInterval);
         dropPotions(player);
         player.sendMessage("§6[Mage] §aNouvelles potions reçues !");
         return true;

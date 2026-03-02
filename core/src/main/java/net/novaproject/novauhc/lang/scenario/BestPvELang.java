@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario BestPvE.
- * Remplace l'ancienne classe scenario/lang/lang/BestPvELang.java
- */
+
 public enum BestPvELang implements Lang {
 
     LIST_QUIT(

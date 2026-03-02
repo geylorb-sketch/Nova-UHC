@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario BloodLust.
- * Remplace l'ancienne classe scenario/lang/lang/BloodLustLang.java
- */
+
 public enum BloodLustLang implements Lang {
 
     KILL_BOOST(

@@ -27,9 +27,7 @@ public class ItemCreator {
         return this.addEnchantment(Enchantment.DURABILITY, 1).addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
 
-    /**
-     * @return EnchantmentStorageMeta
-     */
+
 
     public HashMap<Enchantment, Integer> getStoredEnchantments() {
         if (this.itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
@@ -61,20 +59,13 @@ public class ItemCreator {
         this.itemstack = itemCreator.getItemstack();
     }
 
-    /**
-     * @return l'ItemStack
-     */
+
 
     public ItemStack getItemstack() {
         return new ItemStack(itemstack);
     }
 
-    /**
-     * Set un Material
-     *
-     * @param material material
-     * @return l'objet
-     */
+
 
     public ItemCreator setMaterial(Material material) {
         if (this.itemstack == null) this.itemstack = new ItemStack(material);
@@ -86,21 +77,14 @@ public class ItemCreator {
 
         barre, precedent, suivant, coeur, cercleEtoile, croix, yinYang, losange, moin, plus
     }
-    /**
-     * @return le Material
-     */
+
 
     public Material getMaterial() {
         return this.itemstack.getType();
     }
 
 
-    /**
-     * Set la quantiter d'item
-     *
-     * @param amount quantiter d'item
-     * @return l'objet
-     */
+
 
     public ItemCreator setAmount(int amount) {
         if(amount > 64) amount = 64;
@@ -112,32 +96,20 @@ public class ItemCreator {
         return this.itemstack.getAmount();
     }
 
-    /**
-     * Set la durabiliter
-     *
-     * @param durability durabiliter
-     * @return l'objet
-     */
+
 
     public ItemCreator setDurability(Short durability) {
         this.itemstack.setDurability(durability);
         return this;
     }
 
-    /**
-     * @return la durabiliter
-     */
+
 
     public int getDurability() {
         return this.itemstack.getDurability();
     }
 
-    /**
-     * Set le nom
-     *
-     * @param name nom
-     * @return l'objet
-     */
+
 
     public ItemCreator setName(String name) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -146,26 +118,19 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * @return le nom
-     */
+
 
     public String getName() {
         return this.itemstack.getItemMeta().getDisplayName();
     }
 
-    /**
-     * @return lores
-     */
+
 
     public ArrayList<String> getLores() {
         return (ArrayList<String>) this.itemstack.getItemMeta().getLore();
     }
 
-    /**
-     * @param list set un lore
-     * @return l'objet
-     */
+
 
     public ItemCreator setLores(List<String> list) {
         ItemMeta meta = this.itemstack.getItemMeta();

@@ -102,9 +102,7 @@ public class ApiManager {
 
 
 
-    /**
-     * Démarre une partie
-     */
+
     public CompletableFuture<String> gameStart(
             String mode,
             String scenario,
@@ -144,9 +142,7 @@ public class ApiManager {
                 });
     }
 
-    /**
-     * Termine une partie (méthode unifiée)
-     */
+
     public CompletableFuture<JsonObject> gameEnd(
             String mode,
             String scenario,

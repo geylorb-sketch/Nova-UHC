@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario Gladiator.
- * Remplace l'ancienne classe scenario/lang/lang/GladiatorLang.java
- */
+
 public enum GladiatorLang implements Lang {
 
     ARENA_CREATED(

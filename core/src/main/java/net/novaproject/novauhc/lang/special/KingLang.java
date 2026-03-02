@@ -4,10 +4,7 @@ import net.novaproject.novauhc.lang.Lang;
 
 import java.util.Map;
 
-/**
- * Traductions du scénario King.
- * Placeholder : %king%
- */
+
 public enum KingLang implements Lang {
 
     YOU_ARE_KING(

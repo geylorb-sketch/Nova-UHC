@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.ui;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Centralise tous les titres d'inventaires.
- * Remplace les clés menu.xxx.title dans menu.yml.
- */
+
 public enum UiTitleLang implements Lang {
 
     

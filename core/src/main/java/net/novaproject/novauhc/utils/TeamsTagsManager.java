@@ -27,7 +27,7 @@ public class TeamsTagsManager {
         this.team.setCanSeeFriendlyInvisibles(false);
         this.team.setAllowFriendlyFire(true);
 
-        /* VERIFICATION */
+
         int prefixLength = 0;
         int suffixLength = 0;
         if (prefix != null) {

@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario Ninja.
- * Remplace l'ancienne classe scenario/lang/lang/NinjaLang.java
- */
+
 public enum NinjaLang implements Lang {
 
     KILL_INVISIBILITY(

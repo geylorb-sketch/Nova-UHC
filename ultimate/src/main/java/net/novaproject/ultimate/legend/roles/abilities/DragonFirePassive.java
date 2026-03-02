@@ -13,11 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Passif Dragon :
- *  - Aura Fire Resistance permanente (onSec, direct, pas de cooldown).
- *  - Chance d'enflammer la cible en mêlée (onAttack → tryUse → onEnable).
- */
+
 public class DragonFirePassive extends Ability {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "DRAGON_FIRE_CHANCE_NAME", descKey = "DRAGON_FIRE_CHANCE_DESC", type = VariableType.PERCENTAGE)
@@ -26,7 +22,7 @@ public class DragonFirePassive extends Ability {
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "DRAGON_FIRE_DURATION_NAME", descKey = "DRAGON_FIRE_DURATION_DESC", type = VariableType.INTEGER)
     private int fireDuration = 5;
 
-    // Stockage temporaire pour le déclenchement via tryUse
+
     private Player pendingVictim;
 
     public DragonFirePassive() { setCooldown(0); }
@@ -34,15 +30,15 @@ public class DragonFirePassive extends Ability {
     @Override public String getName() { return "Souffle du Dragon"; }
     @Override public Material getMaterial() { return null; }
 
-    /** Aura appliquée chaque seconde — directement, sans cooldown géré par tryUse. */
+
     @Override
     public void onSec(Player player) {
         player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
         player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 80, 0, false, false));
-        super.onSec(player); // updateCooldown display
+        super.onSec(player);
     }
 
-    /** Déclenché par le framework quand le joueur frappe en mêlée. */
+
     @Override
     public void onAttack(UHCPlayer victimP, EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player attacker)) return;
@@ -52,7 +48,7 @@ public class DragonFirePassive extends Ability {
         tryUse(attacker);
     }
 
-    /** Logique d'embrasement — appelé via tryUse depuis onAttack. */
+
     @Override
     public boolean onEnable(Player player) {
         if (pendingVictim == null) return false;

@@ -12,7 +12,7 @@ import net.novaproject.ultimate.legend.roles.abilities.SuccubeAbsorptionActive;
 import net.novaproject.ultimate.legend.roles.abilities.SuccubeLifestealPassive;
 import org.bukkit.Material;
 
-// onHit supprimé : SuccubeLifestealPassive gère lui-même le vol de vie via onAttack → tryUse → onEnable
+
 public class Succube extends LegendRole {
 
     @RoleVariable(lang = ScenarioVarLang.class, nameKey = "SUCCUBE_LIFESTEAL_NAME", type = VariableType.ABILITY)

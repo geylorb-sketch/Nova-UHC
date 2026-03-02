@@ -14,7 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
-// onHit supprimé : SoldatEquipmentPassive gère lui-même le bonus dégâts via onAttack → tryUse → onEnable
+
 public class Soldat extends LegendRole {
 
     @RoleVariable(lang = ScenarioVarLang.class, nameKey = "SOLDAT_EQUIPMENT_NAME", type = VariableType.ABILITY)
