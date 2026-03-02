@@ -13,11 +13,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.Random;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class BatRoulette extends Scenario {
 
-    @ScenarioVariable(name = "Chance d'etre obliger de faire un MLG", description = "Chance (en pourcentage) d'etre téléporté en hauteur au lieu de recevoir une pomme dorée.",type = VariableType.PERCENTAGE)
-    private int chance = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BATROULETTE_VAR_CHANCE_NAME", descKey = "BATROULETTE_VAR_CHANCE_DESC", type = VariableType.PERCENTAGE)
+    private final int chance = 10;
 
     @Override
     public String getName() {
@@ -25,8 +28,8 @@ public class BatRoulette extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Tuer une chauve-souris donne un effet aléatoire (positif ou négatif).";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BAT_ROULETTE, player);
     }
 
     @Override
@@ -34,10 +37,7 @@ public class BatRoulette extends Scenario {
         return new ItemCreator(Material.MONSTER_EGG);
     }
 
-    @Override
-    public String getPath() {
-        return "batroulette";
-    }
+
 
 
     @Override

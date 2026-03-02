@@ -7,6 +7,7 @@ import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.ui.config.ScenariosUi;
+import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
 import org.bson.Document;
@@ -46,7 +47,7 @@ public abstract class Scenario {
     private FileConfiguration config;
     public abstract String getName();
 
-    public abstract String getDescription();
+    public abstract String getDescription(Player player);
 
     public abstract ItemCreator getItem();
 
@@ -54,6 +55,10 @@ public abstract class Scenario {
 
     public boolean isSpecial() {
         return false;
+    }
+
+    public String getPath() {
+        return null;
     }
 
     public boolean isWin() {
@@ -68,9 +73,6 @@ public abstract class Scenario {
         return false;
     }
 
-    public String getPath() {
-        return null;
-    }
 
     public void enable() {
         if (!isActive()) {
@@ -157,19 +159,13 @@ public abstract class Scenario {
         String configPath = "api/scenario/" + getPath() + ".yml";
         File file = new File(Main.get().getDataFolder(), configPath);
 
-        YamlConfiguration config = file.exists() ? YamlConfiguration.loadConfiguration(file) : new YamlConfiguration();
-
-        config.options().copyDefaults(true);
-
         if (!file.exists()) {
-            try {
-                file.getParentFile().mkdirs();
-                config.save(file);
-                Bukkit.getLogger().info("Config scenario générée automatiquement : " + getPath() + ".yml");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ConfigUtils.createDefaultFiles(configPath);
+            Bukkit.getLogger().info("Config scenario générée automatiquement : " + getPath() + ".yml");
         }
+
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+        config.options().copyDefaults(true);
 
         this.config = config;
     }

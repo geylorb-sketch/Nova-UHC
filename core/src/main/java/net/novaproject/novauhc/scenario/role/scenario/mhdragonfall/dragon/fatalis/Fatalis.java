@@ -9,33 +9,34 @@ import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 
 public class Fatalis extends DragonRole {
-    @RoleVariable(name = "Vie", description = "§fPoints de §a§lVie §fmaximum par default.", type = VariableType.INTEGER)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_MAX_HP_NAME", descKey = "FATALIS_VAR_MAX_HP_DESC", type = VariableType.INTEGER)
     public int maxHP = 17500;
-    @RoleVariable(name = "Force", description = "§fPoint de §c§lForce §fpar défault.",type = VariableType.INTEGER)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_FORCE_NAME", descKey = "FATALIS_VAR_FORCE_DESC", type = VariableType.INTEGER)
     public int force = 480;
-    @RoleVariable(name = "Resistance", description = "§fPoint de §b§lResistance §fpar défault.",type = VariableType.INTEGER)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_RES_NAME", descKey = "FATALIS_VAR_RES_DESC", type = VariableType.INTEGER)
     public int res = 480;
-    @RoleVariable(name = "Critical Damage", description = "§fAugmentation des §6dégat §fen cas de §5§lCritique§f.",type = VariableType.PERCENTAGE)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_CRIT_DAMAGE_NAME", descKey = "FATALIS_VAR_CRIT_DAMAGE_DESC", type = VariableType.PERCENTAGE)
     public int critDamage = 50;
-    @RoleVariable(name = "Critical Chance", description = "§fChance de §6provoquer §fun §5§lCritique§f.",type = VariableType.PERCENTAGE)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_CRIT_CHANCE_NAME", descKey = "FATALIS_VAR_CRIT_CHANCE_DESC", type = VariableType.PERCENTAGE)
     public int critChance = 17;
-    @RoleVariable(name = "Fire Resistance", description = "§c§lAugmentation§f/§a§lDiminution §fdes §6§lRésistance Elementaire§f",type = VariableType.PERCENTAGE)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_FIRE_NAME", descKey = "FATALIS_VAR_FIRE_DESC", type = VariableType.PERCENTAGE)
     public double fire = 0.3;
-    @RoleVariable(name = "Dragon Resistance", description = "§c§lAugmentation§f/§a§lDiminution §fdes §6§lRésistance Elementaire§f",type = VariableType.PERCENTAGE)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_DRAG_NAME", descKey = "FATALIS_VAR_DRAG_DESC", type = VariableType.PERCENTAGE)
     public double drag = 0.1;
-    @RoleVariable(name = "Water Resistance", description = "§c§lAugmentation§f/§a§lDiminution §fdes §6§lRésistance Elementaire§f",type = VariableType.PERCENTAGE)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_WATER_NAME", descKey = "FATALIS_VAR_WATER_DESC", type = VariableType.PERCENTAGE)
     public double water = -0.2;
-    @RoleVariable(name = "Ice Resistance", description = "§c§lAugmentation§f/§a§lDiminution §fdes §6§lRésistance Elementaire§f",type = VariableType.PERCENTAGE)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_ICE_NAME", descKey = "FATALIS_VAR_ICE_DESC", type = VariableType.PERCENTAGE)
     public double ice = -0.2;
-    @RoleVariable(name = "Thunder Resistance", description = "§c§lAugmentation§f/§a§lDiminution §fdes §6§lRésistance Elementaire§f",type = VariableType.PERCENTAGE)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_THUNDER_NAME", descKey = "FATALIS_VAR_THUNDER_DESC", type = VariableType.PERCENTAGE)
     public double thunder = 0.0;
-    @RoleVariable(name = "Aura de Peur", description = "",type = VariableType.ABILITY)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_AURA_NAME", type = VariableType.ABILITY)
     public Ability aura;
-    @RoleVariable(name = "Mer de Flamme", description = "",type = VariableType.ABILITY)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_MER_NAME", type = VariableType.ABILITY)
     public Ability mer;
-    @RoleVariable(name = "Flame Noir", description = "",type = VariableType.ABILITY)
+    @RoleVariable(lang = ScenarioVarLang.class, nameKey = "FATALIS_VAR_FLAME_NAME", type = VariableType.ABILITY)
     public Ability flame;
 
     public Fatalis() {

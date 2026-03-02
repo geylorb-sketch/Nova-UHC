@@ -7,6 +7,7 @@ import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class ChatPvP extends Scenario {
     @Override
@@ -15,8 +16,8 @@ public class ChatPvP extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "A l'arrivée du PVP, le chat est désactivé.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.CHAT_PVP, player);
     }
 
     @Override

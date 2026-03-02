@@ -19,18 +19,20 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class SimonSays extends Scenario {
 
-    @ScenarioVariable(name="Min Delay", description="Temps minimum (en secondes) entre deux commandes", type=VariableType.INTEGER) private int min_delay = 120;
-    @ScenarioVariable(name="Max Delay", description="Temps maximum (en secondes) entre deux commandes", type=VariableType.INTEGER) private int max_delay = 300;
-    @ScenarioVariable(name="Jump Duration", description="Durée (en secondes) pour SAUTER", type=VariableType.INTEGER) private int jump_duration = 15;
-    @ScenarioVariable(name="Crouch Duration", description="Durée (en secondes) pour S'ACCROUPIR", type=VariableType.INTEGER) private int crouch_duration = 10;
-    @ScenarioVariable(name="Move Duration", description="Durée (en secondes) pour les déplacements", type=VariableType.INTEGER) private int move_duration = 20;
-    @ScenarioVariable(name="Stop Duration", description="Durée (en secondes) pour ARRÊTER DE BOUGER", type=VariableType.INTEGER) private int stop_duration = 10;
-    @ScenarioVariable(name="Penalty Damage", description="Activer la pénalité de dégâts", type=VariableType.BOOLEAN) private boolean penalty_damage = true;
-    @ScenarioVariable(name="Penalty Hunger", description="Activer la pénalité de faim", type=VariableType.BOOLEAN) private boolean penalty_hunger = true;
-    @ScenarioVariable(name="Penalty Effects", description="Activer les pénalités d'effets", type=VariableType.BOOLEAN) private boolean penalty_effects = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MIN_DELAY_NAME", descKey = "SIMONSAYS_VAR_MIN_DELAY_DESC", type = VariableType.INTEGER) private final int min_delay = 120;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MAX_DELAY_NAME", descKey = "SIMONSAYS_VAR_MAX_DELAY_DESC", type = VariableType.INTEGER) private final int max_delay = 300;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_JUMP_DURATION_NAME", descKey = "SIMONSAYS_VAR_JUMP_DURATION_DESC", type = VariableType.INTEGER) private final int jump_duration = 15;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_CROUCH_DURATION_NAME", descKey = "SIMONSAYS_VAR_CROUCH_DURATION_DESC", type = VariableType.INTEGER) private final int crouch_duration = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MOVE_DURATION_NAME", descKey = "SIMONSAYS_VAR_MOVE_DURATION_DESC", type = VariableType.INTEGER) private final int move_duration = 20;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_STOP_DURATION_NAME", descKey = "SIMONSAYS_VAR_STOP_DURATION_DESC", type = VariableType.INTEGER) private final int stop_duration = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_DAMAGE_NAME", descKey = "SIMONSAYS_VAR_PENALTY_DAMAGE_DESC", type = VariableType.BOOLEAN) private final boolean penalty_damage = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_HUNGER_NAME", descKey = "SIMONSAYS_VAR_PENALTY_HUNGER_DESC", type = VariableType.BOOLEAN) private final boolean penalty_hunger = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_EFFECTS_NAME", descKey = "SIMONSAYS_VAR_PENALTY_EFFECTS_DESC", type = VariableType.BOOLEAN) private final boolean penalty_effects = true;
 
     private final Set<UUID> playersWhoComplied = new HashSet<>();
     private final Random random = new Random();
@@ -43,7 +45,10 @@ public class SimonSays extends Scenario {
     private String t(SimonSaysLang key, Map<String,Object> p) { return LangManager.get().get(key, p); }
 
     @Override public String getName() { return "SimonSays"; }
-    @Override public String getDescription() { return "Suivez les commandes de Simon ou subissez des pénalités !"; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.SIMON_SAYS, player);
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.COMMAND); }
     @Override public void onGameStart() { startSimonTask(); }
 

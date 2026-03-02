@@ -32,7 +32,7 @@ public class FireForceUHC extends ScenarioRole<FireForceRole> {
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription(Player player) {
         return "";
     }
 
@@ -75,8 +75,8 @@ public class FireForceUHC extends ScenarioRole<FireForceRole> {
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
         switch (subCommand) {
             case "desc":
-                Role role = getRoleByUHCPlayer(uhcPlayer);
-                player.sendMessage(role.getDescription());
+                Role roles = getRoleByUHCPlayer(uhcPlayer);
+                player.sendMessage(roles.getDescription());
                 if (getPlayersByCamps("homme").contains(uhcPlayer)) {
                     sendListByCamps("homme", player);
                 }
@@ -126,30 +126,6 @@ public class FireForceUHC extends ScenarioRole<FireForceRole> {
         }
     }
 
-    public boolean isWin() {
-        Map<String, Integer> campCounts = new HashMap<>();
-
-        for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
-            Role role = getRoleByUHCPlayer(uhcPlayer);
-            String playerCamp = role.getCamp().toString();
-            campCounts.put(playerCamp, campCounts.getOrDefault(playerCamp, 0) + 1);
-        }
-        if (campCounts.size() == 1) {
-            String remainingCamp = campCounts.keySet().iterator().next();
-
-            if (isDuoCamp(remainingCamp)) {
-                return campCounts.get(remainingCamp) == 2;
-            }
-            return true;
-        }
-
-        for (String camp : campCounts.keySet()) {
-            if (isSoloCamp(camp) && campCounts.get(camp) == 1) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {

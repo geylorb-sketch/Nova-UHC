@@ -2,13 +2,11 @@ package net.novaproject.novauhc.scenario.normal;
 
 import net.novaproject.novauhc.lang.LangManager;
 
-import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.lang.scenario.GenieLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
-import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;
@@ -17,63 +15,36 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Genie extends Scenario {
 
     private final Map<UUID, Integer> playerWishes = new HashMap<>();
     private final Map<UUID, Integer> playerKills = new HashMap<>();
 
-    @ScenarioVariable(
-            name = "Nombre maximal de souhaits",
-            description = "Nombre de souhaits disponibles par joueur",
-            type = VariableType.INTEGER
-    )
-    private int maxWishes = 3;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_MAX_WISHES_NAME", descKey = "GENIE_VAR_MAX_WISHES_DESC", type = VariableType.INTEGER)
+    private final int maxWishes = 3;
 
-    @ScenarioVariable(
-            name = "Durée Speed II (ticks)",
-            description = "Durée de l'effet Speed II en ticks",
-            type = VariableType.INTEGER
-    )
-    private int speedDuration = 20 * 60 * 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_SPEED_DURATION_NAME", descKey = "GENIE_VAR_SPEED_DURATION_DESC", type = VariableType.INTEGER)
+    private final int speedDuration = 20 * 60 * 5;
 
-    @ScenarioVariable(
-            name = "Durée Strength I (ticks)",
-            description = "Durée de l'effet Strength I en ticks",
-            type = VariableType.INTEGER
-    )
-    private int strengthDuration = 20 * 60 * 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_STRENGTH_DURATION_NAME", descKey = "GENIE_VAR_STRENGTH_DURATION_DESC", type = VariableType.INTEGER)
+    private final int strengthDuration = 20 * 60 * 5;
 
-    @ScenarioVariable(
-            name = "Kills requis pour souhaits basiques",
-            description = "Nombre de kills requis pour débloquer les souhaits basiques",
-            type = VariableType.INTEGER
-    )
-    private int basicKillRequirement = 0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_BASIC_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_BASIC_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
+    private final int basicKillRequirement = 0;
 
-    @ScenarioVariable(
-            name = "Kills requis pour souhaits moyens",
-            description = "Nombre de kills requis pour débloquer les souhaits moyens",
-            type = VariableType.INTEGER
-    )
-    private int mediumKillRequirement = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_MEDIUM_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_MEDIUM_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
+    private final int mediumKillRequirement = 1;
 
-    @ScenarioVariable(
-            name = "Kills requis pour souhaits avancés",
-            description = "Nombre de kills requis pour débloquer les souhaits avancés",
-            type = VariableType.INTEGER
-    )
-    private int advancedKillRequirement = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_ADVANCED_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_ADVANCED_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
+    private final int advancedKillRequirement = 2;
 
-    @ScenarioVariable(
-            name = "Kills requis pour souhaits légendaires",
-            description = "Nombre de kills requis pour débloquer les souhaits légendaires",
-            type = VariableType.INTEGER
-    )
-    private int legendaryKillRequirement = 3;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_LEGENDARY_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_LEGENDARY_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
+    private final int legendaryKillRequirement = 3;
 
     @Override
     public String getName() {
@@ -81,8 +52,8 @@ public class Genie extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "3 souhaits par partie ! Les options dépendent du nombre de kills.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.GENIE, player);
     }
 
     @Override
@@ -90,10 +61,7 @@ public class Genie extends Scenario {
         return new ItemCreator(Material.NETHER_STAR);
     }
 
-    @Override
-    public String getPath() {
-        return "genie";
-    }
+
 
     @Override
     public void onStart(Player player) {
@@ -112,7 +80,7 @@ public class Genie extends Scenario {
         if (killer != null) {
             UUID killerUuid = killer.getPlayer().getUniqueId();
             playerKills.put(killerUuid, playerKills.getOrDefault(killerUuid, 0) + 1);
-            killer.getPlayer().sendMessage("§6[Genie] §fVos options de souhaits se sont améliorées avec ce kill !");
+            LangManager.get().send(GenieLang.WISHES_IMPROVED, killer.getPlayer());
         }
     }
 
@@ -201,15 +169,15 @@ public class Genie extends Scenario {
                 return true;
             case "resistance":
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 6000, 0));
-                player.sendMessage("§6[Genie] §fVous avez reçu Resistance I pendant 5 minutes !");
+                LangManager.get().send(GenieLang.RECEIVED_RESISTANCE, player);
                 return true;
             case "invisibility":
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1200, 0));
-                player.sendMessage("§6[Genie] §fVous êtes invisible pendant 1 minute !");
+                LangManager.get().send(GenieLang.RECEIVED_INVISIBILITY, player);
                 return true;
             case "arrows":
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 32));
-                player.sendMessage("§6[Genie] §fVous avez reçu 32 flèches !");
+                LangManager.get().send(GenieLang.RECEIVED_ARROWS, player);
                 return true;
             default:
                 return false;

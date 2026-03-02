@@ -72,7 +72,81 @@ public enum DemocracyLang implements Lang {
     AVAILABLE_PLAYER_LINE(
         "§9[Democracy] §f- %player%",
         "§9[Democracy] §f- %player%"
-    )
+    ),
+
+    
+    VOTE_IN_FIVE_MINUTES(
+        "§9[Democracy] §fVote démocratique dans 5 minutes !",
+        "§9[Democracy] §fDemocratic vote in 5 minutes!"
+    ),
+    VOTE_IN_ONE_MINUTE(
+        "§9[Democracy] §fVote démocratique dans 1 minute !",
+        "§9[Democracy] §fDemocratic vote in 1 minute!"
+    ),
+    ONE_MINUTE_LEFT(
+        "§9[Democracy] §fPlus qu'1 minute pour voter !",
+        "§9[Democracy] §fOnly 1 minute left to vote!"
+    ),
+    TEN_SECONDS_LEFT(
+        "§9[Democracy] §fPlus que 10 secondes pour voter !",
+        "§9[Democracy] §fOnly 10 seconds left to vote!"
+    ),
+    VOTE_STARTS(
+        "§9§l[Democracy] §fLE VOTE DÉMOCRATIQUE COMMENCE !",
+        "§9§l[Democracy] §fTHE DEMOCRATIC VOTE BEGINS!"
+    ),
+    USE_VOTE_COMMAND(
+        "§9[Democracy] §fUtilisez /vote <joueur> pour voter !",
+        "§9[Democracy] §fUse /vote <player> to vote!"
+    ),
+    PLAYER_ENTRY(
+        "§9[Democracy] §f- %player%",
+        "§9[Democracy] §f- %player%"
+    ),
+    YOU_ELIMINATED(
+        "§9[Democracy] §cVous avez été éliminé par le vote du peuple !",
+        "§9[Democracy] §cYou have been eliminated by the people's vote!"
+    ),
+    NOT_ENOUGH_VOTES(
+        "§9[Democracy] §fAucun joueur n'a reçu assez de votes pour être éliminé !",
+        "§9[Democracy] §fNo player received enough votes to be eliminated!"
+    ),
+    NO_VOTE_ACTIVE(
+        "§9[Democracy] §cAucun vote en cours !",
+        "§9[Democracy] §cNo vote in progress!"
+    ),
+    ALREADY_VOTED(
+        "§9[Democracy] §cVous avez déjà voté !",
+        "§9[Democracy] §cYou have already voted!"
+    ),
+    PLAYER_NOT_FOUND(
+        "§9[Democracy] §cJoueur introuvable !",
+        "§9[Democracy] §cPlayer not found!"
+    ),
+    NOT_PARTICIPATING(
+        "§9[Democracy] §cCe joueur ne participe pas !",
+        "§9[Democracy] §cThis player is not participating!"
+    ),
+    CANNOT_VOTE_SELF(
+        "§9[Democracy] §cVous ne pouvez pas voter pour vous-même !",
+        "§9[Democracy] §cYou cannot vote for yourself!"
+    ),
+    VOTE_BROADCAST(
+        "§9[Democracy] §f%voter% a voté ! (%current%/%total%)",
+        "§9[Democracy] §f%voter% has voted! (%current%/%total%)"
+    ),
+    STATUS_NO_VOTE(
+        "§9[Democracy] §fAucun vote en cours.",
+        "§9[Democracy] §fNo vote in progress."
+    ),
+    STATUS_HEADER(
+        "§9[Democracy] §fVotes actuels :",
+        "§9[Democracy] §fCurrent votes:"
+    ),
+    STATUS_ENTRY(
+        "§9[Democracy] §f%player%: %votes% vote(s)",
+        "§9[Democracy] §f%player%: %votes% vote(s)"
+    ),
     ;
 
     private final Map<String, String> translations;

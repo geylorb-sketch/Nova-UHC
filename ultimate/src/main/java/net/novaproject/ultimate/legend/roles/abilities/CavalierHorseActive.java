@@ -1,0 +1,32 @@
+package net.novaproject.ultimate.legend.roles.abilities;
+
+import net.novaproject.novauhc.ability.UseAbiliy;
+import net.novaproject.novauhc.ability.utils.AbilityVariable;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.utils.VariableType;
+import org.bukkit.Material;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+public class CavalierHorseActive extends UseAbiliy {
+
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "CAVALIER_HORSE_HP_NAME", descKey = "CAVALIER_HORSE_HP_DESC", type = VariableType.INTEGER)
+    private int horseHealth = 40;
+
+    public CavalierHorseActive() { setCooldown(300); setMaxUse(-1); }
+
+    @Override public String getName() { return "Cheval Royal"; }
+
+    @Override
+    public boolean onEnable(Player player) {
+        Horse horse = player.getWorld().spawn(player.getLocation(), Horse.class);
+        horse.setCustomName("§6Cheval Royal"); horse.setCustomNameVisible(true);
+        horse.setTamed(true); horse.setOwner(player); horse.setAdult();
+        horse.setColor(Horse.Color.WHITE); horse.setJumpStrength(1.0);
+        horse.setMaxHealth(Math.max(horseHealth, 2)); horse.setHealth(Math.max(horseHealth, 2));
+        horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+        horse.setPassenger(player);
+        return true;
+    }
+}

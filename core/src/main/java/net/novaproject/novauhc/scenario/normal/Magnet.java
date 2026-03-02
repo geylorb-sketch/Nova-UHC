@@ -14,6 +14,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Magnet extends Scenario {
 
@@ -27,12 +30,8 @@ public class Magnet extends Scenario {
             Material.REDSTONE_ORE
     );
 
-    @ScenarioVariable(
-            name = "Magnet Radius",
-            description = "Rayon en blocs dans lequel les minerais sont attirés.",
-            type = VariableType.INTEGER
-    )
-    private int magnetRadius = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "MAGNET_VAR_MAGNET_RADIUS_NAME", descKey = "MAGNET_VAR_MAGNET_RADIUS_DESC", type = VariableType.INTEGER)
+    private final int magnetRadius = 5;
 
     @Override
     public String getName() {
@@ -40,8 +39,9 @@ public class Magnet extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les minerais dans un rayon de " + magnetRadius + " blocs viennent automatiquement à vous.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.MAGNET, player)
+                .replace("%radius%", String.valueOf(magnetRadius));
     }
 
     @Override
@@ -49,10 +49,7 @@ public class Magnet extends Scenario {
         return new ItemCreator(Material.IRON_INGOT);
     }
 
-    @Override
-    public String getPath() {
-        return "magnet";
-    }
+
 
     @Override
     public void onBreak(Player player, Block block, BlockBreakEvent event) {
@@ -97,7 +94,7 @@ public class Magnet extends Scenario {
         }
 
         if (oresAttracted > 0) {
-            player.sendMessage("§b[Magnet] §f" + oresAttracted + " minerai(s) attiré(s) !");
+            LangManager.get().send(MagnetLang.ORES_ATTRACTED, player, java.util.Map.of("%count%", String.valueOf(oresAttracted)));
         }
     }
 

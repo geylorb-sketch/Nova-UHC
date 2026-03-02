@@ -69,7 +69,7 @@ public class UHCPlayer {
     private int minedDiamond = 0;
     private int kill = 0;
 
-    // ── Langue du joueur ──────────────────────────────────────────────────────
+    
     /** null = locale serveur par défaut */
     private String locale = null;
 
@@ -227,7 +227,7 @@ public class UHCPlayer {
             TeamsTagsManager.setNameTag(player, "", "", "");
             PermissionAttachment attachment = player.addAttachment(Main.get());
 
-            // ✅ CORRECTION : Ajoute le nom du joueur
+            
             Main.getDatabaseManager().connectPlayer(player.getUniqueId(), player.getName());
 
             if (player.equals(PlayerConnectionEvent.getHost())) {
@@ -331,14 +331,14 @@ public class UHCPlayer {
         if (killer != null) {
             killer.setKill(killer.getKill() + 1);
 
-            // ✅ CORRECTION : Track le kill/death dans le statsTracker
+            
             UHCManager.get().onPlayerKill(killer.getPlayer(), player);
 
             this.killer = killer.getPlayer();
             ScenarioManager.get().getActiveScenarios()
                     .forEach(scenario -> scenario.onKill(killer, this));
         } else {
-            // Si pas de killer (chute, lave, etc.), track quand même la mort
+            
             UHCManager.get().getStatsTracker().addDeath(player.getUniqueId());
         }
 

@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class StarterTools extends Scenario {
     @Override
@@ -14,8 +16,8 @@ public class StarterTools extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Donne des outils de base à tous les joueurs au début de la partie.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.STARTER_TOOLS, player);
     }
 
     @Override

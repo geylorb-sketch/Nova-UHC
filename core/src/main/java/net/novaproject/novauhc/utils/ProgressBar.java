@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 public class ProgressBar {
 
     public static String getProgressBar(int current, int max, int totalBars, String symbol, ChatColor completedColor, ChatColor notCompletedColor) {
-        if (max <= 0) max = 1; // éviter division par 0
+        if (max <= 0) max = 1; 
         float percent = (float) current / max;
         int progressBars = Math.round(totalBars * percent);
         return Strings.repeat(completedColor + symbol, progressBars)

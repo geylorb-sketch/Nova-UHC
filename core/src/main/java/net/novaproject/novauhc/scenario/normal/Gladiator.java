@@ -24,6 +24,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Gladiator extends Scenario {
 
@@ -31,33 +33,17 @@ public class Gladiator extends Scenario {
     private final Map<UUID, UUID> fightPairs = new HashMap<>();
     private final Map<UUID, Location> arenaLocations = new HashMap<>();
 
-    @ScenarioVariable(
-            name = "Rayon de l'arène",
-            description = "Rayon de l'arène circulaire",
-            type = VariableType.INTEGER
-    )
-    private int arenaRadius = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_ARENA_RADIUS_NAME", descKey = "GLADIATOR_VAR_ARENA_RADIUS_DESC", type = VariableType.INTEGER)
+    private final int arenaRadius = 10;
 
-    @ScenarioVariable(
-            name = "Hauteur de l'arène",
-            description = "Hauteur des murs de l'arène",
-            type = VariableType.INTEGER
-    )
-    private int arenaHeight = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_ARENA_HEIGHT_NAME", descKey = "GLADIATOR_VAR_ARENA_HEIGHT_DESC", type = VariableType.INTEGER)
+    private final int arenaHeight = 5;
 
-    @ScenarioVariable(
-            name = "Hauteur de spawn de l'arène",
-            description = "Altitude à laquelle l'arène apparaît",
-            type = VariableType.INTEGER
-    )
-    private int arenaSpawnY = 200;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_ARENA_SPAWN_Y_NAME", descKey = "GLADIATOR_VAR_ARENA_SPAWN_Y_DESC", type = VariableType.INTEGER)
+    private final int arenaSpawnY = 200;
 
-    @ScenarioVariable(
-            name = "Durée max du combat (ticks)",
-            description = "Durée maximale d'un combat d'arène avant fin automatique",
-            type = VariableType.INTEGER
-    )
-    private int maxFightDuration = 20 * 60 * 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_MAX_FIGHT_DURATION_NAME", descKey = "GLADIATOR_VAR_MAX_FIGHT_DURATION_DESC", type = VariableType.INTEGER)
+    private final int maxFightDuration = 20 * 60 * 5;
 
     @Override
     public String getName() {
@@ -65,8 +51,8 @@ public class Gladiator extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les combats 1v1 se déroulent dans une arène fermée qui apparaît automatiquement.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.GLADIATOR, player);
     }
 
     @Override
@@ -74,10 +60,7 @@ public class Gladiator extends Scenario {
         return new ItemCreator(Material.IRON_SWORD);
     }
 
-    @Override
-    public String getPath() {
-        return "gladiator";
-    }
+
 
     @Override
     public void onHit(Entity entity, Entity damager, EntityDamageByEntityEvent event) {
@@ -187,9 +170,9 @@ public class Gladiator extends Scenario {
         arenaLocations.remove(uuid2);
 
         if (winner != null) {
-            Bukkit.broadcastMessage("§c[Gladiator] §f" + winner.getName() + " §fa remporté le combat d'arène !");
+            LangManager.get().sendAll(GladiatorLang.ARENA_WINNER, Map.of("%player%", winner.getName()));
         } else {
-            Bukkit.broadcastMessage("§c[Gladiator] §fLe combat d'arène s'est terminé.");
+            LangManager.get().sendAll(GladiatorLang.ARENA_ENDED);
         }
 
         new BukkitRunnable() {

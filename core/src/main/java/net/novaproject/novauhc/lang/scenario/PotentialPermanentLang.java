@@ -28,7 +28,17 @@ public enum PotentialPermanentLang implements Lang {
     CONVERSION_INFO(
         "§e[PotentialPermanent] §fTuez des joueurs pour convertir l'absorption en vie permanente !",
         "§e[PotentialPermanent] §fKill players to convert absorption into permanent health!"
-    )
+    ),
+
+    
+    KILL_REWARD(
+        "§e[PotentialPermanent] §f+%hearts% cœur(s) permanent(s)",
+        "§e[PotentialPermanent] §f+%hearts% permanent heart(s)"
+    ),
+    KILL_BROADCAST(
+        "§e[PotentialPermanent] §f%player% a gagné des cœurs permanents !",
+        "§e[PotentialPermanent] §f%player% gained permanent hearts!"
+    ),
     ;
 
     private final Map<String, String> translations;

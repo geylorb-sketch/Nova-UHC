@@ -6,12 +6,13 @@ import net.novaproject.novauhc.command.CommandManager;
 import net.novaproject.novauhc.database.ApiManager;
 import net.novaproject.novauhc.database.DatabaseManager;
 import net.novaproject.novauhc.lang.*;
-import net.novaproject.novauhc.lang.lang.CommandLang;
-import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.lang.*;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 import net.novaproject.novauhc.lang.lang.ScoreboardLang;
-import net.novaproject.novauhc.lang.lang.TaskLang;
 import net.novaproject.novauhc.lang.scenario.*;
+import net.novaproject.novauhc.lang.special.*;
 import net.novaproject.novauhc.lang.ui.*;
+import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
 import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.nms.NMSPatcher;
 import net.novaproject.novauhc.world.generation.BiomeReplacer;
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
 
-        // ── API ───────────────────────────────────────────────────────────────
+        
         String apiUrl = getConfig().getString("api.url");
         String apiKey = getConfig().getString("api.key");
         if (apiUrl == null || apiKey == null) {
@@ -70,13 +71,13 @@ public class Main extends JavaPlugin {
         apiManager = new ApiManager(this, apiUrl, apiKey);
         databaseManager = new DatabaseManager(apiManager);
 
-        // ── LangManager ───────────────────────────────────────────────────────
+        
         String defaultLocale = getConfig().getString("language", "fr_FR");
         LangManager langManager = new LangManager(getDataFolder(), defaultLocale);
 
         langManager.register(CommonLang.values());
 
-        // UI
+        
         langManager.register(DefaultUiLang.values());
         langManager.register(GameUiLang.values());
         langManager.register(WhiteListUiLang.values());
@@ -93,47 +94,61 @@ public class Main extends JavaPlugin {
         langManager.register(LimiteStuffUiLang.values());
         langManager.register(ScenarioVariableUiLang.values());
         langManager.register(UiTitleLang.values());
-        // Nouveaux scénarios
-        langManager.register(GoldenHeadLang.values());
-        langManager.register(InventorsLang.values());
-        langManager.register(BlockRushLang.values());
-        langManager.register(NineSlotLang.values());
-        langManager.register(OreRouletteLang.values());
-        langManager.register(SimonSaysLang.values());
-        langManager.register(NoNetherLang.values());
-        langManager.register(NoEndLang.values());
-        langManager.register(LongShootLang.values());
-        langManager.register(LoupGarouLang.values());
-        langManager.register(FireForceLang.values());
 
-        // Commandes et tâches
+        
         langManager.register(CommandLang.values());
         langManager.register(TaskLang.values());
 
-        // Scénarios
+        
+        langManager.register(ScenarioVarLang.values());         
+
+        
+        langManager.register(ScenarioDescLang.values());
         langManager.register(AcidRainLang.values());
         langManager.register(BestPvELang.values());
         langManager.register(BlizzardLang.values());
+        langManager.register(BlockRushLang.values());
         langManager.register(BloodCycleLang.values());
         langManager.register(BloodLustLang.values());
         langManager.register(DemocracyLang.values());
+        langManager.register(net.novaproject.novauhc.lang.special.DragonFallLang.values());          
         langManager.register(FalloutLang.values());
+        langManager.register(net.novaproject.novauhc.lang.special.FireForceLang.values());
         langManager.register(GenieLang.values());
         langManager.register(GladiatorLang.values());
+        langManager.register(GoldenHeadLang.values());
+        langManager.register(InventorsLang.values());
+        langManager.register(LongShootLang.values());
         langManager.register(LootCrateLang.values());
+        langManager.register(net.novaproject.novauhc.lang.special.LoupGarouLang.values());
         langManager.register(LuckyOreLang.values());
         langManager.register(MagnetLang.values());
-        langManager.register(MysteryTeamLang.values());
+        langManager.register(NineSlotLang.values());
         langManager.register(NinjaLang.values());
+        langManager.register(NoEndLang.values());
+        langManager.register(NoNetherLang.values());
+        langManager.register(OreRouletteLang.values());
         langManager.register(OreSwapLang.values());
         langManager.register(ParkourMasterLang.values());
         langManager.register(PotentialPermanentLang.values());
-        langManager.register(SkyDefLang.values());
-        langManager.register(SoulBrotherLang.values());
+        langManager.register(SimonSaysLang.values());
         langManager.register(VampireLang.values());
         langManager.register(WeakestLinkLang.values());
-        langManager.register(DeathNoteLang.values());
-
+        langManager.register(BeatTheSantaLang.values());
+        langManager.register(DragonFallLang.values());
+        langManager.register(FireForceLang.values());
+        langManager.register(FKLang.values());
+        langManager.register(FlowerPowerLang.values());
+        langManager.register(KingLang.values());
+        langManager.register(LegendLang.values());
+        langManager.register(LoupGarouLang.values());
+        langManager.register(MysteryTeamLang.values());
+        langManager.register(SkyDefLang.values());
+        langManager.register(SkyHighLang.values());
+        langManager.register(SlaveMarketLang.values());
+        langManager.register(SoulBrotherLang.values());
+        langManager.register(TaupeGunLang.values());
+        langManager.register(TrueLoveLang.values());
         langManager.generateAndLoad();
 
 

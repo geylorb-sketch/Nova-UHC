@@ -1,5 +1,6 @@
 package net.novaproject.novauhc.scenario.normal;
 
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Location;
@@ -10,6 +11,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import net.novaproject.novauhc.lang.LangManager;
+
 public class ArrowSwitch extends Scenario {
     @Override
     public String getName() {
@@ -17,8 +20,8 @@ public class ArrowSwitch extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les joueurs touchés par une flèche échangent leur position avec le tireur.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.ARROW_SWITCH, player);
     }
 
     @Override

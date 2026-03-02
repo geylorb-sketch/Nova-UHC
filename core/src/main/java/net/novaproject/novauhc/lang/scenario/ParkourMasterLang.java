@@ -36,7 +36,25 @@ public enum ParkourMasterLang implements Lang {
     INVENTORY_FULL(
         "§a[ParkourMaster] §fInventaire plein ! Récompense jetée au sol.",
         "§a[ParkourMaster] §fInventory full! Reward dropped."
-    )
+    ),
+
+    
+    PARKOUR_SPAWNED_PERSONAL(
+        "§a[ParkourMaster] §fUn parcours est apparu près de vous ! Complétez-le pour une récompense !",
+        "§a[ParkourMaster] §fA parkour course appeared near you! Complete it for a reward!"
+    ),
+    PARKOUR_SPAWNED_BROADCAST(
+        "§a[ParkourMaster] §fUn parcours est apparu près de %player% !",
+        "§a[ParkourMaster] §fA parkour course appeared near %player%!"
+    ),
+    PARKOUR_COMPLETED_BROADCAST(
+        "§a[ParkourMaster] §f%player% a complété un parcours !",
+        "§a[ParkourMaster] §f%player% completed a parkour course!"
+    ),
+    INVENTORY_FULL_DROP(
+        "§a[ParkourMaster] §fInventaire plein ! Récompense jetée au sol.",
+        "§a[ParkourMaster] §fInventory full! Reward dropped on the ground."
+    ),
     ;
 
     private final Map<String, String> translations;

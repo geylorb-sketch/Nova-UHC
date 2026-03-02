@@ -50,7 +50,7 @@ public class ApiManager {
         }
     }
 
-    // ═══════════════════════════ AUTH ═══════════════════════════
+    
 
     private void authenticate() throws IOException {
         JsonObject body = new JsonObject();
@@ -96,11 +96,11 @@ public class ApiManager {
         } catch (Exception ignored) {}
     }
 
-    // ═══════════════════════════ GAME ═══════════════════════════
+    
 
-// ═══════════════════════════════════════════════════════════════════
-//  GAME MANAGEMENT
-// ═══════════════════════════════════════════════════════════════════
+
+
+
 
     /**
      * Démarre une partie
@@ -184,7 +184,7 @@ public class ApiManager {
                 });
     }
 
-// ═══ HELPERS ═══
+
 
     public CompletableFuture<JsonObject> gameEndSolo(
             WinnerInfo winner,
@@ -214,7 +214,7 @@ public class ApiManager {
         return gameEnd("Special", scenarioName, winCondition, winners, playerStats, duration, specialData);
     }
 
-    // ═══════════════════════════ STATS ═══════════════════════════
+    
 
     public CompletableFuture<JsonObject> addKills(String uuid, int n) { return addStat(uuid, "kill", n); }
     public CompletableFuture<JsonObject> addWins(String uuid, int n) { return addStat(uuid, "win", n); }
@@ -232,7 +232,7 @@ public class ApiManager {
 
 
 
-    // ═══════════════════════════ CONFIGS ═══════════════════════════
+    
 
     public CompletableFuture<JsonObject> saveConfig(String name, JsonObject config) {
         JsonObject body = new JsonObject();
@@ -258,7 +258,7 @@ public class ApiManager {
     }
 
 
-    // ═══════════════════════════ HTTP CORE ═══════════════════════════
+    
 
     private JsonObject post(String endpoint, JsonObject body) throws IOException {
         return request("POST", endpoint, body, false);
@@ -330,7 +330,7 @@ public class ApiManager {
         }
     }
 
-    // ═══════════════════════════ UTIL ═══════════════════════════
+    
 
     private String buildEndpoint(String path) {
         if (!path.startsWith("/")) path = "/" + path;
@@ -347,7 +347,7 @@ public class ApiManager {
         return plugin.getServer().getPort();
     }
 
-    // ═══════════════════════════ RECORDS ═══════════════════════════
+    
 
     public record PlayerInfo(String uuid, String name) {}
     public record PlayerStats(String uuid, String name, int kills, int deaths, int placement, String camp) {}

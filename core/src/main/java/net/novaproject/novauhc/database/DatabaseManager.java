@@ -18,9 +18,9 @@ public class DatabaseManager {
         this.configManager = new ApiConfigManager(api);
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    //  STATS
-    // ═══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     public void addKills(UUID uuid, int n) { api.addKills(uuid.toString(), n); }
     public void addWins(UUID uuid, int n) { api.addWins(uuid.toString(), n); }
@@ -40,9 +40,9 @@ public class DatabaseManager {
     public void removeLose(UUID uuid, int n) { addLose(uuid, -n); }
     public void removeDeath(UUID uuid, int n) { addDeath(uuid, -n); }
 
-    // ═══════════════════════════════════════════════════════════════════
-    //  CONFIGS UHC
-    // ═══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     public void saveUHCConfig(UUID uuid, UHCGameConfiguration config) {
         configManager.saveConfig(uuid, config);
@@ -72,9 +72,9 @@ public class DatabaseManager {
         return configManager;
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    //  MÉTHODES NON SUPPORTÉES
-    // ═══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     public void connectPlayer(UUID uuid, String name) {
         JsonObject body = new JsonObject();

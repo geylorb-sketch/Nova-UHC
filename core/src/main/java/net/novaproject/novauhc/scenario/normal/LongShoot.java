@@ -15,16 +15,23 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Map;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class LongShoot extends Scenario {
 
-    @ScenarioVariable(name="Distance minimale", description="Distance minimale pour le bonus", type=VariableType.INTEGER)
-    private int minDistance = 75;
-    @ScenarioVariable(name="Multiplicateur de dégâts", description="Multiplicateur pour les tirs longue distance", type=VariableType.DOUBLE)
-    private double damageMultiplier = 1.5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LONGSHOOT_VAR_MIN_DISTANCE_NAME", descKey = "LONGSHOOT_VAR_MIN_DISTANCE_DESC", type = VariableType.INTEGER)
+    private final int minDistance = 75;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LONGSHOOT_VAR_DAMAGE_MULTIPLIER_NAME", descKey = "LONGSHOOT_VAR_DAMAGE_MULTIPLIER_DESC", type = VariableType.DOUBLE)
+    private final double damageMultiplier = 1.5;
 
     @Override public String getName() { return "LongShot"; }
-    @Override public String getDescription() { return "Les tirs à l'arc de plus de " + minDistance + " blocs infligent x" + damageMultiplier + " de dégâts."; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.LONG_SHOOT, player)
+                .replace("%distance%", String.valueOf(minDistance))
+                .replace("%multiplier%", String.valueOf(damageMultiplier));
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.BOW); }
 
     @Override

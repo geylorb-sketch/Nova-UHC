@@ -10,7 +10,6 @@ import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,13 +21,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class WeakestLink extends Scenario {
 
     private final Map<UUID, Integer> playerKills = new HashMap<>();
     private BukkitRunnable updateTask;
-    @ScenarioVariable(name = "multiplier", description = "Le multiplicateur de dégâts pour le maillon faible", type = VariableType.PERCENTAGE)
-    private double multiplier = 2.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "WEAKESTLINK_VAR_MULTIPLIER_NAME", descKey = "WEAKESTLINK_VAR_MULTIPLIER_DESC", type = VariableType.PERCENTAGE)
+    private final double multiplier = 2.0;
 
     @Override
     public String getName() {
@@ -36,8 +37,8 @@ public class WeakestLink extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Le joueur avec le moins de kills prend 2x plus de dégâts.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.WEAKEST_LINK, player);
     }
 
     @Override
@@ -45,10 +46,6 @@ public class WeakestLink extends Scenario {
         return new ItemCreator(Material.IRON_CHESTPLATE);
     }
 
-    @Override
-    public String getPath() {
-        return "weakestlink";
-    }
 
     @Override
     public void onGameStart() {

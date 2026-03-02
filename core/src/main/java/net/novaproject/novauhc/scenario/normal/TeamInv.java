@@ -11,6 +11,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class TeamInv extends Scenario {
     public static HashMap<UHCTeam, Inventory> inventory = new HashMap<>();
@@ -21,8 +23,8 @@ public class TeamInv extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les membres d'une équipe partagent leurs inventaires.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.TEAM_INV, player);
     }
 
     @Override

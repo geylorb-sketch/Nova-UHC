@@ -31,7 +31,7 @@ public class ScenarioManager {
         addScenario(new BetaZombie());
         addScenario(new CatEye());
         addScenario(new Meetup());
-        //addScenario(new LoupGarouUHC());
+        
         addScenario(new StarterTools());
         addScenario(new InfiniteEnchanter());
 
@@ -58,7 +58,7 @@ public class ScenarioManager {
         addScenario(new SafeMiner());
         addScenario(new TeamInv());
         addScenario(new NoHorse());
-        //addScenario(new CromagnonUHC());
+        
         addScenario(new NoNameTag());
         addScenario(new BestPvE());
         addScenario(new HeathCharity());
@@ -73,7 +73,7 @@ public class ScenarioManager {
         addScenario(new HasteyAlpha());
         addScenario(new BuffKiller());
         addScenario(new TeamArrow());
-        //addScenario(new FireForceUHC());
+        
 
         addScenario(new Vampire());
         addScenario(new Gladiator());
@@ -123,8 +123,8 @@ public class ScenarioManager {
         addScenario(new SoulBrother());
         addScenario(new MysteryTeam());*/
 
-        //addScenario(new DeathNote());
-        //addScenario(new DragonFall());
+        
+        
     }
 
 

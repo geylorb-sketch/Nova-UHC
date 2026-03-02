@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class FastMiner extends Scenario {
     @Override
@@ -15,8 +17,8 @@ public class FastMiner extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Augmente la vitesse de minage de tous les joueurs.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.FAST_MINER, player);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.novaproject.novauhc.scenario;
 
 import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.LangResolver;
 import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
 import net.novaproject.novauhc.ui.ConfigVarUi;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -61,9 +62,13 @@ public class ScenarioVariableUi extends CustomInventory {
                     }
                 }
 
+                
+                String varName = LangResolver.resolve(annotation.lang(), annotation.nameKey(), getPlayer());
+                String varDesc = LangResolver.resolve(annotation.lang(), annotation.descKey(), getPlayer());
+
                 ItemCreator icon = new ItemCreator(Material.PAPER)
-                        .setName("§e" + annotation.name())
-                        .addLore("§7" + annotation.description())
+                        .setName("§e" + varName)
+                        .addLore("§7" + varDesc)
                         .addLore("")
                         .addLore(t(ScenarioVariableUiLang.CURRENT_VALUE, Map.of("%value%", displayValue)))
                         .addLore("")

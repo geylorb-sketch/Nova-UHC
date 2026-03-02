@@ -3,14 +3,16 @@ package net.novaproject.ultimate.taupegun;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.Command;
 import net.novaproject.novauhc.command.CommandArguments;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.special.TaupeGunLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.normal.TeamInv;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.utils.ItemCreator;
-import net.novaproject.novauhc.utils.MessageUtils;
+
 import net.novaproject.novauhc.utils.TeamsTagsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,23 +26,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-
 public class TaupeCMD extends Command {
+
     public TaupeGun taupe;
-
-    private void sendHelpMessage(Player player) {
-        player.sendMessage(ChatColor.DARK_PURPLE + "Utilisation de la commande : \n" +
-
-                "/t tc : Envoie vos coordonnée à votre équipe de pas Taupe.\n" +
-                "/t ti : Ouvrir l'inventaire de team de l'équipe de pas Taupe.\n" +
-                "/t kit : Vous permet de récupérer votre kit.\n" +
-                "/t reveal : Vous affiche en tant que Taupe au yeux de tout les joueur.\n" +
-                "/tc : Si vous êtes une taupe vous permet d'envoyer vous coordonnée a votre équipe de taupe.\n" +
-                "/ti : Si vous êtes une taupe vous permet d'accédez au TI de votre équipe de taupe.\n"
-
-        );
-
-    }
 
     @Override
     public void execute(CommandArguments args) {
@@ -48,23 +36,23 @@ public class TaupeCMD extends Command {
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
 
         if (args.getArguments().length == 0) {
-            sendHelpMessage(player);
+            LangManager.get().send(TaupeGunLang.HELP_MESSAGE, player);
             return;
         }
+
         taupe = ScenarioManager.get().getScenario(TaupeGun.class);
+
         if (!taupe.isActive()) {
-            CommonString.DISABLE_ACTION.send(player);
+            LangManager.get().send(CommonLang.DISABLE_ACTION, player);
             return;
         }
 
         if (!taupe.getTeamsTaupe().contains(uhcPlayer.getTeam().get())) {
-            ScenarioLangManager.send(player, TaupeGunLang.NOT_TAUPE_COMMAND_ERROR);
+            LangManager.get().send(TaupeGunLang.NOT_TAUPE_COMMAND_ERROR, player);
             return;
         }
 
-
         switch (args.getLastArgument()) {
-
             case "tc":
                 taupeCoordManager(uhcPlayer);
                 break;
@@ -72,157 +60,132 @@ public class TaupeCMD extends Command {
                 taupeTiManager(uhcPlayer);
                 break;
             case "kit":
-                TaupeKitManager(uhcPlayer);
+                taupeKitManager(uhcPlayer);
                 break;
-
             case "reveal":
-                TaupeRevealManager(uhcPlayer);
+                taupeRevealManager(uhcPlayer);
                 break;
             default:
-                ScenarioLangManager.send(player, TaupeGunLang.UNKNOWN_COMMAND);
+                LangManager.get().send(TaupeGunLang.UNKNOWN_COMMAND, player);
         }
     }
 
-    private void TaupeRevealManager(UHCPlayer uhcPlayer) {
-        if (uhcPlayer.getTeam().isPresent()) {
-            if (taupe.getTeamsTaupe().contains(uhcPlayer.getTeam().get())) {
+    private void taupeRevealManager(UHCPlayer uhcPlayer) {
+        if (!uhcPlayer.getTeam().isPresent()) return;
 
-                UHCTeam team = uhcPlayer.getTeam().get();
-                TeamsTagsManager.setNameTag(uhcPlayer.getPlayer(), team.name(), "[§c" + team.name() + "§r] ", "");
-                Map<String, Object> placeholders = new HashMap<>();
-                placeholders.put("%player%", uhcPlayer.getPlayer().getName());
-                Bukkit.broadcastMessage(ScenarioLangManager.get(TaupeGunLang.REVEAL_SUCCESS, uhcPlayer, placeholders));
-                uhcPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 2));
-            } else {
-                ScenarioLangManager.send(uhcPlayer.getPlayer(), TaupeGunLang.REVEAL_NOT_TAUPE);
-            }
+        if (taupe.getTeamsTaupe().contains(uhcPlayer.getTeam().get())) {
+            UHCTeam team = uhcPlayer.getTeam().get();
+            TeamsTagsManager.setNameTag(uhcPlayer.getPlayer(), team.name(), "[§c" + team.name() + "§r] ", "");
+            Bukkit.broadcastMessage(LangManager.get().get(TaupeGunLang.REVEAL_SUCCESS,
+                    Map.of("%player%", uhcPlayer.getPlayer().getName())));
+            uhcPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 2));
+        } else {
+            LangManager.get().send(TaupeGunLang.REVEAL_NOT_TAUPE, uhcPlayer.getPlayer());
         }
     }
-
 
     private void taupeTiManager(UHCPlayer uhcPlayer) {
         Player player = uhcPlayer.getPlayer();
         UHCTeam team = taupe.getOldTeamforPlayer(uhcPlayer);
 
         if (ScenarioManager.get().isScenarioActive("TeamInventory")) {
-            if (uhcPlayer.getTeam().isPresent() && uhcPlayer.isPlaying() && UHCManager.get().getGameState() == UHCManager.GameState.INGAME) {
+            if (uhcPlayer.getTeam().isPresent() && uhcPlayer.isPlaying()
+                    && UHCManager.get().getGameState() == UHCManager.GameState.INGAME) {
                 player.openInventory(TeamInv.inventory.get(team));
             } else {
-                MessageUtils.sendNotStarted(player);
+
             }
         } else {
-            CommonString.DISABLE_ACTION.send(player);
+            LangManager.get().send(CommonLang.DISABLE_ACTION, player);
         }
     }
 
     private void taupeCoordManager(UHCPlayer uhcPlayer) {
         Player player = uhcPlayer.getPlayer();
         UHCTeam team = taupe.getOldTeamforPlayer(uhcPlayer);
-        if (uhcPlayer.getTeam().isPresent() && uhcPlayer.isPlaying() && UHCManager.get().getGameState() == UHCManager.GameState.INGAME) {
-            int x = player.getLocation().getBlockX();
-            int y = player.getLocation().getBlockY();
-            int z = player.getLocation().getBlockZ();
 
-            String coords = ChatColor.GREEN + "Coord : x: " + x + " y: " + y + " z: " + z;
-            Map<String, Object> placeholders = new HashMap<>();
-            placeholders.put("%co%", coords);
-
-            String teamMessage = ScenarioLangManager.get(TaupeGunLang.TEAM_COORDS_FORMAT, uhcPlayer, placeholders);
-
-            if (team != null) {
-                team.getPlayers().forEach(teamPlayer ->
-                        teamPlayer.getPlayer().sendMessage(teamMessage));
-            }
-
-            player.sendMessage(teamMessage);
-        } else {
-            MessageUtils.sendNotStarted(player);
-        }
-
-    }
-
-    private void TaupeKitManager(UHCPlayer uhcPlayer) {
-        int kit = taupe.getKit().get(uhcPlayer);
-        Inventory inventory = uhcPlayer.getPlayer().getInventory();
-        if (taupe.getCalimed().contains(uhcPlayer)) {
-            uhcPlayer.getPlayer().sendMessage("[§cTaupeGun§r] Sois pas gourmant mon cochon :)");
+        if (!uhcPlayer.getTeam().isPresent() || !uhcPlayer.isPlaying()
+                || UHCManager.get().getGameState() != UHCManager.GameState.INGAME) {
             return;
         }
-        taupe.getCalimed().add(uhcPlayer);
-        switch (kit) {
-            case 0:
-                ItemCreator puch = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
-                ItemCreator power3 = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, 3);
-                ItemCreator arrow = new ItemCreator(Material.ARROW).setAmount(64);
-                ItemCreator string = new ItemCreator(Material.STRING).setAmount(3);
 
-                inventory.addItem(power3.getItemstack());
-                inventory.addItem(puch.getItemstack());
-                inventory.addItem(arrow.getItemstack());
-                inventory.addItem(string.getItemstack());
+        int x = player.getLocation().getBlockX();
+        int y = player.getLocation().getBlockY();
+        int z = player.getLocation().getBlockZ();
+        String coords = ChatColor.GREEN + "Coord : x: " + x + " y: " + y + " z: " + z;
 
-                break;
-            case 1:
-                ItemCreator pearl = new ItemCreator(Material.ENDER_PEARL).setAmount(4);
-                ItemCreator fether = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_FALL, 4);
-                inventory.addItem(fether.getItemstack());
-                inventory.addItem(pearl.getItemstack());
-                break;
-            case 2:
-                ItemCreator speed = new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 8 * 60 * 20, 0, false, false), false).setName(ChatColor.BLUE + "Speed 1");
-                ItemCreator fire = new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 8 * 60 * 20, 0, false, false), false).setName(ChatColor.GOLD + "FireResistance 1");
-                ItemCreator potion = new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 * 20, 0, false, false), true).setName(ChatColor.GREEN + "Poison 1");
+        String teamMessage = LangManager.get().get(TaupeGunLang.TEAM_COORDS_FORMAT, player,
+                Map.of("%co%", coords));
 
-
-                inventory.addItem(speed.getItemstack());
-                inventory.addItem(fire.getItemstack());
-                inventory.addItem(potion.getItemstack());
-                break;
-            case 3:
-                ItemCreator pro = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-                ItemCreator sharp = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.DAMAGE_ALL, 3);
-                ItemCreator power = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, 3);
-
-                inventory.addItem(pro.getItemstack());
-                inventory.addItem(sharp.getItemstack());
-                inventory.addItem(power.getItemstack());
-
-                break;
-            case 4:
-                ItemCreator obsi = new ItemCreator(Material.OBSIDIAN).setAmount(14);
-                ItemCreator diam = new ItemCreator(Material.DIAMOND).setAmount(10);
-                ItemCreator gold = new ItemCreator(Material.GOLD_INGOT).setAmount(32);
-                ItemCreator iron = new ItemCreator(Material.IRON_INGOT).setAmount(64);
-
-                inventory.addItem(obsi.getItemstack());
-                inventory.addItem(diam.getItemstack());
-                inventory.addItem(gold.getItemstack());
-                inventory.addItem(iron.getItemstack());
-
-                break;
-            case 5:
-                ItemCreator fireas = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.FIRE_ASPECT, 3);
-                ItemCreator flam = new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_FIRE, 1);
-
-                inventory.addItem(fireas.getItemstack());
-                inventory.addItem(flam.getItemstack());
-
-                break;
-            case 6:
-                ItemCreator invi = new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60 * 20, 1, false, false), false).setName(ChatColor.GRAY + "Invisibilité 2");
-                ItemCreator force = new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 8 * 60 * 20, 0, false, false), false).setName(ChatColor.RED + "Force 1");
-
-                inventory.addItem(invi.getItemstack());
-                inventory.addItem(force.getItemstack());
-
-                break;
-            default:
-
-                break;
+        if (team != null) {
+            team.getPlayers().forEach(tp -> tp.getPlayer().sendMessage(teamMessage));
         }
-        ScenarioLangManager.send(uhcPlayer.getPlayer(), TaupeGunLang.KIT_RECEIVED);
+        player.sendMessage(teamMessage);
     }
 
+    private void taupeKitManager(UHCPlayer uhcPlayer) {
+        if (taupe.getCalimed().contains(uhcPlayer)) {
+            LangManager.get().send(TaupeGunLang.KIT_ALREADY_CLAIMED, uhcPlayer.getPlayer());
+            return;
+        }
+
+        taupe.getCalimed().add(uhcPlayer);
+        int kit = taupe.getKit().get(uhcPlayer);
+        Inventory inventory = uhcPlayer.getPlayer().getInventory();
+
+        switch (kit) {
+            case 0:
+                inventory.addItem(
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, 3).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_KNOCKBACK, 1).getItemstack(),
+                        new ItemCreator(Material.ARROW).setAmount(64).getItemstack(),
+                        new ItemCreator(Material.STRING).setAmount(3).getItemstack()
+                );
+                break;
+            case 1:
+                inventory.addItem(
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_FALL, 4).getItemstack(),
+                        new ItemCreator(Material.ENDER_PEARL).setAmount(4).getItemstack()
+                );
+                break;
+            case 2:
+                inventory.addItem(
+                        new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 8 * 60 * 20, 0, false, false), false).setName(ChatColor.BLUE + "Speed 1").getItemstack(),
+                        new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 8 * 60 * 20, 0, false, false), false).setName(ChatColor.GOLD + "FireResistance 1").getItemstack(),
+                        new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 * 20, 0, false, false), true).setName(ChatColor.GREEN + "Poison 1").getItemstack()
+                );
+                break;
+            case 3:
+                inventory.addItem(
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.DAMAGE_ALL, 3).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, 3).getItemstack()
+                );
+                break;
+            case 4:
+                inventory.addItem(
+                        new ItemCreator(Material.OBSIDIAN).setAmount(14).getItemstack(),
+                        new ItemCreator(Material.DIAMOND).setAmount(10).getItemstack(),
+                        new ItemCreator(Material.GOLD_INGOT).setAmount(32).getItemstack(),
+                        new ItemCreator(Material.IRON_INGOT).setAmount(64).getItemstack()
+                );
+                break;
+            case 5:
+                inventory.addItem(
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.FIRE_ASPECT, 3).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_FIRE, 1).getItemstack()
+                );
+                break;
+            case 6:
+                inventory.addItem(
+                        new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60 * 20, 1, false, false), false).setName(ChatColor.GRAY + "Invisibilité 2").getItemstack(),
+                        new ItemCreator(Material.POTION).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 8 * 60 * 20, 0, false, false), false).setName(ChatColor.RED + "Force 1").getItemstack()
+                );
+                break;
+        }
+
+        LangManager.get().send(TaupeGunLang.KIT_RECEIVED, uhcPlayer.getPlayer());
+    }
 
     @Override
     public List<String> tabComplete(CommandArguments commandArguments) {

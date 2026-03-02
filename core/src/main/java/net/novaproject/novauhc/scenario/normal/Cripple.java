@@ -10,22 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class Cripple extends Scenario {
 
-    @ScenarioVariable(
-            name = "weakness_duration",
-            description = "Durée de l'effet Weakness en secondes",
-            type = VariableType.TIME
-    )
-    private int weaknessDuration = 30;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "CRIPPLE_VAR_WEAKNESS_DURATION_NAME", descKey = "CRIPPLE_VAR_WEAKNESS_DURATION_DESC", type = VariableType.TIME)
+    private final int weaknessDuration = 30;
 
-    @ScenarioVariable(
-            name = "weakness_level",
-            description = "Niveau de l'effet Weakness",
-            type = VariableType.INTEGER
-    )
-    private int weaknessLevel = 0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "CRIPPLE_VAR_WEAKNESS_LEVEL_NAME", descKey = "CRIPPLE_VAR_WEAKNESS_LEVEL_DESC", type = VariableType.INTEGER)
+    private final int weaknessLevel = 0;
 
     @Override
     public String getName() {
@@ -33,8 +28,9 @@ public class Cripple extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Rend tous les joueurs faibles pendant " + weaknessDuration + " secondes";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.CRIPPLE, player)
+                .replace("%duration%", String.valueOf(weaknessDuration));
     }
 
     @Override

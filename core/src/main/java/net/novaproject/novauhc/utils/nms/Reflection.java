@@ -20,7 +20,7 @@ public class Reflection {
             unsafeField.setAccessible(true);
             unsafe = (Unsafe) unsafeField.get(null);
         } catch (Exception e) {
-            // Unsafe not available, will fall back to other methods
+            
             unsafe = null;
         }
     }
@@ -299,7 +299,7 @@ public class Reflection {
     public static void setFinalStatic(Field field, Object value) throws ReflectiveOperationException {
         field.setAccessible(true);
 
-        // Method 1: Try the old modifiers approach (Java 8-11)
+        
         try {
             Field mf = Field.class.getDeclaredField("modifiers");
             mf.setAccessible(true);
@@ -307,10 +307,10 @@ public class Reflection {
             field.set(null, value);
             return;
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            // Fall through to next method
+            
         }
 
-        // Method 2: Try using Unsafe (works on most Java versions)
+        
         if (unsafe != null) {
             try {
                 Object staticFieldBase = unsafe.staticFieldBase(field);
@@ -318,11 +318,11 @@ public class Reflection {
                 unsafe.putObject(staticFieldBase, staticFieldOffset, value);
                 return;
             } catch (Exception e) {
-                // Fall through to next method
+                
             }
         }
 
-        // Method 3: Last resort - try direct field access (may fail on newer Java)
+        
         try {
             field.set(null, value);
         } catch (IllegalAccessException e) {
@@ -334,7 +334,7 @@ public class Reflection {
     public static void setFinal(Object object, Field field, Object value) throws ReflectiveOperationException {
         field.setAccessible(true);
 
-        // Method 1: Try the old modifiers approach (Java 8-11)
+        
         try {
             Field mf = Field.class.getDeclaredField("modifiers");
             mf.setAccessible(true);
@@ -342,21 +342,21 @@ public class Reflection {
             field.set(object, value);
             return;
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            // Fall through to next method
+            
         }
 
-        // Method 2: Try using Unsafe for instance fields
+        
         if (unsafe != null && object != null) {
             try {
                 long fieldOffset = unsafe.objectFieldOffset(field);
                 unsafe.putObject(object, fieldOffset, value);
                 return;
             } catch (Exception e) {
-                // Fall through to next method
+                
             }
         }
 
-        // Method 3: Last resort - try direct field access
+        
         try {
             field.set(object, value);
         } catch (IllegalAccessException e) {

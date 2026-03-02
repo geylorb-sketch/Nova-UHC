@@ -1,7 +1,11 @@
 package net.novaproject.ultimate.random;
 
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 import net.novaproject.novauhc.scenario.Scenario;
+import net.novaproject.novauhc.scenario.ScenarioVariable;
+import net.novaproject.novauhc.utils.VariableType;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.uhcteam.UHCTeamManager;
@@ -16,10 +20,54 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomCraft extends Scenario {
-    private final Map<ItemStack, ItemStack> cache = new HashMap<>();
-    private final List<ItemStack> alreadyused = new ArrayList<>();
+
+    private final Map<Material, ItemStack> cache = new HashMap<>();
+    private final Set<Material> alreadyUsed = new HashSet<>();
+
+    @ScenarioVariable(
+            nameKey = "RANDOMCRAFT_GIVE_STARTER_NAME",
+            descKey = "RANDOMCRAFT_GIVE_STARTER_DESC",
+            type = VariableType.BOOLEAN
+    )
+    private boolean giveStarterKit = true;
+
+    @ScenarioVariable(
+            nameKey = "RANDOMCRAFT_ALLOW_RARE_NAME",
+            descKey = "RANDOMCRAFT_ALLOW_RARE_DESC",
+            type = VariableType.BOOLEAN
+    )
+    private boolean allowRareItems = true;
+
+    @ScenarioVariable(
+            nameKey = "RANDOMCRAFT_MAX_INGOT_NAME",
+            descKey = "RANDOMCRAFT_MAX_INGOT_DESC",
+            type = VariableType.INTEGER
+    )
+    private int maxIngotAmount = 16;
+
+    @ScenarioVariable(
+            nameKey = "RANDOMCRAFT_GAPPLE_AMOUNT_NAME",
+            descKey = "RANDOMCRAFT_GAPPLE_AMOUNT_DESC",
+            type = VariableType.INTEGER
+    )
+    private int goldenAppleAmount = 3;
+
+    @ScenarioVariable(
+            nameKey = "RANDOMCRAFT_MAX_ENCHANT_NAME",
+            descKey = "RANDOMCRAFT_MAX_ENCHANT_DESC",
+            type = VariableType.INTEGER
+    )
+    private int maxEnchantLevel = 3;
+
+    @ScenarioVariable(
+            nameKey = "RANDOMCRAFT_ALLOW_DUPLICATE_NAME",
+            descKey = "RANDOMCRAFT_ALLOW_DUPLICATE_DESC",
+            type = VariableType.BOOLEAN
+    )
+    private boolean allowDuplicateDrops = false;
 
     @Override
     public String getName() {
@@ -27,8 +75,8 @@ public class RandomCraft extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les recettes de craft donnent des objets aléatoires.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.RANDOMCRAFT, player);
     }
 
     @Override
@@ -38,11 +86,14 @@ public class RandomCraft extends Scenario {
 
     @Override
     public void onStart(Player player) {
+        if (!giveStarterKit) return;
+
         player.getInventory().addItem(new ItemStack(Material.WORKBENCH, 64));
         player.getInventory().addItem(new ItemStack(Material.FURNACE, 64));
-        player.getInventory().addItem(new ItemStack(Material.IRON_PICKAXE, 1));
-        player.getInventory().addItem(new ItemStack(Material.IRON_AXE, 1));
-        player.getInventory().addItem(new ItemStack(Material.IRON_SPADE, 1));
+        player.getInventory().addItem(new ItemStack(Material.IRON_PICKAXE));
+        player.getInventory().addItem(new ItemStack(Material.IRON_AXE));
+        player.getInventory().addItem(new ItemStack(Material.IRON_SPADE));
+
     }
 
     @Override
@@ -56,80 +107,72 @@ public class RandomCraft extends Scenario {
 
     @Override
     public void onFurnace(ItemStack result, FurnaceSmeltEvent event) {
-        if (cache.get(event.getResult()) != null) {
-            event.setResult(cache.get(event.getResult()));
-        } else {
-            checkDrop(event.getResult());
-            event.setResult(cache.get(event.getResult()));
-        }
+        if (result == null) return;
+        event.setResult(getRandomized(result.getType()));
     }
 
     @Override
     public void onCraft(ItemStack result, CraftItemEvent event) {
-        if (cache.get(event.getInventory().getResult()) != null) {
-            event.getInventory().setResult(cache.get(event.getInventory().getResult()));
-        } else {
-            checkDrop(event.getInventory().getResult());
-            event.getInventory().setResult(cache.get(event.getInventory().getResult()));
-        }
+        if (result == null) return;
+        event.getInventory().setResult(getRandomized(result.getType()));
     }
 
-    private void checkDrop(ItemStack itemStack) {
-
-        Material randomMaterial = Material.values()[new Random().nextInt(Material.values().length)];
-        if (isAcceptedMaterial(randomMaterial)) {
-
-            if (isRarity(randomMaterial)) {
-                int amount = 1;
-                if (randomMaterial == Material.GOLDEN_APPLE)
-                    amount = 3;
-                if (randomMaterial == Material.IRON_INGOT || randomMaterial == Material.GOLD_INGOT)
-                    amount = 16;
-                ItemStack item = new ItemStack(randomMaterial, amount);
-
-                if (randomMaterial == Material.ENCHANTED_BOOK) {
-                    EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-                    Enchantment randomEnchant = Enchantment.values()[new Random().nextInt(Enchantment.values().length)];
-                    int randomLevel = new Random().nextInt(3);
-                    meta.addStoredEnchant(randomEnchant, randomLevel + 1, true);
-                    item.setItemMeta(meta);
-                }
-                alreadyused.add(item);
-                cache.put(itemStack, item);
-
-            } else {
-
-                ItemStack item = new ItemCreator(randomMaterial).getItemstack();
-                alreadyused.add(item);
-                cache.put(itemStack, item);
-            }
-        } else {
-            checkDrop(itemStack);
+    private ItemStack getRandomized(Material original) {
+        if (cache.containsKey(original)) {
+            return cache.get(original).clone();
         }
+
+        ItemStack generated = generateRandomItem();
+        cache.put(original, generated);
+        return generated.clone();
+    }
+
+    private ItemStack generateRandomItem() {
+        Material[] materials = Material.values();
+        Material chosen;
+
+        int safety = 0;
+        do {
+            chosen = materials[ThreadLocalRandom.current().nextInt(materials.length)];
+            safety++;
+        } while ((!isAcceptedMaterial(chosen) || (!allowDuplicateDrops && alreadyUsed.contains(chosen)))
+                && safety < 500);
+
+        alreadyUsed.add(chosen);
+
+        int amount = 1;
+
+        if (chosen == Material.GOLDEN_APPLE) amount = goldenAppleAmount;
+        if (chosen == Material.IRON_INGOT || chosen == Material.GOLD_INGOT)
+            amount = maxIngotAmount;
+
+        ItemStack item = new ItemStack(chosen, amount);
+
+        if (chosen == Material.ENCHANTED_BOOK && allowRareItems) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+            Enchantment enchant = Enchantment.values()[ThreadLocalRandom.current().nextInt(Enchantment.values().length)];
+            int level = ThreadLocalRandom.current().nextInt(maxEnchantLevel) + 1;
+            meta.addStoredEnchant(enchant, level, true);
+            item.setItemMeta(meta);
+        }
+
+        return item;
     }
 
     private boolean isAcceptedMaterial(Material type) {
-        if (alreadyused.contains(type)) {
-            return false;
-        }
-        return type != Material.AIR && type != Material.ARMOR_STAND && type != Material.BEDROCK && type != Material.ACACIA_DOOR && type != Material.BIRCH_DOOR_ITEM && type != Material.BREWING_STAND
-                && type != Material.BURNING_FURNACE && type != Material.CAKE_BLOCK && type != Material.CAULDRON && type != Material.COMMAND && type != Material.COMMAND_MINECART && type != Material.DARK_OAK_DOOR
-                && type != Material.DIODE_BLOCK_OFF && type != Material.DIODE_BLOCK_ON && type != Material.ENDER_PORTAL && type != Material.ENDER_PORTAL_FRAME && type != Material.FLOWER_POT && type != Material.GLOWING_REDSTONE_ORE
-                && type != Material.POWERED_MINECART && type != Material.HOPPER_MINECART && type != Material.PISTON_EXTENSION && type != Material.PISTON_MOVING_PIECE && type != Material.PORTAL && type != Material.SKULL && type != Material.STATIONARY_LAVA
-                && type != Material.STATIONARY_WATER && type != Material.SUGAR_CANE_BLOCK && type != Material.WATER && type != Material.LAVA && type != Material.BARRIER && type != Material.BED && type != Material.BED_BLOCK && type != Material.MOB_SPAWNER
-                && type != Material.MONSTER_EGG && type != Material.MONSTER_EGGS && type != Material.WRITTEN_BOOK && type != Material.EXPLOSIVE_MINECART && type != Material.SOIL;
-    }
-
-    private boolean isRarity(Material type) {
-        if (alreadyused.contains(type)) {
-            return false;
-        }
-        return type == Material.ANVIL || type == Material.BEACON || type == Material.BREWING_STAND_ITEM || type == Material.CHAINMAIL_BOOTS || type == Material.CHAINMAIL_CHESTPLATE || type == Material.CHAINMAIL_LEGGINGS || type == Material.CHAINMAIL_HELMET || type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_LEGGINGS || type == Material.LEATHER_HELMET || type == Material.DIAMOND || type == Material.DIAMOND_AXE || type == Material.DIAMOND_BARDING || type == Material.DIAMOND_BLOCK || type == Material.DIAMOND_BOOTS || type == Material.DIAMOND_CHESTPLATE || type == Material.DIAMOND_HELMET || type == Material.DIAMOND_HOE || type == Material.DIAMOND_LEGGINGS || type == Material.DIAMOND_ORE || type == Material.DIAMOND_PICKAXE || type == Material.DIAMOND_SPADE || type == Material.DIAMOND_SWORD || type == Material.IRON_INGOT || type == Material.IRON_AXE || type == Material.IRON_BARDING || type == Material.IRON_BLOCK || type == Material.IRON_BOOTS || type == Material.IRON_CHESTPLATE || type == Material.IRON_HELMET || type == Material.IRON_HOE || type == Material.IRON_LEGGINGS || type == Material.IRON_ORE || type == Material.IRON_PICKAXE || type == Material.IRON_SPADE || type == Material.IRON_SWORD || type == Material.GOLD_INGOT || type == Material.GOLD_AXE || type == Material.GOLD_BARDING || type == Material.GOLD_BLOCK || type == Material.GOLD_BOOTS || type == Material.GOLD_CHESTPLATE || type == Material.GOLD_HELMET || type == Material.GOLD_HOE || type == Material.GOLD_LEGGINGS || type == Material.GOLD_ORE || type == Material.GOLD_PICKAXE || type == Material.GOLD_SPADE || type == Material.GOLD_SWORD || type == Material.DRAGON_EGG || type == Material.ENDER_PEARL || type == Material.FISHING_ROD || type == Material.LAVA_BUCKET || type == Material.WATER_BUCKET || type == Material.ENCHANTED_BOOK || type == Material.ENCHANTMENT_TABLE || type == Material.RECORD_10 || type == Material.RECORD_11 || type == Material.RECORD_12 || type == Material.RECORD_3 || type == Material.RECORD_4 || type == Material.RECORD_5 || type == Material.RECORD_6 || type == Material.RECORD_7 || type == Material.RECORD_8 || type == Material.RECORD_9 || type == Material.FLINT_AND_STEEL || type == Material.CAKE || type == Material.STONE_PICKAXE || type == Material.STONE_SPADE || type == Material.STONE_SWORD || type == Material.STONE_HOE || type == Material.STONE_AXE || type == Material.WOOD_PICKAXE || type == Material.WOOD_SPADE || type == Material.WOOD_SWORD || type == Material.WOOD_HOE || type == Material.WOOD_AXE || type == Material.RABBIT_STEW || type == Material.MUSHROOM_SOUP || type == Material.CARROT_STICK || type == Material.MILK_BUCKET || type == Material.POTION || type == Material.GOLDEN_APPLE || type == Material.SADDLE || type == Material.BONE || type == Material.INK_SACK || type == Material.BOW || type == Material.BOWL;
+        return type != Material.AIR
+                && type != Material.BEDROCK
+                && type != Material.COMMAND
+                && type != Material.BARRIER
+                && type != Material.PORTAL
+                && type != Material.ENDER_PORTAL
+                && type != Material.ENDER_PORTAL_FRAME
+                && type != Material.WATER
+                && type != Material.LAVA;
     }
 
     @Override
     public boolean isSpecial() {
         return true;
     }
-
 }

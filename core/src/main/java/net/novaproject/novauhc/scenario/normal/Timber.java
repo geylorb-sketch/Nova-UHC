@@ -10,6 +10,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.HashSet;
 import java.util.Set;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class Timber extends Scenario {
     @Override
@@ -18,8 +20,8 @@ public class Timber extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Casse les arbres tel un bûcheron - un seul bloc cassé fait tomber tout l'arbre.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.TIMBER, player);
     }
 
     @Override

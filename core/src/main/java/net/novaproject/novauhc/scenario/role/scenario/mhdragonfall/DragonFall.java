@@ -37,7 +37,7 @@ public class DragonFall extends ScenarioRole<DragonRole> {
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription(Player player) {
         return "Ce sous-scenrio apartien a la serie Monster Hunter UHC";
     }
 
@@ -182,6 +182,10 @@ public class DragonFall extends ScenarioRole<DragonRole> {
         UHCUtils.setRealHealth(dragonVictim.getMaxHP(), finalHP, victim, dragonVictim.getAbsortion());
     }
 
+    @Override
+    public boolean isWin() {
+        return false;
+    }
 
     @Override
     public void onDamage(Player player, EntityDamageEvent event) {

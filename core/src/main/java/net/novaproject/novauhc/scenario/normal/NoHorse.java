@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class NoHorse extends Scenario {
     @Override
@@ -16,8 +17,8 @@ public class NoHorse extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Interdit de monter sur les chevaux.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.NO_HORSE, player);
     }
 
     @Override
@@ -34,4 +35,4 @@ public class NoHorse extends Scenario {
     }
 
 }
-//TODO
+

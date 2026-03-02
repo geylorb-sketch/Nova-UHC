@@ -64,7 +64,7 @@ public class ScatterTask extends BukkitRunnable {
 
         UHCManager.get().setGameState(UHCManager.GameState.INGAME);
 
-        Bukkit.broadcastMessage(LangManager.get().get(TaskLang.GAME_START, (Player)null, Map.of("%servertag%", Common.get().getServertag())));
+        Bukkit.broadcastMessage(LangManager.get().get(TaskLang.GAME_START, null, Map.of("%servertag%", Common.get().getServertag())));
 
 
         UHCPlayerManager.get().getPlayingOnlineUHCPlayers().forEach(player -> {

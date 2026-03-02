@@ -7,21 +7,14 @@ import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.DragonFall;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.DragonRole;
-import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.ElementType;
-import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status.StatusEffect;
-import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status.StatusFactory;
-import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status.StatusManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
@@ -30,20 +23,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 
 public class AuraPeur extends Ability {
 
-    @AbilityVariable(name = "Rayon", description = "Permet de définir le rayon d'action",type = VariableType.DOUBLE)
-    private double RADIUS = 4.0;
-    @AbilityVariable(name = "Perte de Resistance",description = "Permet de definir le percentage de resistance perdu dans la zone.",type = VariableType.PERCENTAGE)
-    private double RESIST_DEBUFF_PERCENT = 0.05;
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "AURAPEUR_VAR_RADIUS_NAME", descKey = "AURAPEUR_VAR_RADIUS_DESC", type = VariableType.DOUBLE)
+    private final double RADIUS = 4.0;
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "AURAPEUR_VAR_RESIST_DEBUFF_PERCENT_NAME", descKey = "AURAPEUR_VAR_RESIST_DEBUFF_PERCENT_DESC", type = VariableType.PERCENTAGE)
+    private final double RESIST_DEBUFF_PERCENT = 0.05;
 
     private static final int PARTICLES = 6;
 
-    private volatile double particleAngle = 0;
+    private final double particleAngle = 0;
     private BukkitRunnable particleTask = null;
 
-    private ScenarioRole<DragonRole> scenarioRole = ScenarioManager.get().getScenario(DragonFall.class);
+    private final ScenarioRole<DragonRole> scenarioRole = ScenarioManager.get().getScenario(DragonFall.class);
     private final Map<Player, Integer> lostResistance = new HashMap<>();
 
     @Override

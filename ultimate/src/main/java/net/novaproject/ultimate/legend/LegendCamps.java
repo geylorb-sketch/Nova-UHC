@@ -1,0 +1,47 @@
+package net.novaproject.ultimate.legend;
+
+import net.novaproject.novauhc.scenario.role.camps.Camps;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+/**
+ * Camp unique pour le scénario Legend.
+ * Chaque joueur est dans le même "camp" puisque la victoire est gérée manuellement.
+ */
+public enum LegendCamps implements Camps {
+
+    LEGEND("Légende", "§6");
+
+    private final String name;
+    private final String color;
+
+    LegendCamps(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getColor() {
+        return color;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return new ItemStack(Material.NETHER_STAR);
+    }
+
+    @Override
+    public boolean isMainCamp() {
+        return true;
+    }
+
+    @Override
+    public Camps getParent() {
+        return null;
+    }
+}

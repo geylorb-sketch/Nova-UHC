@@ -64,7 +64,25 @@ public enum GenieLang implements Lang {
     FLIGHT_GRANTED(
         "§6[Genie] §fVous pouvez voler pendant %duration% secondes !",
         "§6[Genie] §fYou can fly for %duration% seconds!"
-    )
+    ),
+
+    
+    WISHES_IMPROVED(
+        "§6[Genie] §fVos options de souhaits se sont améliorées avec ce kill !",
+        "§6[Genie] §fYour wish options have improved with this kill!"
+    ),
+    RECEIVED_RESISTANCE(
+        "§6[Genie] §fVous avez reçu Resistance I pendant 5 minutes !",
+        "§6[Genie] §fYou received Resistance I for 5 minutes!"
+    ),
+    RECEIVED_INVISIBILITY(
+        "§6[Genie] §fVous êtes invisible pendant 1 minute !",
+        "§6[Genie] §fYou are invisible for 1 minute!"
+    ),
+    RECEIVED_ARROWS(
+        "§6[Genie] §fVous avez reçu 32 flèches !",
+        "§6[Genie] §fYou received 32 arrows!"
+    ),
     ;
 
     private final Map<String, String> translations;

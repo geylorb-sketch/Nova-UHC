@@ -4,4 +4,8 @@ import org.bukkit.entity.Player;
 
 public abstract class PassiveAbility extends Ability{
 
+    @Override
+    public void onSec(Player player) {
+        tryUse(player);
+    }
 }

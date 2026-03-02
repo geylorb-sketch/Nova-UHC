@@ -4,9 +4,12 @@ import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.material.MaterialData;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class WooltoString extends Scenario {
     @Override
@@ -15,8 +18,8 @@ public class WooltoString extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Convertit automatiquement la laine en ficelle.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.WOOL_TO_STRING, player);
     }
 
     @Override

@@ -62,11 +62,11 @@ public class WhiteFatalis extends DragonRole {
 
     @Override
     public void initResistances() {
-        getResistanceProfile().setResistance(ElementType.FIRE, 0.4);    // quasi immunisé au feu
-        getResistanceProfile().setResistance(ElementType.WATER, -0.3);  // faible à l'eau
-        getResistanceProfile().setResistance(ElementType.ICE, -0.2);    // vulnérable à la glace
-        getResistanceProfile().setResistance(ElementType.THUNDER, 0.2); // résistance modérée
-        getResistanceProfile().setResistance(ElementType.DRAGON, 0.0);  // neutre
+        getResistanceProfile().setResistance(ElementType.FIRE, 0.4);    
+        getResistanceProfile().setResistance(ElementType.WATER, -0.3);  
+        getResistanceProfile().setResistance(ElementType.ICE, -0.2);    
+        getResistanceProfile().setResistance(ElementType.THUNDER, 0.2); 
+        getResistanceProfile().setResistance(ElementType.DRAGON, 0.0);  
     }
 
     @Override
@@ -75,8 +75,8 @@ public class WhiteFatalis extends DragonRole {
         addElement(ElementType.DRAGON, 1.2);
         addElement(ElementType.THUNDER, 1.0);
 
-        setBlightChance(ElementType.DRAGON, 20.0); // Dragonblight
-        setBlightChance(ElementType.THUNDER, 15.0); // Paralysis
+        setBlightChance(ElementType.DRAGON, 20.0); 
+        setBlightChance(ElementType.THUNDER, 15.0); 
 
         setBlightDuration(ElementType.DRAGON, 100);
         setBlightDuration(ElementType.THUNDER, 80);

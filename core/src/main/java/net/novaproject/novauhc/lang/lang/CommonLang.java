@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public enum CommonLang implements Lang {
 
-    // ── UI générique ──────────────────────────────────────────────────────────
+    
     CLICK_HERE_TO_APPLY(
         " §8» §fCliquez pour §a§lappliquer§f.",
         " §8» §fClick to §a§lapply§f."
@@ -72,7 +72,7 @@ public enum CommonLang implements Lang {
             "§7Cliquez pour revenir en arrière.",
             "§7Click to go back."
     ),
-    // ── Permissions / Erreurs ─────────────────────────────────────────────────
+    
     NO_PERMISSION(
         "§cDésolé, vous n'avez pas la permission d'exécuter cette commande.",
         "§cSorry, you don't have permission to run this command."
@@ -85,7 +85,7 @@ public enum CommonLang implements Lang {
     SUCCESSFUL_DESACTIVATION("§c✓ Désactivation effectuée avec succès !", "§c✓ Successfully deactivated!"),
     SUCCESSFUL_MODIFICATION("§6✓ Modification effectuée avec succès !", "§6✓ Successfully modified!"),
 
-    // ── Connexion ─────────────────────────────────────────────────────────────
+    
     KICKED("§cVous avez été exclu de la partie par l'host", "§cYou have been kicked from the game by the host"),
     KICKED_MESSAGE("§c» Le joueur §f%player% §ca été exclu de la partie par l'host !", "§c» Player §f%player% §cwas kicked by the host!"),
     WELCOME("§a§lBienvenue §fsur la partie de §6%host%§f !", "§a§lWelcome §fto §6%host%§f's game!"),
@@ -99,7 +99,7 @@ public enum CommonLang implements Lang {
     KICK_WHITELIST("§cConnexion refusée : Vous n'êtes pas dans la whitelist", "§cConnection refused: not whitelisted"),
     ORE_BOOST("§aModification enregistrée §f! Recréez l'arène pour appliquer.", "§aChange saved§f! Regenerate the arena to apply."),
 
-    // ── Chat ──────────────────────────────────────────────────────────────────
+    
     CANT_TALK_DEATH("§cVous ne pouvez pas parler car vous êtes mort", "§cYou cannot chat because you are dead"),
     CANT_TALK_SPECTATOR("§cVous ne pouvez pas parler en tant que spectateur", "§cYou cannot chat as a spectator"),
     CHAT_GLOBAL_FORMAT("§7[§6Global§7] §f%s §8» §f%s", "§7[§6Global§7] §f%s §8» §f%s"),
@@ -114,7 +114,7 @@ public enum CommonLang implements Lang {
     MSG_SENT_FORMAT("§8│ §7§lMoi §7→ §7§l%target% §f%message%", "§8│ §7§lMe §7→ §7§l%target% §f%message%"),
     MSG_RECEIVED_FORMAT("§8│ §7§l%sender% §7→ §7§lMoi §f%message%", "§8│ §7§l%sender% §7→ §7§lMe §f%message%"),
 
-    // ── Craft / Enchants ──────────────────────────────────────────────────────
+    
     BLOCKED_ENCHANT("§cVous ne pouvez pas appliquer cet enchantement", "§cYou cannot apply this enchantment"),
     BLOCKED_POTION("§cVous ne pouvez pas créer cette potion", "§cYou cannot brew this potion"),
     BLOCKED_CRAFT("§cVous ne pouvez pas effectuer ce craft", "§cYou cannot perform this craft"),
@@ -123,7 +123,7 @@ public enum CommonLang implements Lang {
     DIAMOND_LIMIT_INCREASED("§bDiamants minés : §f%mined_diamond%§7/§f%diamond_limite%", "§bDiamonds mined: §f%mined_diamond%§7/§f%diamond_limite%"),
     EXEDED_LIMITE("§cLimite dépassée", "§cLimit exceeded"),
 
-    // ── Événements en jeu ─────────────────────────────────────────────────────
+    
     TP_MESSAGE("§a» §f%player% §aa été téléporté !", "§a» §f%player% §ahas been teleported!"),
     DECONNECTION_LOBBY("§c» §f%player% §cse déconnecte du lobby", "§c» §f%player% §cdisconnected from lobby"),
     DECONNECTION_GAME("§c» §f%player% §cse déconnecte de la partie", "§c» §f%player% §cdisconnected from game"),
@@ -166,7 +166,7 @@ public enum CommonLang implements Lang {
             "§6Total des kills : §c%total%",
             "§6Total kills: §c%total%"
     ),
-    // ── Timer / PvP ───────────────────────────────────────────────────────────
+    
     PVP_START("§c⚔ Le PVP est maintenant activé !", "§c⚔ PVP is now enabled!"),
     PVP_START_IN("§e⚡ Le PVP sera activé dans §a%time_before%", "§e⚡ PVP will be enabled in §a%time_before%"),
     MEETUP_START("§c§l♦ MEETUP ACTIVÉ ! §r§cLa bordure se réduit !", "§c§l♦ MEETUP ACTIVATED! §r§cThe border is shrinking!"),
@@ -174,13 +174,13 @@ public enum CommonLang implements Lang {
     PREGEN_FINISHED("§a✓ Pré-génération terminée avec succès !", "§a✓ Pre-generation completed successfully!"),
     PREGEN_STARTED("§e⚡ Pré-génération en cours...", "§e⚡ Pre-generation in progress..."),
 
-    // ── Équipes ───────────────────────────────────────────────────────────────
+    
     TEAM_UPDATED("§6⚡ Les équipes ont été mises à jour !", "§6⚡ Teams have been updated!"),
     TEAM_DESACTIVATED("§c⚡ Les équipes ont été désactivées !", "§c⚡ Teams have been disabled!"),
     TEAM_REDFINIED_AUTO("§6◉ Les équipes ont été redéfinies automatiquement !", "§6◉ Teams have been automatically redefined!"),
     GIVING_ROLES("§6♦ Distribution des rôles en cours...", "§6♦ Distributing roles..."),
 
-    // ── Commandes Host ────────────────────────────────────────────────────────
+    
     HOST_SAY_USAGE("§c✗ Usage: §f/h say <message>", "§c✗ Usage: §f/h say <message>"),
     HOST_COHOST_USAGE("§c✗ Usage: §f/h cohost <add|remove> <joueur>", "§c✗ Usage: §f/h cohost <add|remove> <player>"),
     HOST_BYPASS_ENABLED("§a✓ Mode bypass activé (Créatif)", "§a✓ Bypass mode enabled (Creative)"),
@@ -209,11 +209,11 @@ public enum CommonLang implements Lang {
     HOST_GIVE("§a✓ §f%host% §aa donné %item% %amont%", "§a✓ §f%host% §agave %item% %amont%"),
     ACCESS_HOST("§7» Accès %main_color%Host","§7» Access %main_color%Host"),
 
-    // ── Scénarios communs ─────────────────────────────────────────────────────
+    
     FINAL_HEAL_BROADCAST("§a♥ Final Heal effectué ! Tous les joueurs ont été soignés.", "§a♥ Final Heal done! All players healed."),
     TIMEBOMB_EXPLOSION("§c☠ Le corps de §f%player% §ca explosé !", "§c☠ §f%player%§c's body exploded!"),
 
-    // ── Erreurs génériques ────────────────────────────────────────────────────
+    
     ERROR_INVALID_NUMBER("§c✗ Nombre invalide.", "§c✗ Invalid number."),
     ERROR_NUMBER_TOO_LOW("§c✗ Le nombre doit être supérieur à %min%", "§c✗ Number must be greater than %min%"),
     ERROR_NUMBER_TOO_HIGH("§c✗ Le nombre doit être inférieur à %max%", "§c✗ Number must be less than %max%"),
@@ -228,14 +228,14 @@ public enum CommonLang implements Lang {
     ERROR_PERMISSION_DENIED("§c✗ Permission refusée", "§c✗ Permission denied"),
     DIM_NOT_ACCEIBLE("§cCette dimension n'est pas accessible", "§cThis dimension is not accessible"),
 
-    // ── Succès ────────────────────────────────────────────────────────────────
+    
     SUCCESS_OPERATION_COMPLETED("§a✓ Opération terminée avec succès", "§a✓ Operation completed successfully"),
     SUCCESS_PLAYER_ADDED("§a✓ §f%player% §aajouté avec succès", "§a✓ §f%player% §aadded successfully"),
     SUCCESS_PLAYER_REMOVED("§a✓ §f%player% §cretiré avec succès", "§a✓ §f%player% §cremoved successfully"),
     SUCCESS_SETTINGS_SAVED("§a✓ Paramètres sauvegardés avec succès", "§a✓ Settings saved successfully"),
     SUCCESS_TELEPORT_COMPLETED("§a✓ Téléportation effectuée", "§a✓ Teleportation completed"),
 
-    // ── Info ──────────────────────────────────────────────────────────────────
+    
     INFO_LOADING("§e⚡ Chargement en cours...", "§e⚡ Loading..."),
     INFO_PROCESSING("§e⚡ Traitement en cours...", "§e⚡ Processing..."),
     INFO_PLEASE_WAIT("§e⌛ Veuillez patienter...", "§e⌛ Please wait..."),
@@ -243,18 +243,18 @@ public enum CommonLang implements Lang {
     INFO_NO_CHANGES_MADE("§7◆ Aucune modification effectuée", "§7◆ No changes made"),
 
 
-    // ── Discord / Liens ───────────────────────────────────────────────────────
+    
     DISCORD_MESSAGE("§9│ §f§lDiscord §8» ", "§9│ §f§lDiscord §8» "),
     DISCORD_MESSAGE_HOVER("%main_color% » Clique ici pour ouvrir le Discord !", "%main_color% » Click here to open Discord!"),
     DOCUMENT_MESSAGE("§9│ §f§lDocument §8» ", "§9│ §f§lDocument §8» "),
     DOCUMENT_MESSAGE_HOVER("%main_color% » Clique ici pour ouvrir le Document !", "%main_color% » Click here to open the Document!"),
 
-    // ── Arène ─────────────────────────────────────────────────────────────────
+    
     ARENA_JOIN("%main_color%Arena §7» §c%player% §fa rejoint l'arène !", "%main_color%Arena §7» §c%player% §fjoined the arena!"),
     ARENA_KILL("%main_color%Arena §7» §c%player_arena% §fa été éliminé par §c%killer_arena%", "%main_color%Arena §7» §c%player_arena% §fwas eliminated by §c%killer_arena%"),
     ARENA_DEATH("%main_color%Arena §7» §c%player_arena% §fest mort.", "%main_color%Arena §7» §c%player_arena% §fdied."),
 
-    // ── Boutons UI ────────────────────────────────────────────────────────────
+    
     WHITELIST_ENABLE_BUTTON("§a✓ Activer la Whitelist", "§a✓ Enable Whitelist"),
     WHITELIST_DISABLE_BUTTON("§c✗ Désactiver la Whitelist", "§c✗ Disable Whitelist"),
     RANDOM_TEAMS_BUTTON("§f◆ Équipes aléatoires", "§f◆ Random Teams"),

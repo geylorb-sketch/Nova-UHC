@@ -11,6 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class TeamArrow extends Scenario {
     @Override
@@ -19,8 +21,8 @@ public class TeamArrow extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les flèches ne peuvent pas blesser les membres de sa propre équipe.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.TEAM_ARROW, player);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class TeamArrow extends Scenario {
                         if (p == player1) {
                             continue;
                         }
-                        new Titles().sendActionText(player1.getPlayer(), " " + p.getPlayer().getName() + " : " + getArrowDirection(player1.getPlayer().getLocation(), p.getPlayer().getLocation(), player1.getPlayer().getLocation().getYaw()) // Added semicolon
+                        new Titles().sendActionText(player1.getPlayer(), " " + p.getPlayer().getName() + " : " + getArrowDirection(player1.getPlayer().getLocation(), p.getPlayer().getLocation(), player1.getPlayer().getLocation().getYaw()) 
                         );
                     }
                 }

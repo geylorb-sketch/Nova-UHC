@@ -1,5 +1,7 @@
 package net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status;
 
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.special.DragonFallLang;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.DragonRole;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -14,7 +16,7 @@ public class FireBlight extends StatusEffect {
 
     @Override
     public void start() {
-        getTarget().sendMessage("§c🔥 Vous êtes en proie aux flammes !");
+        LangManager.get().send(DragonFallLang.FIRE_BLIGHT_START, getTarget());
     }
 
     @Override
@@ -43,6 +45,6 @@ public class FireBlight extends StatusEffect {
     @Override
     public void end() {
         super.end();
-        getTarget().sendMessage("§7🔥 Le feu s'est éteint.");
+        LangManager.get().send(DragonFallLang.FIRE_BLIGHT_END, getTarget());
     }
 }

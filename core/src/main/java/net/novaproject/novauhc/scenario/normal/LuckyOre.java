@@ -4,7 +4,6 @@ import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novaproject.novauhc.utils.ItemCreator;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -17,6 +16,10 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.scenario.LuckyOreLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class LuckyOre extends Scenario {
 
@@ -32,12 +35,8 @@ public class LuckyOre extends Scenario {
 
     private final Random random = new Random();
 
-    @ScenarioVariable(
-            name = "Lucky Chance",
-            description = "Pourcentage de chance d'obtenir un objet légendaire en minant.",
-            type = VariableType.PERCENTAGE
-    )
-    private int luckyChance = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LUCKYORE_VAR_LUCKY_CHANCE_NAME", descKey = "LUCKYORE_VAR_LUCKY_CHANCE_DESC", type = VariableType.PERCENTAGE)
+    private final int luckyChance = 10;
 
     @Override
     public String getName() {
@@ -45,8 +44,9 @@ public class LuckyOre extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return luckyChance + "% de chance d'obtenir un objet légendaire en minant des minerais.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.LUCKY_ORE, player)
+                .replace("%chance%", String.valueOf(luckyChance));
     }
 
     @Override
@@ -63,11 +63,9 @@ public class LuckyOre extends Scenario {
             LuckyReward reward = getLuckyReward();
             if (reward != null) {
                 giveReward(player, reward);
-                Bukkit.broadcastMessage("§6§l[LuckyOre] §f" + player.getName() +
-                        " §fa trouvé " + reward.description() +
-                        " §fen minant du " + getOreName(blockType) + " !");
+                LangManager.get().sendAll(LuckyOreLang.LUCKY_BROADCAST, java.util.Map.of("%player%", player.getName(), "%reward%", reward.description(), "%ore%", getOreName(blockType)));
                 player.getWorld().strikeLightning(player.getLocation());
-                player.sendMessage("§6§l[LuckyOre] §fVOUS AVEZ EU DE LA CHANCE !");
+                LangManager.get().send(LuckyOreLang.LUCKY_PERSONAL, player);
             }
         }
     }
@@ -135,7 +133,7 @@ public class LuckyOre extends Scenario {
                         player.getInventory().addItem(item);
                     } else {
                         player.getWorld().dropItemNaturally(player.getLocation(), item);
-                        player.sendMessage("§6[LuckyOre] §fVotre inventaire est plein ! L'objet a été jeté au sol.");
+                        LangManager.get().send(LuckyOreLang.INVENTORY_FULL, player);
                     }
                 }
             }

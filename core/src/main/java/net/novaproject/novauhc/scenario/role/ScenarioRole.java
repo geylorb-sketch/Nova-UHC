@@ -40,7 +40,7 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
             roleConfigs.put(roleClass, role);
             default_roles.put(roleClass, 0);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot register role " + roleClass.getName(), e);
+            throw new RuntimeException("Cannot register roles " + roleClass.getName(), e);
         }
     }
 
@@ -57,6 +57,10 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
         if (current > 0) {
             default_roles.put(roleClass, current - 1);
         }
+    }
+
+    public void setRoleAmout(Class<? extends T> roleClass,int amont){
+        default_roles.replace(roleClass,amont);
     }
 
     public Map<T, Integer> getDefault_roles() {
@@ -153,6 +157,12 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
         isgived = true;
     }
 
+    public void giveRole(UHCPlayer player, T role) {
+        players_roles.put(player, role);
+        RoleVariableProcessor.process(role,player,this);
+        role.onGive(player);
+    }
+
     public T getRoleByUHCPlayer(UHCPlayer player) {
         return players_roles.get(player);
     }
@@ -226,5 +236,20 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
         });
 
         return counts.size() == 1 ? counts.keySet().iterator().next() : null;
+    }
+
+    @Override
+    public boolean isWin() {
+        Map<Camps, Integer> campCounts = new HashMap<>();
+
+        for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
+            Role role = getRoleByUHCPlayer(uhcPlayer);
+            if (role == null) continue;
+
+            Camps camp = role.getCamp();
+            campCounts.put(camp, campCounts.getOrDefault(camp, 0) + 1);
+        }
+
+        return campCounts.size() == 1;
     }
 }

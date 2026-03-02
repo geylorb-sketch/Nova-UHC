@@ -26,7 +26,7 @@ public class LoupGarou extends LoupGarouRole {
         String message = "§8§m---------" + ChatColor.RED + "Loup-Garouf§8§m----------§r\n" +
                 "§fVotre Objectif : " + ChatColor.RED + "Gagnez avec les Loup-Garou\n" +
                 "§fVos Pouvoir : " + ChatColor.BLUE + "Vous possédez Force 1 de nuit.\n" +
-                "§fDescription du role : " + ChatColor.DARK_PURPLE + "Vous possédez la liste de vos coéquipier.\n" +
+                "§fDescription du roles : " + ChatColor.DARK_PURPLE + "Vous possédez la liste de vos coéquipier.\n" +
                 "§8§m--------------------------";
         return message;
     }

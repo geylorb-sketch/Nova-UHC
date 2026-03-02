@@ -8,6 +8,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class BetaZombie extends Scenario {
     @Override
@@ -16,8 +18,8 @@ public class BetaZombie extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Fait en sorte que les zombies drop des plumes au lieu de chair pourrie.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BETA_ZOMBIE, player);
     }
 
     @Override

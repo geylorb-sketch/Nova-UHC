@@ -9,22 +9,26 @@ import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class WebCage extends Scenario {
     @Override
     public String getName() {
         return "WebCages";
     }
-    @ScenarioVariable(name = "Taille de la cage",description = "Permet de definir la taille de WebCage",type = VariableType.INTEGER)
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "WEBCAGE_VAR_SIZE_NAME", descKey = "WEBCAGE_VAR_SIZE_DESC", type = VariableType.INTEGER)
     public int size = 5;
     
     @Override
-    public String getDescription() {
-        return "À la mort, le joueur est entouré d'une cage de toiles d'araignée.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.WEB_CAGE, player);
     }
 
     @Override

@@ -15,31 +15,30 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Vampire extends Scenario {
 
     private BukkitRunnable sunDamageTask;
-    @ScenarioVariable(name = "Vie",description = "Permet de definir la vie gagnez par kill", type = VariableType.DOUBLE)
-    private double healAmount = 2.0; // Default heal amount (1 heart)
-    @ScenarioVariable(name = "Degat du Soleil",description = "Permet de definir les dégats infligés par le soleil", type = VariableType.DOUBLE)
-    double sunDamage = 1.0;
-    @ScenarioVariable(name = "Inverval",description = "Definis l'interval entre les degat du soleil",type = VariableType.INTEGER)
-    private int interval = 40;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "VAMPIRE_VAR_HEAL_AMOUNT_NAME", descKey = "VAMPIRE_VAR_HEAL_AMOUNT_DESC", type = VariableType.DOUBLE)
+    private final double healAmount = 2.0; 
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "VAMPIRE_VAR_INTERVAL_NAME", descKey = "VAMPIRE_VAR_INTERVAL_DESC", type = VariableType.INTEGER)
+    private final int interval = 40;
+    @ScenarioVariable(nameKey = "VAMPIRE_VAR_SUN_DAMAGE_NAME",descKey = "VAMPIRE_VAR_SUN_DAMAGE_DESC",type = VariableType.DOUBLE)
+    private final double sunDamage = 2.0;
     @Override
     public String getName() {
         return "Vampire";
     }
 
     @Override
-    public String getDescription() {
-        return "Récupérez 1 cœur en tuant un joueur, mais brûlez au soleil sans armure.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.VAMPIRE, player);
     }
 
     @Override
@@ -47,10 +46,6 @@ public class Vampire extends Scenario {
         return new ItemCreator(Material.REDSTONE);
     }
 
-    @Override
-    public String getPath() {
-        return "vampire";
-    }
 
     @Override
     public void onGameStart() {

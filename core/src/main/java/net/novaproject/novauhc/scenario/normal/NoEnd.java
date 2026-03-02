@@ -5,11 +5,16 @@ import net.novaproject.novauhc.lang.scenario.NoEndLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerPortalEvent;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class NoEnd extends Scenario {
     @Override public String getName() { return "EndLess"; }
-    @Override public String getDescription() { return "Désactive complètement l'accès à l'End."; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.NO_END, player);
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.ENDER_STONE); }
 
     @Override

@@ -43,7 +43,7 @@ public class UHCManager {
         return Main.getUHCManager();
     }
 
-    // ═══ NOUVEAU ═══
+    
     private GameStatsTracker statsTracker = new GameStatsTracker();
     private String currentGameUuid = null;
 

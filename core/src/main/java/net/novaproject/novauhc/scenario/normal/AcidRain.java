@@ -3,6 +3,7 @@ package net.novaproject.novauhc.scenario.normal;
 import net.novaproject.novauhc.lang.LangManager;
 
 import net.novaproject.novauhc.Main;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.lang.scenario.AcidRainLang;
@@ -18,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+
 
 public class AcidRain extends Scenario {
 
@@ -25,14 +28,14 @@ public class AcidRain extends Scenario {
     private BukkitRunnable acidRainTask;
     private boolean isRaining = false;
 
-    @ScenarioVariable(name = "Temps entre les pluies", description = "Temps de base en secondes entre deux pluies",type = VariableType.TIME)
-    private int nextRainInBase = 300;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "ACIDRAIN_VAR_NEXT_RAIN_IN_BASE_NAME", descKey = "ACIDRAIN_VAR_NEXT_RAIN_IN_BASE_DESC", type = VariableType.TIME)
+    private final int nextRainInBase = 300;
 
-    @ScenarioVariable(name = "Durée de la pluie", description = "Durée de base de la pluie en secondes", type = VariableType.TIME)
-    private int rainDurationBase = 60;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "ACIDRAIN_VAR_RAIN_DURATION_BASE_NAME", descKey = "ACIDRAIN_VAR_RAIN_DURATION_BASE_DESC", type = VariableType.TIME)
+    private final int rainDurationBase = 60;
 
-    @ScenarioVariable(name = "Dégâts", description = "Dégâts par seconde sous la pluie", type = VariableType.DOUBLE)
-    private double rainDamage = 1.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "ACIDRAIN_VAR_RAIN_DAMAGE_NAME", descKey = "ACIDRAIN_VAR_RAIN_DAMAGE_DESC", type = VariableType.DOUBLE)
+    private final double rainDamage = 1.0;
 
     @Override
     public String getName() {
@@ -40,8 +43,8 @@ public class AcidRain extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Pluie acide qui fait des dégâts. Protégez-vous sous des blocs !";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.ACID_RAIN,player);
     }
 
     @Override
@@ -49,10 +52,7 @@ public class AcidRain extends Scenario {
         return new ItemCreator(Material.WATER_BUCKET);
     }
 
-    @Override
-    public String getPath() {
-        return "acidrain";
-    }
+
 
 
     @Override
@@ -96,9 +96,9 @@ public class AcidRain extends Scenario {
                     } else {
                         int timeLeft = nextRainIn - cycleTimer;
                         if (timeLeft == 60) {
-                            Bukkit.broadcastMessage("§c[AcidRain] §fPluie acide dans 1 minute ! Trouvez un abri !");
+                            LangManager.get().sendAll(AcidRainLang.WARNING_ONE_MINUTE);
                         } else if (timeLeft == 10) {
-                            Bukkit.broadcastMessage("§c[AcidRain] §fPluie acide dans 10 secondes !");
+                            LangManager.get().sendAll(AcidRainLang.WARNING_TEN_SECONDS);
                         }
                     }
                 } else {
@@ -111,7 +111,7 @@ public class AcidRain extends Scenario {
                         nextRainIn = nextRainInBase + random.nextInt(nextRainInBase);
                     } else {
                         if (rainDuration == 10) {
-                            Bukkit.broadcastMessage("§c[AcidRain] §fLa pluie acide s'arrête dans 10 secondes !");
+                            LangManager.get().sendAll(AcidRainLang.ENDING_SOON);
                         }
                     }
                 }
@@ -157,7 +157,7 @@ public class AcidRain extends Scenario {
             world.setWeatherDuration(0);
         }
 
-        Bukkit.broadcastMessage("§c[AcidRain] §fLa pluie acide s'est arrêtée. Vous pouvez sortir en sécurité !");
+        LangManager.get().sendAll(AcidRainLang.RAIN_STOPPED);
     }
 
     private void damageExposedPlayers() {
@@ -166,7 +166,7 @@ public class AcidRain extends Scenario {
 
             if (isPlayerExposedToRain(player)) {
                 player.damage(rainDamage);
-                player.sendMessage("§c[AcidRain] §fVous êtes brûlé par la pluie acide ! Trouvez un abri !");
+                LangManager.get().send(AcidRainLang.BURNING, player);
 
                 player.setFireTicks(20);
             }
@@ -177,25 +177,25 @@ public class AcidRain extends Scenario {
         Location playerLoc = player.getLocation();
         World world = playerLoc.getWorld();
 
-        // Check if it's raining in this world
+        
         if (!world.hasStorm()) {
             return false;
         }
 
-        // Check if player is underground (below Y=60)
+        
         if (playerLoc.getY() < 60) {
             return false;
         }
 
-        // Check if player has blocks above them (shelter)
+        
         Location checkLoc = playerLoc.clone();
 
-        // Check up to 10 blocks above the player
+        
         for (int y = 1; y <= 10; y++) {
             checkLoc.add(0, 1, 0);
             Material blockType = checkLoc.getBlock().getType();
 
-            // If there's a solid block above, player is protected
+            
             if (blockType != Material.AIR &&
                     blockType != Material.WATER &&
                     blockType != Material.LAVA &&
@@ -204,7 +204,7 @@ public class AcidRain extends Scenario {
             }
         }
 
-        // Player is exposed to rain
+        
         return true;
     }
 

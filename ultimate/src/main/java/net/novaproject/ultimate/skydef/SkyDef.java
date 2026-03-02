@@ -5,9 +5,11 @@ import lombok.Setter;
 import net.novaproject.novauhc.Common;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.CommonLang;
+import net.novaproject.novauhc.lang.special.SkyDefLang;
 import net.novaproject.novauhc.scenario.Scenario;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.lang.SkyDefLang;
+import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
@@ -16,6 +18,7 @@ import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.ShortCooldownManager;
 import net.novaproject.novauhc.utils.UHCUtils;
+import net.novaproject.novauhc.utils.VariableType;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
 import net.novaproject.novauhc.world.generation.WorldGenerator;
 import org.bukkit.*;
@@ -30,6 +33,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
 
@@ -38,21 +42,41 @@ import java.util.StringJoiner;
 public class SkyDef extends Scenario {
 
     private final Pattern[] pattern = {new Pattern(DyeColor.BLACK, PatternType.FLOWER)};
-    private final int COOLDOWN_TIME = 5;
+
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_COOLDOWN_TIME_NAME", descKey = "VAR_COOLDOWN_TIME_DESC", type = VariableType.INTEGER)
+    private int cooldownTime = 5;
+
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_TEAM_SIZE_NAME", descKey = "VAR_TEAM_SIZE_DESC", type = VariableType.INTEGER)
+    private int team_size = 3;
+
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_TP_RADIUS_NAME", descKey = "VAR_TP_RADIUS_DESC", type = VariableType.INTEGER)
+    private int tpRadius = 1;
+
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_BANNER_PLACE_RADIUS_NAME", descKey = "VAR_BANNER_PLACE_RADIUS_DESC", type = VariableType.INTEGER)
+    private int bannerPlaceRadius = 5;
+
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_ARMOR_ENCHANT_LEVEL_NAME", descKey = "VAR_ARMOR_ENCHANT_LEVEL_DESC", type = VariableType.INTEGER)
+    private int armorEnchantLevel = 2;
+
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_GOLDEN_CARROT_AMOUNT_NAME", descKey = "VAR_GOLDEN_CARROT_AMOUNT_DESC", type = VariableType.INTEGER)
+    private int goldenCarrotAmount = 64;
+
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_BOOK_AMOUNT_NAME", descKey = "VAR_BOOK_AMOUNT_DESC", type = VariableType.INTEGER)
+    private int bookAmount = 7;
+
     private UHCTeam defTeam;
     private World world;
-    private int team_size = 3;
     private boolean bannerBreak = false;
     private Location tpLoc;
 
     @Override
     public String getName() {
-        return "SkyDef";
+        return LangManager.get().get(SkyDefLang.SKYDEF_NAME);
     }
 
     @Override
-    public String getDescription() {
-        return "";
+    public String getDescription(Player player) {
+        return LangManager.get().get(SkyDefLang.SKYDEF_DESC, player);
     }
 
     @Override
@@ -71,11 +95,6 @@ public class SkyDef extends Scenario {
     }
 
     @Override
-    public ScenarioLang[] getLang() {
-        return SkyDefLang.values();
-    }
-
-    @Override
     public void toggleActive() {
         super.toggleActive();
 
@@ -86,11 +105,11 @@ public class SkyDef extends Scenario {
                 return;
             }
 
-
             bannerBreak = false;
             createDefTeam();
 
             Location schemLoc = ConfigUtils.getLocation(getConfig(), "schem_loc");
+            System.out.println(schemLoc);
             if (schemLoc != null) {
                 UHCUtils.loadSchematic(
                         Main.get(),
@@ -112,7 +131,6 @@ public class SkyDef extends Scenario {
                         tpLoc
                 );
             }
-
         } else {
             if (defTeam != null) {
                 UHCTeamManager.get().removeTeam(defTeam);
@@ -123,8 +141,8 @@ public class SkyDef extends Scenario {
     }
 
     public void createDefTeam() {
-        if(defTeam != null){
-            if(!defTeam.getPlayers().isEmpty()){
+        if (defTeam != null) {
+            if (!defTeam.getPlayers().isEmpty()) {
                 for (UHCPlayer player : defTeam.getPlayers()) {
                     player.setTeam(Optional.empty());
                 }
@@ -152,7 +170,7 @@ public class SkyDef extends Scenario {
     public void onTeamUpdate() {
         if (UHCManager.get().getTeam_size() == 1) {
             UHCManager.get().setTeam_size(2);
-            CommonString.TEAM_REDFINIED_AUTO.sendAll();
+            LangManager.get().sendAll(CommonLang.TEAM_REDFINIED_AUTO);
         }
     }
 
@@ -168,29 +186,26 @@ public class SkyDef extends Scenario {
         Location tpUpperArea = ConfigUtils.getLocation(getConfig(), "tp_haut");
         if (tpLowerArea == null || tpUpperArea == null) return;
 
-        long cooldownLeft = ShortCooldownManager.get(player, "tp");
-        if (cooldownLeft > 0) return;
+        if (ShortCooldownManager.get(player, "tp") > 0) return;
 
         Location playerLoc = player.getLocation();
         boolean teleported = false;
 
-        if (isInTeleportArea(playerLoc, tpLowerArea, 1)) {
+        if (isInTeleportArea(playerLoc, tpLowerArea, tpRadius)) {
             player.teleport(tpUpperArea.clone().add(0, 1, 0));
             teleported = true;
-        } else if (isInTeleportArea(playerLoc, tpUpperArea, 1)) {
+        } else if (isInTeleportArea(playerLoc, tpUpperArea, tpRadius)) {
             player.teleport(tpLowerArea.clone().add(0, 1, 0));
             teleported = true;
         }
 
         if (teleported) {
-            ShortCooldownManager.put(player, "tp", 1000L * COOLDOWN_TIME);
+            ShortCooldownManager.put(player, "tp", 1000L * cooldownTime);
         }
     }
 
-
     private boolean isInTeleportArea(Location location, Location center, int radius) {
         if (location == null || center == null) return false;
-
         return Math.abs(location.getBlockX() - center.getBlockX()) <= radius &&
                 Math.abs(location.getBlockY() - center.getBlockY()) <= 1 &&
                 Math.abs(location.getBlockZ() - center.getBlockZ()) <= radius;
@@ -211,7 +226,7 @@ public class SkyDef extends Scenario {
 
             if (!block.getLocation().equals(bannerBlock.getLocation())) {
                 event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + "Cette zone autour de la bannière est protégée !");
+                LangManager.get().send(SkyDefLang.BANNER_ZONE_PROTECTED, player);
                 return;
             }
         }
@@ -225,7 +240,7 @@ public class SkyDef extends Scenario {
 
             if (isDefTeamAlive()) {
                 if (isBannerMaterial(checkType)) {
-                    player.sendMessage("La team des défenseurs n'est pas encore morte.");
+                    LangManager.get().send(SkyDefLang.DEFENDERS_NOT_DEAD, player);
                     event.setCancelled(true);
                 }
             } else {
@@ -235,11 +250,11 @@ public class SkyDef extends Scenario {
                             team.getPlayers().forEach(p -> joiner.add(p.getPlayer().getDisplayName()))
                     );
 
-                    Bukkit.broadcastMessage(ChatColor.YELLOW +
-                            " Bien joué à l'équipe " +
-                            uhcPlayerTeam(player).map(UHCTeam::name).orElse("???") +
-                            " composée de : " + joiner
-                    );
+                    String teamName = uhcPlayerTeam(player).map(UHCTeam::name).orElse("???");
+                    Bukkit.broadcastMessage(LangManager.get().get(SkyDefLang.BANNER_BROKEN_BROADCAST, Map.of(
+                            "%team%", teamName,
+                            "%players%", joiner.toString()
+                    )));
                     bannerBreak = true;
                 }
             }
@@ -256,15 +271,11 @@ public class SkyDef extends Scenario {
         Location bannerLoc = ConfigUtils.getLocation(getConfig(), "banner_loc");
         if (bannerLoc == null || world == null) return;
 
-        int radius = 5;
-        double distance = block.getLocation().distance(bannerLoc);
-
-        if (distance <= radius) {
+        if (block.getLocation().distance(bannerLoc) <= bannerPlaceRadius) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Tu ne peux rien poser dans une sphère de 5 blocs autour de la bannière !");
+            LangManager.get().send(SkyDefLang.BANNER_PLACE_FORBIDDEN, player, Map.of("%radius%", bannerPlaceRadius));
         }
     }
-
 
     private Optional<UHCTeam> uhcPlayerTeam(Player player) {
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
@@ -289,17 +300,15 @@ public class SkyDef extends Scenario {
         }
     }
 
-
     @Override
     public void onStart(Player player) {
-
         ItemCreator[] items = {
-                new ItemCreator(Material.IRON_BOOTS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2),
-                new ItemCreator(Material.IRON_LEGGINGS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2),
-                new ItemCreator(Material.IRON_CHESTPLATE).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2),
-                new ItemCreator(Material.IRON_HELMET).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2),
-                new ItemCreator(Material.GOLDEN_CARROT).setAmount(64),
-                new ItemCreator(Material.BOOK).setAmount(7)
+                new ItemCreator(Material.IRON_BOOTS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, armorEnchantLevel),
+                new ItemCreator(Material.IRON_LEGGINGS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, armorEnchantLevel),
+                new ItemCreator(Material.IRON_CHESTPLATE).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, armorEnchantLevel),
+                new ItemCreator(Material.IRON_HELMET).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, armorEnchantLevel),
+                new ItemCreator(Material.GOLDEN_CARROT).setAmount(goldenCarrotAmount),
+                new ItemCreator(Material.BOOK).setAmount(bookAmount)
         };
 
         for (UHCPlayer pl : defTeam.getPlayers()) {
@@ -317,7 +326,6 @@ public class SkyDef extends Scenario {
         if (bannerLoc != null && bannerLoc.getWorld() != null) {
             Block bannerBlock = bannerLoc.getBlock();
             bannerBlock.setType(Material.WALL_BANNER);
-
             bannerBlock.setData((byte) 5);
         }
     }
@@ -330,5 +338,4 @@ public class SkyDef extends Scenario {
     private boolean isDefTeamAlive() {
         return defTeam != null && defTeam.isAlive();
     }
-
 }

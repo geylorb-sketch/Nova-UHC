@@ -8,6 +8,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class BlackArrow extends Scenario {
     @Override
@@ -16,8 +18,8 @@ public class BlackArrow extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les minerais de charbon donnent des flèches au lieu de charbon.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BLACK_ARROW, player);
     }
 
     @Override

@@ -14,6 +14,8 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.Collection;
 import java.util.Optional;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class AutoRevive extends Scenario {
     private boolean actived = true;
@@ -24,8 +26,8 @@ public class AutoRevive extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les joueurs ressuscitent automatiquement une fois par partie.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.AUTO_REVIVE, player);
     }
 
     @Override
@@ -74,8 +76,9 @@ public class AutoRevive extends Scenario {
         }
     }
 
+
     @Override
-    public void onStart(Player player) {
+    public void onGameStart() {
         Common.get().getArena().setGameRuleValue("keepInventory", "true");
     }
 }

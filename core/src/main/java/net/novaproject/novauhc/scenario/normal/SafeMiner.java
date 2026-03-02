@@ -9,23 +9,18 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class SafeMiner extends Scenario {
 
 
-    @ScenarioVariable(
-            name = "Max Height",
-            description = "Hauteur maximale (Y) en dessous de laquelle les joueurs sont protégés.",
-            type = VariableType.INTEGER
-    )
-    private int max_height = 32;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SAFEMINER_VAR_MAX_HEIGHT_NAME", descKey = "SAFEMINER_VAR_MAX_HEIGHT_DESC", type = VariableType.INTEGER)
+    private final int max_height = 32;
 
-    @ScenarioVariable(
-            name = "Disable At PvP",
-            description = "Désactive SafeMiner automatiquement à l'activation du PvP.",
-            type = VariableType.BOOLEAN
-    )
-    private boolean disable_at_pvp = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SAFEMINER_VAR_DISABLE_AT_PVP_NAME", descKey = "SAFEMINER_VAR_DISABLE_AT_PVP_DESC", type = VariableType.BOOLEAN)
+    private final boolean disable_at_pvp = true;
 
     private boolean actived = true;
 
@@ -35,8 +30,8 @@ public class SafeMiner extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Protège les joueurs des dégâts de lave et d'étouffement en minant.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.SAFE_MINER, player);
     }
 
     @Override
@@ -53,10 +48,7 @@ public class SafeMiner extends Scenario {
         }
     }
 
-    @Override
-    public String getPath() {
-        return "safeminer";
-    }
+
 
     @Override
     public void onSec(Player p) {

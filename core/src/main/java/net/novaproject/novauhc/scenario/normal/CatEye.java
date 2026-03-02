@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class CatEye extends Scenario {
     @Override
@@ -14,8 +16,8 @@ public class CatEye extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Donne une vision nocturne permanente à tous les joueurs.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.CAT_EYE, player);
     }
 
     @Override

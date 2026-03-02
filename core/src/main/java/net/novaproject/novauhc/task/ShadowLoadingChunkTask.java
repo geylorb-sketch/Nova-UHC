@@ -31,7 +31,7 @@ public class ShadowLoadingChunkTask extends BukkitRunnable {
         this.radius = radius;
 
         this.chunkPerAxis = ((radius * 2) / chunkStep) + 1;
-        this.totalChunksToLoad = chunkPerAxis * chunkPerAxis; // Seulement l'overworld
+        this.totalChunksToLoad = chunkPerAxis * chunkPerAxis; 
         runTaskTimer(Main.get(), 0L, 5L);
     }
 
@@ -47,7 +47,7 @@ public class ShadowLoadingChunkTask extends BukkitRunnable {
             loadNextChunk();
         }
 
-        // Pas de mise à jour de progression
+        
 
         if (loadedChunks >= totalChunksToLoad && !finished) {
             finished = true;

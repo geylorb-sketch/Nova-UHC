@@ -1,6 +1,7 @@
 package net.novaproject.ultimate.skydef;
 
-import net.novaproject.novauhc.Common;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.special.SkyDefLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.ui.ConfigVarUi;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -14,8 +15,9 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 public class SkyDefUi extends CustomInventory {
+
     private final Pattern[] pattern = {new Pattern(DyeColor.BLACK, PatternType.FLOWER)};
-    SkyDef sky = ScenarioManager.get().getScenario(SkyDef.class);
+    private final SkyDef sky = ScenarioManager.get().getScenario(SkyDef.class);
 
     public SkyDefUi(Player player) {
         super(player);
@@ -24,16 +26,12 @@ public class SkyDefUi extends CustomInventory {
     @Override
     public void setup() {
         fillCadre(0);
-        ItemCreator def_team_size = new ItemCreator(Material.DIAMOND_CHESTPLATE)
-                .setLores(Arrays.asList(
-                        "",
-                        "  §8┃ §fVous permet de " + Common.get().getMainColor() + "modifier",
-                        "  §8┃ §fle nombre de " + Common.get().getMainColor() + "joueurs§f",
-                        "  §8┃ §fdans l'equipe de §bDéfenseur§f",
-                        ""
-                ));
-        addMenu(13, def_team_size, new ConfigVarUi(getPlayer(), 3, 2, 1, 3, 2, 1, sky.getTeam_size(), 2, 0, this) {
 
+        String lore = LangManager.get().get(SkyDefLang.SKYDEF_UI_DEF_TEAM_SIZE_LORE, getPlayer());
+        ItemCreator defTeamSize = new ItemCreator(Material.DIAMOND_CHESTPLATE)
+                .setLores(Arrays.asList(lore.split("\n")));
+
+        addMenu(13, defTeamSize, new ConfigVarUi(getPlayer(), 3, 2, 1, 3, 2, 1, sky.getTeam_size(), 2, 0, this) {
             @Override
             public void onChange(Number newValue) {
                 sky.setTeam_size((int) newValue);
@@ -44,7 +42,7 @@ public class SkyDefUi extends CustomInventory {
 
     @Override
     public String getTitle() {
-        return "§b§l SkyDef";
+        return LangManager.get().get(SkyDefLang.SKYDEF_UI_TITLE, getPlayer());
     }
 
     @Override

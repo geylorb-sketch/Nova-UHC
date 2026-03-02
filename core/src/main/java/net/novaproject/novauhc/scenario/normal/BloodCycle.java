@@ -13,12 +13,14 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class BloodCycle extends Scenario {
     private final Material[] cache = new Material[6];
     int i = 0;
-    @ScenarioVariable(name = "Temps entre les changements", description = "Temps en secondes entre chaque changement de type de minerai",type = VariableType.TIME)
-    private int between = 360;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODCYCLE_VAR_BETWEEN_NAME", descKey = "BLOODCYCLE_VAR_BETWEEN_DESC", type = VariableType.TIME)
+    private final int between = 360;
 
     @Override
     public String getName() {
@@ -26,8 +28,8 @@ public class BloodCycle extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Un type de minerai change périodiquement et inflige des dégâts si miné.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BLOOD_CYCLE, player);
     }
 
     @Override
@@ -35,10 +37,7 @@ public class BloodCycle extends Scenario {
         return new ItemCreator(Material.BONE);
     }
 
-    @Override
-    public String getPath() {
-        return "bloodcycle";
-    }
+
 
     @Override
     public void onStart(Player player) {

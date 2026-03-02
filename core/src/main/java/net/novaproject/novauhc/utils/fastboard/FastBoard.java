@@ -103,7 +103,7 @@ public class FastBoard extends FastBoardBase<String> {
         } else if (line.length() <= maxLength) {
             prefix = line;
         } else {
-            // Prevent splitting color codes
+            
             int index = line.charAt(maxLength - 1) == ChatColor.COLOR_CHAR
                     ? (maxLength - 1) : maxLength;
             prefix = line.substring(0, index);
@@ -121,7 +121,7 @@ public class FastBoard extends FastBoardBase<String> {
         }
 
         if (prefix.length() > maxLength || suffix.length() > maxLength) {
-            // Something went wrong, just cut to prevent client crash/kick
+            
             prefix = prefix.substring(0, Math.min(maxLength, prefix.length()));
             suffix = suffix.substring(0, Math.min(maxLength, suffix.length()));
         }

@@ -23,7 +23,7 @@ public class Villageois extends LoupGarouRole {
         String message = "§8§m---------" + ChatColor.GREEN + "Villageois§8§m----------§r\n" +
                 "§fVotre Objectif : " + ChatColor.GREEN + "Gagnez avec le Village\n" +
                 "§fVos Pouvoir : " + ChatColor.BLUE + "Aucun\n" +
-                "§fDescription du role : " + ChatColor.DARK_PURPLE + " Vous avez aucun pouvoir. Bonne chance et Bonne survie !\n" +
+                "§fDescription du roles : " + ChatColor.DARK_PURPLE + " Vous avez aucun pouvoir. Bonne chance et Bonne survie !\n" +
                 "§8§m--------------------------";
         return message;
     }

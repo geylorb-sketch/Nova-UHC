@@ -13,22 +13,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Ninja extends Scenario {
 
-    @ScenarioVariable(
-            name = "Invisibility Duration",
-            description = "Durée de l'invisibilité après un kill en ticks (20 ticks = 1 seconde).",
-            type = VariableType.TIME
-    )
-    private int invisibilityDuration = 200;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "NINJA_VAR_INVISIBILITY_DURATION_NAME", descKey = "NINJA_VAR_INVISIBILITY_DURATION_DESC", type = VariableType.TIME)
+    private final int invisibilityDuration = 200;
 
-    @ScenarioVariable(
-            name = "Invisibility Level",
-            description = "Niveau de l'effet d'invisibilité après un kill.",
-            type = VariableType.INTEGER
-    )
-    private int invisibilityLevel = 0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "NINJA_VAR_INVISIBILITY_LEVEL_NAME", descKey = "NINJA_VAR_INVISIBILITY_LEVEL_DESC", type = VariableType.INTEGER)
+    private final int invisibilityLevel = 0;
 
     @Override
     public String getName() {
@@ -36,8 +30,9 @@ public class Ninja extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Devenez invisible pendant " + (invisibilityDuration / 20) + " secondes après chaque kill !";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.NINJA, player)
+                .replace("%seconds%", String.valueOf(invisibilityDuration / 20));
     }
 
     @Override
@@ -45,10 +40,7 @@ public class Ninja extends Scenario {
         return new ItemCreator(Material.FEATHER);
     }
 
-    @Override
-    public String getPath() {
-        return "ninja";
-    }
+
 
     @Override
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {

@@ -13,24 +13,19 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.List;
 import java.util.Random;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class DeathEmerauld extends Scenario {
 
     private final Random random = new Random();
 
-    @ScenarioVariable(
-            name = "damage_amount",
-            description = "Quantité de dégâts infligés au joueur aléatoire",
-            type = VariableType.DOUBLE
-    )
-    private double damageAmount = 4.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEATHEMERAULD_VAR_DAMAGE_AMOUNT_NAME", descKey = "DEATHEMERAULD_VAR_DAMAGE_AMOUNT_DESC", type = VariableType.DOUBLE)
+    private final double damageAmount = 4.0;
 
-    @ScenarioVariable(
-            name = "target_block",
-            description = "Type de bloc qui déclenche l'effet",
-            type = VariableType.STRING
-    )
-    private String targetBlock = "EMERALD_ORE";
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEATHEMERAULD_VAR_TARGET_BLOCK_NAME", descKey = "DEATHEMERAULD_VAR_TARGET_BLOCK_DESC", type = VariableType.STRING)
+    private final String targetBlock = "EMERALD_ORE";
 
     @Override
     public String getName() {
@@ -38,8 +33,10 @@ public class DeathEmerauld extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Miner une " + targetBlock + " inflige " + damageAmount + " dégâts à un joueur aléatoire.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.DEATH_EMERAULD, player)
+                .replace("%block%", String.valueOf(targetBlock))
+                .replace("%damage%", String.valueOf(damageAmount));
     }
 
     @Override

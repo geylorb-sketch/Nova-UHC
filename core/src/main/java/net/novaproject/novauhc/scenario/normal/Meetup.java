@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class Meetup extends Scenario {
     @Override
@@ -14,8 +16,8 @@ public class Meetup extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Donne a tout les joueur le même équipement.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.MEETUP, player);
     }
 
     @Override

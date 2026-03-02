@@ -3,6 +3,7 @@ package net.novaproject.novauhc.ability;
 import lombok.Getter;
 import lombok.Setter;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -23,11 +24,11 @@ import java.lang.reflect.Field;
 @Setter
 public abstract class Ability implements Cloneable {
 
-    @AbilityVariable(name = "Nombre d'utilisation", description = "Nombre d'utilisation de la capacité", type = VariableType.INTEGER)
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ABILITY_VAR_MAX_USE_NAME", descKey = "ABILITY_VAR_MAX_USE_DESC", type = VariableType.INTEGER)
     private int maxUse = -1;
-    @AbilityVariable(name = "Cooldown", description = "Definir le temps en seconde entre chaque utilisation.", type = VariableType.TIME)
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ABILITY_VAR_COOLDOWN_NAME", descKey = "ABILITY_VAR_COOLDOWN_DESC", type = VariableType.TIME)
     private int cooldown = 0;
-    @AbilityVariable(name = "Active", description = "Active la capacité",type = VariableType.BOOLEAN)
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ABILITY_VAR_ACTIVE_NAME", descKey = "ABILITY_VAR_ACTIVE_DESC", type = VariableType.BOOLEAN)
     private boolean active = true;
 
     public abstract String getName();

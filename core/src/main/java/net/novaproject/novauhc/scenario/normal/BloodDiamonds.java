@@ -8,10 +8,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class BloodDiamonds extends Scenario {
-    @ScenarioVariable(name = "Quantité de dégâts", description = "Quantité de cœurs perdus en minant un diamant.",type = VariableType.DOUBLE)
-    private int damageAmount = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODDIAMONDS_VAR_DAMAGE_AMOUNT_NAME", descKey = "BLOODDIAMONDS_VAR_DAMAGE_AMOUNT_DESC", type = VariableType.DOUBLE)
+    private final int damageAmount = 1;
 
     @Override
     public String getName() {
@@ -19,8 +22,8 @@ public class BloodDiamonds extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les joueurs perdent 1 cœur en minant un diamant.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BLOOD_DIAMONDS, player);
     }
 
     @Override

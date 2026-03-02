@@ -15,18 +15,23 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Map;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class RewardLongShot extends Scenario {
 
-    @ScenarioVariable(name="Minimum Distance", description="Distance minimale pour un long shot", type=VariableType.INTEGER)
-    private int min_distance = 75;
-    @ScenarioVariable(name="Damage Multiplier", description="Multiplicateur de dégâts", type=VariableType.DOUBLE)
-    private double damage_multiplier = 1.5;
-    @ScenarioVariable(name="Heal Amount", description="Points de vie rendus au tireur (2 = 1 cœur)", type=VariableType.DOUBLE)
-    private double heal_amount = 2.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "REWARDLONGSHOT_VAR_MIN_DISTANCE_NAME", descKey = "REWARDLONGSHOT_VAR_MIN_DISTANCE_DESC", type = VariableType.INTEGER)
+    private final int min_distance = 75;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "REWARDLONGSHOT_VAR_DAMAGE_MULTIPLIER_NAME", descKey = "REWARDLONGSHOT_VAR_DAMAGE_MULTIPLIER_DESC", type = VariableType.DOUBLE)
+    private final double damage_multiplier = 1.5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "REWARDLONGSHOT_VAR_HEAL_AMOUNT_NAME", descKey = "REWARDLONGSHOT_VAR_HEAL_AMOUNT_DESC", type = VariableType.DOUBLE)
+    private final double heal_amount = 2.0;
 
     @Override public String getName() { return "Rewarding LongShot"; }
-    @Override public String getDescription() { return "Les tirs longue distance infligent plus de dégâts et soignent le tireur."; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.REWARD_LONG_SHOT, player);
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.BOW); }
 
     @Override

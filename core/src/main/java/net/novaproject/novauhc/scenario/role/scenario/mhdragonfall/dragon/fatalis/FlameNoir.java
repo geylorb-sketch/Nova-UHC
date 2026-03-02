@@ -8,19 +8,16 @@ import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.DragonFall;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.DragonRole;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.ElementType;
-import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status.FireBlight;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status.StatusEffect;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status.StatusFactory;
 import net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.status.StatusManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
-import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -28,20 +25,19 @@ import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 
 public class FlameNoir extends UseAbiliy {
 
 
 
-    @AbilityVariable(name = "Distance", description = "Distance parcourue", type = VariableType.DOUBLE)
-    private double MAX_DISTANCE = 15.0;
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "FLAMENOIR_VAR_MAX_DISTANCE_NAME", descKey = "FLAMENOIR_VAR_MAX_DISTANCE_DESC", type = VariableType.DOUBLE)
+    private final double MAX_DISTANCE = 15.0;
 
-    @AbilityVariable(name = "Degat", description = "Dégâts", type = VariableType.DOUBLE)
-    private int degat = 300;
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "FLAMENOIR_VAR_DEGAT_NAME", descKey = "FLAMENOIR_VAR_DEGAT_DESC", type = VariableType.DOUBLE)
+    private final int degat = 300;
 
     private static final double STEP = 1.0;
     private static final int PARTICLES_PER_TICK = 9;

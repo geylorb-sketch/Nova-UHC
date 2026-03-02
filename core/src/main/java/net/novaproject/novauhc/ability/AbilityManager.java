@@ -24,6 +24,7 @@ public class AbilityManager {
         regesiterAbility(new AuraPeur());
         regesiterAbility(new FlameNoir());
         regesiterAbility(new FlameNoir());
+
     }
 
     public void regesiterAbility(Ability ability) {

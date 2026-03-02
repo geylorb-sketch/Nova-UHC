@@ -26,17 +26,18 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 
 public class MerFlamme extends UseAbiliy {
 
-    @AbilityVariable(name = "Dégâts", description = "Dégâts infligés", type = net.novaproject.novauhc.utils.VariableType.DOUBLE)
-    private int DAMAGE = 1000;
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "MERFLAMME_VAR_DAMAGE_NAME", descKey = "MERFLAMME_VAR_DAMAGE_DESC", type = VariableType.DOUBLE)
+    private final int DAMAGE = 1000;
 
-    @AbilityVariable(name = "Durée feu", description = "Durée du statut Feu (s)", type = net.novaproject.novauhc.utils.VariableType.INTEGER)
-    private int FIRE_DURATION = 15;
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "MERFLAMME_VAR_FIRE_DURATION_NAME", descKey = "MERFLAMME_VAR_FIRE_DURATION_DESC", type = VariableType.INTEGER)
+    private final int FIRE_DURATION = 15;
 
-    @AbilityVariable(name = "Rayon", description = "Rayon de la vague", type = net.novaproject.novauhc.utils.VariableType.DOUBLE)
-    private double RADIUS = 25;
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "MERFLAMME_VAR_RADIUS_NAME", descKey = "MERFLAMME_VAR_RADIUS_DESC", type = VariableType.DOUBLE)
+    private final double RADIUS = 25;
 
     private static final int PARTICLES = 60;
     private static final int TICKS_DURATION = 50;
@@ -65,7 +66,7 @@ public class MerFlamme extends UseAbiliy {
 
         Location center = caster.getLocation();
 
-        // Set pour tracker les joueurs déjà touchés
+        
         Set<UUID> hitPlayers = new HashSet<>();
 
         Random random = new Random();
@@ -82,7 +83,7 @@ public class MerFlamme extends UseAbiliy {
 
                 double currentRadius = RADIUS * ((double) tick / TICKS_DURATION);
 
-                // Cercle de particules animé
+                
                 for (int i = 0; i < PARTICLES; i++) {
                     double angle = 2 * Math.PI * i / PARTICLES;
                     double x = currentRadius * Math.cos(angle);
@@ -94,29 +95,29 @@ public class MerFlamme extends UseAbiliy {
                             .display();
                 }
 
-                // Vérifier les joueurs dans le rayon actuel
+                
                 for (Player target : center.getWorld().getPlayers()) {
-                    // Si le joueur a déjà été touché, on le skip
+                    
                     if (hitPlayers.contains(target.getUniqueId())) {
                         continue;
                     }
 
-                    // Le lanceur est invincible à sa propre attaque
+                    
                     if (target.getUniqueId().equals(caster.getUniqueId())) {
                         continue;
                     }
 
                     if (target.getLocation().distance(center) <= currentRadius + 1) {
-                        // Marquer le joueur comme touché
+                        
                         hitPlayers.add(target.getUniqueId());
 
                         UHCPlayer targetUhc = getUHCPlayer(target);
                         DragonRole targetRole = scenario.getRoleByUHCPlayer(targetUhc);
 
-                        // Dégâts
+                        
                         targetRole.damage(DAMAGE, caster);
 
-                        // Statut Feu
+                        
                         StatusEffect effect = StatusFactory.create(
                                 ElementType.FIRE,
                                 target,

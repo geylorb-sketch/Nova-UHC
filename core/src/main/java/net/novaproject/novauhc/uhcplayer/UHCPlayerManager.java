@@ -91,7 +91,7 @@ public class UHCPlayerManager {
         String ip = Common.get().getServerIp();
 
         if (uhcManager.isLobby()) {
-            // ─── LOBBY ───────────────────────────────────────────────────────
+            
             board.updateTitle(lm.get(ScoreboardLang.SB_LOBBY_TITLE, player));
             board.updateLines(lines(lm, player, ip,
                     ScoreboardLang.SB_LOBBY_L1,
@@ -107,7 +107,7 @@ public class UHCPlayerManager {
             }
 
         } else if (uhcManager.isGame()) {
-            // ─── GAME ─────────────────────────────────────────────────────────
+            
             if (isRole) {
                 board.updateTitle(lm.get(ScoreboardLang.SB_GAME_ROLE_TITLE, player));
                 board.updateLines(lines(lm, player, ip,
@@ -148,7 +148,7 @@ public class UHCPlayerManager {
             }
 
         } else {
-            // ─── END ──────────────────────────────────────────────────────────
+            
             board.updateTitle(lm.get(ScoreboardLang.SB_END_TITLE, player));
             board.updateLines(lines(lm, player, ip,
                     ScoreboardLang.SB_END_L1,

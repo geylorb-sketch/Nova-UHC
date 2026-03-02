@@ -16,32 +16,23 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class TimeBombe extends Scenario {
 
-    @ScenarioVariable(
-            name = "Explosion Delay",
-            description = "Temps en secondes avant l'explosion après la mort du joueur.",
-            type = VariableType.INTEGER
-    )
-    private int explosion_delay = 30;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TIMEBOMBE_VAR_EXPLOSION_DELAY_NAME", descKey = "TIMEBOMBE_VAR_EXPLOSION_DELAY_DESC", type = VariableType.INTEGER)
+    private final int explosion_delay = 30;
 
-    @ScenarioVariable(
-            name = "Explosion Power",
-            description = "Puissance de l'explosion créée par la TimeBombe.",
-            type = VariableType.INTEGER
-    )
-    private int explosion_power = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TIMEBOMBE_VAR_EXPLOSION_POWER_NAME", descKey = "TIMEBOMBE_VAR_EXPLOSION_POWER_DESC", type = VariableType.INTEGER)
+    private final int explosion_power = 2;
 
-    @ScenarioVariable(
-            name = "Give Golden Apple",
-            description = "Donner une pomme d'or supplémentaire dans le coffre.",
-            type = VariableType.BOOLEAN
-    )
-    private boolean give_golden_apple = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TIMEBOMBE_VAR_GIVE_GOLDEN_APPLE_NAME", descKey = "TIMEBOMBE_VAR_GIVE_GOLDEN_APPLE_DESC", type = VariableType.BOOLEAN)
+    private final boolean give_golden_apple = true;
 
     @Override
     public String getName() {
@@ -49,8 +40,8 @@ public class TimeBombe extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les joueurs morts explosent après un délai, créant un cratère.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.TIME_BOMBE, player);
     }
 
     @Override

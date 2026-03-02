@@ -103,6 +103,7 @@ public class ItemCreator {
      */
 
     public ItemCreator setAmount(int amount) {
+        if(amount > 64) amount = 64;
         this.itemstack.setAmount(amount);
         return this;
     }
@@ -672,43 +673,43 @@ public class ItemCreator {
             BannerMeta meta = (BannerMeta) this.itemstack.getItemMeta();
             DyeColor basecolor = meta.getBaseColor();
             switch (type) {
-                // rien, barre, precedent, suivant, Coeur, cercleEtoile, croix,
-                // yinYang, Losange, Moin, Plus;
+                
+                
                 case barre:
                     addasyncronePattern(new Pattern(patterncolor, PatternType.STRIPE_DOWNRIGHT), true);
                     break;
                 case precedent:
-                    // precedent
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.RHOMBUS_MIDDLE), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.SQUARE_BOTTOM_RIGHT), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.SQUARE_TOP_RIGHT), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.STRIPE_RIGHT), true);
                     break;
                 case suivant:
-                    // suivant
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.RHOMBUS_MIDDLE), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.SQUARE_BOTTOM_LEFT), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.SQUARE_TOP_LEFT), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.STRIPE_LEFT), true);
                     break;
                 case coeur:
-                    // Coeur
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.RHOMBUS_MIDDLE), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.TRIANGLE_TOP), true);
                     break;
                 case cercleEtoile:
-                    // cercleEtoile
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.RHOMBUS_MIDDLE), false);
                     addasyncronePattern(new Pattern(patterncolor, PatternType.FLOWER), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.CIRCLE_MIDDLE), true);
                     break;
                 case croix:
-                    // croix
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.CROSS), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.CURLY_BORDER), true);
                     break;
                 case yinYang:
-                    // yinYang
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.SQUARE_BOTTOM_RIGHT), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.STRIPE_RIGHT), false);
                     addasyncronePattern(new Pattern(patterncolor, PatternType.DIAGONAL_LEFT), false);
@@ -719,16 +720,16 @@ public class ItemCreator {
                     addasyncronePattern(new Pattern(patterncolor, PatternType.STRIPE_LEFT), true);
                     break;
                 case losange:
-                    // Losange
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.RHOMBUS_MIDDLE), true);
                     break;
                 case moin:
-                    // Moin
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.STRIPE_MIDDLE), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.BORDER), true);
                     break;
                 case plus:
-                    // Plus
+                    
                     addasyncronePattern(new Pattern(patterncolor, PatternType.STRAIGHT_CROSS), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.STRIPE_TOP), false);
                     addasyncronePattern(new Pattern(basecolor, PatternType.STRIPE_BOTTOM), false);
@@ -759,7 +760,7 @@ public class ItemCreator {
         }
     }
 
-//    COMPARATE
+
 
     public Boolean comparate(ItemCreator item, ComparatorType type) {
         switch (type) {

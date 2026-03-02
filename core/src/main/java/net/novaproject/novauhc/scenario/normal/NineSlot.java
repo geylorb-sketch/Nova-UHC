@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class NineSlot extends Scenario {
 
@@ -27,7 +28,10 @@ public class NineSlot extends Scenario {
     private String t(NineSlotLang key, Player p) { return LangManager.get().get(key, p); }
 
     @Override public String getName() { return "NineSlot"; }
-    @Override public String getDescription() { return "Seule la hotbar peut être utilisée. L'inventaire principal est inaccessible !"; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.NINE_SLOT, player);
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.CHEST); }
 
     @Override

@@ -16,102 +16,53 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class GapRoulette extends Scenario {
 
     private final List<PotionEffectType> allEffects = new ArrayList<>();
     private final Random random = new Random();
 
-    @ScenarioVariable(
-            name = "Effet Vitesse",
-            description = "Activer l'effet Vitesse pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableSpeed = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_SPEED_NAME", descKey = "GAPROULETTE_VAR_ENABLE_SPEED_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableSpeed = true;
 
-    @ScenarioVariable(
-            name = "Effet Strength",
-            description = "Activer l'effet Strength pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableStrength = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_STRENGTH_NAME", descKey = "GAPROULETTE_VAR_ENABLE_STRENGTH_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableStrength = true;
 
-    @ScenarioVariable(
-            name = "Effet Resistance",
-            description = "Activer l'effet Resistance pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableResistance = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_RESISTANCE_NAME", descKey = "GAPROULETTE_VAR_ENABLE_RESISTANCE_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableResistance = true;
 
-    @ScenarioVariable(
-            name = "Effet Jump",
-            description = "Activer l'effet Jump pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableJump = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_JUMP_NAME", descKey = "GAPROULETTE_VAR_ENABLE_JUMP_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableJump = true;
 
-    @ScenarioVariable(
-            name = "Effet Fire Resistance",
-            description = "Activer l'effet Fire Resistance pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableFireResistance = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_FIRE_RESISTANCE_NAME", descKey = "GAPROULETTE_VAR_ENABLE_FIRE_RESISTANCE_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableFireResistance = true;
 
-    @ScenarioVariable(
-            name = "Effet Weakness",
-            description = "Activer l'effet Weakness pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableWeakness = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_WEAKNESS_NAME", descKey = "GAPROULETTE_VAR_ENABLE_WEAKNESS_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableWeakness = true;
 
-    @ScenarioVariable(
-            name = "Effet Poison",
-            description = "Activer l'effet Poison pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enablePoison = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_POISON_NAME", descKey = "GAPROULETTE_VAR_ENABLE_POISON_DESC", type = VariableType.BOOLEAN)
+    private final boolean enablePoison = true;
 
-    @ScenarioVariable(
-            name = "Effet Slowness",
-            description = "Activer l'effet Slowness pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableSlowness = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_SLOWNESS_NAME", descKey = "GAPROULETTE_VAR_ENABLE_SLOWNESS_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableSlowness = true;
 
-    @ScenarioVariable(
-            name = "Effet Hunger",
-            description = "Activer l'effet Hunger pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableHunger = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_HUNGER_NAME", descKey = "GAPROULETTE_VAR_ENABLE_HUNGER_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableHunger = true;
 
-    @ScenarioVariable(
-            name = "Effet Wither",
-            description = "Activer l'effet Wither pour les pommes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableWither = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_WITHER_NAME", descKey = "GAPROULETTE_VAR_ENABLE_WITHER_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableWither = true;
 
-    @ScenarioVariable(
-            name = "Durée minimum (secondes)",
-            description = "Durée minimale des effets appliqués",
-            type = VariableType.INTEGER
-    )
-    private int minDuration = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_MIN_DURATION_NAME", descKey = "GAPROULETTE_VAR_MIN_DURATION_DESC", type = VariableType.INTEGER)
+    private final int minDuration = 5;
 
-    @ScenarioVariable(
-            name = "Durée maximum (secondes)",
-            description = "Durée maximale des effets appliqués",
-            type = VariableType.INTEGER
-    )
-    private int maxDuration = 15;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_MAX_DURATION_NAME", descKey = "GAPROULETTE_VAR_MAX_DURATION_DESC", type = VariableType.INTEGER)
+    private final int maxDuration = 15;
 
-    @ScenarioVariable(
-            name = "Amplificateur maximum",
-            description = "Amplificateur maximal des effets appliqués",
-            type = VariableType.INTEGER
-    )
-    private int maxAmplifier = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_MAX_AMPLIFIER_NAME", descKey = "GAPROULETTE_VAR_MAX_AMPLIFIER_DESC", type = VariableType.INTEGER)
+    private final int maxAmplifier = 1;
 
     public GapRoulette() {
         allEffects.add(PotionEffectType.SPEED);
@@ -132,8 +83,8 @@ public class GapRoulette extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les pommes dorées donnent des effets aléatoires configurables au lieu de leurs effets normaux.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.GAP_ROULETTE, player);
     }
 
     @Override

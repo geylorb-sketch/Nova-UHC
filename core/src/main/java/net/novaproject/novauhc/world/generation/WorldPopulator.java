@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WorldPopulator {
 
     private final World arena;
-    private CenterType type;
+    private final CenterType type;
 
     public WorldPopulator(World arena, CenterType type, Biome biome) {
         this.arena = arena;

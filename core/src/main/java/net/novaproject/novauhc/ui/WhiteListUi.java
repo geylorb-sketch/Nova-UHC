@@ -46,7 +46,7 @@ public class WhiteListUi extends CustomInventory {
         String clickAccess = LangManager.get().get(CommonLang.CLICK_HERE_TO_ACCESS, getPlayer());
         String clickModify = LangManager.get().get(CommonLang.CLICK_HERE_TO_MODIFY, getPlayer());
 
-        // Disable whitelist button
+        
         ItemStack disableWool = new ItemStack(Material.WOOL, 1, (byte) 14);
         ItemMeta disableMeta = disableWool.getItemMeta();
         if (disableMeta != null) {
@@ -61,7 +61,7 @@ public class WhiteListUi extends CustomInventory {
             }
         });
 
-        // Enable whitelist button
+        
         ItemStack enableWool = new ItemStack(Material.WOOL, 1, (byte) 5);
         ItemMeta enableMeta = enableWool.getItemMeta();
         if (enableMeta != null) {
@@ -76,7 +76,7 @@ public class WhiteListUi extends CustomInventory {
             }
         });
 
-        // Add player button
+        
         addItem(new ActionItem(0, new ItemCreator(Material.PAPER).setName(t(WhiteListUiLang.ADD_PLAYER_BUTTON))) {
             @Override
             public void onClick(InventoryClickEvent e) {
@@ -92,7 +92,7 @@ public class WhiteListUi extends CustomInventory {
             }
         });
 
-        // Player list
+        
         List<OfflinePlayer> whitelistedPlayers = new ArrayList<>(Bukkit.getWhitelistedPlayers());
         int playersPerPage   = 24;
         int totalCategories  = (int) Math.ceil((double) whitelistedPlayers.size() / playersPerPage);
@@ -131,7 +131,7 @@ public class WhiteListUi extends CustomInventory {
             });
         }
 
-        // CloudNet button
+        
         if (Main.get().getCloudNet() != null) {
             ItemCreator cloud = new ItemCreator(Material.SLIME_BALL)
                     .setName(t(WhiteListUiLang.CLOUD_ITEM_NAME))

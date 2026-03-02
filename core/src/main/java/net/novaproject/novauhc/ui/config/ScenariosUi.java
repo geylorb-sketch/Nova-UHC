@@ -83,7 +83,7 @@ public class ScenariosUi extends CustomInventory {
             ItemCreator item = scenario.getItem()
                     .setName("§8┃ §f" + scenario.getName() + ": " + status)
                     .addLore("")
-                    .addLore("  §8┃ §f" + scenario.getDescription())
+                    .addLore("  §8┃ §f" + scenario.getDescription(getPlayer()))
                     .addLore("")
                     .addLore(LangManager.get().get(CommonLang.CLICK_HERE_TO_TOGGLE, getPlayer()));
 

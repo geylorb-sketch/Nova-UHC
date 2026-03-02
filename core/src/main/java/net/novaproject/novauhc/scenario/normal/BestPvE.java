@@ -16,12 +16,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class BestPvE extends Scenario {
     private final List<Player> listPve = new ArrayList<>();
     private final List<Player> listOutPve = new ArrayList<>();
-    @ScenarioVariable(name = "Temps entre les gains de cœur", description = "Définit le temps (en secondes) entre chaque gain de cœur pour les joueurs dans le classement PvE.", type = VariableType.TIME)
-    private int timer = 600; // 20 minutes
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BESTPVE_VAR_TIMER_NAME", descKey = "BESTPVE_VAR_TIMER_DESC", type = VariableType.TIME)
+    private final int timer = 600; 
 
     @Override
     public String getName() {
@@ -29,8 +31,8 @@ public class BestPvE extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Récompense les joueurs qui excellent dans le PvE avec des bonus.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BEST_PVE, player);
     }
 
     @Override
@@ -44,10 +46,7 @@ public class BestPvE extends Scenario {
         bestPvE(player);
     }
 
-    @Override
-    public String getPath() {
-        return "bestpve";
-    }
+
 
     private void bestPvE(Player player) {
         new BukkitRunnable() {

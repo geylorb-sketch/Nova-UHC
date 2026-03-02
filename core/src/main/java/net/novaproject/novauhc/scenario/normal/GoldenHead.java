@@ -8,7 +8,6 @@ import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -21,32 +20,37 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class GoldenHead extends Scenario {
     private ShapedRecipe recipe;
 
-    @ScenarioVariable(name="Durée Absorption Golden Head (s)", description="Durée de l'effet Absorption pour la Golden Head", type=VariableType.TIME)
-    private int absorptionDurationGoldenHead = 20 * 60 * 2;
-    @ScenarioVariable(name="Niveau Absorption Golden Head", description="Niveau de l'effet Absorption pour la Golden Head", type=VariableType.INTEGER)
-    private int absorptionAmplifierGoldenHead = 1;
-    @ScenarioVariable(name="Durée Régénération Golden Head (s)", description="Durée de l'effet Régénération pour la Golden Head", type=VariableType.TIME)
-    private int regenerationDurationGoldenHead = 20 * 6;
-    @ScenarioVariable(name="Niveau Régénération Golden Head", description="Niveau de l'effet Régénération pour la Golden Head", type=VariableType.INTEGER)
-    private int regenerationAmplifierGoldenHead = 1;
-    @ScenarioVariable(name="Durée Absorption Apple (s)", description="Durée de l'effet Absorption pour les pommes dorées normales", type=VariableType.TIME)
-    private int absorptionDurationApple = 20 * 60 * 2;
-    @ScenarioVariable(name="Niveau Absorption Apple", description="Niveau de l'effet Absorption pour les pommes dorées normales", type=VariableType.INTEGER)
-    private int absorptionAmplifierApple = 0;
-    @ScenarioVariable(name="Durée Régénération Apple (s)", description="Durée de l'effet Régénération pour les pommes dorées normales", type=VariableType.TIME)
-    private int regenerationDurationApple = 20 * 4;
-    @ScenarioVariable(name="Niveau Régénération Apple", description="Niveau de l'effet Régénération pour les pommes dorées normales", type=VariableType.INTEGER)
-    private int regenerationAmplifierApple = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_GOLDEN_HEAD_DESC", type = VariableType.TIME)
+    private final int absorptionDurationGoldenHead = 20 * 60 * 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_GOLDEN_HEAD_DESC", type = VariableType.INTEGER)
+    private final int absorptionAmplifierGoldenHead = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_GOLDEN_HEAD_DESC", type = VariableType.TIME)
+    private final int regenerationDurationGoldenHead = 20 * 6;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_GOLDEN_HEAD_DESC", type = VariableType.INTEGER)
+    private final int regenerationAmplifierGoldenHead = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_APPLE_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_APPLE_DESC", type = VariableType.TIME)
+    private final int absorptionDurationApple = 20 * 60 * 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_APPLE_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_APPLE_DESC", type = VariableType.INTEGER)
+    private final int absorptionAmplifierApple = 0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_APPLE_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_APPLE_DESC", type = VariableType.TIME)
+    private final int regenerationDurationApple = 20 * 4;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_APPLE_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_APPLE_DESC", type = VariableType.INTEGER)
+    private final int regenerationAmplifierApple = 1;
 
     private String t(GoldenHeadLang key) { return LangManager.get().get(key); }
     private String t(GoldenHeadLang key, Map<String,Object> p) { return LangManager.get().get(key, p); }
 
     @Override public String getName() { return "Golden Head"; }
-    @Override public String getDescription() { return "Les têtes de joueurs morts peuvent être craftées en pommes dorées spéciales."; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.GOLDEN_HEAD, player);
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.GOLDEN_APPLE); }
 
     @Override

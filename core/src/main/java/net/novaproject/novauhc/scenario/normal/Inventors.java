@@ -15,29 +15,34 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Inventors extends Scenario {
 
     private final Map<Material, UUID> firstCrafters = new HashMap<>();
     private final Map<UUID, Integer> playerInventions = new HashMap<>();
 
-    @ScenarioVariable(name="Bonus pour outils en bois", description="Pommes pour le premier crafteur bois", type=VariableType.INTEGER)
-    private int woodToolBonus = 2;
-    @ScenarioVariable(name="Bonus pour outils en pierre", description="Pains pour le premier crafteur pierre", type=VariableType.INTEGER)
-    private int stoneToolBonus = 3;
-    @ScenarioVariable(name="Bonus pour outils en fer", description="Lingots de fer pour le premier crafteur fer", type=VariableType.INTEGER)
-    private int ironToolBonus = 2;
-    @ScenarioVariable(name="Bonus pour outils en diamant", description="Diamants pour le premier crafteur diamant", type=VariableType.INTEGER)
-    private int diamondToolBonus = 1;
-    @ScenarioVariable(name="Récompense milestone 5", description="Objet donné au palier 5", type=VariableType.STRING)
-    private String milestone5Reward = "ENCHANTED_BOOK";
-    @ScenarioVariable(name="Récompense milestone 10", description="Objet donné au palier 10", type=VariableType.STRING)
-    private String milestone10Reward = "NETHER_STAR";
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_WOOD_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_WOOD_TOOL_BONUS_DESC", type = VariableType.INTEGER)
+    private final int woodToolBonus = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_STONE_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_STONE_TOOL_BONUS_DESC", type = VariableType.INTEGER)
+    private final int stoneToolBonus = 3;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_IRON_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_IRON_TOOL_BONUS_DESC", type = VariableType.INTEGER)
+    private final int ironToolBonus = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_DIAMOND_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_DIAMOND_TOOL_BONUS_DESC", type = VariableType.INTEGER)
+    private final int diamondToolBonus = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_MILESTONE5REWARD_NAME", descKey = "INVENTORS_VAR_MILESTONE5REWARD_DESC", type = VariableType.STRING)
+    private final String milestone5Reward = "ENCHANTED_BOOK";
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_MILESTONE10REWARD_NAME", descKey = "INVENTORS_VAR_MILESTONE10REWARD_DESC", type = VariableType.STRING)
+    private final String milestone10Reward = "NETHER_STAR";
 
     private String t(InventorsLang key, Map<String,Object> p) { return LangManager.get().get(key, p); }
 
     @Override public String getName() { return "Inventors"; }
-    @Override public String getDescription() { return "Le premier à crafter un objet est annoncé et reçoit un bonus !"; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.INVENTORS, player);
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.WORKBENCH); }
 
     @Override

@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class OreRoulette extends Scenario {
 
@@ -25,7 +26,10 @@ public class OreRoulette extends Scenario {
     private String t(OreRouletteLang key, Player p, Map<String,Object> m) { return LangManager.get().get(key, p, m); }
 
     @Override public String getName() { return "OreRoulette"; }
-    @Override public String getDescription() { return "Chaque minerai miné donne un minerai aléatoire."; }
+    @Override
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.ORE_ROULETTE, player);
+    }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.EMERALD_ORE); }
 
     @Override

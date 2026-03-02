@@ -192,7 +192,7 @@ public abstract class DragonRole extends Role {
                 }
 
                 if (piece.hasItemMeta() && piece.getItemMeta().hasEnchants()) {
-                    int protection = piece.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.PROTECTION_ENVIRONMENTAL);
+                    int protection = piece.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
                     enchantArmorBonus += protection * 5.0;
                 }
             }
@@ -213,9 +213,9 @@ public abstract class DragonRole extends Role {
             }
 
             if (weapon.hasItemMeta() && weapon.getItemMeta().hasEnchants()) {
-                int sharpness = weapon.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DAMAGE_ALL);
-                int smite = weapon.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DAMAGE_UNDEAD);
-                int bane = weapon.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DAMAGE_ARTHROPODS);
+                int sharpness = weapon.getEnchantmentLevel(Enchantment.DAMAGE_ALL);
+                int smite = weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD);
+                int bane = weapon.getEnchantmentLevel(Enchantment.DAMAGE_ARTHROPODS);
                 int power = weapon.getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
                 enchantWeaponBonus += sharpness * 5.0;
                 enchantWeaponBonus += smite * 3.0;

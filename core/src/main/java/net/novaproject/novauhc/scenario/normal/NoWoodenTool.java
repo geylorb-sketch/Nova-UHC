@@ -3,8 +3,11 @@ package net.novaproject.novauhc.scenario.normal;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class NoWoodenTool extends Scenario {
     @Override
@@ -13,8 +16,8 @@ public class NoWoodenTool extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Remplace automatiquement les outils en bois par des outils en fer.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.NO_WOODEN_TOOL, player);
     }
 
     @Override

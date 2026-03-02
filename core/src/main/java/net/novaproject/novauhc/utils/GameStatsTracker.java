@@ -15,7 +15,7 @@ public class GameStatsTracker {
         public int kills = 0;
         public int deaths = 0;
         public boolean isAlive = true;
-        public String camp = null; // Pour modes Special
+        public String camp = null; 
         public long joinTime = System.currentTimeMillis();
 
         public PlayerGameStats(UUID uuid, String name) {
@@ -95,14 +95,14 @@ public class GameStatsTracker {
     public List<ApiManager.PlayerStats> getPlayerStats() {
         List<ApiManager.PlayerStats> list = new ArrayList<>();
 
-        // Trie par placement (vivants d'abord, puis par kills)
+        
         List<PlayerGameStats> sorted = new ArrayList<>(stats.values());
         sorted.sort((a, b) -> {
             if (a.isAlive != b.isAlive) return b.isAlive ? 1 : -1;
             return Integer.compare(b.kills, a.kills);
         });
 
-        // Calcule les placements
+        
         int placement = 1;
         for (PlayerGameStats stat : sorted) {
             list.add(new ApiManager.PlayerStats(

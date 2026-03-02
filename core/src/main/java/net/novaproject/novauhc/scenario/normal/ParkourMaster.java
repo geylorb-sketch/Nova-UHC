@@ -20,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class ParkourMaster extends Scenario {
 
@@ -28,41 +30,41 @@ public class ParkourMaster extends Scenario {
     private final Random random = new Random();
     private BukkitRunnable parkourTask;
 
-    @ScenarioVariable(name = "Spawn Interval", description = "Intervalle (en secondes) entre l'apparition des parcours.", type = VariableType.INTEGER)
-    private int spawnInterval = 300;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_SPAWN_INTERVAL_NAME", descKey = "PARKOURMASTER_VAR_SPAWN_INTERVAL_DESC", type = VariableType.INTEGER)
+    private final int spawnInterval = 300;
 
-    @ScenarioVariable(name = "Min Checkpoints", description = "Nombre minimum de checkpoints par parcours.", type = VariableType.INTEGER)
-    private int minCheckpoints = 3;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_MIN_CHECKPOINTS_NAME", descKey = "PARKOURMASTER_VAR_MIN_CHECKPOINTS_DESC", type = VariableType.INTEGER)
+    private final int minCheckpoints = 3;
 
-    @ScenarioVariable(name = "Max Checkpoints", description = "Nombre maximum de checkpoints par parcours.", type = VariableType.INTEGER)
-    private int maxCheckpoints = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_MAX_CHECKPOINTS_NAME", descKey = "PARKOURMASTER_VAR_MAX_CHECKPOINTS_DESC", type = VariableType.INTEGER)
+    private final int maxCheckpoints = 5;
 
-    @ScenarioVariable(name = "Checkpoint Distance Min", description = "Distance minimale entre les checkpoints.", type = VariableType.INTEGER)
-    private int checkpointDistanceMin = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MIN_NAME", descKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MIN_DESC", type = VariableType.INTEGER)
+    private final int checkpointDistanceMin = 5;
 
-    @ScenarioVariable(name = "Checkpoint Distance Max", description = "Distance maximale entre les checkpoints.", type = VariableType.INTEGER)
-    private int checkpointDistanceMax = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MAX_NAME", descKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MAX_DESC", type = VariableType.INTEGER)
+    private final int checkpointDistanceMax = 10;
 
-    @ScenarioVariable(name = "Parkour Timeout", description = "Temps maximum (en secondes) pour compléter un parcours.", type = VariableType.INTEGER)
-    private int parkourTimeout = 300;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_PARKOUR_TIMEOUT_NAME", descKey = "PARKOURMASTER_VAR_PARKOUR_TIMEOUT_DESC", type = VariableType.INTEGER)
+    private final int parkourTimeout = 300;
 
-    @ScenarioVariable(name = "Reward Golden Apple", description = "Quantité de pommes d'or offertes.", type = VariableType.INTEGER)
-    private int rewardGoldenApple = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_GOLDEN_APPLE_NAME", descKey = "PARKOURMASTER_VAR_REWARD_GOLDEN_APPLE_DESC", type = VariableType.INTEGER)
+    private final int rewardGoldenApple = 2;
 
-    @ScenarioVariable(name = "Reward Arrow", description = "Quantité de flèches offertes.", type = VariableType.INTEGER)
-    private int rewardArrow = 16;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_ARROW_NAME", descKey = "PARKOURMASTER_VAR_REWARD_ARROW_DESC", type = VariableType.INTEGER)
+    private final int rewardArrow = 16;
 
-    @ScenarioVariable(name = "Reward Ender Pearl", description = "Quantité de perles d'ender offertes.", type = VariableType.INTEGER)
-    private int rewardEnderPearl = 4;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_ENDER_PEARL_NAME", descKey = "PARKOURMASTER_VAR_REWARD_ENDER_PEARL_DESC", type = VariableType.INTEGER)
+    private final int rewardEnderPearl = 4;
 
-    @ScenarioVariable(name = "Reward Iron Ingot", description = "Quantité de lingots de fer offerts.", type = VariableType.INTEGER)
-    private int rewardIronIngot = 8;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_IRON_INGOT_NAME", descKey = "PARKOURMASTER_VAR_REWARD_IRON_INGOT_DESC", type = VariableType.INTEGER)
+    private final int rewardIronIngot = 8;
 
-    @ScenarioVariable(name = "Reward Diamond", description = "Quantité de diamants offerts.", type = VariableType.INTEGER)
-    private int rewardDiamond = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_DIAMOND_NAME", descKey = "PARKOURMASTER_VAR_REWARD_DIAMOND_DESC", type = VariableType.INTEGER)
+    private final int rewardDiamond = 2;
 
-    @ScenarioVariable(name = "Reward Enchanted Book", description = "Quantité de livres enchantés offerts.", type = VariableType.INTEGER)
-    private int rewardEnchantedBook = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_ENCHANTED_BOOK_NAME", descKey = "PARKOURMASTER_VAR_REWARD_ENCHANTED_BOOK_DESC", type = VariableType.INTEGER)
+    private final int rewardEnchantedBook = 1;
 
     @Override
     public String getName() {
@@ -70,8 +72,8 @@ public class ParkourMaster extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Des parcours apparaissent aléatoirement. Les compléter donne des récompenses !";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.PARKOUR_MASTER, player);
     }
 
     @Override
@@ -79,10 +81,7 @@ public class ParkourMaster extends Scenario {
         return new ItemCreator(Material.FEATHER);
     }
 
-    @Override
-    public String getPath() {
-        return "parkourmaster";
-    }
+
 
     @Override
     public void onGameStart() {
@@ -150,8 +149,8 @@ public class ParkourMaster extends Scenario {
         if (loc != null) {
             ParkourChallenge challenge = createParkourChallenge(loc);
             activeChallenges.put(player.getUniqueId(), challenge);
-            player.sendMessage("§a[ParkourMaster] §fUn parcours est apparu près de vous ! Complétez-le pour une récompense !");
-            Bukkit.broadcastMessage("§a[ParkourMaster] §fUn parcours est apparu près de " + player.getName() + " !");
+            LangManager.get().send(ParkourMasterLang.PARKOUR_SPAWNED_PERSONAL, player);
+            LangManager.get().sendAll(ParkourMasterLang.PARKOUR_SPAWNED_BROADCAST, Map.of("%player%", player.getName()));
             buildParkour(challenge);
         }
     }
@@ -204,14 +203,14 @@ public class ParkourMaster extends Scenario {
         ParkourReward r = rewards.get(random.nextInt(rewards.size()));
         giveReward(p,r);
         cleanupParkour(c);
-        p.sendMessage("§a§l[ParkourMaster] §fParcours complété ! Récompense : "+r.description());
-        Bukkit.broadcastMessage("§a[ParkourMaster] §f"+p.getName()+" a complété un parcours !");
+        LangManager.get().send(ParkourMasterLang.PARKOUR_COMPLETED, p, Map.of("%reward%", r.description()));
+        LangManager.get().sendAll(ParkourMasterLang.PARKOUR_COMPLETED_BROADCAST, Map.of("%player%", p.getName()));
         p.getWorld().playSound(p.getLocation(), org.bukkit.Sound.LEVEL_UP,1.0f,1.0f);
     }
 
     private void failParkour(Player p, ParkourChallenge c) {
         activeChallenges.remove(p.getUniqueId());
-        p.sendMessage("§c[ParkourMaster] §fVous avez échoué au parcours ! Réessayez la prochaine fois.");
+        LangManager.get().send(ParkourMasterLang.PARKOUR_FAILED, p);
         new BukkitRunnable(){public void run(){cleanupParkour(c);}}.runTaskLater(Main.get(),100);
     }
 
@@ -232,7 +231,7 @@ public class ParkourMaster extends Scenario {
             ParkourChallenge c = e.getValue();
             if (c.isExpired()) {
                 Player p = Bukkit.getPlayer(e.getKey());
-                if (p!=null) p.sendMessage("§c[ParkourMaster] §fLe parcours a expiré !");
+                if (p!=null) LangManager.get().send(ParkourMasterLang.PARKOUR_EXPIRED, p);
                 cleanupParkour(c);
                 it.remove();
             }
@@ -251,7 +250,7 @@ public class ParkourMaster extends Scenario {
 
     private void giveReward(Player p, ParkourReward r) {
         if (p.getInventory().firstEmpty()!=-1) p.getInventory().addItem(r.item());
-        else {p.getWorld().dropItemNaturally(p.getLocation(),r.item());p.sendMessage("§a[ParkourMaster] §fInventaire plein ! Récompense jetée au sol.");}
+        else {p.getWorld().dropItemNaturally(p.getLocation(),r.item());LangManager.get().send(ParkourMasterLang.INVENTORY_FULL_DROP, p);}
     }
 
     private static class ParkourChallenge {

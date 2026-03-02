@@ -32,7 +32,17 @@ public enum GladiatorLang implements Lang {
     ARENA_CLEANUP(
         "§4[Gladiator] §fArène nettoyée.",
         "§4[Gladiator] §fArena cleaned up."
-    )
+    ),
+
+    
+    ARENA_WINNER(
+        "§c[Gladiator] §f%player% §fa remporté le combat d'arène !",
+        "§c[Gladiator] §f%player% §fwon the arena fight!"
+    ),
+    ARENA_ENDED(
+        "§c[Gladiator] §fLe combat d'arène s'est terminé.",
+        "§c[Gladiator] §fThe arena fight has ended."
+    ),
     ;
 
     private final Map<String, String> translations;

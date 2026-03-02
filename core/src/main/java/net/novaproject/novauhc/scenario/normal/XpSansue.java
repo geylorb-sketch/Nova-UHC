@@ -10,19 +10,22 @@ import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class XpSansue extends Scenario {
     private boolean active = false;
-    @ScenarioVariable(name = "damage", description = "Dégâts infligés lorsque le joueur n'a plus de niveau d'expérience.",type = VariableType.INTEGER)
-    private int damage = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "XPSANSUE_VAR_DAMAGE_NAME", descKey = "XPSANSUE_VAR_DAMAGE_DESC", type = VariableType.INTEGER)
+    private final int damage = 1;
     @Override
     public String getName() {
         return "XpSansue";
     }
 
     @Override
-    public String getDescription() {
-        return "Modifie le système d'expérience pour le rendre plus équilibré.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.XP_SANSUE, player);
     }
 
     @Override

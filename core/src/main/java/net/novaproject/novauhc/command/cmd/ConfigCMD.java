@@ -123,26 +123,26 @@ public class ConfigCMD extends Command {
                 Main.getDatabaseManager().getConfigManager().getCurrentPotionStates()
         );
 
-        // ✅ Async - pas besoin d'attendre la réponse
+        
         Main.getDatabaseManager().saveUHCConfig(playerUUID, config);
         player.sendMessage(ChatColor.GREEN + "⏳ Sauvegarde de la configuration " + ChatColor.GOLD + configName + ChatColor.GREEN + " en cours...");
 
-        // Message de confirmation après 1 seconde (laisse le temps à l'API)
+        
         new BukkitRunnable() {
             @Override
             public void run() {
                 player.sendMessage(ChatColor.GREEN + "✓ Configuration " + ChatColor.GOLD + configName + ChatColor.GREEN + " sauvegardée!");
             }
-        }.runTaskLater(Main.get(), 20L); // 1 seconde
+        }.runTaskLater(Main.get(), 20L); 
     }
 
     private void loadConfig(Player player, UUID playerUUID, String configName) {
         player.sendMessage(ChatColor.YELLOW + "⏳ Chargement de la configuration " + ChatColor.GOLD + configName + ChatColor.YELLOW + "...");
 
-        // ✅ Async avec thenAccept
+        
         Main.getDatabaseManager().getUHCConfig(playerUUID, configName)
                 .thenAccept(config -> {
-                    // Retour au thread principal
+                    
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -179,12 +179,12 @@ public class ConfigCMD extends Command {
         uhc.setTimerpvp(config.getPvpTime());
         uhc.setReducSpeed(config.getTimereduc());
 
-        // Scenarios configs
+        
         config.getScenarioConfigs().forEach((name, doc) -> {
             ScenarioManager.get().getScenarioByName(name).ifPresent(scenario -> scenario.docToScenario(doc));
         });
 
-        // Enable scenarios
+        
         config.getEnabledScenarios().forEach(name -> {
             ScenarioManager.get().getScenarioByName(name).ifPresent(scenario -> {
                 if (!scenario.isActive()) scenario.enable();
@@ -235,7 +235,7 @@ public class ConfigCMD extends Command {
     private void deleteConfig(Player player, UUID playerUUID, String configName) {
         player.sendMessage(ChatColor.YELLOW + "⏳ Suppression de la configuration " + ChatColor.GOLD + configName + ChatColor.YELLOW + "...");
 
-        // ✅ Async avec thenAccept
+        
         Main.getDatabaseManager().deleteUHCConfig(playerUUID, configName)
                 .thenAccept(deleted -> {
                     new BukkitRunnable() {
@@ -264,7 +264,7 @@ public class ConfigCMD extends Command {
     private void listConfigs(Player player, UUID playerUUID) {
         player.sendMessage(ChatColor.YELLOW + "⏳ Récupération de vos configurations...");
 
-        // ✅ Async avec thenAccept
+        
         Main.getDatabaseManager().getPlayerUHCConfigNames(playerUUID)
                 .thenAccept(configNames -> {
                     new BukkitRunnable() {

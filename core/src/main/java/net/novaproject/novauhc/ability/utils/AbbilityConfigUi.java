@@ -2,6 +2,7 @@ package net.novaproject.novauhc.ability.utils;
 
 import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.LangResolver;
 import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
 import net.novaproject.novauhc.ui.ConfigVarUi;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -59,11 +60,15 @@ public class AbbilityConfigUi extends CustomInventory {
                         }
                     }
 
+                    
+                    String varName = LangResolver.resolve(annotation.lang(), annotation.nameKey(), getPlayer());
+                    String varDesc = LangResolver.resolve(annotation.lang(), annotation.descKey(), getPlayer());
+
                     final Object finalRawValue = rawValue;
                     addItem(new ActionItem(slot, new ItemCreator(Material.PAPER)
-                            .setName("§e" + annotation.name())
+                            .setName("§e" + varName)
                             .setLores(Arrays.asList(
-                                    "§7" + annotation.description(),
+                                    "§7" + varDesc,
                                     "",
                                     t(ScenarioVariableUiLang.CURRENT_VALUE, Map.of("%value%", displayValue)),
                                     "",

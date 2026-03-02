@@ -40,7 +40,7 @@ import java.util.stream.Stream;
  * Lightweight packet-based scoreboard API for Bukkit plugins.
  * It can be safely used asynchronously as everything is at packet level.
  * <p>
- * The project is on <a href="https://github.com/MrMicky-FR/FastBoard">GitHub</a>.
+ * The project is on <a href="https:
  *
  * @author MrMicky
  * @version 2.1.4
@@ -52,7 +52,7 @@ public abstract class FastBoardBase<T> {
             .toArray(String[]::new);
     private static final Map<Class<?>, Field[]> PACKETS = new HashMap<>(8);
     private static final VersionType VERSION_TYPE;
-    // Packets and components
+    
     private static final Class<?> CHAT_COMPONENT_CLASS;
     private static final Class<?> CHAT_FORMAT_ENUM;
     private static final Object RESET_FORMATTING;
@@ -60,7 +60,7 @@ public abstract class FastBoardBase<T> {
     private static final MethodHandle SEND_PACKET;
     private static final MethodHandle PLAYER_GET_HANDLE;
     private static final MethodHandle FIXED_NUMBER_FORMAT;
-    // Scoreboard packets
+    
     private static final FastReflection.PacketConstructor PACKET_SB_OBJ;
     private static final FastReflection.PacketConstructor PACKET_SB_DISPLAY_OBJ;
     private static final FastReflection.PacketConstructor PACKET_SB_TEAM;
@@ -68,7 +68,7 @@ public abstract class FastBoardBase<T> {
     private static final MethodHandle PACKET_SB_SET_SCORE;
     private static final MethodHandle PACKET_SB_RESET_SCORE;
     private static final boolean SCORE_OPTIONAL_COMPONENTS;
-    // Scoreboard enums
+    
     private static final Class<?> DISPLAY_SLOT_TYPE;
     private static final Class<?> ENUM_SB_HEALTH_DISPLAY;
     private static final Class<?> ENUM_SB_ACTION;
@@ -137,7 +137,7 @@ public abstract class FastBoardBase<T> {
             Object blankNumberFormat = null;
             boolean scoreOptionalComponents = false;
 
-            if (numberFormat.isPresent()) { // 1.20.3
+            if (numberFormat.isPresent()) { 
                 Class<?> blankFormatClass = FastReflection.nmsClass("network.chat.numbers", "BlankFormat");
                 Class<?> fixedFormatClass = FastReflection.nmsClass("network.chat.numbers", "FixedFormat");
                 Class<?> resetScoreClass = FastReflection.nmsClass(gameProtocolPackage, "ClientboundResetScorePacket");
@@ -146,7 +146,7 @@ public abstract class FastBoardBase<T> {
                 MethodType removeScoreType = MethodType.methodType(void.class, String.class, String.class);
                 MethodType fixedFormatType = MethodType.methodType(void.class, CHAT_COMPONENT_CLASS);
                 Optional<Field> blankField = Arrays.stream(blankFormatClass.getFields()).filter(f -> f.getType() == blankFormatClass).findAny();
-                // Fields are of type Optional in 1.20.5+
+                
                 Optional<MethodHandle> optionalScorePacket = FastReflection.optionalConstructor(packetSbScoreClass, lookup, scoreTypeOptional);
                 fixedFormatConstructor = lookup.findConstructor(fixedFormatClass, fixedFormatType);
                 packetSbSetScore = optionalScorePacket.isPresent() ? optionalScorePacket.get()
@@ -649,7 +649,7 @@ public abstract class FastBoardBase<T> {
 
         if (mode != ObjectiveMode.REMOVE) {
             setComponentField(packet, this.title, 1);
-            setField(packet, Optional.class, Optional.empty()); // Number format for 1.20.5+, previously nullable
+            setField(packet, Optional.class, Optional.empty()); 
 
             if (VersionType.V1_8.isHigherOrEqual()) {
                 setField(packet, ENUM_SB_HEALTH_DISPLAY, ENUM_SB_HEALTH_DISPLAY_INTEGER);
@@ -664,8 +664,8 @@ public abstract class FastBoardBase<T> {
     protected void sendDisplayObjectivePacket() throws Throwable {
         Object packet = PACKET_SB_DISPLAY_OBJ.invoke();
 
-        setField(packet, DISPLAY_SLOT_TYPE, SIDEBAR_DISPLAY_SLOT); // Position
-        setField(packet, String.class, this.id); // Score Name
+        setField(packet, DISPLAY_SLOT_TYPE, SIDEBAR_DISPLAY_SLOT); 
+        setField(packet, String.class, this.id); 
 
         sendPacket(packet);
     }
@@ -678,19 +678,19 @@ public abstract class FastBoardBase<T> {
 
         Object packet = PACKET_SB_SET_SCORE.invoke();
 
-        setField(packet, String.class, COLOR_CODES[score], 0); // Player Name
+        setField(packet, String.class, COLOR_CODES[score], 0); 
 
         if (VersionType.V1_8.isHigherOrEqual()) {
             Object enumAction = action == ScoreboardAction.REMOVE
                     ? ENUM_SB_ACTION_REMOVE : ENUM_SB_ACTION_CHANGE;
             setField(packet, ENUM_SB_ACTION, enumAction);
         } else {
-            setField(packet, int.class, action.ordinal(), 1); // Action
+            setField(packet, int.class, action.ordinal(), 1); 
         }
 
         if (action == ScoreboardAction.CHANGE) {
-            setField(packet, String.class, this.id, 1); // Objective Name
-            setField(packet, int.class, score); // Score
+            setField(packet, String.class, this.id, 1); 
+            setField(packet, int.class, score); 
         }
 
         sendPacket(packet);
@@ -701,7 +701,7 @@ public abstract class FastBoardBase<T> {
         Object enumAction = action == ScoreboardAction.REMOVE
                 ? ENUM_SB_ACTION_REMOVE : ENUM_SB_ACTION_CHANGE;
 
-        if (PACKET_SB_RESET_SCORE == null) { // Pre 1.20.3
+        if (PACKET_SB_RESET_SCORE == null) { 
             sendPacket(PACKET_SB_SET_SCORE.invoke(enumAction, this.id, objName, score));
             return;
         }
@@ -734,8 +734,8 @@ public abstract class FastBoardBase<T> {
 
         Object packet = PACKET_SB_TEAM.invoke();
 
-        setField(packet, String.class, this.id + ':' + score); // Team name
-        setField(packet, int.class, mode.ordinal(), VERSION_TYPE == VersionType.V1_8 ? 1 : 0); // Update mode
+        setField(packet, String.class, this.id + ':' + score); 
+        setField(packet, int.class, mode.ordinal(), VERSION_TYPE == VersionType.V1_8 ? 1 : 0); 
 
         if (mode == TeamMode.REMOVE) {
             sendPacket(packet);
@@ -744,25 +744,25 @@ public abstract class FastBoardBase<T> {
 
         if (VersionType.V1_17.isHigherOrEqual()) {
             Object team = PACKET_SB_SERIALIZABLE_TEAM.invoke();
-            // Since the packet is initialized with null values, we need to change more things.
-            setComponentField(team, null, 0); // Display name
-            setField(team, CHAT_FORMAT_ENUM, RESET_FORMATTING); // Color
-            setComponentField(team, prefix, 1); // Prefix
-            setComponentField(team, suffix, 2); // Suffix
-            setField(team, String.class, "always", 0); // Visibility before 1.21.5
-            setField(team, String.class, "always", 1); // Collisions before 1.21.5
-            setField(team, ENUM_VISIBILITY, ENUM_VISIBILITY_ALWAYS, 0); // 1.21.5+
-            setField(team, ENUM_COLLISION_RULE, ENUM_COLLISION_RULE_ALWAYS, 0); // 1.21.5+
+            
+            setComponentField(team, null, 0); 
+            setField(team, CHAT_FORMAT_ENUM, RESET_FORMATTING); 
+            setComponentField(team, prefix, 1); 
+            setComponentField(team, suffix, 2); 
+            setField(team, String.class, "always", 0); 
+            setField(team, String.class, "always", 1); 
+            setField(team, ENUM_VISIBILITY, ENUM_VISIBILITY_ALWAYS, 0); 
+            setField(team, ENUM_COLLISION_RULE, ENUM_COLLISION_RULE_ALWAYS, 0); 
             setField(packet, Optional.class, Optional.of(team));
         } else {
-            setComponentField(packet, prefix, 2); // Prefix
-            setComponentField(packet, suffix, 3); // Suffix
-            setField(packet, String.class, "always", 4); // Visibility for 1.8+
-            setField(packet, String.class, "always", 5); // Collisions for 1.9+
+            setComponentField(packet, prefix, 2); 
+            setComponentField(packet, suffix, 3); 
+            setField(packet, String.class, "always", 4); 
+            setField(packet, String.class, "always", 5); 
         }
 
         if (mode == TeamMode.CREATE) {
-            setField(packet, Collection.class, Collections.singletonList(COLOR_CODES[score])); // Players in the team
+            setField(packet, Collection.class, Collections.singletonList(COLOR_CODES[score])); 
         }
 
         sendPacket(packet);

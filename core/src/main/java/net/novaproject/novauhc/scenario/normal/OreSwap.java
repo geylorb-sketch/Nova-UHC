@@ -6,7 +6,6 @@ import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.lang.scenario.OreSwapLang;
 import net.novaproject.novauhc.utils.ItemCreator;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -15,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class OreSwap extends Scenario {
 
@@ -38,7 +38,7 @@ public class OreSwap extends Scenario {
         oreToItem.put(Material.GOLD_ORE, Material.GOLD_INGOT);
         oreToItem.put(Material.DIAMOND_ORE, Material.DIAMOND);
         oreToItem.put(Material.EMERALD_ORE, Material.EMERALD);
-        oreToItem.put(Material.LAPIS_ORE, Material.INK_SACK); // Lapis Lazuli
+        oreToItem.put(Material.LAPIS_ORE, Material.INK_SACK); 
         oreToItem.put(Material.REDSTONE_ORE, Material.REDSTONE);
     }
 
@@ -48,8 +48,8 @@ public class OreSwap extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les minerais changent aléatoirement toutes les 15 minutes.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.ORE_SWAP, player);
     }
 
     @Override
@@ -57,10 +57,7 @@ public class OreSwap extends Scenario {
         return new ItemCreator(Material.DIAMOND_ORE);
     }
 
-    @Override
-    public String getPath() {
-        return "oreswap";
-    }
+
 
 
     @Override
@@ -82,38 +79,38 @@ public class OreSwap extends Scenario {
         Material blockType = block.getType();
 
         if (oreTypes.contains(blockType)) {
-            // Cancel the original drop
+            
             event.setCancelled(true);
 
-            // Break the block manually
+            
             block.setType(Material.AIR);
 
-            // Get the swapped ore type
+            
             Material swappedOre = currentOreMapping.getOrDefault(blockType, blockType);
             Material itemToDrop = oreToItem.get(swappedOre);
 
             if (itemToDrop != null) {
-                // Drop the swapped item
+                
                 ItemStack drop = new ItemStack(itemToDrop, 1);
 
-                // Handle special cases
+                
                 if (itemToDrop == Material.INK_SACK) {
-                    drop.setDurability((short) 4); // Lapis Lazuli data value
-                    drop.setAmount(4 + new Random().nextInt(5)); // 4-8 lapis
+                    drop.setDurability((short) 4); 
+                    drop.setAmount(4 + new Random().nextInt(5)); 
                 } else if (itemToDrop == Material.REDSTONE) {
-                    drop.setAmount(4 + new Random().nextInt(2)); // 4-5 redstone
+                    drop.setAmount(4 + new Random().nextInt(2)); 
                 } else if (itemToDrop == Material.COAL) {
                     drop.setAmount(1);
                 }
 
                 block.getWorld().dropItemNaturally(block.getLocation(), drop);
 
-                // Send message to player
+                
                 String originalOreName = getOreName(blockType);
                 String swappedOreName = getOreName(swappedOre);
 
                 if (!blockType.equals(swappedOre)) {
-                    player.sendMessage("§6[OreSwap] §f" + originalOreName + " → " + swappedOreName + " !");
+                    LangManager.get().send(OreSwapLang.ORE_SWAPPED, player, Map.of("%original%", originalOreName, "%swapped%", swappedOreName));
                 }
             }
         }
@@ -122,16 +119,16 @@ public class OreSwap extends Scenario {
     private void initializeOreMapping() {
         currentOreMapping.clear();
 
-        // Create a shuffled list of ore types
+        
         List<Material> shuffledOres = new ArrayList<>(oreTypes);
         Collections.shuffle(shuffledOres);
 
-        // Map each ore to a random ore
+        
         for (int i = 0; i < oreTypes.size(); i++) {
             currentOreMapping.put(oreTypes.get(i), shuffledOres.get(i));
         }
 
-        // Broadcast the new mapping
+        
         broadcastOreMapping();
     }
 
@@ -148,15 +145,15 @@ public class OreSwap extends Scenario {
                     return;
                 }
 
-                // Shuffle the ore mapping
+                
                 initializeOreMapping();
 
                 LangManager.get().sendAll(OreSwapLang.SWAP_ANNOUNCEMENT);
             }
         };
 
-        // Run based on config interval
-        int interval = getConfig().getInt("swap_interval", 900) * 20; // Convert seconds to ticks
+        
+        int interval = getConfig().getInt("swap_interval", 900) * 20; 
         swapTask.runTaskTimer(Main.get(), interval, interval);
     }
 

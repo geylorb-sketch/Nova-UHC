@@ -6,7 +6,7 @@ import java.util.Map;
 
 public enum ScoreboardLang implements Lang {
 
-    // ─── Tab ─────────────────────────────────────────────────────────────────
+    
     TAB_LOBBY_HEADER(
             "§3»§b»§f» %main_color%NOVA §f§lUHC §f«§b«§3«\n\n§8│ §7Joueurs: §f%players% §8| §7Serveur: §fUHC §8│\n",
             "§3»§b»§f» %main_color%NOVA §f§lUHC §f«§b«§3«\n\n§8│ §7Players: §f%players% §8| §7Server: §fUHC §8│\n"),
@@ -28,7 +28,7 @@ public enum ScoreboardLang implements Lang {
             "\n§8● §9/§fdiscord §8● §3/§fdoc\n§cKills: §f%kills%\n%main_color%✦ Merci d'avoir participé ! ✦",
             "\n§8● §9/§fdiscord §8● §3/§fdoc\n§cKills: §f%kills%\n%main_color%✦ Thanks for playing! ✦"),
 
-    // ─── Scoreboard LOBBY ────────────────────────────────────────────────────
+    
     SB_LOBBY_TITLE("%main_color%§lNova UHC", "%main_color%§lNova UHC"),
     SB_LOBBY_L1("", ""),
     SB_LOBBY_L2("§f §5│ §fConnecté(s): §3%players%§f/%slot%", "§f §5│ §fConnected: §3%players%§f/%slot%"),
@@ -36,7 +36,7 @@ public enum ScoreboardLang implements Lang {
     SB_LOBBY_L4("", ""),
     SB_LOBBY_L5("<ip>", "<ip>"),
 
-    // ─── Scoreboard GAME ─────────────────────────────────────────────────────
+    
     SB_GAME_TITLE("§f- %main_color%§lNova UHC §f-", "§f- %main_color%§lNova UHC §f-"),
     SB_GAME_L1("", ""),
     SB_GAME_L2("§f §5│ §fConnecté(s): §3%players%§f/%slot%", "§f §5│ §fConnected: §3%players%§f/%slot%"),
@@ -51,14 +51,14 @@ public enum ScoreboardLang implements Lang {
     SB_GAME_L11("", ""),
     SB_GAME_L12("<ip>", "<ip>"),
 
-    // ─── Scoreboard GAME (rôle) ───────────────────────────────────────────────
+    
     SB_GAME_ROLE_TITLE("§f- %main_color%§lNova UHC §f-", "§f- %main_color%§lNova UHC §f-"),
     SB_GAME_ROLE_L1("", ""),
     SB_GAME_ROLE_L2("§f §5│ §fConnecté(s): §3%players%§f/%slot%", "§f §5│ §fConnected: §3%players%§f/%slot%"),
     SB_GAME_ROLE_L3("§f §5│ §fDurée: §3%timer%", "§f §5│ §fDuration: §3%timer%"),
     SB_GAME_ROLE_L4("", ""),
     SB_GAME_ROLE_L5("§f §6│ §fPartie :", "§f §6│ §fGame:"),
-    SB_GAME_ROLE_L6("§f  §8● §fRôle: %main_color%%role%", "§f  §8● §fRole: %main_color%%role%"),
+    SB_GAME_ROLE_L6("§f  §8● §fRôle: %main_color%%roles%", "§f  §8● §fRole: %main_color%%roles%"),
     SB_GAME_ROLE_L7("§f  §8● §fKill : %main_color%%kills%", "§f  §8● §fKills: %main_color%%kills%"),
     SB_GAME_ROLE_L8("", ""),
     SB_GAME_ROLE_L9("§f  §8● §fBordure: %main_color%%border%", "§f  §8● §fBorder: %main_color%%border%"),
@@ -67,14 +67,14 @@ public enum ScoreboardLang implements Lang {
     SB_GAME_ROLE_L12("", ""),
     SB_GAME_ROLE_L13("<ip>", "<ip>"),
 
-    // ─── Scoreboard END ───────────────────────────────────────────────────────
+    
     SB_END_TITLE("%main_color%§lNova UHC", "%main_color%§lNova UHC"),
     SB_END_L1("", ""),
     SB_END_L2("§f §5│ §fConnecté(s): §3%players%§f/%slot%", "§f §5│ §fConnected: §3%players%§f/%slot%"),
     SB_END_L3("§f §5│ §fDurée: §3%timer%", "§f §5│ §fDuration: §3%timer%"),
     SB_END_L4("", ""),
     SB_END_L5("§f §6│ §fPartie : ", "§f §6│ §fGame: "),
-    SB_END_L6("§f  §8● §fRôle: %main_color%%role%", "§f  §8● §fRole: %main_color%%role%"),
+    SB_END_L6("§f  §8● §fRôle: %main_color%%roles%", "§f  §8● §fRole: %main_color%%roles%"),
     SB_END_L7("§f  §8● §fKill : %main_color%%kills%", "§f  §8● §fKills: %main_color%%kills%"),
     SB_END_L8("", ""),
     SB_END_L9("<ip>", "<ip>"),

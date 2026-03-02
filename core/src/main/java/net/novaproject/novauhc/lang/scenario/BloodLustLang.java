@@ -16,7 +16,25 @@ public enum BloodLustLang implements Lang {
     BOOST_EXPIRED(
         "§c[BloodLust] §fVotre soif de sang s'estompe...",
         "§c[BloodLust] §fYour bloodlust fades..."
-    )
+    ),
+
+    
+    BLOODLUST_ACTIVATED(
+        "§c[BloodLust] §f%player% §fest en état de soif de sang !",
+        "§c[BloodLust] §f%player% §fis in a bloodlust state!"
+    ),
+    ENDING_TEN_SECONDS(
+        "§c[BloodLust] §fSoif de sang se termine dans 10 secondes !",
+        "§c[BloodLust] §fBloodlust ends in 10 seconds!"
+    ),
+    ENDING_FIVE_SECONDS(
+        "§c[BloodLust] §fSoif de sang se termine dans 5 secondes !",
+        "§c[BloodLust] §fBloodlust ends in 5 seconds!"
+    ),
+    BLOODLUST_ENDED(
+        "§c[BloodLust] §fVotre soif de sang s'est calmée.",
+        "§c[BloodLust] §fYour bloodlust has calmed down."
+    ),
     ;
 
     private final Map<String, String> translations;

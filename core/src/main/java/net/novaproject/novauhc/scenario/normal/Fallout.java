@@ -8,7 +8,6 @@ import net.novaproject.novauhc.utils.VariableType;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,6 +18,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.scenario.FalloutLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Fallout extends Scenario {
 
@@ -26,47 +29,23 @@ public class Fallout extends Scenario {
     private BukkitRunnable falloutTask;
     private boolean falloutStarted = false;
 
-    @ScenarioVariable(
-            name = "Fallout Start Time",
-            description = "Temps en secondes avant le début des radiations",
-            type = VariableType.TIME
-    )
-    private int falloutStartTime = 45 * 60;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_FALLOUT_START_TIME_NAME", descKey = "FALLOUT_VAR_FALLOUT_START_TIME_DESC", type = VariableType.TIME)
+    private final int falloutStartTime = 45 * 60;
 
-    @ScenarioVariable(
-            name = "Safe Y Level",
-            description = "Altitude Y en dessous de laquelle les joueurs sont en sécurité",
-            type = VariableType.INTEGER
-    )
-    private int safeYLevel = 60;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_SAFE_YLEVEL_NAME", descKey = "FALLOUT_VAR_SAFE_YLEVEL_DESC", type = VariableType.INTEGER)
+    private final int safeYLevel = 60;
 
-    @ScenarioVariable(
-            name = "Base Radiation Damage",
-            description = "Dégâts de radiation appliqués par tick pour exposition légère",
-            type = VariableType.DOUBLE
-    )
-    private double baseDamage = 0.5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_BASE_DAMAGE_NAME", descKey = "FALLOUT_VAR_BASE_DAMAGE_DESC", type = VariableType.DOUBLE)
+    private final double baseDamage = 0.5;
 
-    @ScenarioVariable(
-            name = "Moderate Radiation Threshold",
-            description = "Nombre de ticks d'exposition avant radiation modérée",
-            type = VariableType.INTEGER
-    )
-    private int moderateThreshold = 3;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_MODERATE_THRESHOLD_NAME", descKey = "FALLOUT_VAR_MODERATE_THRESHOLD_DESC", type = VariableType.INTEGER)
+    private final int moderateThreshold = 3;
 
-    @ScenarioVariable(
-            name = "Severe Radiation Threshold",
-            description = "Nombre de ticks d'exposition avant radiation sévère",
-            type = VariableType.INTEGER
-    )
-    private int severeThreshold = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_SEVERE_THRESHOLD_NAME", descKey = "FALLOUT_VAR_SEVERE_THRESHOLD_DESC", type = VariableType.INTEGER)
+    private final int severeThreshold = 5;
 
-    @ScenarioVariable(
-            name = "Severe Radiation Max Damage",
-            description = "Dégâts max de radiation par tick",
-            type = VariableType.DOUBLE
-    )
-    private double maxDamage = 2.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_MAX_DAMAGE_NAME", descKey = "FALLOUT_VAR_MAX_DAMAGE_DESC", type = VariableType.DOUBLE)
+    private final double maxDamage = 2.0;
 
     @Override
     public String getName() {
@@ -74,9 +53,9 @@ public class Fallout extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Après un certain temps, rester au-dessus de Y=" + safeYLevel +
-                " inflige des dégâts de radiation aux joueurs.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.FALLOUT, player)
+                .replace("%level%", String.valueOf(safeYLevel));
     }
 
     @Override
@@ -124,14 +103,14 @@ public class Fallout extends Scenario {
             }
         };
 
-        falloutTask.runTaskTimer(Main.get(), 0, 200); // 10 sec
+        falloutTask.runTaskTimer(Main.get(), 0, 200); 
     }
 
     private void startFallout() {
         falloutStarted = true;
 
-        Bukkit.broadcastMessage("§c§l[Fallout] §fLES RADIATIONS COMMENCENT !");
-        Bukkit.broadcastMessage("§c[Fallout] §fDescendez sous Y=" + safeYLevel + " pour éviter les radiations !");
+        LangManager.get().sendAll(FalloutLang.RADIATION_START);
+        LangManager.get().sendAll(FalloutLang.GO_UNDERGROUND, Map.of("%level%", String.valueOf(safeYLevel)));
 
         for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
             Player player = uhcPlayer.getPlayer();
@@ -143,11 +122,11 @@ public class Fallout extends Scenario {
     private void sendFalloutWarnings(int currentTime) {
         int timeUntilFallout = falloutStartTime - currentTime;
         if (timeUntilFallout == 300)
-            Bukkit.broadcastMessage("§c[Fallout] §fRadiations dans 5 minutes ! Préparez vos abris !");
+            LangManager.get().sendAll(FalloutLang.WARNING_FIVE_MINUTES);
         else if (timeUntilFallout == 60)
-            Bukkit.broadcastMessage("§c[Fallout] §fRadiations dans 1 minute ! Descendez sous Y=" + safeYLevel + " !");
+            LangManager.get().sendAll(FalloutLang.WARNING_ONE_MINUTE, Map.of("%level%", String.valueOf(safeYLevel)));
         else if (timeUntilFallout == 10)
-            Bukkit.broadcastMessage("§c[Fallout] §fRadiations dans 10 secondes !");
+            LangManager.get().sendAll(FalloutLang.WARNING_TEN_SECONDS);
     }
 
     private void checkPlayerRadiation(Player player) {
@@ -180,14 +159,14 @@ public class Fallout extends Scenario {
             player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 100, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 100, 1));
-            player.sendMessage("§c[Fallout] §fRadiation SÉVÈRE ! Descendez immédiatement !");
+            LangManager.get().send(FalloutLang.SEVERE_RADIATION, player);
         } else if (exposureLevel >= moderateThreshold) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 0));
             player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 60, 0));
-            player.sendMessage("§c[Fallout] §fRadiation modérée ! Trouvez un abri !");
+            LangManager.get().send(FalloutLang.MODERATE_RADIATION, player);
         } else {
             player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 40, 0));
-            player.sendMessage("§c[Fallout] §fVous êtes exposé aux radiations !");
+            LangManager.get().send(FalloutLang.EXPOSED, player);
         }
     }
 

@@ -44,13 +44,13 @@ public class MsgCMD implements CommandExecutor {
 
         String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        // Envoyer le message au sender
+        
         Map<String, Object> senderPlaceholders = new HashMap<>();
         senderPlaceholders.put("%target%", target.getName());
         senderPlaceholders.put("%message%", message);
         LangManager.get().send(CommonLang.MSG_SENT_FORMAT, player, senderPlaceholders);
 
-        // Envoyer le message au destinataire
+        
         Map<String, Object> targetPlaceholders = new HashMap<>();
         targetPlaceholders.put("%sender%", player.getName());
         targetPlaceholders.put("%message%", message);

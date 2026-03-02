@@ -23,6 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class LootCrate extends Scenario {
 
@@ -30,61 +32,29 @@ public class LootCrate extends Scenario {
     private final Random random = new Random();
     private BukkitRunnable lootCrateTask;
 
-    @ScenarioVariable(
-            name = "Spawn Interval",
-            description = "Temps en secondes entre chaque apparition de coffres",
-            type = VariableType.TIME
-    )
-    private int spawnInterval = 600;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_SPAWN_INTERVAL_NAME", descKey = "LOOTCRATE_VAR_SPAWN_INTERVAL_DESC", type = VariableType.TIME)
+    private final int spawnInterval = 600;
 
-    @ScenarioVariable(
-            name = "Min Crates",
-            description = "Nombre minimum de coffres à spawn",
-            type = VariableType.INTEGER
-    )
-    private int minCrates = 3;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_MIN_CRATES_NAME", descKey = "LOOTCRATE_VAR_MIN_CRATES_DESC", type = VariableType.INTEGER)
+    private final int minCrates = 3;
 
-    @ScenarioVariable(
-            name = "Max Crates",
-            description = "Nombre maximum de coffres à spawn",
-            type = VariableType.INTEGER
-    )
-    private int maxCrates = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_MAX_CRATES_NAME", descKey = "LOOTCRATE_VAR_MAX_CRATES_DESC", type = VariableType.INTEGER)
+    private final int maxCrates = 5;
 
-    @ScenarioVariable(
-            name = "Diamonds",
-            description = "Activer l'apparition de diamants",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableDiamonds = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_DIAMONDS_NAME", descKey = "LOOTCRATE_VAR_ENABLE_DIAMONDS_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableDiamonds = true;
 
-    @ScenarioVariable(
-            name = "Golden Apples",
-            description = "Activer l'apparition de pommes d'or",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableGoldenApples = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_GOLDEN_APPLES_NAME", descKey = "LOOTCRATE_VAR_ENABLE_GOLDEN_APPLES_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableGoldenApples = true;
 
-    @ScenarioVariable(
-            name = "Enchanted Items",
-            description = "Activer l'apparition d'items enchantés",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableEnchantedItems = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_ENCHANTED_ITEMS_NAME", descKey = "LOOTCRATE_VAR_ENABLE_ENCHANTED_ITEMS_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableEnchantedItems = true;
 
-    @ScenarioVariable(
-            name = "Potions",
-            description = "Activer l'apparition de potions",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enablePotions = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_POTIONS_NAME", descKey = "LOOTCRATE_VAR_ENABLE_POTIONS_DESC", type = VariableType.BOOLEAN)
+    private final boolean enablePotions = true;
 
-    @ScenarioVariable(
-            name = "Food",
-            description = "Activer l'apparition de nourriture",
-            type = VariableType.BOOLEAN
-    )
-    private boolean enableFood = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_FOOD_NAME", descKey = "LOOTCRATE_VAR_ENABLE_FOOD_DESC", type = VariableType.BOOLEAN)
+    private final boolean enableFood = true;
 
     @Override
     public String getName() {
@@ -92,8 +62,9 @@ public class LootCrate extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Coffres de loot distribués toutes les " + (spawnInterval / 60) + " minutes avec des objets configurables !";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.LOOT_CRATE, player)
+                .replace("%minutes%", String.valueOf(spawnInterval / 60));
     }
 
     @Override
@@ -101,10 +72,7 @@ public class LootCrate extends Scenario {
         return new ItemCreator(Material.CHEST);
     }
 
-    @Override
-    public String getPath() {
-        return "lootcrate";
-    }
+
 
     @Override
     public void onGameStart() {
@@ -194,7 +162,7 @@ public class LootCrate extends Scenario {
         fillChestWithLoot(inv);
         activeCrates.add(location);
 
-        // Beacon effect
+        
         Location beaconLoc = location.clone().subtract(0, 1, 0);
         beaconLoc.getBlock().setType(Material.IRON_BLOCK);
         location.clone().add(0, 1, 0).getBlock().setType(Material.BEACON);
@@ -256,7 +224,7 @@ public class LootCrate extends Scenario {
         for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
             Player player = uhcPlayer.getPlayer();
             if (player.getLocation().distance(loc) <= 100) {
-                player.sendMessage("§d[LootCrate] §fUn coffre de loot est apparu près de vous !");
+                LangManager.get().send(LootCrateLang.CRATE_SPAWNED, player);
             }
         }
     }

@@ -6,10 +6,8 @@ import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.lang.scenario.PotentialPermanentLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
-import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -19,6 +17,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class PotentialPermanent extends Scenario {
 
@@ -29,30 +29,20 @@ public class PotentialPermanent extends Scenario {
        SCENARIO VARIABLES
        ========================= */
 
-    @ScenarioVariable(name = "Starting Permanent Health",
-            description = "Vie permanente de départ pour chaque joueur (en cœurs).",
-            type = VariableType.DOUBLE)
-    private double startingPermanentHealth = 20.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_STARTING_PERMANENT_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_STARTING_PERMANENT_HEALTH_DESC", type = VariableType.DOUBLE)
+    private final double startingPermanentHealth = 20.0;
 
-    @ScenarioVariable(name = "Starting Absorption Health",
-            description = "Points d'absorption de départ pour chaque joueur (en cœurs).",
-            type = VariableType.DOUBLE)
-    private double startingAbsorptionHealth = 20.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_STARTING_ABSORPTION_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_STARTING_ABSORPTION_HEALTH_DESC", type = VariableType.DOUBLE)
+    private final double startingAbsorptionHealth = 20.0;
 
-    @ScenarioVariable(name = "Kill Reward",
-            description = "Quantité d'absorption convertie en vie permanente lorsqu'un joueur tue quelqu'un (en cœurs).",
-            type = VariableType.DOUBLE)
-    private double killReward = 4.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_KILL_REWARD_NAME", descKey = "POTENTIALPERMANENT_VAR_KILL_REWARD_DESC", type = VariableType.DOUBLE)
+    private final double killReward = 4.0;
 
-    @ScenarioVariable(name = "Max Permanent Health",
-            description = "Vie permanente maximale qu'un joueur peut avoir (en cœurs).",
-            type = VariableType.DOUBLE)
-    private double maxPermanentHealth = 60.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_MAX_PERMANENT_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_MAX_PERMANENT_HEALTH_DESC", type = VariableType.DOUBLE)
+    private final double maxPermanentHealth = 60.0;
 
-    @ScenarioVariable(name = "Max Absorption Health",
-            description = "Absorption maximale qu'un joueur peut avoir (en cœurs).",
-            type = VariableType.DOUBLE)
-    private double maxAbsorptionHealth = 40.0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_MAX_ABSORPTION_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_MAX_ABSORPTION_HEALTH_DESC", type = VariableType.DOUBLE)
+    private final double maxAbsorptionHealth = 40.0;
 
     /* =========================
        META
@@ -64,8 +54,8 @@ public class PotentialPermanent extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Commencez avec 10 cœurs + 10 d'absorption qui peuvent devenir permanents.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.POTENTIAL_PERMANENT, player);
     }
 
     @Override
@@ -73,10 +63,7 @@ public class PotentialPermanent extends Scenario {
         return new ItemCreator(Material.GOLDEN_APPLE);
     }
 
-    @Override
-    public String getPath() {
-        return "potentialpermanent";
-    }
+
 
 
     @Override
@@ -124,9 +111,8 @@ public class PotentialPermanent extends Scenario {
 
         applyHealth(k);
 
-        k.sendMessage("§e[PotentialPermanent] §f+" + (reward / 2) + " cœur(s) permanent(s)");
-        Bukkit.broadcastMessage("§e[PotentialPermanent] §f" + k.getName() +
-                " a maintenant §c" + (perm / 2) + " cœurs permanents");
+        LangManager.get().send(PotentialPermanentLang.KILL_REWARD, k, Map.of("%hearts%", String.valueOf(reward / 2)));
+        LangManager.get().sendAll(PotentialPermanentLang.KILL_BROADCAST, Map.of("%player%", k.getName(), "%hearts%", String.valueOf(perm / 2)));
     }
 
     private void applyHealth(Player player) {

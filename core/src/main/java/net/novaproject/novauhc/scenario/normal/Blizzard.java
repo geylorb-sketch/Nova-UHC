@@ -21,6 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.scenario.BlizzardLang;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Blizzard extends Scenario {
 
@@ -29,89 +33,41 @@ public class Blizzard extends Scenario {
     private BukkitRunnable blizzardTask;
     private boolean isBlizzardActive = false;
 
-    @ScenarioVariable(
-            name = "minTimeBetweenBlizzards",
-            description = "Temps minimum entre deux tempêtes (en secondes)",
-            type = VariableType.TIME
-    )
-    private int minTimeBetweenBlizzards = 240;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MIN_TIME_BETWEEN_BLIZZARDS_NAME", descKey = "BLIZZARD_VAR_MIN_TIME_BETWEEN_BLIZZARDS_DESC", type = VariableType.TIME)
+    private final int minTimeBetweenBlizzards = 240;
 
-    @ScenarioVariable(
-            name = "maxTimeBetweenBlizzards",
-            description = "Temps maximum entre deux tempêtes (en secondes)",
-            type = VariableType.TIME
-    )
-    private int maxTimeBetweenBlizzards = 480;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MAX_TIME_BETWEEN_BLIZZARDS_NAME", descKey = "BLIZZARD_VAR_MAX_TIME_BETWEEN_BLIZZARDS_DESC", type = VariableType.TIME)
+    private final int maxTimeBetweenBlizzards = 480;
 
-    @ScenarioVariable(
-            name = "minBlizzardDuration",
-            description = "Durée minimale d'une tempête (en secondes)",
-            type = VariableType.TIME
-    )
-    private int minBlizzardDuration = 90;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MIN_BLIZZARD_DURATION_NAME", descKey = "BLIZZARD_VAR_MIN_BLIZZARD_DURATION_DESC", type = VariableType.TIME)
+    private final int minBlizzardDuration = 90;
 
-    @ScenarioVariable(
-            name = "maxBlizzardDuration",
-            description = "Durée maximale d'une tempête (en secondes)",
-            type = VariableType.TIME
-    )
-    private int maxBlizzardDuration = 180;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MAX_BLIZZARD_DURATION_NAME", descKey = "BLIZZARD_VAR_MAX_BLIZZARD_DURATION_DESC", type = VariableType.TIME)
+    private final int maxBlizzardDuration = 180;
 
-    @ScenarioVariable(
-            name = "coldDamageInterval",
-            description = "Intervalle de tick pour appliquer les effets de froid (en secondes)",
-            type = VariableType.TIME
-    )
-    private int coldDamageInterval = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_COLD_DAMAGE_INTERVAL_NAME", descKey = "BLIZZARD_VAR_COLD_DAMAGE_INTERVAL_DESC", type = VariableType.TIME)
+    private final int coldDamageInterval = 2;
 
-    @ScenarioVariable(
-            name = "warmthDecreasePerTick",
-            description = "Perte de chaleur par tick quand exposé au blizzard",
-            type = VariableType.INTEGER
-    )
-    private int warmthDecreasePerTick = 2;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_DECREASE_PER_TICK_NAME", descKey = "BLIZZARD_VAR_WARMTH_DECREASE_PER_TICK_DESC", type = VariableType.INTEGER)
+    private final int warmthDecreasePerTick = 2;
 
-    @ScenarioVariable(
-            name = "slowEffectLevel",
-            description = "Niveau de l'effet Slowness lors de froid modéré",
-            type = VariableType.INTEGER
-    )
-    private int slowEffectLevel = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_SLOW_EFFECT_LEVEL_NAME", descKey = "BLIZZARD_VAR_SLOW_EFFECT_LEVEL_DESC", type = VariableType.INTEGER)
+    private final int slowEffectLevel = 1;
 
-    @ScenarioVariable(
-            name = "blindEffectLevel",
-            description = "Niveau de l'effet Blindness lors de froid",
-            type = VariableType.INTEGER
-    )
-    private int blindEffectLevel = 0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_BLIND_EFFECT_LEVEL_NAME", descKey = "BLIZZARD_VAR_BLIND_EFFECT_LEVEL_DESC", type = VariableType.INTEGER)
+    private final int blindEffectLevel = 0;
 
-    @ScenarioVariable(
-            name = "warmthNearHeatSourceBonus",
-            description = "Gain de chaleur si proche d'une source de chaleur",
-            type = VariableType.INTEGER
-    )
-    private int warmthNearHeatSourceBonus = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_NEAR_HEAT_SOURCE_BONUS_NAME", descKey = "BLIZZARD_VAR_WARMTH_NEAR_HEAT_SOURCE_BONUS_DESC", type = VariableType.INTEGER)
+    private final int warmthNearHeatSourceBonus = 5;
 
-    @ScenarioVariable(
-            name = "warmthNormalGain",
-            description = "Gain de chaleur normal par tick",
-            type = VariableType.INTEGER
-    )
-    private int warmthNormalGain = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_NORMAL_GAIN_NAME", descKey = "BLIZZARD_VAR_WARMTH_NORMAL_GAIN_DESC", type = VariableType.INTEGER)
+    private final int warmthNormalGain = 1;
 
-    @ScenarioVariable(
-            name = "exposureCheckHeight",
-            description = "Hauteur au-dessus du joueur pour vérifier l'exposition",
-            type = VariableType.INTEGER
-    )
-    private int exposureCheckHeight = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_EXPOSURE_CHECK_HEIGHT_NAME", descKey = "BLIZZARD_VAR_EXPOSURE_CHECK_HEIGHT_DESC", type = VariableType.INTEGER)
+    private final int exposureCheckHeight = 5;
 
-    @ScenarioVariable(
-            name = "warmthMax",
-            description = "Chaleur maximale d'un joueur",
-            type = VariableType.INTEGER
-    )
-    private int warmthMax = 100;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_MAX_NAME", descKey = "BLIZZARD_VAR_WARMTH_MAX_DESC", type = VariableType.INTEGER)
+    private final int warmthMax = 100;
 
     @Override
     public String getName() {
@@ -119,8 +75,8 @@ public class Blizzard extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Tempêtes de neige qui ralentissent et aveuglent. Restez près du feu !";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BLIZZARD, player);
     }
 
     @Override
@@ -158,8 +114,8 @@ public class Blizzard extends Scenario {
                         blizzardDuration = minBlizzardDuration + random.nextInt(maxBlizzardDuration - minBlizzardDuration);
                     } else {
                         int timeLeft = nextBlizzardIn - cycleTimer;
-                        if (timeLeft == 60) Bukkit.broadcastMessage("§b[Blizzard] §fTempête de neige dans 1 minute !");
-                        if (timeLeft == 10) Bukkit.broadcastMessage("§b[Blizzard] §fTempête de neige dans 10 secondes !");
+                        if (timeLeft == 60) LangManager.get().sendAll(BlizzardLang.WARNING_ONE_MINUTE);
+                        if (timeLeft == 10) LangManager.get().sendAll(BlizzardLang.WARNING_TEN_SECONDS);
                     }
                 } else {
                     applyBlizzardEffects();
@@ -169,7 +125,7 @@ public class Blizzard extends Scenario {
                         cycleTimer = 0;
                         nextBlizzardIn = minTimeBetweenBlizzards + random.nextInt(maxTimeBetweenBlizzards - minTimeBetweenBlizzards);
                     } else if (blizzardDuration == 10) {
-                        Bukkit.broadcastMessage("§b[Blizzard] §fLa tempête se calme dans 10 secondes !");
+                        LangManager.get().sendAll(BlizzardLang.ENDING_SOON);
                     }
                 }
             }
@@ -185,7 +141,7 @@ public class Blizzard extends Scenario {
             world.setWeatherDuration(Integer.MAX_VALUE);
         }
 
-        Bukkit.broadcastMessage("§b§l[Blizzard] §fUne tempête de neige commence ! Trouvez de la chaleur !");
+        LangManager.get().sendAll(BlizzardLang.STORM_START);
     }
 
     private void stopBlizzard() {
@@ -195,7 +151,7 @@ public class Blizzard extends Scenario {
             world.setWeatherDuration(0);
         }
         clearPlayerEffects();
-        Bukkit.broadcastMessage("§b[Blizzard] §fLa tempête de neige s'est calmée !");
+        LangManager.get().sendAll(BlizzardLang.STORM_END);
     }
 
     private void applyBlizzardEffects() {
@@ -213,14 +169,14 @@ public class Blizzard extends Scenario {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, coldDamageInterval * 20, slowEffectLevel + 1));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, coldDamageInterval * 20, blindEffectLevel));
                     player.damage(0.5);
-                    player.sendMessage("§b[Blizzard] §fVous gelez ! Trouvez de la chaleur !");
+                    LangManager.get().send(BlizzardLang.FREEZING, player);
                 } else if (warmth < 50) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, coldDamageInterval * 20, slowEffectLevel));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, coldDamageInterval * 20, blindEffectLevel));
-                    player.sendMessage("§b[Blizzard] §fVous avez très froid !");
+                    LangManager.get().send(BlizzardLang.VERY_COLD, player);
                 } else if (warmth < 80) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, coldDamageInterval * 20, 0));
-                    if (random.nextInt(3) == 0) player.sendMessage("§b[Blizzard] §fVous commencez à avoir froid...");
+                    if (random.nextInt(3) == 0) LangManager.get().send(BlizzardLang.GETTING_COLD, player);
                 }
             } else {
                 int currentWarmth = playerWarmth.getOrDefault(playerUuid, warmthMax);

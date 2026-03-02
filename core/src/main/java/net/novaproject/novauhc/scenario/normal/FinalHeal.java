@@ -12,29 +12,19 @@ import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class FinalHeal extends Scenario {
 
-    @ScenarioVariable(
-            name = "Final Heal 1 Time",
-            description = "Temps (en secondes) du premier heal",
-            type = VariableType.TIME
-    )
-    private int healTime1 = 600;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FINALHEAL_VAR_HEAL_TIME1_NAME", descKey = "FINALHEAL_VAR_HEAL_TIME1_DESC", type = VariableType.TIME)
+    private final int healTime1 = 600;
 
-    @ScenarioVariable(
-            name = "Final Heal 2 Time",
-            description = "Temps (en secondes) du deuxième heal",
-            type = VariableType.TIME
-    )
-    private int healTime2 = 1200;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FINALHEAL_VAR_HEAL_TIME2_NAME", descKey = "FINALHEAL_VAR_HEAL_TIME2_DESC", type = VariableType.TIME)
+    private final int healTime2 = 1200;
 
-    @ScenarioVariable(
-            name = "Heal Food",
-            description = "Si vrai, restaure aussi la nourriture",
-            type = VariableType.BOOLEAN
-    )
-    private boolean healFood = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FINALHEAL_VAR_HEAL_FOOD_NAME", descKey = "FINALHEAL_VAR_HEAL_FOOD_DESC", type = VariableType.BOOLEAN)
+    private final boolean healFood = true;
 
     @Override
     public String getName() {
@@ -42,8 +32,8 @@ public class FinalHeal extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Heal tous les joueurs à des moments précis avant le PVP.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.FINAL_HEAL, player);
     }
 
     @Override

@@ -35,7 +35,7 @@ import static net.novaproject.novauhc.utils.UHCUtils.*;
 public class HCMD extends Command {
 
 
-    private Set<Player> beingModif = new HashSet<>();
+    private final Set<Player> beingModif = new HashSet<>();
     @Override
     public void execute(CommandArguments args) {
         CommandSender sender = args.getSender();

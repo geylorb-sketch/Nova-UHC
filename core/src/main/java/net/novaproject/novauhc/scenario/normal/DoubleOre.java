@@ -18,38 +18,25 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class DoubleOre extends Scenario {
 
     private static final String PLAYER_PLACED_TAG = "playerPlaced";
 
-    @ScenarioVariable(
-            name = "Double Iron",
-            description = "Double la quantité de fer miné",
-            type = VariableType.BOOLEAN
-    )
-    private boolean doubleIron = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_IRON_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_IRON_DESC", type = VariableType.BOOLEAN)
+    private final boolean doubleIron = true;
 
-    @ScenarioVariable(
-            name = "Double Gold",
-            description = "Double la quantité d'or miné",
-            type = VariableType.BOOLEAN
-    )
-    private boolean doubleGold = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_GOLD_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_GOLD_DESC", type = VariableType.BOOLEAN)
+    private final boolean doubleGold = true;
 
-    @ScenarioVariable(
-            name = "Double Diamond",
-            description = "Double la quantité de diamants minés",
-            type = VariableType.BOOLEAN
-    )
-    private boolean doubleDiamond = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_DIAMOND_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_DIAMOND_DESC", type = VariableType.BOOLEAN)
+    private final boolean doubleDiamond = true;
 
-    @ScenarioVariable(
-            name = "Double Emerald",
-            description = "Double la quantité d'émeraudes minées",
-            type = VariableType.BOOLEAN
-    )
-    private boolean doubleEmerald = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_EMERALD_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_EMERALD_DESC", type = VariableType.BOOLEAN)
+    private final boolean doubleEmerald = true;
 
     @Override
     public String getName() {
@@ -57,8 +44,8 @@ public class DoubleOre extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Double la quantité de minerais obtenus lors du minage, configurable pour chaque minerai.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.DOUBLE_ORE, player);
     }
 
     @Override

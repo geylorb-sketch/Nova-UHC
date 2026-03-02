@@ -30,7 +30,7 @@ public class LoupGarouUHC extends ScenarioRole<LoupGarouRole> {
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription(Player player) {
         return "";
     }
 
@@ -97,18 +97,5 @@ public class LoupGarouUHC extends ScenarioRole<LoupGarouRole> {
         return super.getRoleByUHCPlayer(player);
     }
 
-    public boolean isWin() {
-        Map<Camps, Integer> campCounts = new HashMap<>();
-
-        for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
-            Role role = getRoleByUHCPlayer(uhcPlayer);
-            if (role == null) continue;
-
-            Camps camp = role.getCamp();
-            campCounts.put(camp, campCounts.getOrDefault(camp, 0) + 1);
-        }
-
-        return campCounts.size() == 1;
-    }
 
 }

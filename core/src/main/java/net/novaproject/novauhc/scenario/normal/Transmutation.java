@@ -17,52 +17,31 @@ import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class Transmutation extends Scenario {
 
     private final Map<Material, TransmutationRecipe> transmutationRecipes = new HashMap<>();
 
-    @ScenarioVariable(
-            name = "Iron Input",
-            description = "Nombre de minerais de fer nécessaires pour obtenir un lingot d'or.",
-            type = VariableType.INTEGER
-    )
-    private int iron_input = 8;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TRANSMUTATION_VAR_IRON_INPUT_NAME", descKey = "TRANSMUTATION_VAR_IRON_INPUT_DESC", type = VariableType.INTEGER)
+    private final int iron_input = 8;
 
-    @ScenarioVariable(
-            name = "Gold Input",
-            description = "Nombre de lingots d'or nécessaires pour obtenir un diamant.",
-            type = VariableType.INTEGER
-    )
-    private int gold_input = 16;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TRANSMUTATION_VAR_GOLD_INPUT_NAME", descKey = "TRANSMUTATION_VAR_GOLD_INPUT_DESC", type = VariableType.INTEGER)
+    private final int gold_input = 16;
 
-    @ScenarioVariable(
-            name = "Coal Input",
-            description = "Nombre de charbons nécessaires pour obtenir un lingot de fer.",
-            type = VariableType.INTEGER
-    )
-    private int coal_input = 16;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TRANSMUTATION_VAR_COAL_INPUT_NAME", descKey = "TRANSMUTATION_VAR_COAL_INPUT_DESC", type = VariableType.INTEGER)
+    private final int coal_input = 16;
 
-    @ScenarioVariable(
-            name = "Diamond Output",
-            description = "Nombre de diamants obtenus lors d'une transmutation or → diamant.",
-            type = VariableType.INTEGER
-    )
-    private int diamond_output = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TRANSMUTATION_VAR_DIAMOND_OUTPUT_NAME", descKey = "TRANSMUTATION_VAR_DIAMOND_OUTPUT_DESC", type = VariableType.INTEGER)
+    private final int diamond_output = 1;
 
-    @ScenarioVariable(
-            name = "Gold Output",
-            description = "Nombre de lingots d'or obtenus lors d'une transmutation fer → or.",
-            type = VariableType.INTEGER
-    )
-    private int gold_output = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TRANSMUTATION_VAR_GOLD_OUTPUT_NAME", descKey = "TRANSMUTATION_VAR_GOLD_OUTPUT_DESC", type = VariableType.INTEGER)
+    private final int gold_output = 1;
 
-    @ScenarioVariable(
-            name = "Iron Output",
-            description = "Nombre de lingots de fer obtenus lors d'une transmutation charbon → fer.",
-            type = VariableType.INTEGER
-    )
-    private int iron_output = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TRANSMUTATION_VAR_IRON_OUTPUT_NAME", descKey = "TRANSMUTATION_VAR_IRON_OUTPUT_DESC", type = VariableType.INTEGER)
+    private final int iron_output = 1;
 
     @Override
     public String getName() {
@@ -70,8 +49,8 @@ public class Transmutation extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Transformez des ressources via l'alchimie (craft uniquement).";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.TRANSMUTATION, player);
     }
 
     @Override

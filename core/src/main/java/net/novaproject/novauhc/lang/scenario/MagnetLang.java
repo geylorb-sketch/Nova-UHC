@@ -12,7 +12,13 @@ public enum MagnetLang implements Lang {
     MAGNET_ACTIVATED(
         "§6[Magnet] §fMinerais attirés dans un rayon de %radius% blocs !",
         "§6[Magnet] §fOres attracted within %radius% blocks!"
-    )
+    ),
+
+    
+    ORES_ATTRACTED(
+        "§b[Magnet] §f%count% minerai(s) attiré(s) !",
+        "§b[Magnet] §f%count% ore(s) attracted!"
+    ),
     ;
 
     private final Map<String, String> translations;

@@ -137,7 +137,7 @@ public final class FastReflection {
             MethodHandle constructor = lookup.findConstructor(packetClass, VOID_METHOD_TYPE);
             return constructor::invoke;
         } catch (NoSuchMethodException | IllegalAccessException e) {
-            // try below with Unsafe
+            
         }
 
         if (theUnsafe == null) {

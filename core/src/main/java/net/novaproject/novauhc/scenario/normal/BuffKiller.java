@@ -6,6 +6,7 @@ import net.novaproject.novauhc.utils.VariableType;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -13,59 +14,34 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class BuffKiller extends Scenario {
 
     private final Random random = new Random();
 
-    @ScenarioVariable(
-            name = "speed_active",
-            description = "Activer l'effet Speed pour le tueur",
-            type = VariableType.BOOLEAN
-    )
-    private boolean speedActive = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_SPEED_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_SPEED_ACTIVE_DESC", type = VariableType.BOOLEAN)
+    private final boolean speedActive = true;
 
-    @ScenarioVariable(
-            name = "strength_active",
-            description = "Activer l'effet Strength pour le tueur",
-            type = VariableType.BOOLEAN
-    )
-    private boolean strengthActive = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_STRENGTH_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_STRENGTH_ACTIVE_DESC", type = VariableType.BOOLEAN)
+    private final boolean strengthActive = true;
 
-    @ScenarioVariable(
-            name = "resistance_active",
-            description = "Activer l'effet Resistance pour le tueur",
-            type = VariableType.BOOLEAN
-    )
-    private boolean resistanceActive = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_RESISTANCE_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_RESISTANCE_ACTIVE_DESC", type = VariableType.BOOLEAN)
+    private final boolean resistanceActive = true;
 
-    @ScenarioVariable(
-            name = "fire_resistance_active",
-            description = "Activer l'effet Fire Resistance pour le tueur",
-            type = VariableType.BOOLEAN
-    )
-    private boolean fireResistanceActive = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_FIRE_RESISTANCE_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_FIRE_RESISTANCE_ACTIVE_DESC", type = VariableType.BOOLEAN)
+    private final boolean fireResistanceActive = true;
 
-    @ScenarioVariable(
-            name = "min_duration",
-            description = "Durée minimale des effets en secondes",
-            type = VariableType.TIME
-    )
-    private int minDuration = 5;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_MIN_DURATION_NAME", descKey = "BUFFKILLER_VAR_MIN_DURATION_DESC", type = VariableType.TIME)
+    private final int minDuration = 5;
 
-    @ScenarioVariable(
-            name = "max_duration",
-            description = "Durée maximale des effets en secondes",
-            type = VariableType.TIME
-    )
-    private int maxDuration = 15;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_MAX_DURATION_NAME", descKey = "BUFFKILLER_VAR_MAX_DURATION_DESC", type = VariableType.TIME)
+    private final int maxDuration = 15;
 
-    @ScenarioVariable(
-            name = "effect_level",
-            description = "Niveau des effets de potion appliqués",
-            type = VariableType.INTEGER
-    )
-    private int effectLevel = 0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_EFFECT_LEVEL_NAME", descKey = "BUFFKILLER_VAR_EFFECT_LEVEL_DESC", type = VariableType.INTEGER)
+    private final int effectLevel = 0;
 
     @Override
     public String getName() {
@@ -73,8 +49,8 @@ public class BuffKiller extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Tuer un joueur donne des effets de potion bénéfiques au tueur.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BUFF_KILLER, player);
     }
 
     @Override

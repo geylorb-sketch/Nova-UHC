@@ -13,7 +13,7 @@ public enum ScenarioVariableUiLang implements Lang {
     CONFIG_BUTTON     ("§8» §fConfigurer %name% §8«",            "§8» §fConfigure %name% §8«"),
     CONFIG_LORE       ("§8┃ §fCliquez pour configurer",          "§8┃ §fClick to configure"),
     CONFIG_ABILITY_DESC1("  §8┃ §fPermet de configurer les options de", "  §8┃ §fConfigure the options of"),
-    CONFIG_ABILITY_DESC2("  §8┃ §fle pouvoir %name%",           "  §8┃ §fthe ability %name%"),
+    CONFIG_ABILITY_DESC2("  §8┃ §fle pouvoir %name%",           "  §8┃ §fthe abilities %name%"),
 
     CONFIG_TITLE      ("§8Config: §6%name%",                     "§8Config: §6%name%"),
     ROLE_CONFIG_TITLE ("Configuration de %name%",                "Configuration of %name%"),

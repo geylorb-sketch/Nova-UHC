@@ -8,16 +8,16 @@ import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class GoldenDrop extends Scenario {
 
-    @ScenarioVariable(
-            name = "Quantité de Golden Apple",
-            description = "Nombre de Golden Apple droppées à la mort d'un joueur",
-            type = VariableType.INTEGER
-    )
-    private int goldenAppleAmount = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENDROP_VAR_GOLDEN_APPLE_AMOUNT_NAME", descKey = "GOLDENDROP_VAR_GOLDEN_APPLE_AMOUNT_DESC", type = VariableType.INTEGER)
+    private final int goldenAppleAmount = 1;
 
     @Override
     public String getName() {
@@ -25,8 +25,8 @@ public class GoldenDrop extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Les joueurs morts drop automatiquement une pomme dorée.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.GOLDEN_DROP, player);
     }
 
     @Override

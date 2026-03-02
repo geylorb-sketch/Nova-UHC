@@ -1,13 +1,15 @@
 package net.novaproject.ultimate.skyhigt;
 
-import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.lang.special.SkyHighLang;
 import net.novaproject.novauhc.scenario.Scenario;
-import net.novaproject.novauhc.scenario.lang.ScenarioLang;
-import net.novaproject.novauhc.scenario.lang.ScenarioLangManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.uhcteam.UHCTeamManager;
 import net.novaproject.novauhc.utils.ItemCreator;
+import net.novaproject.novauhc.scenario.ScenarioVariable;
+import net.novaproject.novauhc.utils.VariableType;
+import net.novaproject.novauhc.UHCManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,22 +19,66 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-
 public class SkyHigh extends Scenario {
+
+    @ScenarioVariable(
+            nameKey = "SKYHIGH_VAR_FIRST_LEVEL_NAME",
+            descKey = "SKYHIGH_VAR_FIRST_LEVEL_DESC",
+            type = VariableType.INTEGER
+    )
+    private int firstLevel = 120;
+
+    @ScenarioVariable(
+
+            nameKey = "SKYHIGH_VAR_SECOND_LEVEL_NAME",
+            descKey = "SKYHIGH_VAR_SECOND_LEVEL_DESC",
+            type = VariableType.INTEGER
+    )
+    private int secondLevel = 80;
+
+    @ScenarioVariable(
+            
+            nameKey = "SKYHIGH_VAR_THIRD_LEVEL_NAME",
+            descKey = "SKYHIGH_VAR_THIRD_LEVEL_DESC",
+            type = VariableType.INTEGER
+    )
+    private int thirdLevel = 40;
+
+    @ScenarioVariable(
+
+            nameKey = "SKYHIGH_VAR_FIRST_DAMAGE_NAME",
+            descKey = "SKYHIGH_VAR_FIRST_DAMAGE_DESC",
+            type = VariableType.INTEGER
+    )
+    private int firstDamage = 5;
+
+    @ScenarioVariable(
+            nameKey = "SKYHIGH_VAR_SECOND_DAMAGE_NAME",
+            descKey = "SKYHIGH_VAR_SECOND_DAMAGE_DESC",
+            type = VariableType.INTEGER
+    )
+    private int secondDamage = 3;
+
+    @ScenarioVariable(
+            nameKey = "SKYHIGH_VAR_THIRD_DAMAGE_NAME",
+            descKey = "SKYHIGH_VAR_THIRD_DAMAGE_DESC",
+            type = VariableType.INTEGER
+    )
+    private int thirdDamage = 1;
+
     @Override
     public String getName() {
         return "SkyHigh";
     }
 
     @Override
-    public String getDescription() {
-        return "Force les joueurs à rester en hauteur, les dégâts augmentent en dessous d'une certaine altitude.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(SkyHighLang.WARNING_SKY_HIGH, player);
     }
 
     @Override
     public ItemCreator getItem() {
         return new ItemCreator(Material.PAPER);
-
     }
 
     @Override
@@ -50,21 +96,24 @@ public class SkyHigh extends Scenario {
     }
 
     @Override
-    public void onSec(Player p) {
+    public void onSec(Player player) {
         int timer = UHCManager.get().getTimer();
+
         if (timer == UHCManager.get().getTimerborder() - 120) {
-            ScenarioLangManager.send(p, SkyHigthLang.WARNING_SKY_HIGH);
+            LangManager.get().send(SkyHighLang.WARNING_SKY_HIGH, player);
         }
+
+        int y = player.getLocation().getBlockY();
         if (timer >= UHCManager.get().getTimerborder()) {
-            if (p.getLocation().getBlockY() < getConfig().getInt("third_level")) {
-                ScenarioLangManager.send(p, SkyHigthLang.DAMAGE_THIRD_LAYER);
-                p.damage(getConfig().getInt("third_damage"));
-            } else if (p.getLocation().getBlockY() < getConfig().getInt("second_level")) {
-                ScenarioLangManager.send(p, SkyHigthLang.DAMAGE_SECOND_LAYER);
-                p.damage(getConfig().getInt("second_damage"));
-            } else if (p.getLocation().getBlockY() < getConfig().getInt("first_level")) {
-                ScenarioLangManager.send(p, SkyHigthLang.DAMAGE_FIRST_LAYER);
-                p.damage(getConfig().getInt("firth_damage"));
+            if (y < thirdLevel) {
+                LangManager.get().send(SkyHighLang.DAMAGE_THIRD_LAYER, player);
+                player.damage(thirdDamage);
+            } else if (y < secondLevel) {
+                LangManager.get().send(SkyHighLang.DAMAGE_SECOND_LAYER, player);
+                player.damage(secondDamage);
+            } else if (y < firstLevel) {
+                LangManager.get().send(SkyHighLang.DAMAGE_FIRST_LAYER, player);
+                player.damage(firstDamage);
             }
         }
     }
@@ -87,16 +136,5 @@ public class SkyHigh extends Scenario {
     @Override
     public boolean isSpecial() {
         return true;
-    }
-
-    @Override
-    public String getPath() {
-        return "special/skyhigh";
-    }
-
-
-    @Override
-    public ScenarioLang[] getLang() {
-        return SkyHigthLang.values();
     }
 }

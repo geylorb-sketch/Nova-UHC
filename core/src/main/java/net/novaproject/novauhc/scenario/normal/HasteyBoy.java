@@ -4,11 +4,14 @@ import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.EnumSet;
 import java.util.Set;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class HasteyBoy extends Scenario {
     @Override
@@ -17,8 +20,8 @@ public class HasteyBoy extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Tous les outils craftés reçoivent automatiquement Efficacité III et Solidité I.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.HASTEY_BOY, player);
     }
 
     @Override

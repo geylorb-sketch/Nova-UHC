@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class Rodless extends Scenario {
     @Override
@@ -17,8 +18,8 @@ public class Rodless extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Empêche l'utilisation et la fabrication de cannes à pêche.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.RODLESS, player);
     }
 
     @Override

@@ -20,59 +20,33 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class BloodLust extends Scenario {
 
     private final Map<UUID, BukkitRunnable> activeEffects = new HashMap<>();
 
-    @ScenarioVariable(
-            name = "speed_duration",
-            description = "Durée de l'effet Speed en secondes",
-            type = VariableType.TIME
-    )
-    private int speedDuration = 30;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_SPEED_DURATION_NAME", descKey = "BLOODLUST_VAR_SPEED_DURATION_DESC", type = VariableType.TIME)
+    private final int speedDuration = 30;
 
-    @ScenarioVariable(
-            name = "strength_duration",
-            description = "Durée de l'effet Strength en secondes",
-            type = VariableType.TIME
-    )
-    private int strengthDuration = 30;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_STRENGTH_DURATION_NAME", descKey = "BLOODLUST_VAR_STRENGTH_DURATION_DESC", type = VariableType.TIME)
+    private final int strengthDuration = 30;
 
-    @ScenarioVariable(
-            name = "speed_level",
-            description = "Niveau de l'effet Speed",
-            type = VariableType.INTEGER
-    )
-    private int speedLevel = 1;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_SPEED_LEVEL_NAME", descKey = "BLOODLUST_VAR_SPEED_LEVEL_DESC", type = VariableType.INTEGER)
+    private final int speedLevel = 1;
 
-    @ScenarioVariable(
-            name = "strength_level",
-            description = "Niveau de l'effet Strength",
-            type = VariableType.INTEGER
-    )
-    private int strengthLevel = 0;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_STRENGTH_LEVEL_NAME", descKey = "BLOODLUST_VAR_STRENGTH_LEVEL_DESC", type = VariableType.INTEGER)
+    private final int strengthLevel = 0;
 
-    @ScenarioVariable(
-            name = "countdown_10sec",
-            description = "Activer le message de countdown à 10 secondes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean countdown10Sec = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_COUNTDOWN10SEC_NAME", descKey = "BLOODLUST_VAR_COUNTDOWN10SEC_DESC", type = VariableType.BOOLEAN)
+    private final boolean countdown10Sec = true;
 
-    @ScenarioVariable(
-            name = "countdown_5sec",
-            description = "Activer le message de countdown à 5 secondes",
-            type = VariableType.BOOLEAN
-    )
-    private boolean countdown5Sec = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_COUNTDOWN5SEC_NAME", descKey = "BLOODLUST_VAR_COUNTDOWN5SEC_DESC", type = VariableType.BOOLEAN)
+    private final boolean countdown5Sec = true;
 
-    @ScenarioVariable(
-            name = "countdown_end",
-            description = "Activer le message à la fin de l'effet",
-            type = VariableType.BOOLEAN
-    )
-    private boolean countdownEnd = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_COUNTDOWN_END_NAME", descKey = "BLOODLUST_VAR_COUNTDOWN_END_DESC", type = VariableType.BOOLEAN)
+    private final boolean countdownEnd = true;
 
     @Override
     public String getName() {
@@ -80,8 +54,11 @@ public class BloodLust extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Chaque kill donne Speed " + (speedLevel + 1) + " et Strength " + (strengthLevel + 1) + " pendant " + speedDuration + " secondes.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.BLOOD_LUST, player)
+                .replace("%speed_level%", String.valueOf(speedLevel + 1))
+                .replace("%strength_level%", String.valueOf(strengthLevel + 1))
+                .replace("%duration%", String.valueOf(speedDuration));
     }
 
     @Override
@@ -89,10 +66,7 @@ public class BloodLust extends Scenario {
         return new ItemCreator(Material.BLAZE_POWDER);
     }
 
-    @Override
-    public String getPath() {
-        return "bloodlust";
-    }
+
 
     @Override
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
@@ -103,7 +77,7 @@ public class BloodLust extends Scenario {
         applyBloodLustEffect(killerPlayer);
 
         LangManager.get().send(BloodLustLang.KILL_BOOST, killerPlayer);
-        Bukkit.broadcastMessage("§c[BloodLust] §f" + killerPlayer.getName() + " §fest en état de soif de sang !");
+        LangManager.get().sendAll(BloodLustLang.BLOODLUST_ACTIVATED, Map.of("%player%", killerPlayer.getName()));
     }
 
     private void applyBloodLustEffect(Player player) {
@@ -126,11 +100,11 @@ public class BloodLust extends Scenario {
                 timeLeft--;
 
                 if (countdown10Sec && timeLeft == 10) {
-                    player.sendMessage("§c[BloodLust] §fSoif de sang se termine dans 10 secondes !");
+                    LangManager.get().send(BloodLustLang.ENDING_TEN_SECONDS, player);
                 } else if (countdown5Sec && timeLeft == 5) {
-                    player.sendMessage("§c[BloodLust] §fSoif de sang se termine dans 5 secondes !");
+                    LangManager.get().send(BloodLustLang.ENDING_FIVE_SECONDS, player);
                 } else if (countdownEnd && timeLeft <= 0) {
-                    player.sendMessage("§c[BloodLust] §fVotre soif de sang s'est calmée.");
+                    LangManager.get().send(BloodLustLang.BLOODLUST_ENDED, player);
                     player.removePotionEffect(PotionEffectType.SPEED);
                     player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                     activeEffects.remove(playerUuid);

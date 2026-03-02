@@ -29,7 +29,7 @@ public class Renard extends LoupGarouRole {
         String message = "§8§m---------" + ChatColor.GREEN + "Renard§8§m----------§r\n" +
                 "§fVotre Objectif : " + ChatColor.GREEN + "Gagnez avec le Village\n" +
                 "§fVos Pouvoir : " + ChatColor.BLUE + "Vous possedez le pouvoir de flairer, et l'effet Speed 1 de nuit.\n" +
-                "§fDescription du role : " + ChatColor.DARK_PURPLE + " Vos Flaire sont \n" +
+                "§fDescription du roles : " + ChatColor.DARK_PURPLE + " Vos Flaire sont \n" +
                 "-Utilisable 3x par partie avec la commande /lg flairer.\n" +
                 "-Vous pouvez flairer uniquement la nuit et dans un rayon de 20 block.\n" +
                 "-Les joueur flairer seront prévenu le jour suivant.\n" +

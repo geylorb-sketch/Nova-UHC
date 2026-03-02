@@ -4,11 +4,14 @@ import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.EnumSet;
 import java.util.Set;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class HasteyBabie extends Scenario {
     @Override
@@ -17,8 +20,8 @@ public class HasteyBabie extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Version réduite de HasteyBoy - seulement Efficacité I sur les outils.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.HASTEY_BABIE, player);
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public enum DefaultUiLang implements Lang {
 
-    // Items
+    
     BORDER_ITEM_NAME("§8┃ §fGestion de la %main_color%bordure", "§8┃ §fBorder %main_color%management"),
     BORDER_ITEM_DESC("  §8┃ §fPermet de modifier la §ataille§f et la §bvitesse§f de la %main_color%bordure§f.", "  §8┃ §fModify the §asize§f and §bspeed§f of the %main_color%border§f."),
     SCENARIOS_ITEM_NAME("§8┃ §fGestion des %main_color%scénarios", "§8┃ §f%main_color%Scenario§f management"),
@@ -37,7 +37,7 @@ public enum DefaultUiLang implements Lang {
     SLOT_ITEM_NAME("§8┃ §fSlots", "§8┃ §fSlots"),
     SLOT_ITEM_DESC("  §8┃ §fVous permet de %main_color%modifier§fle nombre de %main_color%joueurs§f autorisés.", "  §8┃ §f%main_color%Modify§fthe number of %main_color%players§f allowed."),
 
-    // Lancer la partie
+    
     STOP_CONFIRM("Etes-vous sûr de vouloir stopper le serveur ?", "Are you sure you want to stop the server?"),
     SLOT_ITEM_DESC2("  §8┃ §fà se §aconnecter§f à la %main_color%partie§f.", "  §8┃ §fto §aconnect§f to the %main_color%game§f."),
     START_READY_NAME("§aLancer la partie", "§aStart the game"),

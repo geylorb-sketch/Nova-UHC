@@ -20,7 +20,13 @@ public enum LuckyOreLang implements Lang {
     INVENTORY_FULL(
         "§6[LuckyOre] §fInventaire plein ! L'objet a été jeté au sol.",
         "§6[LuckyOre] §fInventory full! The item was dropped on the ground."
-    )
+    ),
+
+    
+    LUCKY_BROADCAST(
+        "§6§l[LuckyOre] §f%player% a trouvé un minerai chanceux !",
+        "§6§l[LuckyOre] §f%player% found a lucky ore!"
+    ),
     ;
 
     private final Map<String, String> translations;

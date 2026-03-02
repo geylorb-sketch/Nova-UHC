@@ -8,6 +8,8 @@ import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
+import net.novaproject.novauhc.lang.LangManager;
 
 public class HeathCharity extends Scenario {
     private boolean active = false;
@@ -18,8 +20,8 @@ public class HeathCharity extends Scenario {
     }
 
     @Override
-    public String getDescription() {
-        return "Partage automatiquement la vie entre les membres d'une équipe.";
+    public String getDescription(Player player) {
+        return LangManager.get().get(ScenarioDescLang.HEATH_CHARITY, player);
     }
 
     @Override

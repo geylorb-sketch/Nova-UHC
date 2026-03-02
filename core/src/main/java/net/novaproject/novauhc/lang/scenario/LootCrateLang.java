@@ -32,7 +32,13 @@ public enum LootCrateLang implements Lang {
     CRATES_FORCED(
         "§d[LootCrate] §fCoffres forcés par un administrateur !",
         "§d[LootCrate] §fCrates forced by an administrator!"
-    )
+    ),
+
+    
+    CRATE_SPAWNED(
+        "§d[LootCrate] §fUn coffre de loot est apparu près de vous !",
+        "§d[LootCrate] §fA loot crate has spawned near you!"
+    ),
     ;
 
     private final Map<String, String> translations;

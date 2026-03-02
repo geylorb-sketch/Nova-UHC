@@ -1,0 +1,78 @@
+package net.novaproject.ultimate.legend.roles.abilities;
+
+import net.novaproject.novauhc.ability.Ability;
+import net.novaproject.novauhc.ability.utils.AbilityVariable;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
+import net.novaproject.novauhc.utils.VariableType;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * Passif Ogre :
+ *  - Malus (Slow + Weakness) si < minApples gapples → onSec → tryUse → onEnable (cooldown 0).
+ *  - Effet random en consommant une gapple → onConsume (direct, pas de cooldown).
+ */
+public class OgrePassive extends Ability {
+
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "OGRE_MIN_APPLES_NAME", descKey = "OGRE_MIN_APPLES_DESC", type = VariableType.INTEGER)
+    private int minApples = 5;
+
+    @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "OGRE_EFFECT_DURATION_NAME", descKey = "OGRE_EFFECT_DURATION_DESC", type = VariableType.TIME)
+    private int effectDuration = 5;
+
+    private static final List<PotionEffectType> POOL = Arrays.asList(
+            PotionEffectType.SPEED, PotionEffectType.INCREASE_DAMAGE,
+            PotionEffectType.DAMAGE_RESISTANCE, PotionEffectType.FIRE_RESISTANCE,
+            PotionEffectType.ABSORPTION, PotionEffectType.SATURATION);
+
+    public OgrePassive() { setCooldown(0); }
+
+    @Override public String getName() { return "Appétit d'Ogre"; }
+    @Override public Material getMaterial() { return null; }
+
+    /** Tick chaque seconde : applique ou retire le malus selon le stock de gapples. */
+    @Override
+    public void onSec(Player player) {
+        tryUse(player);
+        super.onSec(player);
+    }
+
+    @Override
+    public boolean onEnable(Player player) {
+        if (countGA(player) <= minApples) {
+            player.removePotionEffect(PotionEffectType.SLOW);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 0, false, false));
+            player.removePotionEffect(PotionEffectType.WEAKNESS);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 80, 0, false, false));
+            return true;
+        }
+        // Plus assez de pommes → on retire les effets
+        player.removePotionEffect(PotionEffectType.SLOW);
+        player.removePotionEffect(PotionEffectType.WEAKNESS);
+        return false;
+    }
+
+    /** Effet bonus random à chaque pomme d'or consommée. */
+    @Override
+    public void onConsume(PlayerItemConsumeEvent event) {
+        if (event.getItem().getType() != Material.GOLDEN_APPLE) return;
+        Player p = event.getPlayer();
+        PotionEffectType type = POOL.get(ThreadLocalRandom.current().nextInt(POOL.size()));
+        p.addPotionEffect(new PotionEffect(type, 20 * effectDuration, 0));
+    }
+
+    private int countGA(Player p) {
+        int c = 0;
+        for (ItemStack i : p.getInventory().getContents())
+            if (i != null && i.getType() == Material.GOLDEN_APPLE) c += i.getAmount();
+        return c;
+    }
+}

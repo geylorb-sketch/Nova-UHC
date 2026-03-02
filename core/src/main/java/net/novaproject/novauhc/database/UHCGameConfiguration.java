@@ -10,7 +10,7 @@ import java.util.Map;
 @Getter
 public class UHCGameConfiguration {
 
-    private String name;
+    private final String name;
     private final List<String> enabledScenarios;
     private final Map<String, Document> scenarioConfigs;
     private final int teamSize;
