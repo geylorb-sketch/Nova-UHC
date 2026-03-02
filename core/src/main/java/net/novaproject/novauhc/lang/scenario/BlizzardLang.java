@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario Blizzard.
- * Remplace l'ancienne classe scenario/lang/lang/BlizzardLang.java
- */
+
 public enum BlizzardLang implements Lang {
 
     BLIZZARD_START(

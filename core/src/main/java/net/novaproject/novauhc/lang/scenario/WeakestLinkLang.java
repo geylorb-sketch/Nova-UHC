@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario WeakestLink.
- * Remplace l'ancienne classe scenario/lang/lang/WeakestLinkLang.java
- */
+
 public enum WeakestLinkLang implements Lang {
 
     WEAKEST_PLAYER(

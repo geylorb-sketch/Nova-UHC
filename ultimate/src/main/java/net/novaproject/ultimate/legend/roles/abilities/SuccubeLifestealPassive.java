@@ -9,16 +9,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-/**
- * Passif Succube : Vol de vie à chaque frappe en mêlée.
- * onAttack → tryUse → onEnable (cooldown 0 = s'applique à chaque coup).
- */
+
 public class SuccubeLifestealPassive extends Ability {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "SUCCUBE_LIFESTEAL_NAME", descKey = "SUCCUBE_LIFESTEAL_DESC", type = VariableType.DOUBLE)
     private double lifestealAmount = 1.0;
 
-    // Stockage temporaire entre onAttack() et onEnable()
+    
     private Player pendingAttacker;
 
     public SuccubeLifestealPassive() { setCooldown(0); }

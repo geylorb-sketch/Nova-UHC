@@ -9,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Tank : Résistance I quand vie < seuil.
- * PassiveAbility.onSec() → tryUse() → onEnable() chaque seconde (cooldown 0).
- */
+
 public class TankResistancePassive extends PassiveAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "TANK_RESIST_THRESHOLD_NAME", descKey = "TANK_RESIST_THRESHOLD_DESC", type = VariableType.DOUBLE)

@@ -25,7 +25,7 @@ public class NetheriBus extends Scenario {
             descKey = "NETHERIBUS_VAR_TIMER_DESC",
             type = VariableType.TIME
     )
-    private int startTimer = 600; // secondes avant activation
+    private int startTimer = 600; 
 
     @ScenarioVariable(
             nameKey = "NETHERIBUS_VAR_DAMAGE_NAME",

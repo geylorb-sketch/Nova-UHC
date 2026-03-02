@@ -4,14 +4,7 @@ import net.novaproject.novauhc.lang.Lang;
 
 import java.util.Map;
 
-/**
- * Messages globaux du plugin (anciennement CommonString).
- *
- * Usage :
- *   LangManager.get().send(CommonLang.PVP_START, player);
- *   LangManager.get().sendAll(CommonLang.MEETUP_START);
- *   String txt = LangManager.get().get(CommonLang.CLICK_HERE_TO_ACCESS, player);
- */
+
 public enum CommonLang implements Lang {
 
     

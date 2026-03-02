@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario Fallout.
- * Remplace l'ancienne classe scenario/lang/lang/FalloutLang.java
- */
+
 public enum FalloutLang implements Lang {
 
     FALLOUT_STARTED(

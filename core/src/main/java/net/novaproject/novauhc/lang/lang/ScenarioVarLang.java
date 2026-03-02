@@ -4,13 +4,7 @@ import net.novaproject.novauhc.lang.Lang;
 
 import java.util.Map;
 
-/**
- * Traductions centralisées de TOUS les noms/descriptions de @ScenarioVariable,
- * @RoleVariable et @AbilityVariable.
- *
- * Convention de nommage : SCENARIONAME_VAR_FIELDNAME_NAME / _DESC
- * Exemple : ACIDRAIN_VAR_DAMAGE_NAME, FATALIS_VAR_MAX_HP_DESC
- */
+
 public enum ScenarioVarLang implements Lang {
 
 
@@ -536,25 +530,25 @@ public enum ScenarioVarLang implements Lang {
     LEGEND_VAR_MIN_TEAM_SIZE_NAME("Taille min. d'équipe", "Min Team Size"),
     LEGEND_VAR_MIN_TEAM_SIZE_DESC("Taille minimum des équipes pour ce scénario.", "Minimum team size for this scenario."),
     ARCHER_BOW_NAME("Arc amélioré", "Enhanced Bow"),
-    // ── Assassin ──
+    
     ASSASSIN_EXTRA_HEARTS_NAME("Cœurs bonus Assassin", "Assassin Extra Hearts"),
     ASSASSIN_EXTRA_HEARTS_DESC("Cœurs supplémentaires (demi-cœurs).", "Extra hearts (half-hearts)."),
     ASSASSIN_FORCE_LEVEL_NAME("Niveau Force Assassin", "Assassin Force Level"),
     ASSASSIN_FORCE_LEVEL_DESC("Niveau de Force passive.", "Passive Strength level."),
 
-    // ── Tank ──
+    
     TANK_EXTRA_HEARTS_NAME("Cœurs bonus Tank", "Tank Extra Hearts"),
     TANK_EXTRA_HEARTS_DESC("Cœurs supplémentaires (demi-cœurs).", "Extra hearts (half-hearts)."),
     TANK_RESIST_THRESHOLD_NAME("Seuil vie Tank", "Tank HP Threshold"),
     TANK_RESIST_THRESHOLD_DESC("Vie sous laquelle Résistance s'active.", "HP below which Resistance activates."),
     TANK_RESIST_LEVEL_NAME("Niveau Résistance Tank", "Tank Resistance Level"),
     TANK_RESIST_LEVEL_DESC("Niveau de Résistance.", "Resistance level."),
-    // ── Nain ──
+    
     NAIN_ARMOR_DURATION_NAME("Durée armure Nain (s)", "Nain Armor Duration (s)"),
     NAIN_ARMOR_DURATION_DESC("Durée de l'armure temporaire.", "Temporary armor duration."),
     NAIN_ARMOR_PROT_LEVEL_NAME("Niveau Protection Nain", "Nain Protection Level"),
     NAIN_ARMOR_PROT_LEVEL_DESC("Niveau Protection de l'armure.", "Armor Protection level."),
-    // ── Archer ──
+    
     ARCHER_BOW_POWER_NAME("Power arc Archer", "Archer Bow Power"),
     ARCHER_BOW_POWER_DESC("Niveau Power de l'arc.", "Bow Power level."),
     ARCHER_BOW_BONUS_NAME("Bonus dégâts arc", "Bow Bonus Damage"),
@@ -563,21 +557,21 @@ public enum ScenarioVarLang implements Lang {
     ARCHER_SLOW_CHANCE_DESC("Chance d'appliquer Slowness.", "Chance to apply Slowness."),
     ARCHER_SLOW_DURATION_NAME("Durée Slowness arc (s)", "Arrow Slow Duration (s)"),
     ARCHER_SLOW_DURATION_DESC("Durée du Slowness.", "Slowness duration."),
-    // ── Zeus ──
+    
     ZEUS_LIGHTNING_CHANCE_NAME("Chance éclair Zeus", "Zeus Lightning Chance"),
     ZEUS_LIGHTNING_CHANCE_DESC("Chance d'éclair au hit.", "Lightning chance on hit."),
     ZEUS_SPEED_CHANCE_NAME("Chance Speed Zeus", "Zeus Speed Chance"),
     ZEUS_SPEED_CHANCE_DESC("Chance de Speed I 10s.", "Speed I 10s chance."),
     ZEUS_EFFECT_DURATION_NAME("Durée effets Zeus (s)", "Zeus Effect Duration (s)"),
     ZEUS_EFFECT_DURATION_DESC("Durée des effets aléatoires.", "Random effects duration."),
-    // ── Nécromancien ──
+    
     NECRO_SKELETON_COUNT_NAME("Nb squelettes", "Skeleton Count"),
     NECRO_SKELETON_COUNT_DESC("Nombre de squelettes invoqués.", "Summoned skeletons count."),
     NECRO_ZOMBIE_COUNT_NAME("Nb zombies", "Zombie Count"),
     NECRO_ZOMBIE_COUNT_DESC("Nombre de baby zombies.", "Baby zombies count."),
     NECRO_SEARCH_RADIUS_NAME("Rayon recherche ennemi", "Enemy Search Radius"),
     NECRO_SEARCH_RADIUS_DESC("Rayon de recherche.", "Search radius."),
-    // ── Succube ──
+    
     SUCCUBE_LIFESTEAL_NAME("Vol de vie Succube", "Succube Lifesteal"),
     SUCCUBE_LIFESTEAL_DESC("PV volés au hit melee.", "HP stolen on melee hit."),
     SUCCUBE_ABSORB_RADIUS_NAME("Rayon Absorption", "Absorption Radius"),
@@ -586,16 +580,16 @@ public enum ScenarioVarLang implements Lang {
     SUCCUBE_ABSORB_LEVEL_DESC("Niveau d'Absorption.", "Absorption level."),
     SUCCUBE_ABSORB_DURATION_NAME("Durée Absorption (s)", "Absorption Duration (s)"),
     SUCCUBE_ABSORB_DURATION_DESC("Durée de l'Absorption.", "Absorption duration."),
-    // ── Soldat ──
+    
     SOLDAT_BONUS_DAMAGE_NAME("Bonus dégâts Soldat", "Soldier Bonus Damage"),
     SOLDAT_BONUS_DAMAGE_DESC("Dégâts bonus avec épée (melee).", "Bonus sword damage (melee)."),
-    // ── Princesse ──
+    
     PRINCESSE_EXTRA_HEARTS_NAME("Cœurs bonus Princesse", "Princess Extra Hearts"),
     PRINCESSE_EXTRA_HEARTS_DESC("Cœurs supplémentaires.", "Extra hearts."),
-    // ── Cavalier ──
+    
     CAVALIER_HORSE_HP_NAME("PV cheval Cavalier", "Cavalier Horse HP"),
     CAVALIER_HORSE_HP_DESC("Points de vie du cheval.", "Horse HP."),
-    // ── Dragon ──
+    
     DRAGON_EXTRA_HEARTS_NAME("Cœurs bonus Dragon", "Dragon Extra Hearts"),
     DRAGON_EXTRA_HEARTS_DESC("Cœurs supplémentaires.", "Extra hearts."),
     DRAGON_FIRE_CHANCE_NAME("Chance feu Dragon", "Dragon Fire Chance"),
@@ -604,19 +598,19 @@ public enum ScenarioVarLang implements Lang {
     DRAGON_FIRE_DURATION_DESC("Durée du feu.", "Fire duration."),
     DRAGON_FIREBALL_YIELD_NAME("Puissance boule de feu", "Fireball Yield"),
     DRAGON_FIREBALL_YIELD_DESC("Puissance explosion.", "Explosion power."),
-    // ── Médecin ──
+    
     MEDECIN_HEAL_RADIUS_NAME("Rayon soin Médecin", "Medic Heal Radius"),
     MEDECIN_HEAL_RADIUS_DESC("Rayon zone de soin.", "Healing zone radius."),
     MEDECIN_HEAL_LEVEL_NAME("Niveau Régénération", "Regeneration Level"),
     MEDECIN_HEAL_LEVEL_DESC("Niveau Régénération alliés.", "Ally Regeneration level."),
-    // ── Prisonnier ──
+    
     PRISONNIER_SPEED_LEVEL_NAME("Niveau Speed Prisonnier", "Prisoner Speed Level"),
     PRISONNIER_SPEED_LEVEL_DESC("Niveau Speed permanente.", "Permanent Speed level."),
     PRISONNIER_CHAIN_RADIUS_NAME("Rayon chaînes", "Chain Radius"),
     PRISONNIER_CHAIN_RADIUS_DESC("Rayon recherche chaînes.", "Chain search radius."),
     PRISONNIER_CHAIN_DURATION_NAME("Durée chaînes (s)", "Chain Duration (s)"),
     PRISONNIER_CHAIN_DURATION_DESC("Durée des chaînes.", "Chain duration."),
-    // ── Ogre ──
+    
     OGRE_EXTRA_HEARTS_NAME("Cœurs bonus Ogre", "Ogre Extra Hearts"),
     OGRE_EXTRA_HEARTS_DESC("Cœurs supplémentaires.", "Extra hearts."),
     OGRE_START_GAPPLES_NAME("Gapples début Ogre", "Ogre Starting Gapples"),
@@ -625,14 +619,14 @@ public enum ScenarioVarLang implements Lang {
     OGRE_MIN_APPLES_DESC("En dessous = malus.", "Below = debuff."),
     OGRE_EFFECT_DURATION_NAME("Durée effet gapple (s)", "Gapple Effect Duration (s)"),
     OGRE_EFFECT_DURATION_DESC("Durée effet aléatoire.", "Random effect duration."),
-    // ── Corne ──
+    
     CORNE_FEU_DURATION_NAME("Durée Mélodie Feu (s)", "Fire Melody Duration (s)"),
     CORNE_FEU_DURATION_DESC("Durée Fire Resistance.", "Fire Resistance duration."),
     CORNE_METAL_DURATION_NAME("Durée Mélodie Métal (s)", "Metal Melody Duration (s)"),
     CORNE_METAL_DURATION_DESC("Durée Résistance.", "Resistance duration."),
     CORNE_AIR_DURATION_NAME("Durée Mélodie Air (s)", "Air Melody Duration (s)"),
     CORNE_AIR_DURATION_DESC("Durée Speed.", "Speed duration."),
-    // ── Paladin ──
+    
     PALADIN_EXTRA_HEARTS_NAME("Cœurs bonus Paladin", "Paladin Extra Hearts"),
     PALADIN_EXTRA_HEARTS_DESC("Cœurs supplémentaires.", "Extra hearts."),
     PALADIN_BLESSING_DURATION_NAME("Durée Bénédiction (s)", "Blessing Duration (s)"),
@@ -641,10 +635,10 @@ public enum ScenarioVarLang implements Lang {
     PALADIN_LOW_HP_THRESHOLD_DESC("Vie sous laquelle Résistance s'active.", "HP below which Resistance activates."),
     PALADIN_ALLY_RADIUS_NAME("Rayon alliés Paladin", "Paladin Ally Radius"),
     PALADIN_ALLY_RADIUS_DESC("Rayon pour Force I.", "Radius for Strength I."),
-    // ── Marionnettiste ──
+    
     MARIONNETTISTE_PUPPET_RANGE_NAME("Portée marionnettes", "Puppet Range"),
     MARIONNETTISTE_PUPPET_RANGE_DESC("Distance max avant Poison.", "Max distance before Poison."),
-    // ── Mage ──
+    
     MAGE_REGEN_INTERVAL_NAME("Intervalle potions Mage (s)", "Mage Potion Interval (s)"),
     MAGE_REGEN_INTERVAL_DESC("Intervalle entre régénérations.", "Interval between regenerations."),
     CAVALIER_HORSE_NAME("Cheval", "Horse"),

@@ -16,10 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Interface de sélection des légendes.
- * Affiche tous les rôles activés (amount >= 1) et permet au joueur de choisir.
- */
+
 public class ChooseUi extends CustomInventory {
 
     private final Legend legend;
@@ -88,7 +85,7 @@ public class ChooseUi extends CustomInventory {
         ItemCreator icon = new ItemCreator(role.getIconMaterial())
                 .setName("§6" + role.getName());
 
-        // Courte description
+        
         String desc = role.getDescription();
         if (desc.length() > 50) {
             icon.addLore("§7" + desc.substring(0, 50) + "...");
@@ -132,9 +129,9 @@ public class ChooseUi extends CustomInventory {
             return;
         }
 
-        // chooseRole gère toutes les vérifications + message
+        
         if (legend.chooseRole(uhcPlayer, role)) {
-            // Succès → fermer l'inventaire
+            
             getPlayer().closeInventory();
 
             getPlayer().sendMessage("");

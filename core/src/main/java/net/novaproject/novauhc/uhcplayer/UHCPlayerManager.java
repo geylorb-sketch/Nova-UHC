@@ -169,10 +169,7 @@ public class UHCPlayerManager {
         }
     }
 
-    /**
-     * Résout une liste de clés ScoreboardLang pour un joueur,
-     * en remplaçant les placeholders et <ip>.
-     */
+    
     private List<String> lines(LangManager lm, Player player, String ip, ScoreboardLang... keys) {
         return Arrays.stream(keys)
                 .map(key -> lm.get(key, player).replace("<ip>", ip))

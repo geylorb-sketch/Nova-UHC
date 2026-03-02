@@ -11,10 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Médecin : Régénération I aux alliés proches.
- * PassiveAbility.onSec() → tryUse() → onEnable() chaque seconde (cooldown 0).
- */
+
 public class MedecinHealPassive extends PassiveAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "MEDECIN_HEAL_RADIUS_NAME", descKey = "MEDECIN_HEAL_RADIUS_DESC", type = VariableType.DOUBLE)

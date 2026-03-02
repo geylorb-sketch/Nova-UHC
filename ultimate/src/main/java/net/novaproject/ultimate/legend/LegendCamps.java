@@ -4,10 +4,7 @@ import net.novaproject.novauhc.scenario.role.camps.Camps;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Camp unique pour le scénario Legend.
- * Chaque joueur est dans le même "camp" puisque la victoire est gérée manuellement.
- */
+
 public enum LegendCamps implements Camps {
 
     LEGEND("Légende", "§6");

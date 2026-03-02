@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario Vampire.
- * Remplace l'ancienne classe scenario/lang/lang/VampireLang.java
- */
+
 public enum VampireLang implements Lang {
 
     KILL_HEAL(

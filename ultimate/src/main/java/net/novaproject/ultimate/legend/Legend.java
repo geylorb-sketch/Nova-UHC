@@ -33,9 +33,9 @@ public class Legend extends ScenarioRole<LegendRole> {
 
     private static Legend instance;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  @ScenarioVariable
-    // ═══════════════════════════════════════════════════════════════════════════
+    
+    
+    
 
     @ScenarioVariable(lang = ScenarioVarLang.class,
             nameKey = "LEGEND_VAR_CHOOSE_TIME_NAME",
@@ -43,35 +43,32 @@ public class Legend extends ScenarioRole<LegendRole> {
             type = VariableType.INTEGER)
     private int chooseTime = 3;
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  State
-    // ═══════════════════════════════════════════════════════════════════════════
+    
+    
+    
 
     private boolean canChooseClass = true;
 
-    /** Joueurs qui ont DÉJÀ choisi manuellement (avant giveRoles) */
+    
     private final Set<UUID> manuallyChosen = new HashSet<>();
 
     public static Legend get() {
         return instance;
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  Camps — Un seul camp, victoire gérée manuellement
-    // ═══════════════════════════════════════════════════════════════════════════
+    
+    
+    
 
     @Override
     public Camps[] getCamps() {
         return LegendCamps.values();
     }
 
-    /**
-     * Override : la victoire n'est PAS par camps.
-     * On la gère via isWin() ci-dessous.
-     */
+    
     @Override
     public boolean isWin() {
-        // Victoire quand il reste 1 équipe avec des joueurs vivants
+        
         long activeTeams = UHCPlayerManager.get().getPlayingOnlineUHCPlayers().stream()
                 .filter(p -> p.getTeam().isPresent())
                 .map(p -> p.getTeam().get())
@@ -80,9 +77,9 @@ public class Legend extends ScenarioRole<LegendRole> {
         return activeTeams <= 1;
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  Scenario Info
-    // ═══════════════════════════════════════════════════════════════════════════
+    
+    
+    
 
     @Override
     public String getName() {
@@ -100,9 +97,9 @@ public class Legend extends ScenarioRole<LegendRole> {
     }
 
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  Setup — Enregistrement des rôles
-    // ═══════════════════════════════════════════════════════════════════════════
+    
+    
+    
 
     @Override
     public void setup() {
@@ -148,26 +145,23 @@ public class Legend extends ScenarioRole<LegendRole> {
     public void onStart(Player player) {
 
 
-        // Message de bienvenue traduit
+        
         String msg = LangManager.get().get(LegendLang.CHOOSE_CLASS_WELCOME, player)
                 .replace("%choose_time%", String.valueOf(chooseTime));
         player.sendMessage(msg);
     }
 
-    /**
-     * Override onSec : à la fin du temps de choix, assigner les rôles
-     * aux joueurs qui n'ont pas encore choisi via giveRoles().
-     */
+    
     @Override
     public void onSec(Player p) {
-        super.onSec(p); // délègue aux abilities des rôles déjà assignés
+        super.onSec(p); 
 
         int timer = UHCManager.get().getTimer();
 
-        // Quand le timer de choix expire
+        
         if (canChooseClass && timer >= chooseTime * 60) {
             canChooseClass = false;
-            giveRoles(); // assigne les rôles restants
+            giveRoles(); 
         }
     }
 
@@ -177,20 +171,16 @@ public class Legend extends ScenarioRole<LegendRole> {
     }
 
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  giveRoles — Override : assigne aléatoirement SANS regarder les counts
-    // ═══════════════════════════════════════════════════════════════════════════
+    
+    
+    
 
-    /**
-     * Assigne un rôle aléatoire aux joueurs qui n'ont pas encore choisi.
-     * Ignore le nombre configuré (0 ou 1) — tous les rôles activés (=1)
-     * sont dans le pool. Si un rôle est à 0, il est exclu du pool.
-     */
+    
     @Override
     public void giveRoles() {
         LangManager.get().sendAll(LegendLang.CHOOSE_CLASS_TIME_EXPIRED);
 
-        // Construire le pool de rôles activés (amount >= 1)
+        
         List<LegendRole> pool = new ArrayList<>();
         getDefault_roles().forEach((role, amount) -> {
             if (amount >= 1) {
@@ -203,22 +193,22 @@ public class Legend extends ScenarioRole<LegendRole> {
             return;
         }
 
-        // Assigner aux joueurs sans rôle
+        
         for (UHCPlayer player : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
-            // Déjà un rôle (choisi manuellement) → skip
+            
             if (getRoleByUHCPlayer(player) != null) continue;
 
             Player bp = player.getPlayer();
             if (bp == null) continue;
 
-            // Choisir un rôle aléatoire non-pris par l'équipe
+            
             LegendRole selected = pickRandomAvailable(player, pool);
             if (selected == null) {
-                // Fallback : n'importe quel rôle du pool
+                
                 selected = pool.get(ThreadLocalRandom.current().nextInt(pool.size()));
             }
 
-            // Clone + assign
+            
             LegendRole clone = (LegendRole) selected.clone();
             giveRole(player, clone);
 
@@ -228,25 +218,22 @@ public class Legend extends ScenarioRole<LegendRole> {
         }
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    //  Choix manuel (appelé par ChooseUi / LdCMD)
-    // ═══════════════════════════════════════════════════════════════════════════
+    
+    
+    
 
-    /**
-     * Un joueur choisit manuellement un rôle.
-     * @return true si le choix a réussi
-     */
+    
     public boolean chooseRole(UHCPlayer player, LegendRole role) {
         Player bp = player.getPlayer();
         if (bp == null) return false;
 
-        // Déjà un rôle ?
+        
         if (getRoleByUHCPlayer(player) != null) {
             LangManager.get().send(LegendLang.CLASS_ALREADY_CHOSEN, bp);
             return false;
         }
 
-        // Rôle déjà pris dans l'équipe ?
+        
         if (isRoleTakenInTeam(player, role)) {
             String msg = LangManager.get().get(LegendLang.CLASS_TAKEN_IN_TEAM, bp)
                     .replace("%legend_name%", role.getName());
@@ -254,7 +241,7 @@ public class Legend extends ScenarioRole<LegendRole> {
             return false;
         }
 
-        // Clone + assign
+        
         LegendRole clone = (LegendRole) role.clone();
         giveRole(player, clone);
         manuallyChosen.add(bp.getUniqueId());
@@ -266,9 +253,7 @@ public class Legend extends ScenarioRole<LegendRole> {
         return true;
     }
 
-    /**
-     * Vérifie si un rôle est déjà pris par quelqu'un de la même équipe.
-     */
+    
     public boolean isRoleTakenInTeam(UHCPlayer player, LegendRole role) {
         if (!player.getTeam().isPresent()) return false;
 
@@ -283,9 +268,7 @@ public class Legend extends ScenarioRole<LegendRole> {
         return false;
     }
 
-    /**
-     * Choisit un rôle aléatoire non-pris dans l'équipe du joueur.
-     */
+    
     private LegendRole pickRandomAvailable(UHCPlayer player, List<LegendRole> pool) {
         List<LegendRole> available = new ArrayList<>();
         for (LegendRole role : pool) {
@@ -298,9 +281,7 @@ public class Legend extends ScenarioRole<LegendRole> {
         return available.get(ThreadLocalRandom.current().nextInt(available.size()));
     }
 
-    /**
-     * Récupère tous les rôles activés (amount >= 1) pour l'UI.
-     */
+    
     public List<LegendRole> getActivatedRoles() {
         List<LegendRole> roles = new ArrayList<>();
         getDefault_roles().forEach((role, amount) -> {

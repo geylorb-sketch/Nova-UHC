@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario Magnet.
- * Remplace l'ancienne classe scenario/lang/lang/MagnetLang.java
- */
+
 public enum MagnetLang implements Lang {
 
     MAGNET_ACTIVATED(

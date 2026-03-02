@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario Genie.
- * Remplace l'ancienne classe scenario/lang/lang/GenieLang.java
- */
+
 public enum GenieLang implements Lang {
 
     WISHES_RECEIVED(

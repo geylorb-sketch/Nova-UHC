@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario BloodCycle.
- * Remplace l'ancienne classe scenario/lang/lang/BloodCycleLang.java
- */
+
 public enum BloodCycleLang implements Lang {
 
     TAKE_DAMAGE(

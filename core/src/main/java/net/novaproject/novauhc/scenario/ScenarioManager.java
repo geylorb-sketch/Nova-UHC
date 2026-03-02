@@ -106,22 +106,7 @@ public class ScenarioManager {
         addScenario(new PotentialPermanent());
         addScenario(new LootCrate());
 
-        /*addScenario(new BeatTheSanta());
-        addScenario(new FallenKingdom());
-        addScenario(new FlowerPower());
-        addScenario(new GoneFIsh());
-        addScenario(new King());
-        addScenario(new Legend());
-        addScenario(new NetheriBus());
-        addScenario(new RandomCraft());
-        addScenario(new RandomDrop());
-        addScenario(new SkyHigh());
-        addScenario(new SlaveMarket());
-        addScenario(new SuperHeros());
-        addScenario(new TaupeGun());
-        addScenario(new TeamAtFirstSeigth());
-        addScenario(new SoulBrother());
-        addScenario(new MysteryTeam());*/
+        
 
         
         

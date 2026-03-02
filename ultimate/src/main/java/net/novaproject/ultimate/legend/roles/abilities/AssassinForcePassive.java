@@ -10,10 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Assassin : Force I si Lame Secrète + < 2 épées.
- * PassiveAbility.onSec() → tryUse() → onEnable() chaque seconde (cooldown 0).
- */
+
 public class AssassinForcePassive extends PassiveAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ASSASSIN_FORCE_LEVEL_NAME", descKey = "ASSASSIN_FORCE_LEVEL_DESC", type = VariableType.INTEGER)

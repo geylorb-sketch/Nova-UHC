@@ -54,11 +54,7 @@ public abstract class Ability implements Cloneable {
 
 
 
-    /*public boolean hasAbility(Player player) {
-        UHCPlayer UHCPlayer = getUHCPlayer(player);
-        if (UHCPlayer == null || UHCPlayer.getPersoActuel() == null) return false;
-        return UHCPlayer.getPersoActuel().getAbilities().contains(this);
-    }*/
+    
 
     public abstract boolean onEnable(Player player);
 

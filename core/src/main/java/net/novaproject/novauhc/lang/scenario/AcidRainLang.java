@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario AcidRain.
- * Remplace l'ancienne classe scenario/lang/lang/AcidRainLang.java
- */
+
 public enum AcidRainLang implements Lang {
 
     ACID_RAIN_START(

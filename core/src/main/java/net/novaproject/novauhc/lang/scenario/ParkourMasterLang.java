@@ -3,10 +3,7 @@ package net.novaproject.novauhc.lang.scenario;
 import net.novaproject.novauhc.lang.Lang;
 import java.util.Map;
 
-/**
- * Messages du scénario ParkourMaster.
- * Remplace l'ancienne classe scenario/lang/lang/ParkourMasterLang.java
- */
+
 public enum ParkourMasterLang implements Lang {
 
     PARKOUR_SPAWNED(

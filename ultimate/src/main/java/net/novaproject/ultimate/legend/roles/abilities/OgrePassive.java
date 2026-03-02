@@ -15,11 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Passif Ogre :
- *  - Malus (Slow + Weakness) si < minApples gapples → onSec → tryUse → onEnable (cooldown 0).
- *  - Effet random en consommant une gapple → onConsume (direct, pas de cooldown).
- */
+
 public class OgrePassive extends Ability {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "OGRE_MIN_APPLES_NAME", descKey = "OGRE_MIN_APPLES_DESC", type = VariableType.INTEGER)
@@ -38,7 +34,7 @@ public class OgrePassive extends Ability {
     @Override public String getName() { return "Appétit d'Ogre"; }
     @Override public Material getMaterial() { return null; }
 
-    /** Tick chaque seconde : applique ou retire le malus selon le stock de gapples. */
+    
     @Override
     public void onSec(Player player) {
         tryUse(player);
@@ -54,13 +50,13 @@ public class OgrePassive extends Ability {
             player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 80, 0, false, false));
             return true;
         }
-        // Plus assez de pommes → on retire les effets
+        
         player.removePotionEffect(PotionEffectType.SLOW);
         player.removePotionEffect(PotionEffectType.WEAKNESS);
         return false;
     }
 
-    /** Effet bonus random à chaque pomme d'or consommée. */
+    
     @Override
     public void onConsume(PlayerItemConsumeEvent event) {
         if (event.getItem().getType() != Material.GOLDEN_APPLE) return;

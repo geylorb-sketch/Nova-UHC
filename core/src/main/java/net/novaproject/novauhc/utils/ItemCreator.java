@@ -27,9 +27,7 @@ public class ItemCreator {
         return this.addEnchantment(Enchantment.DURABILITY, 1).addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
 
-    /**
-     * @return EnchantmentStorageMeta
-     */
+    
 
     public HashMap<Enchantment, Integer> getStoredEnchantments() {
         if (this.itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
@@ -61,20 +59,13 @@ public class ItemCreator {
         this.itemstack = itemCreator.getItemstack();
     }
 
-    /**
-     * @return l'ItemStack
-     */
+    
 
     public ItemStack getItemstack() {
         return new ItemStack(itemstack);
     }
 
-    /**
-     * Set un Material
-     *
-     * @param material material
-     * @return l'objet
-     */
+    
 
     public ItemCreator setMaterial(Material material) {
         if (this.itemstack == null) this.itemstack = new ItemStack(material);
@@ -86,21 +77,14 @@ public class ItemCreator {
 
         barre, precedent, suivant, coeur, cercleEtoile, croix, yinYang, losange, moin, plus
     }
-    /**
-     * @return le Material
-     */
+    
 
     public Material getMaterial() {
         return this.itemstack.getType();
     }
 
 
-    /**
-     * Set la quantiter d'item
-     *
-     * @param amount quantiter d'item
-     * @return l'objet
-     */
+    
 
     public ItemCreator setAmount(int amount) {
         if(amount > 64) amount = 64;
@@ -112,32 +96,20 @@ public class ItemCreator {
         return this.itemstack.getAmount();
     }
 
-    /**
-     * Set la durabiliter
-     *
-     * @param durability durabiliter
-     * @return l'objet
-     */
+    
 
     public ItemCreator setDurability(Short durability) {
         this.itemstack.setDurability(durability);
         return this;
     }
 
-    /**
-     * @return la durabiliter
-     */
+    
 
     public int getDurability() {
         return this.itemstack.getDurability();
     }
 
-    /**
-     * Set le nom
-     *
-     * @param name nom
-     * @return l'objet
-     */
+    
 
     public ItemCreator setName(String name) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -146,26 +118,19 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * @return le nom
-     */
+    
 
     public String getName() {
         return this.itemstack.getItemMeta().getDisplayName();
     }
 
-    /**
-     * @return lores
-     */
+    
 
     public ArrayList<String> getLores() {
         return (ArrayList<String>) this.itemstack.getItemMeta().getLore();
     }
 
-    /**
-     * @param list set un lore
-     * @return l'objet
-     */
+    
 
     public ItemCreator setLores(List<String> list) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -174,11 +139,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * Clear le lore
-     *
-     * @return l'objet
-     */
+    
 
     public ItemCreator clearLores() {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -187,10 +148,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * @param lore a add
-     * @return l'objet
-     */
+    
 
     public ItemCreator addLore(String lore) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -209,18 +167,13 @@ public class ItemCreator {
     }
 
 
-    /**
-     * @return les enchantements
-     */
+    
 
     public HashMap<Enchantment, Integer> getEnchantments() {
         return new HashMap<>(this.itemstack.getItemMeta().getEnchants());
     }
 
-    /**
-     * @param map enchantements
-     * @return l'objet
-     */
+    
 
     public ItemCreator setEnchantments(Map<Enchantment, Integer> map) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -237,11 +190,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * Clear l'enchantement
-     *
-     * @return l'objet
-     */
+    
 
     public ItemCreator clearEnchantments() {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -255,13 +204,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * add un enchant
-     *
-     * @param enchantment enchant
-     * @param lvl         niveau d'enchant
-     * @return l'objet
-     */
+    
 
     public ItemCreator addEnchantment(Enchantment enchantment, int lvl) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -270,12 +213,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * enlever un enchant
-     *
-     * @param enchantment enchant
-     * @return
-     */
+    
 
     public ItemCreator removeEnchantment(Enchantment enchantment) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -288,9 +226,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * @return EnchantmentStorageMeta
-     */
+    
 
 
     public EnchantmentStorageMeta getEnchantmentStorageMeta() {
@@ -300,12 +236,7 @@ public class ItemCreator {
         return null;
     }
 
-    /**
-     * set le EnchantmentStorageMeta
-     *
-     * @param enchantmentstoragemeta EnchantmentStorageMeta
-     * @return l'objet
-     */
+    
 
     public ItemCreator setEnchantmentStorageMeta(EnchantmentStorageMeta enchantmentstoragemeta) {
         if (this.itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
@@ -372,9 +303,7 @@ public class ItemCreator {
     }
 
 
-    /**
-     * @return la normal des item flags
-     */
+    
 
     public ArrayList<ItemFlag> getItemFlags() {
         ArrayList<ItemFlag> itemflags = new ArrayList<>();
@@ -384,12 +313,7 @@ public class ItemCreator {
         return itemflags;
     }
 
-    /**
-     * set l'itemflags
-     *
-     * @param itemflags normal d'itemflags
-     * @return l'objet
-     */
+    
 
     public ItemCreator setItemFlags(ArrayList<ItemFlag> itemflags) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -406,11 +330,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * Clear les items flags
-     *
-     * @return l'objet
-     */
+    
 
     public ItemCreator clearItemFlags() {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -424,12 +344,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * add un item flag
-     *
-     * @param itemflag item flag
-     * @return l'objet
-     */
+    
 
     public ItemCreator addItemFlags(ItemFlag itemflag) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -438,12 +353,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * Enlever un item flag
-     *
-     * @param itemflag item flag
-     * @return l'objet
-     */
+    
 
     public ItemCreator removeItemFlags(ItemFlag itemflag) {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -456,11 +366,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * Ajouter tout les items flags
-     *
-     * @return l'objet
-     */
+    
 
     public ItemCreator addallItemsflags() {
         ItemMeta meta = this.itemstack.getItemMeta();
@@ -473,9 +379,7 @@ public class ItemCreator {
     }
 
 
-    /**
-     * @return la meta de la tete
-     */
+    
 
     public SkullMeta getSkullMeta() {
         if (this.itemstack.getType().equals(Material.SKULL_ITEM)) {
@@ -484,12 +388,7 @@ public class ItemCreator {
         return null;
     }
 
-    /**
-     * set la meta de la tete
-     *
-     * @param skullmeta skull meta
-     * @return l'objet
-     */
+    
 
     public ItemCreator setSkullMeta(SkullMeta skullmeta) {
         if (this.itemstack.getType().equals(Material.SKULL_ITEM)) {
@@ -498,9 +397,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * @return l'owner
-     */
+    
 
     public String getOwner() {
         if (this.itemstack.getType().equals(Material.SKULL_ITEM)) {
@@ -509,12 +406,7 @@ public class ItemCreator {
         return null;
     }
 
-    /**
-     * set l'owner
-     *
-     * @param owner pseudo de l'owner pour changer le skin de la tete
-     * @return l'objet
-     */
+    
 
     public ItemCreator setOwner(String owner) {
         if (this.itemstack.getType().equals(Material.SKULL_ITEM)) {
@@ -525,9 +417,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * @return la meta de la banniere
-     */
+    
     public BannerMeta getBannerMeta() {
         if (this.itemstack.getType().equals(Material.BANNER)) {
             return (BannerMeta) this.itemstack.getItemMeta();
@@ -535,12 +425,7 @@ public class ItemCreator {
         return null;
     }
 
-    /**
-     * Set la meta de la baniere
-     *
-     * @param bannermeta banner meta
-     * @return l'objet
-     */
+    
 
     public ItemCreator setBannerMeta(BannerMeta bannermeta) {
         if (this.itemstack.getType().equals(Material.BANNER)) {
@@ -549,9 +434,7 @@ public class ItemCreator {
         return this;
     }
 
-    /**
-     * @return la couleur de base du drapeau
-     */
+    
 
     public DyeColor getBasecolor() {
         if (this.itemstack.getType().equals(Material.BANNER)) {
@@ -560,12 +443,7 @@ public class ItemCreator {
         return null;
     }
 
-    /**
-     * set la couleur de base du drapeau
-     *
-     * @param basecolor couleur
-     * @return l'objet
-     */
+    
 
     public ItemCreator setBasecolor(DyeColor basecolor) {
         if (this.itemstack.getType().equals(Material.BANNER)) {
@@ -861,7 +739,7 @@ public class ItemCreator {
         if (url.isEmpty())
             return this;
 
-        url = "https://textures.minecraft.net/texture/" + url;
+        url = "https:
 
         SkullMeta headMeta = (SkullMeta) this.itemstack.getItemMeta();
         GameProfile profile = new GameProfile(UUID.randomUUID(), "Sithey");

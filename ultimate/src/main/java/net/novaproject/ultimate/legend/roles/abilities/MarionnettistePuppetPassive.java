@@ -17,11 +17,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Passif Marionnettiste : gestion des marionnettes.
- * PassiveAbility.onSec() → tryUse() → onEnable() chaque seconde (cooldown 0).
- * createPuppet() est appelé par le listener de mort du rôle.
- */
+
 public class MarionnettistePuppetPassive extends PassiveAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "MARIONNETTISTE_PUPPET_RANGE_NAME", descKey = "MARIONNETTISTE_PUPPET_RANGE_DESC", type = VariableType.DOUBLE)
@@ -35,7 +31,7 @@ public class MarionnettistePuppetPassive extends PassiveAbility {
     @Override public String getName() { return "Marionnettes"; }
     @Override public Material getMaterial() { return null; }
 
-    /** Tick de gestion des marionnettes — appelé chaque seconde via PassiveAbility. */
+    
     @Override
     public boolean onEnable(Player player) {
         if (puppets.isEmpty()) return false;
@@ -44,13 +40,13 @@ public class MarionnettistePuppetPassive extends PassiveAbility {
             Player puppet = org.bukkit.Bukkit.getPlayer(uuid);
             if (puppet == null || !puppet.isOnline()) continue;
 
-            // Poison si hors de portée du maître
+            
             if (puppet.getLocation().distance(player.getLocation()) > maxRange) {
                 puppet.removePotionEffect(PotionEffectType.POISON);
                 puppet.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0, false, false));
             }
 
-            // Effet selon le type de marionnette
+            
             Integer type = puppetTypes.get(uuid);
             if (type == null) continue;
             PotionEffect effect = switch (type) {
@@ -77,7 +73,7 @@ public class MarionnettistePuppetPassive extends PassiveAbility {
         puppetTypes.clear();
     }
 
-    /** Appelé depuis le listener de mort du rôle quand un joueur adverse meurt. */
+    
     public void createPuppet(UHCPlayer deadPlayer, UHCPlayer master) {
         Player pp = deadPlayer.getPlayer();
         Player mp = master.getPlayer();

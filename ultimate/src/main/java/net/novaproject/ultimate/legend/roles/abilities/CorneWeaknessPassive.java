@@ -6,10 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-/**
- * Passif Corne : Weakness I permanente.
- * PassiveAbility.onSec() → tryUse() → onEnable() chaque seconde (cooldown 0).
- */
+
 public class CorneWeaknessPassive extends PassiveAbility {
 
     public CorneWeaknessPassive() { setCooldown(0); }

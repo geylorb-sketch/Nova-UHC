@@ -17,18 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 
-/**
- * Gestionnaire de traductions centralisé.
- *
- * Initialisation dans Main.onEnable() :
- * <pre>
- *   LangManager lm = new LangManager(getDataFolder(), "fr_FR");
- *   lm.register(CommonLang.values());
- *   lm.register(AcidRainLang.values());
- *   
- *   lm.generateAndLoad();
- * </pre>
- */
+
 public class LangManager {
 
     
@@ -42,10 +31,10 @@ public class LangManager {
     private final File langFolder;
     private final String serverDefaultLocale;
 
-    /** locale → (key → message traduit) */
+    
     private final Map<String, Map<String, String>> translations = new HashMap<>();
 
-    /** Toutes les Lang enums enregistrées */
+    
     private final List<Lang> registered = new ArrayList<>();
 
     private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
@@ -60,18 +49,14 @@ public class LangManager {
 
     
 
-    /** Enregistre un enum de traductions. */
+    
     public void register(Lang[] values) {
         registered.addAll(Arrays.asList(values));
     }
 
     
 
-    /**
-     * Génère les fichiers YAML manquants, ajoute les clés manquantes,
-     * puis charge toutes les traductions en mémoire.
-     * Appeler une seule fois au démarrage, après tous les register().
-     */
+    
     public void generateAndLoad() {
         if (!langFolder.exists()) langFolder.mkdirs();
 
@@ -124,7 +109,7 @@ public class LangManager {
 
     
 
-    /** Récupère le message brut traduit pour une locale donnée, sans placeholders. */
+    
     public String getRaw(Lang key, String locale) {
         Map<String, String> map = translations.get(locale);
         if (map != null && map.containsKey(key.getKey())) {
@@ -138,10 +123,7 @@ public class LangManager {
         return key.getFallback();
     }
 
-    /**
-     * Récupère le message traduit dans la langue du joueur,
-     * avec les placeholders communs + les placeholders extra appliqués.
-     */
+    
     public String get(Lang key, Player player, Map<String, Object> extra) {
         UHCPlayer uhc = UHCPlayerManager.get() != null ? UHCPlayerManager.get().getPlayer(player) : null;
         String locale = (uhc != null) ? uhc.getLocale() : serverDefaultLocale;
@@ -149,40 +131,40 @@ public class LangManager {
         return applyPlaceholders(msg, buildPlaceholders(uhc, extra));
     }
 
-    /** Récupère le message traduit dans la langue du joueur, sans extra placeholders. */
+    
     public String get(Lang key, Player player) {
         return get(key, player, null);
     }
 
-    /** Récupère le message dans la locale serveur, avec placeholders. */
+    
     public String get(Lang key, Map<String, Object> extra) {
         String msg = getRaw(key, serverDefaultLocale);
         return applyPlaceholders(msg, buildPlaceholders(null, extra));
     }
 
-    /** Récupère le message dans la locale serveur, sans extra placeholders. */
+    
     public String get(Lang key) {
         return get(key, (Map<String, Object>) null);
     }
 
     
 
-    /** Envoie le message au joueur dans SA langue. */
+    
     public void send(Lang key, Player player) {
         player.sendMessage(get(key, player));
     }
 
-    /** Envoie le message au joueur dans SA langue avec des placeholders extra. */
+    
     public void send(Lang key, Player player, Map<String, Object> extra) {
         player.sendMessage(get(key, player, extra));
     }
 
-    /** Envoie à tous les joueurs en ligne — chacun dans SA langue. */
+    
     public void sendAll(Lang key) {
         sendAll(key, null);
     }
 
-    /** Envoie à tous les joueurs avec extra placeholders — chacun dans SA langue. */
+    
     public void sendAll(Lang key, Map<String, Object> extra) {
         if (UHCPlayerManager.get() == null) return;
         for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getOnlineUHCPlayers()) {
@@ -195,10 +177,7 @@ public class LangManager {
 
     
 
-    /**
-     * Construit la map complète des placeholders communs.
-     * Peut être appelée depuis l'extérieur pour construire des messages custom.
-     */
+    
     public Map<String, Object> buildPlaceholders(UHCPlayer uhcPlayer, Map<String, Object> extra) {
         Map<String, Object> ph = new HashMap<>();
 
@@ -318,7 +297,7 @@ public class LangManager {
         return ph;
     }
 
-    /** Construit les placeholders sans joueur spécifique. */
+    
     public Map<String, Object> buildPlaceholders(Map<String, Object> extra) {
         return buildPlaceholders(null, extra);
     }
