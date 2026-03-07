@@ -37,7 +37,7 @@ public class DocumentCMD extends Command {
         ));
         linkOfficial.setClickEvent(new ClickEvent(
                 ClickEvent.Action.OPEN_URL,
-                "https:
+                "https://nova-code.fr"
         ));
         base.addExtra(linkConfig);
         base.addExtra(" ");

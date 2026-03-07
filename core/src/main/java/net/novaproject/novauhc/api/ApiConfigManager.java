@@ -1,4 +1,4 @@
-package net.novaproject.novauhc.database;
+package net.novaproject.novauhc.api;
 
 import com.google.gson.*;
 import net.novaproject.novauhc.ui.config.Potions;

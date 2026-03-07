@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.novaproject.novauhc.ability.AbilityManager;
 import net.novaproject.novauhc.command.CommandManager;
-import net.novaproject.novauhc.database.ApiManager;
+import net.novaproject.novauhc.api.ApiManager;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.lang.lang.TaskLang;

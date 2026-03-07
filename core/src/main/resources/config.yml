@@ -10,14 +10,14 @@ serverinfo:
   helpop:
     "§f[§6HELP§f] "
 api:
-  url: "http:
+  url: "https://api.nova-code.fr"
   key: "TA CLEF API ICI"
   server-name: "Nova-UHC"
 mumble:
   port: ""
   ip: ""
-doc: "https:
-discord: "https:
+doc: ""
+discord: "https://discord.gg/TGMM7bPwTb"
 staff:
   - "89daecd6-f9a7-4a2e-a8bf-a7d9294f074f"
 ## PlaceHolder utilisable :

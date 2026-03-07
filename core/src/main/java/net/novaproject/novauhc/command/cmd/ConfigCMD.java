@@ -5,7 +5,7 @@ import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.Command;
 import net.novaproject.novauhc.command.CommandArguments;
-import net.novaproject.novauhc.database.UHCGameConfiguration;
+import net.novaproject.novauhc.api.UHCGameConfiguration;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.ui.config.Enchants;

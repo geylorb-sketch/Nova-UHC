@@ -1,6 +1,6 @@
 package net.novaproject.novauhc.utils;
 
-import net.novaproject.novauhc.database.ApiManager;
+import net.novaproject.novauhc.api.ApiManager;
 import java.util.*;
 import java.util.stream.Collectors;
 

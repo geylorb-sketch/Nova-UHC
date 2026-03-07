@@ -1,4 +1,4 @@
-package net.novaproject.novauhc.database;
+package net.novaproject.novauhc.api;
 
 import com.google.gson.*;
 import net.novaproject.novauhc.Main;
@@ -34,8 +34,11 @@ public class ApiManager {
     public static ApiManager get() { return Main.getApiManager(); }
 
     public ApiManager(Plugin plugin, String apiUrl, String apiKey) {
+        String apiUrl1;
         this.plugin = plugin;
-        this.apiUrl = apiUrl.endsWith("/") ? apiUrl.substring(0, apiUrl.length() - 1) : apiUrl;
+        apiUrl1 = apiUrl.endsWith("/") ? apiUrl.substring(0, apiUrl.length() - 1) : apiUrl;
+        apiUrl1 = apiUrl1 + "/api/v1/plugin";
+        this.apiUrl = apiUrl1;
         this.apiKey = apiKey;
         this.log = plugin.getLogger();
         this.gson = new GsonBuilder().create();

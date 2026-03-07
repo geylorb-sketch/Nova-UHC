@@ -1,4 +1,4 @@
-package net.novaproject.novauhc.database;
+package net.novaproject.novauhc.api;
 
 import lombok.Getter;
 import org.bson.Document;

@@ -37,7 +37,7 @@ public class DiscordCMD extends Command {
         ));
         linkOfficial.setClickEvent(new ClickEvent(
                 ClickEvent.Action.OPEN_URL,
-                "https:
+                "https://discord.gg/TGMM7bPwTb"
         ));
         base.addExtra(linkConfig);
         base.addExtra(" ");
