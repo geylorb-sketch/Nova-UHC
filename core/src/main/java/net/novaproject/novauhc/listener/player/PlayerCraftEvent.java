@@ -1,7 +1,6 @@
 package net.novaproject.novauhc.listener.player;
 
 import net.novaproject.novauhc.lang.LangManager;
-import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.scenario.ScenarioManager;
@@ -24,7 +23,6 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.material.MaterialData;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,7 +30,6 @@ import java.util.stream.Collectors;
 public class PlayerCraftEvent implements Listener {
 
     public UHCManager uhcManager = UHCManager.get();
-
 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
@@ -57,17 +54,6 @@ public class PlayerCraftEvent implements Listener {
             player.updateInventory();
             return;
         }
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (ItemStack invItem : player.getInventory().getContents()) {
-                    if (invItem != null && invItem.isSimilar(invItem)) {
-                        ScenarioManager.get().getActiveScenarios().forEach(scenario -> scenario.onCraft(invItem, event));
-                    }
-                }
-            }
-        }.runTaskLater(Main.get(), 2L);
 
         ScenarioManager.get().getActiveScenarios().forEach(scenario -> {
             scenario.onCraft(item, event);
@@ -131,6 +117,7 @@ public class PlayerCraftEvent implements Listener {
 
 
     private boolean isDiamondArmor(ItemStack item) {
+        if (item == null) return false;
         Material type = item.getType();
         return type == Material.DIAMOND_HELMET ||
                 type == Material.DIAMOND_CHESTPLATE ||
@@ -173,7 +160,9 @@ public class PlayerCraftEvent implements Listener {
     }
 
     private Map<Enchantment, Integer> getBlockedEnchant(UHCPlayer player, Map<Enchantment, Integer> enchantments) {
-        return enchantments.entrySet().stream().filter(x -> isBlockedEnchant(player, x.getKey(), x.getValue().intValue())).collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
+        return enchantments.entrySet().stream()
+                .filter(x -> isBlockedEnchant(player, x.getKey(), x.getValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private boolean isBlockedEnchant(UHCPlayer player, Enchantment enchant, int value) {

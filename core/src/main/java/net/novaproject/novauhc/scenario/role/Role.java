@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -28,9 +29,16 @@ public abstract class Role implements Cloneable {
 
     public abstract String getName();
     public abstract void sendDescription(Player player);
-
     private Camps camp;
-
+    public double getStrengthPercent(){
+        return 0;
+    }
+    public double getResistancePercent(){
+        return 0;
+    }
+    public double getStrengthCriticPercent(){
+        return 0;
+    }
     public String getColor() {
         return camp.getColor();
     }
@@ -46,7 +54,9 @@ public abstract class Role implements Cloneable {
         if(!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onGive(uhcPlayer));
     }
 
-
+    public void onDrop(UHCPlayer uhcPlayer, PlayerDropItemEvent event) {
+        if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onDrop(uhcPlayer,event));
+    }
     public void onSec(Player player){
         if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onSec(player));
     }

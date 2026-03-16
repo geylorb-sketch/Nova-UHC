@@ -20,8 +20,8 @@ public enum FKLang implements Lang {
 
     
     ANNONCE_NEW_EPISODE(
-            "§6§l⚔ FK §r§eNouvel épisode !",
-            "§6§l⚔ FK §r§eNew episode!"
+            "§6§l⚔ FK §r§eNouvel épisode ! Episode : %episode%",
+            "§6§l⚔ FK §r§eNew episode! Episode : %episode%"
     ),
     ANNONCE_NETHER(
             "§6§l⚔ FK §r§cLe Nether est désormais accessible !",

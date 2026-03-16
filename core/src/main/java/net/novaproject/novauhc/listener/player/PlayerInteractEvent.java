@@ -59,20 +59,18 @@ public class PlayerInteractEvent implements Listener {
                         }
                         return;
                     }
-                    if(item.getType() == Material.WOOD_DOOR && player.getWorld().equals(Common.get().getArena())){
+                    if (item.getType() == Material.WOOD_DOOR && player.getWorld().equals(Common.get().getArena())) {
                         player.getInventory().clear();
                         player.teleport(Common.get().getLobbySpawn());
                         UHCUtils.giveLobbyItems(player);
                     }
-
-                    if(item.isSimilar(Common.get().getChangeSpawn().getItemstack())){
-                        new CenterUi(player.getPlayer(),null).open();
+                    if (item.isSimilar(Common.get().getChangeSpawn().getItemstack())) {
+                        new CenterUi(player.getPlayer(), null).open();
                     }
-                    if(item.isSimilar(Common.get().getRegenArena().getItemstack())){
+                    if (item.isSimilar(Common.get().getRegenArena().getItemstack())) {
                         new WorldGenerator(Main.get(), Common.get().getArenaName());
                         UHCUtils.giveLobbyItems(player);
                     }
-
                 }
                 if (item.isSimilar(Common.get().getTeamItem().getItemstack())) {
                     new inGameTeamUi(player).open();
@@ -88,12 +86,13 @@ public class PlayerInteractEvent implements Listener {
                 }
             }
         }
+
         ItemStack item = event.getItem();
         if (isDiamondArmor(item)) {
-
+            UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
             int currentDiamondPieces = countDiamondArmor(player);
 
-            if (currentDiamondPieces >= UHCManager.get().getDiamondArmor()) {
+            if (currentDiamondPieces >= uhcPlayer.getDiamondArmor()) {
                 event.setCancelled(true);
                 player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
                 LangManager.get().send(CommonLang.EXEDED_LIMITE, player);
@@ -115,6 +114,7 @@ public class PlayerInteractEvent implements Listener {
             scenario.onDrop(event);
         });
     }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
@@ -122,7 +122,9 @@ public class PlayerInteractEvent implements Listener {
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
 
         if (UHCManager.get().isLobby()) {
-            if (!player.hasPermission("novauhc.host") || !player.hasPermission("novauhc.cohost")) {
+            // FIX : || remplacé par && — avec ||, même un host était bloqué
+            // car il n'a pas forcément les DEUX permissions simultanément
+            if (!player.hasPermission("novauhc.host") && !player.hasPermission("novauhc.cohost")) {
                 event.setCancelled(true);
                 player.updateInventory();
             }
@@ -132,13 +134,27 @@ public class PlayerInteractEvent implements Listener {
         if (event.isShiftClick()) {
             ItemStack clicked = event.getCurrentItem();
             if (isDiamondArmor(clicked)) {
-                if (exceedsDiamondLimit(player, uhcPlayer)) {
+                // FIX : vérifie si l'item irait réellement occuper un slot armure supplémentaire
+                int armorIndex = getArmorIndex(clicked);
+                ItemStack[] armorContents = player.getInventory().getArmorContents();
+                boolean slotAlreadyOccupied = armorIndex >= 0
+                        && armorContents[armorIndex] != null
+                        && armorContents[armorIndex].getType() != Material.AIR;
+
+                // Si le slot cible est déjà occupé par une pièce diamant,
+                // le shift-click va la remplacer → le count ne change pas
+                boolean wouldIncreaseCount = !slotAlreadyOccupied || !isDiamondArmor(armorIndex >= 0 ? armorContents[armorIndex] : null);
+
+                if (wouldIncreaseCount && exceedsDiamondLimit(player, uhcPlayer)) {
                     event.setCancelled(true);
                     player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 1);
                     LangManager.get().send(CommonLang.EXEDED_LIMITE, player);
                     player.updateInventory();
                 }
             }
+            // FIX : pas de return ici — on laisse passer les shift-clicks non-diamant
+            // normalement sans court-circuiter la suite du handler.
+            // (Le return était trop tôt et empêchait d'autres vérifications.)
             return;
         }
 
@@ -148,6 +164,7 @@ public class PlayerInteractEvent implements Listener {
                 ItemStack current = event.getCurrentItem();
                 int currentPieces = countDiamondArmor(player);
 
+                // Si le slot armure ciblé contenait déjà une pièce diamant, on ne compte pas double
                 if (isDiamondArmor(current)) {
                     currentPieces--;
                 }
@@ -183,16 +200,31 @@ public class PlayerInteractEvent implements Listener {
         return countDiamondArmor(player) >= uhcPlayer.getDiamondArmor();
     }
 
+    /**
+     * Retourne l'index dans getArmorContents() correspondant au type de pièce :
+     * 0 = boots, 1 = leggings, 2 = chestplate, 3 = helmet
+     */
+    private int getArmorIndex(ItemStack item) {
+        if (item == null) return -1;
+        return switch (item.getType()) {
+            case DIAMOND_BOOTS -> 0;
+            case DIAMOND_LEGGINGS -> 1;
+            case DIAMOND_CHESTPLATE -> 2;
+            case DIAMOND_HELMET -> 3;
+            default -> -1;
+        };
+    }
+
 
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
-
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
         ScenarioManager.get().getActiveScenarios().forEach(scenario -> {
             scenario.onConsume(player, item, event);
         });
+
         GoldenHead goldenHeadScenario = ScenarioManager.get().getScenario(GoldenHead.class);
         if (goldenHeadScenario != null && !goldenHeadScenario.isActive()) {
             if (item.getType() == Material.GOLDEN_APPLE
@@ -206,9 +238,7 @@ public class PlayerInteractEvent implements Listener {
 
     @EventHandler
     public void onPlayerMountHorse(PlayerInteractEntityEvent event) {
-
         Player player = event.getPlayer();
-
         ScenarioManager.get().getActiveScenarios().forEach(scenario -> {
             scenario.onPlayerInteractonEntity(player, event);
         });

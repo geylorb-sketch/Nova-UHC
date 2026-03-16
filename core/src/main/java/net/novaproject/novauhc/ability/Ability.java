@@ -13,6 +13,7 @@ import org.bson.Document;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -124,7 +125,9 @@ public abstract class Ability implements Cloneable {
 
     }
 
+    public void onDrop(UHCPlayer uhcPlayer, PlayerDropItemEvent event){
 
+    }
     public void onDeath() {
     }
 

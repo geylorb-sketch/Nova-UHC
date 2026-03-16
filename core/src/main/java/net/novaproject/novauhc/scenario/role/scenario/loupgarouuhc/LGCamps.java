@@ -24,6 +24,4 @@ public enum LGCamps implements Camps {
         this.delegate = new AbstractCamp(name, color, material, parent, mainCamp) {
         };
     }
-
-
 }

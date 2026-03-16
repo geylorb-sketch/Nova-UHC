@@ -161,7 +161,7 @@ public class Main extends JavaPlugin {
             cloudNet = new CloudNet();
         }
 
-        new NMSPatcher(this);
+        //new NMSPatcher(this);
     }
 
     @Override

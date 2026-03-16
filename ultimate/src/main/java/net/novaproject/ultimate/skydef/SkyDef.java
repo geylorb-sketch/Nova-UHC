@@ -129,6 +129,7 @@ public class SkyDef extends Scenario {
                         Main.get(),
                         new File(Main.get().getDataFolder(), "api/schem/tp.schematic"),
                         tpLoc
+                        ,false
                 );
             }
         } else {
@@ -181,7 +182,7 @@ public class SkyDef extends Scenario {
 
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
         if (uhcPlayer == null) return;
-
+        if(!defTeam.getPlayers().contains(uhcPlayer)) return;
         Location tpLowerArea = tpLoc;
         Location tpUpperArea = ConfigUtils.getLocation(getConfig(), "tp_haut");
         if (tpLowerArea == null || tpUpperArea == null) return;
@@ -244,7 +245,7 @@ public class SkyDef extends Scenario {
                     event.setCancelled(true);
                 }
             } else {
-                if (checkType == Material.AIR) {
+                if (isBannerMaterial(checkType)) {
                     StringJoiner joiner = new StringJoiner(", ");
                     uhcPlayerTeam(player).ifPresent(team ->
                             team.getPlayers().forEach(p -> joiner.add(p.getPlayer().getDisplayName()))
@@ -256,6 +257,7 @@ public class SkyDef extends Scenario {
                             "%players%", joiner.toString()
                     )));
                     bannerBreak = true;
+                    UHCManager.get().checkVictory();
                 }
             }
         }
@@ -300,8 +302,17 @@ public class SkyDef extends Scenario {
         }
     }
 
+
+
     @Override
-    public void onStart(Player player) {
+    public void onGameStart() {
+        Location bannerLoc = ConfigUtils.getLocation(getConfig(), "banner_loc");
+        if (bannerLoc != null && bannerLoc.getWorld() != null) {
+            Block bannerBlock = bannerLoc.getBlock();
+            bannerBlock.setType(Material.WALL_BANNER);
+            bannerBlock.setData((byte) getConfig().getInt("banner_data"));
+        }
+
         ItemCreator[] items = {
                 new ItemCreator(Material.IRON_BOOTS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, armorEnchantLevel),
                 new ItemCreator(Material.IRON_LEGGINGS).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, armorEnchantLevel),
@@ -320,13 +331,6 @@ public class SkyDef extends Scenario {
             p.getInventory().setChestplate(items[2].getItemstack());
             p.getInventory().setHelmet(items[3].getItemstack());
             p.getInventory().addItem(items[4].getItemstack(), items[5].getItemstack());
-        }
-
-        Location bannerLoc = ConfigUtils.getLocation(getConfig(), "banner_loc");
-        if (bannerLoc != null && bannerLoc.getWorld() != null) {
-            Block bannerBlock = bannerLoc.getBlock();
-            bannerBlock.setType(Material.WALL_BANNER);
-            bannerBlock.setData((byte) 5);
         }
     }
 

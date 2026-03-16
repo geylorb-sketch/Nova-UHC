@@ -20,59 +20,71 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomCraft extends Scenario {
 
-    private final Map<Material, ItemStack> cache = new HashMap<>();
-    private final Set<Material> alreadyUsed = new HashSet<>();
+    // -----------------------------------------------------------------------
+    // Caches statiques
+    // -----------------------------------------------------------------------
+    private static final Material[]    ALL_MATERIALS    = Material.values();
+    private static final Enchantment[] ALL_ENCHANTMENTS = Enchantment.values();
 
-    @ScenarioVariable(
-            nameKey = "RANDOMCRAFT_GIVE_STARTER_NAME",
-            descKey = "RANDOMCRAFT_GIVE_STARTER_DESC",
-            type = VariableType.BOOLEAN
-    )
+    /** Matériaux toujours exclus. */
+    private static final EnumSet<Material> ALWAYS_BLOCKED = EnumSet.of(
+            Material.AIR, Material.BEDROCK, Material.COMMAND,
+            Material.BARRIER, Material.PORTAL,
+            Material.ENDER_PORTAL, Material.ENDER_PORTAL_FRAME,
+            Material.WATER, Material.LAVA,
+            Material.STATIONARY_WATER, Material.STATIONARY_LAVA
+    );
+
+    /** Matériaux considérés comme rares. */
+    private static final EnumSet<Material> RARE_MATERIALS = EnumSet.of(
+            Material.DIAMOND, Material.DIAMOND_BLOCK,
+            Material.GOLDEN_APPLE, Material.ENCHANTED_BOOK,
+            Material.BEACON, Material.DRAGON_EGG
+    );
+
+    // -----------------------------------------------------------------------
+    // Variables de scénario
+    // -----------------------------------------------------------------------
+    @ScenarioVariable(nameKey = "RANDOMCRAFT_GIVE_STARTER_NAME",   descKey = "RANDOMCRAFT_GIVE_STARTER_DESC",   type = VariableType.BOOLEAN)
     private boolean giveStarterKit = true;
 
-    @ScenarioVariable(
-            nameKey = "RANDOMCRAFT_ALLOW_RARE_NAME",
-            descKey = "RANDOMCRAFT_ALLOW_RARE_DESC",
-            type = VariableType.BOOLEAN
-    )
+    @ScenarioVariable(nameKey = "RANDOMCRAFT_ALLOW_RARE_NAME",     descKey = "RANDOMCRAFT_ALLOW_RARE_DESC",     type = VariableType.BOOLEAN)
     private boolean allowRareItems = true;
 
-    @ScenarioVariable(
-            nameKey = "RANDOMCRAFT_MAX_INGOT_NAME",
-            descKey = "RANDOMCRAFT_MAX_INGOT_DESC",
-            type = VariableType.INTEGER
-    )
+    @ScenarioVariable(nameKey = "RANDOMCRAFT_MAX_INGOT_NAME",      descKey = "RANDOMCRAFT_MAX_INGOT_DESC",      type = VariableType.INTEGER)
     private int maxIngotAmount = 16;
 
-    @ScenarioVariable(
-            nameKey = "RANDOMCRAFT_GAPPLE_AMOUNT_NAME",
-            descKey = "RANDOMCRAFT_GAPPLE_AMOUNT_DESC",
-            type = VariableType.INTEGER
-    )
+    @ScenarioVariable(nameKey = "RANDOMCRAFT_GAPPLE_AMOUNT_NAME",  descKey = "RANDOMCRAFT_GAPPLE_AMOUNT_DESC",  type = VariableType.INTEGER)
     private int goldenAppleAmount = 3;
 
-    @ScenarioVariable(
-            nameKey = "RANDOMCRAFT_MAX_ENCHANT_NAME",
-            descKey = "RANDOMCRAFT_MAX_ENCHANT_DESC",
-            type = VariableType.INTEGER
-    )
+    @ScenarioVariable(nameKey = "RANDOMCRAFT_MAX_ENCHANT_NAME",    descKey = "RANDOMCRAFT_MAX_ENCHANT_DESC",    type = VariableType.INTEGER)
     private int maxEnchantLevel = 3;
 
-    @ScenarioVariable(
-            nameKey = "RANDOMCRAFT_ALLOW_DUPLICATE_NAME",
-            descKey = "RANDOMCRAFT_ALLOW_DUPLICATE_DESC",
-            type = VariableType.BOOLEAN
-    )
+    @ScenarioVariable(nameKey = "RANDOMCRAFT_ALLOW_DUPLICATE_NAME", descKey = "RANDOMCRAFT_ALLOW_DUPLICATE_DESC", type = VariableType.BOOLEAN)
     private boolean allowDuplicateDrops = false;
 
+    // -----------------------------------------------------------------------
+    // État interne
+    // -----------------------------------------------------------------------
+    /** Cache matériau craftable/fondable → résultat aléatoire. */
+    private final Map<Material, ItemStack> cache = new HashMap<>();
+    private final Random random = new Random();
+
+    /**
+     * Pool de matériaux disponibles, initialisée paresseusement.
+     * – Sans doublons : swap-remove O(1).
+     * – Avec doublons : pioche sans suppression.
+     */
+    private List<Material> materialPool = null;
+
+    // -----------------------------------------------------------------------
+    // API Scenario
+    // -----------------------------------------------------------------------
     @Override
-    public String getName() {
-        return "RandomCraft";
-    }
+    public String getName() { return "RandomCraft"; }
 
     @Override
     public String getDescription(Player player) {
@@ -87,13 +99,11 @@ public class RandomCraft extends Scenario {
     @Override
     public void onStart(Player player) {
         if (!giveStarterKit) return;
-
         player.getInventory().addItem(new ItemStack(Material.WORKBENCH, 64));
         player.getInventory().addItem(new ItemStack(Material.FURNACE, 64));
         player.getInventory().addItem(new ItemStack(Material.IRON_PICKAXE));
         player.getInventory().addItem(new ItemStack(Material.IRON_AXE));
         player.getInventory().addItem(new ItemStack(Material.IRON_SPADE));
-
     }
 
     @Override
@@ -105,6 +115,9 @@ public class RandomCraft extends Scenario {
         }
     }
 
+    // -----------------------------------------------------------------------
+    // Événements
+    // -----------------------------------------------------------------------
     @Override
     public void onFurnace(ItemStack result, FurnaceSmeltEvent event) {
         if (result == null) return;
@@ -117,41 +130,63 @@ public class RandomCraft extends Scenario {
         event.getInventory().setResult(getRandomized(result.getType()));
     }
 
-    private ItemStack getRandomized(Material original) {
-        if (cache.containsKey(original)) {
-            return cache.get(original).clone();
-        }
+    // -----------------------------------------------------------------------
+    // Logique de génération
+    // -----------------------------------------------------------------------
 
-        ItemStack generated = generateRandomItem();
-        cache.put(original, generated);
-        return generated.clone();
+    private ItemStack getRandomized(Material original) {
+        return cache.computeIfAbsent(original, k -> generateRandomItem());
     }
 
+    /**
+     * Initialise la pool la première fois, en filtrant une seule fois tous les matériaux
+     * valides selon la config courante (allowRareItems).
+     */
+    private void initPoolIfNeeded() {
+        if (materialPool != null) return;
+
+        materialPool = new ArrayList<>();
+        for (Material m : ALL_MATERIALS) {
+            if (isAcceptedMaterial(m)) materialPool.add(m);
+        }
+        Collections.shuffle(materialPool, random);
+    }
+
+    /**
+     * Génère un item aléatoire.
+     *
+     * – Sans doublons : swap-remove → O(1), zéro retry.
+     * – Avec doublons  : pioche directement.
+     *
+     * @return l'ItemStack généré, ou null si la pool est épuisée.
+     */
     private ItemStack generateRandomItem() {
-        Material[] materials = Material.values();
+        initPoolIfNeeded();
+
+        if (materialPool.isEmpty()) return null;
+
         Material chosen;
+        if (!allowDuplicateDrops) {
+            chosen = materialPool.remove(materialPool.size() - 1);
+        } else {
+            chosen = materialPool.get(random.nextInt(materialPool.size()));
+        }
 
-        int safety = 0;
-        do {
-            chosen = materials[ThreadLocalRandom.current().nextInt(materials.length)];
-            safety++;
-        } while ((!isAcceptedMaterial(chosen) || (!allowDuplicateDrops && alreadyUsed.contains(chosen)))
-                && safety < 500);
+        return buildItem(chosen);
+    }
 
-        alreadyUsed.add(chosen);
-
+    /** Construit l'ItemStack final pour un matériau donné. */
+    private ItemStack buildItem(Material chosen) {
         int amount = 1;
+        if (chosen == Material.GOLDEN_APPLE)                                    amount = goldenAppleAmount;
+        if (chosen == Material.IRON_INGOT || chosen == Material.GOLD_INGOT)     amount = maxIngotAmount;
 
-        if (chosen == Material.GOLDEN_APPLE) amount = goldenAppleAmount;
-        if (chosen == Material.IRON_INGOT || chosen == Material.GOLD_INGOT)
-            amount = maxIngotAmount;
-
-        ItemStack item = new ItemStack(chosen, amount);
+        ItemStack item = new ItemStack(chosen, Math.max(1, amount));
 
         if (chosen == Material.ENCHANTED_BOOK && allowRareItems) {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-            Enchantment enchant = Enchantment.values()[ThreadLocalRandom.current().nextInt(Enchantment.values().length)];
-            int level = ThreadLocalRandom.current().nextInt(maxEnchantLevel) + 1;
+            Enchantment enchant = ALL_ENCHANTMENTS[random.nextInt(ALL_ENCHANTMENTS.length)];
+            int level = random.nextInt(Math.max(1, maxEnchantLevel)) + 1;
             meta.addStoredEnchant(enchant, level, true);
             item.setItemMeta(meta);
         }
@@ -159,16 +194,14 @@ public class RandomCraft extends Scenario {
         return item;
     }
 
+    // -----------------------------------------------------------------------
+    // Helpers
+    // -----------------------------------------------------------------------
     private boolean isAcceptedMaterial(Material type) {
-        return type != Material.AIR
-                && type != Material.BEDROCK
-                && type != Material.COMMAND
-                && type != Material.BARRIER
-                && type != Material.PORTAL
-                && type != Material.ENDER_PORTAL
-                && type != Material.ENDER_PORTAL_FRAME
-                && type != Material.WATER
-                && type != Material.LAVA;
+        if (type == null) return false;
+        if (ALWAYS_BLOCKED.contains(type)) return false;
+        if (!allowRareItems && RARE_MATERIALS.contains(type)) return false;
+        return true;
     }
 
     @Override

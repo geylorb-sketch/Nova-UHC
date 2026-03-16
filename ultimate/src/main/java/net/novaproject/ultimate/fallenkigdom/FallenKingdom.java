@@ -79,6 +79,12 @@ public class FallenKingdom extends Scenario {
             type = VariableType.INTEGER)
     private int endep = 6;
 
+    @ScenarioVariable(lang = ScenarioVarLang.class,
+            nameKey = "FK_VAR_MAX_BUILD_Y_NAME",
+            descKey = "FK_VAR_MAX_BUILD_Y_DESC",
+            type = VariableType.INTEGER)
+    private int maxBuildY = 75;
+
 
     private final Map<UHCTeam, TeamZone> teamZones = new HashMap<>();
     private final Map<UHCTeam, Integer> captureTimers = new HashMap<>();
@@ -86,6 +92,7 @@ public class FallenKingdom extends Scenario {
     private final Map<UHCTeam, Location> captureChestLocations = new HashMap<>();
     private final Map<UHCTeam, BukkitTask> activeCaptureTask = new HashMap<>();
     private final Set<Player> inzone = new HashSet<>();
+    private final Set<UHCTeam> eliminatedTeams = new HashSet<>();
 
     private List<Location> teamZoneLocations = new ArrayList<>();
     private int episode = 0;
@@ -131,43 +138,44 @@ public class FallenKingdom extends Scenario {
     }
 
     @Override
+    public boolean overridesVictory() {
+        return true;
+    }
+
+    @Override
     public void toggleActive() {
         super.toggleActive();
         if (isActive()) {
             teamZoneLocations.clear();
+            LoadingChunkTask.stopPregen();
             ConfigUtils.getLocations(getConfig(), "team_zone_location").forEach(loc -> {
                 if (loc.getWorld() != null) {
                     teamZoneLocations.add(loc);
-                    Bukkit.getLogger().info("[FK] Zone location chargée: " + loc.getWorld().getName() + " x=" + loc.getBlockX() + " z=" + loc.getBlockZ());
                 } else {
-                    Bukkit.getLogger().warning("[FK] Zone location ignorée (world null): " + loc);
                 }
             });
-            Bukkit.getLogger().info("[FK] setup() - Total zones chargées: " + teamZoneLocations.size());
             UHCManager.get().setTeam_size(2);
-            Bukkit.getLogger().info("[FK] toggleActive() - teamZoneLocations.size()=" + teamZoneLocations.size());
             UHCTeamManager.get().deleteTeams();
             for (int i = 0; i < teamZoneLocations.size(); i++) {
                 UHCTeamManager.get().createTeam(UHCManager.get().getTeam_size());
-                Bukkit.getLogger().info("[FK] Equipe créée #" + (i+1));
             }
-            Bukkit.getLogger().info("[FK] Total equipes après création: " + UHCTeamManager.get().getTeams().size());
+
             resetState();
             LobbyCreator.deleteWorld(Common.get().getArenaName(), Common.get().getLobbySpawn());
             LobbyCreator.cloneWorld(getConfig().getString("fk_template"), Common.get().getArenaName());
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if(LobbyCreator.worldsBeingTasked.isEmpty()){
+                    if (LobbyCreator.worldsBeingTasked.isEmpty()) {
                         cancel();
                         LoadingChunkTask.create(Common.get().getArena(), Common.get().getNether(), 1000);
-                        UHCManager.get().setTimerpvp(7200);
+                        UHCManager.get().setTimerpvp(1200);
                         setupTeamZones();
                         Common.get().getArena().getWorldBorder().setSize(1000);
                         UHCManager.get().setTimerborder(-2);
                     }
                 }
-            }.runTaskTimer(Main.get(),0,20);
+            }.runTaskTimer(Main.get(), 0, 20);
 
         } else {
             cancelAllCaptureTasks();
@@ -182,7 +190,7 @@ public class FallenKingdom extends Scenario {
 
     private void resetState() {
         episode = 0;
-        epTimerCurrent = epTimer; 
+        epTimerCurrent = epTimer;
         annonce = false;
         endact = false;
         netheract = false;
@@ -190,6 +198,7 @@ public class FallenKingdom extends Scenario {
         capturingTeams.clear();
         captureChestLocations.clear();
         teamZones.clear();
+        eliminatedTeams.clear();
         cancelAllCaptureTasks();
     }
 
@@ -210,19 +219,17 @@ public class FallenKingdom extends Scenario {
     private void setupTeamZones() {
         teamZones.clear();
         List<UHCTeam> teams = UHCTeamManager.get().getTeams();
-        Bukkit.getLogger().info("[FK] setupTeamZones() - teams=" + teams.size() + " zones=" + teamZoneLocations.size());
+
 
         int teamCount = Math.min(teams.size(), teamZoneLocations.size());
-        Bukkit.getLogger().info("[FK] setupTeamZones() - teamCount effectif=" + teamCount);
+
 
         for (int i = 0; i < teamCount; i++) {
             UHCTeam team = teams.get(i);
             Location location = teamZoneLocations.get(i);
-            Bukkit.getLogger().info("[FK] Assignation zone #" + i + " -> team=" + team.name() + " x=" + location.getBlockX() + " z=" + location.getBlockZ());
             TeamZone zone = new TeamZone(team, location.getBlockX(), location.getBlockZ(), zoneSize, Common.get().getArenaName());
             teamZones.put(team, zone);
         }
-        Bukkit.getLogger().info("[FK] setupTeamZones() terminé - " + teamZones.size() + " zones assignées");
     }
 
     public TeamZone getTeamZone(UHCTeam team) {
@@ -238,37 +245,49 @@ public class FallenKingdom extends Scenario {
         return Optional.empty();
     }
 
-    
-    
-    
+
+
 
     @Override
     public void onStart(Player player) {
-        LangManager.get().sendAll(FKLang.WELCOME_FK);
+        LangManager.get().send(FKLang.WELCOME_FK, player);
     }
 
     @Override
+    public void onGameStart() {
+        UHCTeamManager.get().getTeams().removeIf(team -> {
+            if(team.getPlayers().isEmpty()){
+                System.out.println("team " + team.name() + " supprimer");
+                return true;
+            }
+            return false;
+        });
+    }
+
+
+    @Override
     public void scatter(UHCPlayer uhcPlayer, Location location, HashMap<UHCTeam, Location> teamloc) {
-        Bukkit.getLogger().info("[FK] scatter() appelé - teamZones.size()=" + teamZones.size());
 
         for (UHCPlayer p : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
             Player player = p.getPlayer();
-            if (player == null) { Bukkit.getLogger().warning("[FK] scatter() player null pour " + p); continue; }
+            if (player == null) {
+                continue;
+            }
 
             if (p.getTeam().isPresent()) {
                 UHCTeam team = p.getTeam().get();
                 TeamZone zone = getTeamZone(team);
-                Bukkit.getLogger().info("[FK] scatter() " + player.getName() + " team=" + team.name() + " zone=" + (zone == null ? "NULL !" : "OK"));
 
                 if (zone == null) continue;
 
                 Location spawn = zone.getSpawn();
                 World world = spawn.getWorld();
-                if (world == null) { Bukkit.getLogger().warning("[FK] scatter() world null pour team " + team.name()); continue; }
+                if (world == null) {
+                    continue;
+                }
 
                 int highY = world.getHighestBlockYAt(spawn.getBlockX(), spawn.getBlockZ()) + 2;
                 player.teleport(new Location(world, spawn.getX(), highY, spawn.getZ()));
-                Bukkit.getLogger().info("[FK] scatter() " + player.getName() + " téléporté en x=" + spawn.getBlockX() + " y=" + highY + " z=" + spawn.getBlockZ());
             } else {
                 Bukkit.getLogger().warning("[FK] scatter() " + player.getName() + " n'a PAS de team !");
             }
@@ -282,9 +301,8 @@ public class FallenKingdom extends Scenario {
         }
     }
 
-    
-    
-    
+
+
 
     @Override
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
@@ -296,21 +314,34 @@ public class FallenKingdom extends Scenario {
             public void run() {
                 if (!player.isOnline()) return;
 
+                boolean teamEliminated = uhcPlayer.getTeam().isPresent()
+                        && eliminatedTeams.contains(uhcPlayer.getTeam().get());
+
+                if (teamEliminated) {
+                    player.spigot().respawn();
+                    player.setGameMode(GameMode.SPECTATOR);
+                    TeamsTagsManager.setNameTag(player, "zzzzz", "§8§lSPEC §r§8", "");
+                    return;
+                }
+
                 player.spigot().respawn();
                 player.setGameMode(GameMode.SURVIVAL);
+                uhcPlayer.setPlaying(true);
 
-                if (uhcPlayer.getTeam().isPresent()) {
-                    TeamZone teamZone = getTeamZone(uhcPlayer.getTeam().get());
-                    if (teamZone != null) {
-                        player.teleport(teamZone.getSpawn());
-                    }
-                    UHCTeam team = uhcPlayer.getTeam().get();
-                    TeamsTagsManager.setNameTag(player, team.name(), team.prefix(), "");
+                Location bedSpawn = player.getBedSpawnLocation();
+
+                if (bedSpawn != null) {
+                    player.teleport(bedSpawn);
                 } else {
                     World arenaWorld = Bukkit.getWorld(Common.get().getArenaName());
                     if (arenaWorld != null) {
                         player.teleport(new Location(arenaWorld, 0, 142, 0));
                     }
+                }
+
+                if (uhcPlayer.getTeam().isPresent()) {
+                    UHCTeam team = uhcPlayer.getTeam().get();
+                    TeamsTagsManager.setNameTag(player, team.name(), team.prefix(), "");
                 }
             }
         }.runTaskLater(Main.get(), 2L);
@@ -323,9 +354,8 @@ public class FallenKingdom extends Scenario {
         }
     }
 
-    
-    
-    
+
+
 
     @Override
     public void onSec(Player p) {
@@ -353,30 +383,36 @@ public class FallenKingdom extends Scenario {
         try {
             if (timer == epTimerCurrent) {
                 episode++;
-                epTimerCurrent += epTimer; 
-                LangManager.get().sendAll(FKLang.ANNONCE_NEW_EPISODE);
+                epTimerCurrent += epTimer;
+                LangManager.get().sendAll(FKLang.ANNONCE_NEW_EPISODE,
+                        Map.of("%episode%", String.valueOf(episode)));
             }
 
             if (episode >= netherep && !netheract) {
                 netheract = true;
-                ConfigUtils.getLocations(getConfig(), "nether_portals").forEach(loc -> {
-                    loc.getBlock().setType(Material.AIR);
-                });
+                List<Location> pos1List = ConfigUtils.getLocations(getConfig(), "nether_portals.pos1");
+                List<Location> pos2List = ConfigUtils.getLocations(getConfig(), "nether_portals.pos2");
+                if (pos1List.size() != pos2List.size()) {
+                    Main.get().getLogger().warning("nether_portals: pos1 et pos2 n'ont pas le même nombre d'entrées !");
+                } else {
+                    for (int i = 0; i < pos1List.size(); i++) {
+                        generatePortalBetween(pos1List.get(i), pos2List.get(i), Material.PORTAL);
+                    }
+                }
                 LangManager.get().sendAll(FKLang.ANNONCE_NETHER);
             }
 
             if (episode >= endep && !endact) {
                 endact = true;
-                ConfigUtils.getLocations(getConfig(), "end_portals").forEach(loc -> {
-                    int y = loc.getBlockY();
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dz = -1; dz <= 1; dz++) {
-                            loc.getWorld().getBlockAt(
-                                    loc.getBlockX() + dx, y, loc.getBlockZ() + dz
-                            ).setType(Material.ENDER_PORTAL);
-                        }
+                List<Location> pos1List = ConfigUtils.getLocations(getConfig(), "end_portals.pos1");
+                List<Location> pos2List = ConfigUtils.getLocations(getConfig(), "end_portals.pos2");
+                if (pos1List.size() != pos2List.size()) {
+                    Main.get().getLogger().warning("end_portals: pos1 et pos2 n'ont pas le même nombre d'entrées !");
+                } else {
+                    for (int i = 0; i < pos1List.size(); i++) {
+                        generatePortalBetween(pos1List.get(i), pos2List.get(i), Material.ENDER_PORTAL);
                     }
-                });
+                }
                 LangManager.get().sendAll(FKLang.ANNONCE_END);
             }
 
@@ -389,9 +425,30 @@ public class FallenKingdom extends Scenario {
         }
     }
 
-    
-    
-    
+    public void generatePortalBetween(Location pos1, Location pos2, Material material) {
+        World world = pos1.getWorld();
+
+        int minX = Math.min(pos1.getBlockX(), pos2.getBlockX());
+        int maxX = Math.max(pos1.getBlockX(), pos2.getBlockX());
+
+        int minY = Math.min(pos1.getBlockY(), pos2.getBlockY());
+        int maxY = Math.max(pos1.getBlockY(), pos2.getBlockY());
+
+        int minZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
+        int maxZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    world.getBlockAt(x, y, z).setType(material);
+                }
+            }
+        }
+    }
+
+
+
+
 
     private boolean canBuildAtLocation(Player player, Location location) {
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
@@ -400,13 +457,11 @@ public class FallenKingdom extends Scenario {
         }
 
         UHCTeam playerTeam = uhcPlayer.getTeam().get();
+        TeamZone ownZone = getTeamZone(playerTeam);
 
-        for (Map.Entry<UHCTeam, TeamZone> entry : teamZones.entrySet()) {
-            if (entry.getValue().isInZone(location)) {
-                return entry.getKey().equals(playerTeam);
-            }
-        }
-        return true;
+        if (ownZone == null) return false;
+
+        return ownZone.isInZone(location);
     }
 
     private boolean isAssaultStarted() {
@@ -415,13 +470,15 @@ public class FallenKingdom extends Scenario {
 
     @Override
     public void onPlace(Player player, Block block, BlockPlaceEvent event) {
-        if (block.getType() == Material.TNT && !isAssaultStarted()) {
-            event.setCancelled(true);
-            LangManager.get().send(FKLang.TNT_DISABLED, player);
+        if (block.getType() == Material.TNT) {
+            if (!isAssaultStarted()) {
+                event.setCancelled(true);
+                LangManager.get().send(FKLang.TNT_DISABLED, player);
+            }
             return;
         }
 
-        if (!canBuildAtLocation(player, block.getLocation())) {
+        if (block.getY() > maxBuildY && !canBuildAtLocation(player, block.getLocation())) {
             event.setCancelled(true);
             LangManager.get().send(FKLang.BUILD_DENIED, player);
         }
@@ -474,9 +531,8 @@ public class FallenKingdom extends Scenario {
         }
     }
 
-    
-    
-    
+
+
 
     @Override
     public void onMove(Player player, PlayerMoveEvent event) {
@@ -497,8 +553,6 @@ public class FallenKingdom extends Scenario {
         if (enemyTeam.equals(playerTeam)) return;
         if (!isAssaultStarted()) return;
 
-        boolean enemyAlive = enemyTeam.getPlayers().stream().anyMatch(UHCPlayer::isPlaying);
-        if (!enemyAlive) return;
 
         Location chestLocation = findNearbyChest(playerLocation, 3);
         if (chestLocation == null) return;
@@ -604,11 +658,12 @@ public class FallenKingdom extends Scenario {
         captureChestLocations.clear();
     }
 
-    
-    
-    
+
+
 
     private void eliminateTeam(UHCTeam enemyTeam, UHCTeam playerTeam) {
+        eliminatedTeams.add(enemyTeam);
+
         for (UHCPlayer enemy : enemyTeam.getPlayers()) {
             Player ep = enemy.getPlayer();
             if (!enemy.isPlaying() || ep == null || !ep.isOnline()) continue;
@@ -640,14 +695,13 @@ public class FallenKingdom extends Scenario {
         UHCManager.get().checkVictory();
     }
 
-    
-    
-    
+
+
 
     @Override
     public boolean isWin() {
         long activeTeams = UHCTeamManager.get().getTeams().stream()
-                .filter(team -> team.getPlayers().stream().anyMatch(UHCPlayer::isPlaying))
+                .filter(team -> !eliminatedTeams.contains(team))
                 .count();
 
         if (activeTeams == 1) {
@@ -659,9 +713,8 @@ public class FallenKingdom extends Scenario {
         return false;
     }
 
-    
-    
-    
+
+
 
     private Location findNearbyChest(Location loc, int radius) {
         Block center = loc.getBlock();

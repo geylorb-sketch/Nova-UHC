@@ -288,6 +288,110 @@ public class UHCUtils {
                             final var pos = new BlockPosition(blockX, blockY, blockZ);
                             final var nmsWorld = ((CraftWorld) world).getHandle();
                             final var nmsChunk = nmsWorld.getChunkAt(blockX >> 4, blockZ >> 4);
+
+                            if (blockY < 0 || blockY > 255) {
+                                index++;
+                                continue;
+                            }
+
+                            int sectionIndex = blockY >> 4;
+
+                            if (sectionIndex < 0 || sectionIndex >= nmsChunk.getSections().length) {
+                                index++;
+                                continue;
+                            }
+
+                            var cs = nmsChunk.getSections()[sectionIndex];
+
+                            if (cs == null) {
+                                cs = new ChunkSection(sectionIndex << 4, !nmsWorld.worldProvider.o());
+                                nmsChunk.getSections()[sectionIndex] = cs;
+                            }
+
+                            cs.setType(blockX & 15, blockY & 15, blockZ & 15, blockDataFinal);
+                            nmsChunk.tileEntities.remove(pos);
+
+                            final var packet = new PacketPlayOutBlockChange(nmsWorld, pos);
+                            for (final var p : Bukkit.getServer().getOnlinePlayers()) {
+                                if(location.getWorld().equals(p.getWorld())) ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+                            }
+                        }
+
+                        index++;
+                    }
+
+
+                    if (index >= blocks.length) {
+                        Bukkit.broadcastMessage("§aSchematic " + file.getName() + " loaded in " + (System.currentTimeMillis() - start) + "ms");
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(plugin, 0L, 2L);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Bukkit.broadcastMessage("§cAn error has occured while loading the schematic " + file.getName() + ". (" + e.getMessage() + ")");
+        }
+    }
+
+    public static void loadSchematic(JavaPlugin plugin, File file, final Location location,boolean offset) {
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            NBTTagCompound schematic = NBTCompressedStreamTools.a(fis);
+
+            short width = schematic.getShort("Width");
+            short height = schematic.getShort("Height");
+            short length = schematic.getShort("Length");
+
+            byte[] blocks = schematic.getByteArray("Blocks");
+            byte[] data = schematic.getByteArray("Data");
+
+            int offsetX = width / 2;
+            int offsetY = height / 2;
+            int offsetZ = length / 2;
+
+            final long start = System.currentTimeMillis();
+
+            new BukkitRunnable() {
+                int index = 0;
+
+                @Override
+                public void run() {
+                    int limit = 10000000;
+                    int placed = 0;
+
+                    while (index < blocks.length && placed++ < limit) {
+                        int x = index % width;
+                        int y = (index / (width * length));
+                        int z = (index / width) % length;
+
+                        int blockX = location.getBlockX() + x - offsetX;
+                        int blockY = location.getBlockY() + y;
+                        int blockZ = location.getBlockZ() + z - offsetZ;
+
+                        int blockId = blocks[index] & 0xFF;
+                        byte blockData = data[index];
+
+                        Material material = Material.getMaterial(blockId);
+                        if (material == null) {
+                            index++;
+                            continue;
+                        }
+
+                        final var world = location.getWorld();
+                        final var blockAt = world.getBlockAt(blockX, blockY, blockZ);
+
+                        if (blockAt.getTypeId() != blockId || blockAt.getData() != blockData) {
+                            final var nmsBlock = CraftMagicNumbers.getBlock(material);
+                            if (nmsBlock == null) {
+                                index++;
+                                continue;
+                            }
+
+                            final var blockDataFinal = nmsBlock.fromLegacyData(blockData);
+
+                            final var pos = new BlockPosition(blockX, blockY, blockZ);
+                            final var nmsWorld = ((CraftWorld) world).getHandle();
+                            final var nmsChunk = nmsWorld.getChunkAt(blockX >> 4, blockZ >> 4);
                             var cs = nmsChunk.getSections()[blockY >> 4];
 
                             if (cs == null) {

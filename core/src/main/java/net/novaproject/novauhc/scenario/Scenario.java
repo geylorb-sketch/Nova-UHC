@@ -64,7 +64,9 @@ public abstract class Scenario {
     public boolean isWin() {
         return false;
     }
-
+    public boolean overridesVictory() {
+        return false;
+    }
     public boolean hascustomDeathMessage() {
         return false;
     }

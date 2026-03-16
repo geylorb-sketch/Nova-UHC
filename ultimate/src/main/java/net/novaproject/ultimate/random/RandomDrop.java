@@ -26,32 +26,76 @@ import java.util.*;
 
 public class RandomDrop extends Scenario {
 
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_GIVE_STARTER_NAME", descKey = "RANDOMDROP_VAR_GIVE_STARTER_DESC", type = VariableType.BOOLEAN)
+    // -----------------------------------------------------------------------
+    // Caches statiques – évite de recréer les tableaux à chaque appel
+    // -----------------------------------------------------------------------
+    private static final Material[]    ALL_MATERIALS    = Material.values();
+    private static final Enchantment[] ALL_ENCHANTMENTS = Enchantment.values();
+
+    /** Blocs dont la data-value n'est pas directionnelle (clé normalisée à 0). */
+    private static final EnumSet<Material> DIRECTIONABLE = EnumSet.of(
+            Material.FENCE_GATE, Material.FURNACE, Material.TRAP_DOOR,
+            Material.TRAPPED_CHEST, Material.CHEST, Material.DROPPER,
+            Material.HOPPER, Material.SIGN
+    );
+
+    /** Matériaux toujours exclus, quelle que soit la config. */
+    private static final EnumSet<Material> ALWAYS_BLOCKED = EnumSet.of(
+            Material.AIR, Material.BEDROCK, Material.COMMAND,
+            Material.PORTAL, Material.ENDER_PORTAL, Material.ENDER_PORTAL_FRAME,
+            Material.BARRIER, Material.MOB_SPAWNER,
+            Material.WATER, Material.LAVA,
+            Material.STATIONARY_WATER, Material.STATIONARY_LAVA
+    );
+
+    /** Matériaux considérés comme rares. */
+    private static final EnumSet<Material> RARE_MATERIALS = EnumSet.of(
+            Material.DIAMOND, Material.DIAMOND_BLOCK,
+            Material.GOLDEN_APPLE, Material.ENCHANTED_BOOK,
+            Material.BEACON, Material.DRAGON_EGG
+    );
+
+    // -----------------------------------------------------------------------
+    // Variables de scénario
+    // -----------------------------------------------------------------------
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_GIVE_STARTER_NAME",   descKey = "RANDOMDROP_VAR_GIVE_STARTER_DESC",   type = VariableType.BOOLEAN)
     private boolean giveStarter = true;
 
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_ALLOW_RARE_NAME", descKey = "RANDOMDROP_VAR_ALLOW_RARE_DESC", type = VariableType.BOOLEAN)
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_ALLOW_RARE_NAME",     descKey = "RANDOMDROP_VAR_ALLOW_RARE_DESC",     type = VariableType.BOOLEAN)
     private boolean allowRare = true;
 
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_MAX_INGOT_NAME", descKey = "RANDOMDROP_VAR_MAX_INGOT_DESC", type = VariableType.INTEGER)
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_MAX_INGOT_NAME",      descKey = "RANDOMDROP_VAR_MAX_INGOT_DESC",      type = VariableType.INTEGER)
     private int maxIngotAmount = 16;
 
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_GAPPLE_AMOUNT_NAME", descKey = "RANDOMDROP_VAR_GAPPLE_AMOUNT_DESC", type = VariableType.INTEGER)
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_GAPPLE_AMOUNT_NAME",  descKey = "RANDOMDROP_VAR_GAPPLE_AMOUNT_DESC",  type = VariableType.INTEGER)
     private int gappleAmount = 3;
 
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_MAX_ENCHANT_NAME", descKey = "RANDOMDROP_VAR_MAX_ENCHANT_DESC", type = VariableType.INTEGER)
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_MAX_ENCHANT_NAME",    descKey = "RANDOMDROP_VAR_MAX_ENCHANT_DESC",    type = VariableType.INTEGER)
     private int maxEnchantLevel = 3;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "RANDOMDROP_VAR_ALLOW_DUPLICATE_NAME", descKey = "RANDOMDROP_VAR_ALLOW_DUPLICATE_DESC", type = VariableType.BOOLEAN)
     private boolean allowDuplicate = false;
 
-    private final Map<String, ItemStack> cacheblock = new HashMap<>();
-    private final Set<Material> alreadyUsed = new HashSet<>();
+    // -----------------------------------------------------------------------
+    // État interne
+    // -----------------------------------------------------------------------
+    /** Cache clé→drop : évite de recalculer un drop déjà attribué. */
+    private final Map<String, ItemStack> cacheBlock = new HashMap<>();
     private final Random random = new Random();
 
+    /**
+     * Pool de matériaux disponibles.
+     * – Mode sans doublons : on pioche en bout de liste (swap-remove O(1)).
+     * – Mode avec doublons : on pioche aléatoirement sans supprimer.
+     * Initialisée paresseusement au premier appel de generateDrop().
+     */
+    private List<Material> materialPool = null;
+
+    // -----------------------------------------------------------------------
+    // API Scenario
+    // -----------------------------------------------------------------------
     @Override
-    public String getName() {
-        return "RandomDrop";
-    }
+    public String getName() { return "RandomDrop"; }
 
     @Override
     public String getDescription(Player player) {
@@ -79,6 +123,9 @@ public class RandomDrop extends Scenario {
         }
     }
 
+    // -----------------------------------------------------------------------
+    // Événements
+    // -----------------------------------------------------------------------
     @Override
     public void onEntityDeath(Entity entity, Player killer, EntityDeathEvent event) {
         if (event.getDrops().isEmpty()) return;
@@ -86,8 +133,8 @@ public class RandomDrop extends Scenario {
         Location loc = entity.getLocation();
 
         for (ItemStack drop : event.getDrops()) {
-            String key = drop.getType() + ":" + drop.getDurability();
-            ItemStack result = cacheblock.computeIfAbsent(key, this::generateDrop);
+            String key = drop.getType().name() + ':' + drop.getDurability();
+            ItemStack result = cacheBlock.computeIfAbsent(key, k -> generateDrop());
             if (result != null) entity.getWorld().dropItem(loc, result.clone());
         }
 
@@ -100,37 +147,69 @@ public class RandomDrop extends Scenario {
 
         event.setCancelled(true);
 
-        String key = block.getType() + ":" + (isDirectionable(block.getType()) ? 0 : block.getData());
+        String key = block.getType().name() + ':' + (DIRECTIONABLE.contains(block.getType()) ? 0 : block.getData());
         Location loc = block.getLocation().add(0.5, 0.5, 0.5);
 
-        ItemStack result = cacheblock.computeIfAbsent(key, this::generateDrop);
+        ItemStack result = cacheBlock.computeIfAbsent(key, k -> generateDrop());
         if (result != null) block.getWorld().dropItem(loc, result.clone());
 
         block.setType(Material.AIR);
     }
 
-    private ItemStack generateDrop(String key) {
+    // -----------------------------------------------------------------------
+    // Logique de génération
+    // -----------------------------------------------------------------------
+
+    /**
+     * Initialise la pool la première fois.
+     * On filtre une seule fois tous les matériaux acceptés et on mélange.
+     */
+    private void initPoolIfNeeded() {
+        if (materialPool != null) return;
+
+        materialPool = new ArrayList<>();
+        for (Material m : ALL_MATERIALS) {
+            if (isAcceptedMaterial(m)) materialPool.add(m);
+        }
+        Collections.shuffle(materialPool, random);
+    }
+
+    /**
+     * Génère un drop aléatoire.
+     *
+     * – Sans doublons : swap-remove sur la pool pré-mélangée → O(1), pas de boucle de retry.
+     * – Avec doublons  : pioche directement dans la pool sans la modifier.
+     *
+     * @return l'ItemStack généré, ou null si la pool est épuisée.
+     */
+    private ItemStack generateDrop() {
+        initPoolIfNeeded();
+
+        if (materialPool.isEmpty()) return null;
+
         Material material;
-        int safety = 0;
+        if (!allowDuplicate) {
+            // Swap-remove : échange l'élément choisi avec le dernier puis retire le dernier → O(1)
+            int idx = materialPool.size() - 1;
+            material = materialPool.remove(idx);
+        } else {
+            material = materialPool.get(random.nextInt(materialPool.size()));
+        }
 
-        do {
-            material = Material.values()[random.nextInt(Material.values().length)];
-            safety++;
-            if (safety > 500) return null;
-        } while (!isAcceptedMaterial(material) || (!allowDuplicate && alreadyUsed.contains(material)));
+        return buildItem(material);
+    }
 
-        if (!allowDuplicate) alreadyUsed.add(material);
-
+    /** Construit l'ItemStack final pour un matériau donné. */
+    private ItemStack buildItem(Material material) {
         int amount = 1;
-
-        if (material == Material.GOLDEN_APPLE) amount = gappleAmount;
+        if (material == Material.GOLDEN_APPLE)                                  amount = gappleAmount;
         if (material == Material.IRON_INGOT || material == Material.GOLD_INGOT) amount = maxIngotAmount;
 
         ItemStack item = new ItemStack(material, Math.max(1, amount));
 
-        if (allowRare && material == Material.ENCHANTED_BOOK) {
+        if (material == Material.ENCHANTED_BOOK && allowRare) {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-            Enchantment enchant = Enchantment.values()[random.nextInt(Enchantment.values().length)];
+            Enchantment enchant = ALL_ENCHANTMENTS[random.nextInt(ALL_ENCHANTMENTS.length)];
             int level = random.nextInt(Math.max(1, maxEnchantLevel)) + 1;
             meta.addStoredEnchant(enchant, level, true);
             item.setItemMeta(meta);
@@ -139,37 +218,14 @@ public class RandomDrop extends Scenario {
         return item;
     }
 
-    private boolean isDirectionable(Material type) {
-        return type == Material.FENCE_GATE || type == Material.FURNACE || type == Material.TRAP_DOOR
-                || type == Material.TRAPPED_CHEST || type == Material.CHEST || type == Material.DROPPER
-                || type == Material.HOPPER || type == Material.SIGN;
-    }
-
+    // -----------------------------------------------------------------------
+    // Helpers
+    // -----------------------------------------------------------------------
     private boolean isAcceptedMaterial(Material type) {
         if (type == null) return false;
-
-        if (!allowRare && isRare(type)) return false;
-
-        return type != Material.AIR
-                && type != Material.BEDROCK
-                && type != Material.COMMAND
-                && type != Material.PORTAL
-                && type != Material.ENDER_PORTAL
-                && type != Material.ENDER_PORTAL_FRAME
-                && type != Material.BARRIER
-                && type != Material.MOB_SPAWNER
-                && type != Material.WATER
-                && type != Material.LAVA
-                && type != Material.STATIONARY_WATER
-                && type != Material.STATIONARY_LAVA;
-    }
-
-    private boolean isRare(Material type) {
-        return type == Material.DIAMOND || type == Material.DIAMOND_BLOCK
-                || type == Material.GOLDEN_APPLE
-                || type == Material.ENCHANTED_BOOK
-                || type == Material.BEACON
-                || type == Material.DRAGON_EGG;
+        if (ALWAYS_BLOCKED.contains(type)) return false;
+        if (!allowRare && RARE_MATERIALS.contains(type)) return false;
+        return true;
     }
 
     @Override

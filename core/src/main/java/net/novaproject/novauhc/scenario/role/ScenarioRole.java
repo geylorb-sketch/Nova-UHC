@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -197,6 +198,11 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
     @Override
     public void onConsume(Player player, ItemStack item, PlayerItemConsumeEvent event) {
         players_roles.forEach((p, role) -> role.onConsume(player, item, event));
+    }
+
+    @Override
+    public void onDrop(PlayerDropItemEvent event) {
+        players_roles.forEach((p, role) -> role.onDrop(p,event));
     }
 
     @Override

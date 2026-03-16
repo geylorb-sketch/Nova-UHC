@@ -1,5 +1,6 @@
 package net.novaproject.novauhc.uhcteam;
 
+import net.novaproject.novauhc.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -58,6 +59,7 @@ public class TeamZone {
     public Location getSpawn() {
         int centerX = (minX + maxX) / 2;
         int centerZ = (minZ + maxZ) / 2;
-        return new Location(Bukkit.getWorld(worldName), centerX, 0, centerZ);
+        int y = Common.get().getArena().getHighestBlockYAt(centerX, centerZ);
+        return new Location(Bukkit.getWorld(worldName), centerX, y , centerZ);
     }
 }

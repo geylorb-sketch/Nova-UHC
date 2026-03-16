@@ -17,6 +17,6 @@ jar {
     from {
         configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    destinationDirectory.set(file("C:\\Users\\darkm\\Downloads\\Nouveau dossier\\plugins") )
+    destinationDirectory.set(file("F:\\plugin\\serv\\plugins") )
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

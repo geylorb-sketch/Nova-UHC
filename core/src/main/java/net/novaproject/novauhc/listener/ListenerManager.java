@@ -1,6 +1,9 @@
 package net.novaproject.novauhc.listener;
 
 import net.novaproject.novauhc.Main;
+import net.novaproject.novauhc.listener.effect.ArmorDurabilityNerfEvent;
+import net.novaproject.novauhc.listener.effect.AttackNerfEvent;
+import net.novaproject.novauhc.listener.effect.ResistanceNerfEvent;
 import net.novaproject.novauhc.listener.entity.EntityBowEvent;
 import net.novaproject.novauhc.listener.entity.EntityDamageEntity;
 import net.novaproject.novauhc.listener.entity.EntityDeathEvent;
@@ -12,22 +15,27 @@ import org.bukkit.plugin.PluginManager;
 
 public class ListenerManager {
 
-    public static void setup(){
-
+    public static void setup() {
         PluginManager pm = Bukkit.getPluginManager();
+        Main plugin = Main.get();
 
-        pm.registerEvents(new PlayerConnectionEvent(), Main.get());
-        pm.registerEvents(new PlayerBlockEvent(), Main.get());
-        pm.registerEvents(new EntityDeathEvent(), Main.get());
-        pm.registerEvents(new CustomInventoryEvent(), Main.get());
-        pm.registerEvents(new PlayerDeathEvent(), Main.get());
-        pm.registerEvents(new PlayerCraftEvent(),Main.get());
-        pm.registerEvents(new PlayerInteractEvent(),Main.get());
-        pm.registerEvents(new PlayerTakeDamage(),Main.get());
-        pm.registerEvents(new PlayerListener(), Main.get());
-        pm.registerEvents(new EntityBowEvent(), Main.get());
-        pm.registerEvents(new EntityDamageEntity(), Main.get());
-        pm.registerEvents(new ChunkUnloadListener(), Main.get());
+        pm.registerEvents(new PlayerConnectionEvent(), plugin);
+        pm.registerEvents(new PlayerBlockEvent(),      plugin);
+        pm.registerEvents(new PlayerDeathEvent(),      plugin);
+        pm.registerEvents(new PlayerCraftEvent(),      plugin);
+        pm.registerEvents(new PlayerInteractEvent(),   plugin);
+        pm.registerEvents(new PlayerTakeDamage(),      plugin);
+        pm.registerEvents(new PlayerListener(),        plugin);
+
+        pm.registerEvents(new EntityDeathEvent(),      plugin);
+        pm.registerEvents(new EntityBowEvent(),        plugin);
+        pm.registerEvents(new EntityDamageEntity(),    plugin);
+
+        pm.registerEvents(new AttackNerfEvent(),           plugin);
+        pm.registerEvents(new ResistanceNerfEvent(),       plugin);
+        pm.registerEvents(new ArmorDurabilityNerfEvent(),  plugin);
+
+        pm.registerEvents(new CustomInventoryEvent(),  plugin);
+        pm.registerEvents(new ChunkUnloadListener(),   plugin);
     }
-
 }

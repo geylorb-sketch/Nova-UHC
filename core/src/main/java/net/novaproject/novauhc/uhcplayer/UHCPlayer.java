@@ -42,7 +42,9 @@ public class UHCPlayer {
     private int dimamondLimit = uhcManager.getDimamondLimit();
     private int diamondArmor = uhcManager.getDiamondArmor();
     private int protectionMax = uhcManager.getProtectionMax();
-
+    private double forcePercent = 0.5;
+    private double forceCriticPercent = 1;
+    private double resitancePercent = 1;
     private int minedDiamond = 0;
     private int kill = 0;
     private String locale = null;

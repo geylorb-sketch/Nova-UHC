@@ -1,0 +1,118 @@
+package net.novauhc.dandadan.lang;
+
+import net.novaproject.novauhc.lang.Lang;
+import java.util.Map;
+
+/**
+ * Clés ScenarioVarLang supplémentaires — générées automatiquement.
+ * 97 clés pour les abilities et variables des rôles DanDaDan.
+ */
+public enum DanDaDanVarLangExt6 implements Lang {
+
+    POISSON_DEPTH_STRIDER_LVL_NAME("§fPoisson Profondeur Marcheur Niv.", "§fPoisson Profondeur Marcheur Niv."),
+    POLNAREFF_ABILITY_NAME_KEY_NAME("§fPolnareff Capacité Name Key", "§fPolnareff Capacité Name Key"),
+    PRECISION_CHANCE_DESC("§7Réglage pour Precision Chance", "§7Setting for Precision Chance"),
+    PRECISION_CHANCE_NAME("§fPrecision Chance", "§fPrecision Chance"),
+    PRECISION_SPEED_DURATION_DESC("§7Réglage pour Precision Vitesse Durée", "§7Setting for Precision Vitesse Durée"),
+    PRECISION_SPEED_DURATION_NAME("§fPrecision Vitesse Durée", "§fPrecision Vitesse Durée"),
+    PREDICTION_CHANCE_DESC("§7Réglage pour Prediction Chance", "§7Setting for Prediction Chance"),
+    PREDICTION_CHANCE_NAME("§fPrediction Chance", "§fPrediction Chance"),
+    PROTECT_DURABILITY_THRESHOLD_DESC("§7Réglage pour Protection Durabilité Seuil", "§7Setting for Protection Durabilité Seuil"),
+    PROTECT_DURABILITY_THRESHOLD_NAME("§fProtection Durabilité Seuil", "§fProtection Durabilité Seuil"),
+    PROTECT_DURATION_DESC("§7Réglage pour Protection Durée", "§7Setting for Protection Durée"),
+    PROTECT_DURATION_NAME("§fProtection Durée", "§fProtection Durée"),
+    REACTION_DODGE_CHANCE_DESC("§7Réglage pour Reaction Esquive Chance", "§7Setting for Reaction Esquive Chance"),
+    REACTION_DODGE_CHANCE_NAME("§fReaction Esquive Chance", "§fReaction Esquive Chance"),
+    REBUFF_COMBO_COUNT_DESC("§7Réglage pour Rebuff Combo Nombre", "§7Setting for Rebuff Combo Nombre"),
+    REBUFF_COMBO_COUNT_NAME("§fRebuff Combo Nombre", "§fRebuff Combo Nombre"),
+    REBUFF_COOLDOWN_DESC("§7Réglage pour Rebuff Recharge", "§7Setting for Rebuff Recharge"),
+    REBUFF_COOLDOWN_NAME("§fRebuff Recharge", "§fRebuff Recharge"),
+    REBUFF_DAMAGE_BONUS_DESC("§7Réglage pour Rebuff Dégâts Bonus", "§7Setting for Rebuff Dégâts Bonus"),
+    REBUFF_DAMAGE_BONUS_NAME("§fRebuff Dégâts Bonus", "§fRebuff Dégâts Bonus"),
+    REIKO_ABILITY_NAME_KEY_NAME("§fReiko Capacité Name Key", "§fReiko Capacité Name Key"),
+    REZE_ABILITY_NAME_KEY_NAME("§fReze Capacité Name Key", "§fReze Capacité Name Key"),
+    ROHAN_ABILITY_NAME_KEY_NAME("§fRohan Capacité Name Key", "§fRohan Capacité Name Key"),
+    SANG_REGEN_INTERVAL_DESC("§7Réglage pour Sang Régénération Intervalle", "§7Setting for Sang Régénération Intervalle"),
+    SANG_REGEN_INTERVAL_NAME("§fSang Régénération Intervalle", "§fSang Régénération Intervalle"),
+    SANG_REGEN_PASSIVE_DESC("§7Réglage pour Sang Régénération Passif", "§7Setting for Sang Régénération Passif"),
+    SANG_REGEN_PASSIVE_NAME("§fSang Régénération Passif", "§fSang Régénération Passif"),
+    SANG_REGEN_PER_HIT_DESC("§7Réglage pour Sang Régénération Par Hit", "§7Setting for Sang Régénération Par Hit"),
+    SANG_REGEN_PER_HIT_NAME("§fSang Régénération Par Hit", "§fSang Régénération Par Hit"),
+    SAVON_LAUNCHER_COOLDOWN_DESC("§7Réglage pour Savon Launcher Recharge", "§7Setting for Savon Launcher Recharge"),
+    SAVON_LAUNCHER_COOLDOWN_NAME("§fSavon Launcher Recharge", "§fSavon Launcher Recharge"),
+    SAVON_LAUNCHER_RANGE_DESC("§7Réglage pour Savon Launcher Portée", "§7Setting for Savon Launcher Portée"),
+    SAVON_LAUNCHER_RANGE_NAME("§fSavon Launcher Portée", "§fSavon Launcher Portée"),
+    SAVON_LAUNCHER_VELOCITY_DESC("§7Réglage pour Savon Launcher Vélocité", "§7Setting for Savon Launcher Vélocité"),
+    SAVON_LAUNCHER_VELOCITY_NAME("§fSavon Launcher Vélocité", "§fSavon Launcher Vélocité"),
+    SAVON_LENSES_COOLDOWN_DESC("§7Réglage pour Savon Lenses Recharge", "§7Setting for Savon Lenses Recharge"),
+    SAVON_LENSES_COOLDOWN_NAME("§fSavon Lenses Recharge", "§fSavon Lenses Recharge"),
+    SAVON_LENSES_DURATION_DESC("§7Réglage pour Savon Lenses Durée", "§7Setting for Savon Lenses Durée"),
+    SAVON_LENSES_DURATION_NAME("§fSavon Lenses Durée", "§fSavon Lenses Durée"),
+    SEIJIN_LIFESTEAL_AMOUNT_DESC("§7Réglage pour Seijin Vol de vie Montant", "§7Setting for Seijin Vol de vie Montant"),
+    SEIJIN_LIFESTEAL_AMOUNT_NAME("§fSeijin Vol de vie Montant", "§fSeijin Vol de vie Montant"),
+    SEIJIN_LIFESTEAL_CHANCE_DESC("§7Réglage pour Seijin Vol de vie Chance", "§7Setting for Seijin Vol de vie Chance"),
+    SEIJIN_LIFESTEAL_CHANCE_NAME("§fSeijin Vol de vie Chance", "§fSeijin Vol de vie Chance"),
+    SERUPO_MAX_HEALTH_DESC("§7Réglage pour Serupo Max Santé", "§7Setting for Serupo Max Santé"),
+    SERUPO_MAX_HEALTH_NAME("§fSerupo Max Santé", "§fSerupo Max Santé"),
+    SUMO_FORME_ATTACK_STRENGTH_DESC("§7Réglage pour Sumo Forme Attaque Force", "§7Setting for Sumo Forme Attaque Force"),
+    SUMO_FORME_ATTACK_STRENGTH_NAME("§fSumo Forme Attaque Force", "§fSumo Forme Attaque Force"),
+    SUMO_FORME_COOLDOWN_DESC("§7Réglage pour Sumo Forme Recharge", "§7Setting for Sumo Forme Recharge"),
+    SUMO_FORME_COOLDOWN_NAME("§fSumo Forme Recharge", "§fSumo Forme Recharge"),
+    SUMO_FORME_DEFENSE_RESIST_DESC("§7Réglage pour Sumo Forme Défense Résistance", "§7Setting for Sumo Forme Défense Résistance"),
+    SUMO_FORME_DEFENSE_RESIST_NAME("§fSumo Forme Défense Résistance", "§fSumo Forme Défense Résistance"),
+    TETE_HAUTE_HEIGHT_THRESHOLD_DESC("§7Réglage pour Tete Haute Hauteur Seuil", "§7Setting for Tete Haute Hauteur Seuil"),
+    TETE_HAUTE_HEIGHT_THRESHOLD_NAME("§fTete Haute Hauteur Seuil", "§fTete Haute Hauteur Seuil"),
+    TETE_HAUTE_SPEED_AMP_DESC("§7Réglage pour Tete Haute Vitesse Amplificateur", "§7Setting for Tete Haute Vitesse Amplificateur"),
+    TETE_HAUTE_SPEED_AMP_NAME("§fTete Haute Vitesse Amplificateur", "§fTete Haute Vitesse Amplificateur"),
+    THOMSON_ARROW_COUNT_DESC("§7Réglage pour Thomson Flèche Nombre", "§7Setting for Thomson Flèche Nombre"),
+    THOMSON_ARROW_COUNT_NAME("§fThomson Flèche Nombre", "§fThomson Flèche Nombre"),
+    THOMSON_HP_THRESHOLD_DESC("§7Réglage pour Thomson PV Seuil", "§7Setting for Thomson PV Seuil"),
+    THOMSON_HP_THRESHOLD_NAME("§fThomson PV Seuil", "§fThomson PV Seuil"),
+    THOMSON_MAX_USES_DESC("§7Réglage pour Thomson Max Utilisations", "§7Setting for Thomson Max Utilisations"),
+    THOMSON_MAX_USES_NAME("§fThomson Max Utilisations", "§fThomson Max Utilisations"),
+    THORNS_COOLDOWN_DESC("§7Réglage pour Thorns Recharge", "§7Setting for Thorns Recharge"),
+    THORNS_COOLDOWN_NAME("§fThorns Recharge", "§fThorns Recharge"),
+    THORNS_DURATION_DESC("§7Réglage pour Thorns Durée", "§7Setting for Thorns Durée"),
+    THORNS_DURATION_NAME("§fThorns Durée", "§fThorns Durée"),
+    THORNS_REFLECT_PCT_DESC("§7Réglage pour Thorns Renvoi %", "§7Setting for Thorns Renvoi %"),
+    THORNS_REFLECT_PCT_NAME("§fThorns Renvoi %", "§fThorns Renvoi %"),
+    TSUCHINOKO_ABILITY_NAME_KEY_NAME("§fTsuchinoko Capacité Name Key", "§fTsuchinoko Capacité Name Key"),
+    UMBRELLA_ABILITY_NAME_KEY_NAME("§fUmbrella Capacité Name Key", "§fUmbrella Capacité Name Key"),
+    UMBRELLA_CURSE_COOLDOWN_DESC("§7Réglage pour Umbrella Curse Recharge", "§7Setting for Umbrella Curse Recharge"),
+    UMBRELLA_CURSE_COOLDOWN_NAME("§fUmbrella Curse Recharge", "§fUmbrella Curse Recharge"),
+    UMBRELLA_CURSE_RANGE_DESC("§7Réglage pour Umbrella Curse Portée", "§7Setting for Umbrella Curse Portée"),
+    UMBRELLA_CURSE_RANGE_NAME("§fUmbrella Curse Portée", "§fUmbrella Curse Portée"),
+    UMBRELLA_CURSE_SLOW_DURATION_DESC("§7Réglage pour Umbrella Curse Lenteur Durée", "§7Setting for Umbrella Curse Lenteur Durée"),
+    UMBRELLA_CURSE_SLOW_DURATION_NAME("§fUmbrella Curse Lenteur Durée", "§fUmbrella Curse Lenteur Durée"),
+    UMBRELLA_PASSIVE_CHANCE_DESC("§7Réglage pour Umbrella Passif Chance", "§7Setting for Umbrella Passif Chance"),
+    UMBRELLA_PASSIVE_CHANCE_NAME("§fUmbrella Passif Chance", "§fUmbrella Passif Chance"),
+    UMBRELLA_PASSIVE_KB_RANGE_DESC("§7Réglage pour Umbrella Passif Recul Portée", "§7Setting for Umbrella Passif Recul Portée"),
+    UMBRELLA_PASSIVE_KB_RANGE_NAME("§fUmbrella Passif Recul Portée", "§fUmbrella Passif Recul Portée"),
+    UMBRELLA_PROTECT_DURATION_DESC("§7Réglage pour Umbrella Protection Durée", "§7Setting for Umbrella Protection Durée"),
+    UMBRELLA_PROTECT_DURATION_NAME("§fUmbrella Protection Durée", "§fUmbrella Protection Durée"),
+    UMBRELLA_PROTECT_RESIST_AMP_DESC("§7Réglage pour Umbrella Protection Résistance Amplificateur", "§7Setting for Umbrella Protection Résistance Amplificateur"),
+    UMBRELLA_PROTECT_RESIST_AMP_NAME("§fUmbrella Protection Résistance Amplificateur", "§fUmbrella Protection Résistance Amplificateur"),
+    VAMPIRE_NIGHT_TIME_END_DESC("§7Réglage pour Vampire Night Temps End", "§7Setting for Vampire Night Temps End"),
+    VAMPIRE_NIGHT_TIME_END_NAME("§fVampire Night Temps End", "§fVampire Night Temps End"),
+    VAMPIRE_NIGHT_TIME_START_DESC("§7Réglage pour Vampire Night Temps Start", "§7Setting for Vampire Night Temps Start"),
+    VAMPIRE_NIGHT_TIME_START_NAME("§fVampire Night Temps Start", "§fVampire Night Temps Start"),
+    VAMPIRE_STRENGTH_AMP_DESC("§7Réglage pour Vampire Force Amplificateur", "§7Setting for Vampire Force Amplificateur"),
+    VAMPIRE_STRENGTH_AMP_NAME("§fVampire Force Amplificateur", "§fVampire Force Amplificateur"),
+    VER_MORT_CHANCE_DESC("§7Réglage pour Ver Mort Chance", "§7Setting for Ver Mort Chance"),
+    VER_MORT_CHANCE_NAME("§fVer Mort Chance", "§fVer Mort Chance"),
+    VER_MORT_POISON_DURATION_DESC("§7Réglage pour Ver Mort Poison Durée", "§7Setting for Ver Mort Poison Durée"),
+    VER_MORT_POISON_DURATION_NAME("§fVer Mort Poison Durée", "§fVer Mort Poison Durée"),
+    ZONE_INTOUCHABLE_DURATION_DESC("§7Réglage pour Zone Intouchable Durée", "§7Setting for Zone Intouchable Durée"),
+    ZONE_INTOUCHABLE_DURATION_NAME("§fZone Intouchable Durée", "§fZone Intouchable Durée"),
+    ZONE_INTOUCHABLE_RADIUS_DESC("§7Réglage pour Zone Intouchable Rayon", "§7Setting for Zone Intouchable Rayon"),
+    ZONE_INTOUCHABLE_RADIUS_NAME("§fZone Intouchable Rayon", "§fZone Intouchable Rayon");
+
+    private final Map<String, String> translations;
+
+    DanDaDanVarLangExt6(String fr, String en) {
+        this.translations = Map.of("fr_FR", fr, "en_US", en);
+    }
+
+    @Override public String getKey() { return "dandadan.var." + name(); }
+    @Override public Map<String, String> getTranslations() { return translations; }
+}

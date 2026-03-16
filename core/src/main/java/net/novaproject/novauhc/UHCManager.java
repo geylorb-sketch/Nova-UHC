@@ -350,6 +350,15 @@ public class UHCManager {
             return;
         }
 
+        for (Scenario scenario : ScenarioManager.get().getActiveScenarios()) {
+            if (scenario.overridesVictory()) {
+                if (scenario.isWin()) {
+                    endGame();
+                }
+                return;
+            }
+        }
+
         boolean win = false;
 
         if (team_size == 1) {
@@ -374,14 +383,12 @@ public class UHCManager {
                 List<UHCPlayer> sorted = new ArrayList<>(team.getPlayers());
                 sorted.sort((a, b) -> Integer.compare(b.getKill(), a.getKill()));
 
-                LangManager.get().sendAll(CommonLang.TEAM_WIN,Map.of("%team%",team.name()));
+                LangManager.get().sendAll(CommonLang.TEAM_WIN, Map.of("%team%", team.name()));
                 int rank = 1;
                 int total = 0;
 
                 for (UHCPlayer member : sorted) {
-
                     String prefix = rank == 1 ? "§6⭐ " : "  ";
-
                     Bukkit.broadcastMessage(
                             LangManager.get().get(
                                     CommonLang.TEAM_RANK_LINE,
@@ -394,21 +401,17 @@ public class UHCManager {
                                     )
                             )
                     );
-
                     total += member.getKill();
                     rank++;
                 }
 
-                LangManager.get().sendAll(
-                        CommonLang.TEAM_TOTAL_KILLS,
-                        Map.of("%total%", String.valueOf(total))
-                );
+                LangManager.get().sendAll(CommonLang.TEAM_TOTAL_KILLS, Map.of("%total%", String.valueOf(total)));
                 win = true;
             }
         }
 
         for (Scenario scenario : ScenarioManager.get().getActiveScenarios()) {
-            if (scenario.isWin()) {
+            if (!scenario.overridesVictory() && scenario.isWin()) {
                 win = true;
             }
         }
@@ -436,6 +439,7 @@ public class UHCManager {
         fM.setPower(1);
         f.setFireworkMeta(fM);
     }
+    
 
     public void setSlot(int slot) {
         if (slot < 1)
