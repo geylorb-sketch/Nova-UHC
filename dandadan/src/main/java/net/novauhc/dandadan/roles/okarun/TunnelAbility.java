@@ -1,17 +1,16 @@
 package net.novauhc.dandadan.roles.okarun;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbiliy;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
-import net.novauhc.dandadan.particularity.EspaceVideManager;
-import org.bukkit.Bukkit;
+import net.novauhc.dandadan.lang.DanDaDanLang;
+import net.novauhc.dandadan.lang.DanDaDanVarLang;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -21,73 +20,85 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Tunnel — Espace Vide d'Okarun
- * Gitbook: TP tous les joueurs dans un rayon de 30 blocs dans une dimension tunnel 1min.
- * - Familiers: NPCs avec 5❤️ et force attaquent les joueurs
- * - Okarun: obtient effets de sa malédiction sans perdre de temps
- * - Malus: 40% chance de n'infliger que 0.5❤️, 40% chance d'arrêter le sprint
- * Cooldown: 10 min
+ * Tunnel — Espace Vide d'Okarun (Clic-Droit, ENDER_PEARL)
+ * TP joueurs dans un rayon de 30 blocs dans un tunnel pendant 1min.
+ * Familiers PNJ attaquent. Okarun reçoit malédiction gratuite.
+ * Malus : 40% chance 0.5❤ dégâts, 40% chance arrêt sprint.
+ * Cooldown 10min.
  */
 public class TunnelAbility extends UseAbiliy {
 
-    @AbilityVariable(lang = DanDaDanVarLangExt4.class, nameKey = "TUNNEL_RADIUS_NAME",
+    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "TUNNEL_RADIUS_NAME",
             descKey = "TUNNEL_RADIUS_DESC", type = VariableType.INTEGER)
     private int radius = 30;
 
-    @AbilityVariable(lang = DanDaDanVarLangExt4.class, nameKey = "TUNNEL_DURATION_NAME",
-            descKey = "TUNNEL_DURATION_DESC", type = VariableType.INTEGER)
-    private int durationSec = 60; // 1 minute
+    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "TUNNEL_DURATION_NAME",
+            descKey = "TUNNEL_DURATION_DESC", type = VariableType.TIME)
+    private int durationSec = 60;
 
     private final Random random = new Random();
     private final List<Player> playersInTunnel = new ArrayList<>();
 
-    @Override public String getName() { return "Tunnel"; }
+    @Override public String getName()       { return "Tunnel"; }
     @Override public Material getMaterial() { return Material.ENDER_PEARL; }
-
-    public TunnelAbility() {
-        setCooldown(600); // 10 min
-    }
 
     @Override
     public boolean onEnable(Player player) {
-        World videWorld = EspaceVideManager.get().getVideWorld();
-        if (videWorld == null) {
-            player.sendMessage("§c✘ La dimension Espace Vide n'est pas chargée.");
-            return false;
-        }
-
         Location center = player.getLocation();
         playersInTunnel.clear();
 
-        // TP tous les joueurs proches dans la dimension
-        Location spawnVide = videWorld.getSpawnLocation().clone().add(0, 1, 0);
+        // Collecter les joueurs dans le rayon
         for (UHCPlayer uhc : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
             Player p = uhc.getPlayer();
             if (p == null) continue;
             if (p.getLocation().distance(center) <= radius) {
-                p.teleport(spawnVide.clone().add((random.nextDouble() - 0.5) * 10, 0, (random.nextDouble() - 0.5) * 10));
                 playersInTunnel.add(p);
-
-                if (!p.equals(player)) {
-                    p.sendMessage("§5§l✦ Tunnel ! §r§5Vous avez été aspiré dans l'espace vide d'Okarun !");
-                }
             }
         }
 
-        // Okarun reçoit speed (malédiction) sans perdre de temps
+        if (playersInTunnel.size() <= 1) {
+            LangManager.get().send(DanDaDanLang.OKARUN_NO_PLAYERS, player);
+            return false;
+        }
+
+        // TP tous les joueurs en hauteur (simulation du tunnel)
+        Location tunnelBase = center.clone().add(0, 50, 0);
+        // Créer un sol temporaire
+        for (int x = -5; x <= 5; x++) {
+            for (int z = -5; z <= 5; z++) {
+                tunnelBase.clone().add(x, -1, z).getBlock().setType(Material.OBSIDIAN);
+            }
+        }
+
+        for (Player p : playersInTunnel) {
+            Location tp = tunnelBase.clone().add(
+                    (random.nextDouble() - 0.5) * 8, 0, (random.nextDouble() - 0.5) * 8);
+            p.teleport(tp);
+
+            if (!p.equals(player)) {
+                LangManager.get().send(DanDaDanLang.OKARUN_TUNNEL_ENTER, p);
+            }
+        }
+
+        // Okarun reçoit la malédiction gratuite
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, durationSec * 20, 1, false, false));
-        player.sendMessage("§5§l✦ Tunnel activé ! §r§5Malédiction active pendant " + durationSec + "s !");
+        LangManager.get().send(DanDaDanLang.OKARUN_TUNNEL_ON, player, java.util.Map.of("%duration%", String.valueOf(durationSec)));
 
-        setCooldown(600);
+        setCooldown(600); // 10min
 
-        // Timer pour ramener les joueurs
+        // Timer : ramener les joueurs et nettoyer après la durée
         Main.get().getServer().getScheduler().runTaskLater(Main.get(), () -> {
-            World mainWorld = Bukkit.getWorlds().get(0);
-            Location mainSpawn = mainWorld.getSpawnLocation().clone().add(0, 1, 0);
+            // Nettoyer le sol
+            for (int x = -5; x <= 5; x++) {
+                for (int z = -5; z <= 5; z++) {
+                    tunnelBase.clone().add(x, -1, z).getBlock().setType(Material.AIR);
+                }
+            }
+            // TP retour
             for (Player p : playersInTunnel) {
-                if (p.isOnline() && p.getWorld().equals(videWorld)) {
-                    p.teleport(mainSpawn.clone().add((random.nextDouble() - 0.5) * 20, 0, (random.nextDouble() - 0.5) * 20));
-                    p.sendMessage("§a✦ Le Tunnel s'est refermé !");
+                if (p.isOnline()) {
+                    p.teleport(center);
+                    LangManager.get().send(DanDaDanLang.OKARUN_TUNNEL_END, p);
                 }
             }
             playersInTunnel.clear();
@@ -96,18 +107,15 @@ public class TunnelAbility extends UseAbiliy {
         return true;
     }
 
-    /** Vérifie si un joueur est dans le tunnel (pour appliquer les malus) */
+    /** Pour les malus (appelé depuis OkarunRole.onHit) */
     public boolean isInTunnel(Player player) {
         return playersInTunnel.contains(player);
     }
 
-    /** Malus: 40% chance de n'infliger que 0.5❤️ */
-    public double applyDamageMalus(double originalDamage) {
-        if (random.nextDouble() < 0.4) return 1.0; // 0.5❤️
-        return originalDamage;
+    public double applyDamageMalus(double originalDmg) {
+        return random.nextDouble() < 0.4 ? 1.0 : originalDmg; // 40% → 0.5❤
     }
 
-    /** Malus: 40% chance d'arrêter le sprint */
     public boolean shouldStopSprint() {
         return random.nextDouble() < 0.4;
     }

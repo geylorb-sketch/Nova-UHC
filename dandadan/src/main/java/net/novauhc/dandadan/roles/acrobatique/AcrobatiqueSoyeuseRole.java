@@ -6,69 +6,54 @@ import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt2;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class AcrobatiqueSoyeuseRole extends DanDaDanRole {
 
-    public enum Upgrade { NONE, CHEVEUX, CORPS, JAMBES, PIED }
-    private Upgrade chosen = Upgrade.NONE;
-    private double speedStack = 0; // pour amélioration PIED
-    private int corpsCounter = 0;  // pour amélioration CORPS
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ACROBATIQUE_ABILITY_CHEVEUX_NAME", type = VariableType.ABILITY)
+    private Ability cheveuxAbility = new CheveuxAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ACROBATIQUE_ABILITY_TRANSFOA_NAME", type = VariableType.ABILITY)
+    private Ability transfoAAbility = new TransfoAAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ACROBATIQUE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability cheveux = new CheveuxAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ACROBATIQUE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability transformation = new TransformationAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ACROBATIQUE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability heat = new HeatCommand();
-
-    // Passif Acrobate → constructeur ✅
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ACROBATIQUE_PASSIVE_ACROBATE_NAME", type = VariableType.ABILITY)
-    private Ability acrobatePassive = new AcrobatePassive();
+    private final AcrobatePassive acrobatePassive  = new AcrobatePassive();
 
 
-    @RoleVariable(lang = DanDaDanVarLangExt4.class, nameKey = "ACROBATIQUE_ABILITY_ESPACE_VIDE_NAME", type = VariableType.ABILITY)
-    private Ability espaceVideAcrobatique = new EspaceVideAcrobatiqueAbility();
-public AcrobatiqueSoyeuseRole() {
+    public AcrobatiqueSoyeuseRole() {
+        getAbilities().add(acrobatePassive);
     }
 
-    @Override public int getId()                { return 19; }
-    @Override public String getName()           { return "L'Acrobatique Soyeuse"; }
+    @Override public String getName() { return "Acrobatique Soyeuse"; }
     @Override public Material getIconMaterial() { return Material.STRING; }
 
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
+
     @Override
-    public String getDescription(Player player) {
-        return LangManager.get().get(DanDaDanLangExt2.ACRO_DESC, player);
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.ACROBATIQUE_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ACROBATIQUE_ACRO_TEXT), L(DanDaDanDescLang.ACROBATIQUE_ACRO_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ACROBATIQUE_CHEVEUX_TEXT), L(DanDaDanDescLang.ACROBATIQUE_CHEVEUX_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ACROBATIQUE_TRANSFO_A_TEXT), L(DanDaDanDescLang.ACROBATIQUE_TRANSFO_A_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ACROBATIQUE_HEAT_TEXT), L(DanDaDanDescLang.ACROBATIQUE_HEAT_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
     }
 
     @Override
-    public void onKill(UHCPlayer killer, UHCPlayer victim) {
-        super.onKill(killer, victim);
-        // bonus speed PIED
-        if (chosen == Upgrade.PIED) {
-            speedStack = Math.min(0.40, speedStack + 0.02);
-        }
+    public void onGive(UHCPlayer uhcPlayer) {
+        super.onGive(uhcPlayer);
     }
 
-    public Upgrade getChosen() { return chosen; }
-    public void setChosen(Upgrade u) { chosen = u; }
-    public double getSpeedStack() { return speedStack; }
-    public void decrementSpeed() { speedStack = Math.max(0, speedStack - 0.01); }
-    public int getCorpsCounter() { return corpsCounter; }
-    public void incrementCorps() { corpsCounter++; }
-    public void resetCorps() { corpsCounter = 0; }
-
-    // ── Passif Acrobate ───────────────────────────────────────
-
-    // ── Cheveux (active) ──────────────────────────────────────
-
-    // ── Transformation (choix amélioration) ───────────────────
-
-    // ── /ddd heat ────────────────────────────────────────────
 }

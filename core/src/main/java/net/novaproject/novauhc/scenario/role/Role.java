@@ -11,6 +11,7 @@ import org.bson.Document;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -36,6 +37,7 @@ public abstract class Role implements Cloneable {
     public double getResistancePercent(){
         return 0;
     }
+    private UHCPlayer owner;
     public double getStrengthCriticPercent(){
         return 0;
     }
@@ -62,7 +64,10 @@ public abstract class Role implements Cloneable {
     }
 
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
-        if (!getAbilities().isEmpty()) getAbilities().forEach(Ability::onDeath);
+        if (!getAbilities().isEmpty()) getAbilities().forEach(a -> a.onDeath(uhcPlayer,killer,event));
+    }
+    public void onBow(Entity shooter, Player target, EntityShootBowEvent event){
+        if(!getAbilities().isEmpty()) getAbilities().forEach(a -> a.onBow(shooter,target,event));
     }
 
     public void onConsume(Player player, ItemStack item, PlayerItemConsumeEvent event) {
@@ -72,7 +77,6 @@ public abstract class Role implements Cloneable {
 
     public void onIteract(Player player1, PlayerInteractEvent event) {
         if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onClick(event, event.getItem()));
-
     }
 
     public void onMove(UHCPlayer player1, PlayerMoveEvent event) {

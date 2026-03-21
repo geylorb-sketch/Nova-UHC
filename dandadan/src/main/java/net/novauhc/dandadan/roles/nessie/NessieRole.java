@@ -3,53 +3,65 @@ package net.novauhc.dandadan.roles.nessie;
 import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
+import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class NessieRole extends DanDaDanRole {
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability deluge = new DelugeAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_ABILITY_DELUGE_NAME", type = VariableType.ABILITY)
+    private Ability delugeAbility = new DelugeAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_ABILITY_JETEAU_NAME", type = VariableType.ABILITY)
+    private Ability jetEauAbility = new JetEauAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability jetEau = new JetEauAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability cou = new CouCommand();
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_PASSIVE_POISSON_NAME", type = VariableType.ABILITY)
-    private Ability poissonPassive = new PoissonPassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_PASSIVE_COU_LARGE_NAME", type = VariableType.ABILITY)
-    private Ability couLargePassive = new CouLargePassive();
+    private final PoissonPassive poissonPassive  = new PoissonPassive();
 
 
-    @RoleVariable(lang = DanDaDanVarLangExt4.class, nameKey = "NESSIE_ABILITY_ESPACE_VIDE_NAME", type = VariableType.ABILITY)
-    private Ability espaceVideNessie = new EspaceVideNessieAbility();
-public NessieRole() {
+    public NessieRole() {
+        getAbilities().add(poissonPassive);
     }
 
-    @Override public int getId()                { return 18; }
-    @Override public String getName()           { return "Nessie"; }
+    @Override public String getName() { return "Nessie"; }
     @Override public Material getIconMaterial() { return Material.WATER_BUCKET; }
 
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
+
     @Override
-    public String getDescription(Player player) {
-        return LangManager.get().get(DanDaDanLangExt.NESSIE_DESC, player);
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.NESSIE_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_POISSON_TEXT), L(DanDaDanDescLang.NESSIE_POISSON_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_COU_L_TEXT), L(DanDaDanDescLang.NESSIE_COU_L_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_DELUGE_TEXT), L(DanDaDanDescLang.NESSIE_DELUGE_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_JET_E_TEXT), L(DanDaDanDescLang.NESSIE_JET_E_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_COU_TEXT), L(DanDaDanDescLang.NESSIE_COU_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
     }
 
-    // Passif Poisson : Depth Strider 3 sur bottes
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.WATER_BUCKET).setName(LangManager.get().get(DanDaDanLang.ITEM_NESSIE_9DELUGE)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.PRISMARINE_SHARD).setName(LangManager.get().get(DanDaDanLang.ITEM_NESSIE_BJET_DEAU)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
+    }
 
-    // Passif Cou Large : double coup tous les 7 hits
-
-    // Création du Déluge
-
-    // Jet d'eau
-
-    // /ddd cou
 }

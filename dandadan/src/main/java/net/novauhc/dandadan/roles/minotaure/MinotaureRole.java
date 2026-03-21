@@ -4,59 +4,63 @@ import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt2;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class MinotaureRole extends DanDaDanRole {
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability durabilite = new DurabiliteImmenAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_ABILITY_DURABILITE_NAME", type = VariableType.ABILITY)
+    private Ability durabiliteAbility = new DurabiliteAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_ABILITY_KUNGFU_NAME", type = VariableType.ABILITY)
+    private Ability kungFuAbility = new KungFuAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability kungFu = new KungFuAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability fer = new FerCommand();
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_PASSIVE_OXYDATION_NAME", type = VariableType.ABILITY)
-    private Ability oxydationPassive = new OxydationPassive();
+    private final  OxydationPassive oxyPassive  = new OxydationPassive();
 
 
-    @RoleVariable(lang = DanDaDanVarLangExt4.class, nameKey = "MINOTAURE_ABILITY_ESPACE_VIDE_NAME", type = VariableType.ABILITY)
-    private Ability espaceVideMinotaure = new EspaceVideMinotaureAbility();
-public MinotaureRole() {
+    public MinotaureRole() {
+        getAbilities().add(oxyPassive);
     }
 
-    @Override public int getId()                { return 20; }
-    @Override public String getName()           { return "Minotaure"; }
-    @Override public Material getIconMaterial() { return Material.IRON_CHESTPLATE; }
+    @Override public String getName() { return "Minotaure"; }
+    @Override public Material getIconMaterial() { return Material.IRON_INGOT; }
+
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
 
     @Override
-    public String getDescription(Player player) {
-        return LangManager.get().get(DanDaDanLangExt2.MINO_DESC, player);
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.MINOTAURE_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_OXY_TEXT), L(DanDaDanDescLang.MINOTAURE_OXY_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_DURA_TEXT), L(DanDaDanDescLang.MINOTAURE_DURA_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_KUNGFU_TEXT), L(DanDaDanDescLang.MINOTAURE_KUNGFU_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_FER_TEXT), L(DanDaDanDescLang.MINOTAURE_FER_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
     }
 
     @Override
-    public void onKill(UHCPlayer killer, UHCPlayer victim) {
-        super.onKill(killer, victim);
-        Player bp = killer.getPlayer();
-        if (bp != null) LangManager.get().send(DanDaDanLangExt2.MINO_KILL_BONUS, bp);
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.IRON_INGOT).setName(LangManager.get().get(DanDaDanLang.ITEM_MINOTAURE_7DURABILITE)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.IRON_AXE).setName(LangManager.get().get(DanDaDanLang.ITEM_MINOTAURE_CKUNG_FU)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
     }
 
-    // Passif Oxydation : 80% réduction feu
-
-    // Durabilité Immense
-
-    // Kung-Fu
-
-    // /ddd fer
 }
-
-// ════════════════════════════════════════════
-//  Umbrella Boy (id 21) — dans le même fichier pour compacité
-// ════════════════════════════════════════════

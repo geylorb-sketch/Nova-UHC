@@ -4,75 +4,71 @@ import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
-import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novauhc.dandadan.DanDaDan;
 import net.novauhc.dandadan.DanDaDanCamps;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt3;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novauhc.dandadan.roles.joseph.JosephRole;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class CaesarRole extends DanDaDanRole {
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability savonLauncher = new SavonLauncherAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_ABILITY_SAVONLAUNCHER_NAME", type = VariableType.ABILITY)
+    private Ability savonLauncherAbility = new SavonLauncherAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_ABILITY_SAVONLENSES_NAME", type = VariableType.ABILITY)
+    private Ability savonLensesAbility = new SavonLensesAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_ABILITY_SAVONCUTTER_NAME", type = VariableType.ABILITY)
+    private Ability savonCutterAbility = new SavonCutterAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability savonLenses = new SavonLensesAbility();
+    private final  BandanaPassive bandanaPassive = new BandanaPassive();
+    private final  HamonPassive hamonPassive= new HamonPassive();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability savonCutter = new SavonCutterAbility();
 
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_PASSIVE_HAMON_NAME", type = VariableType.ABILITY)
-    private Ability hamonPassive = new CaesarHamonPassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "CAESAR_PASSIVE_BANDANA_NAME", type = VariableType.ABILITY)
-    private Ability bandanaPassive = new BandanaPassive();
-
-public CaesarRole() {
-        setCamp(DanDaDanCamps.SOLO);
+    public CaesarRole() {
+        setCamp(DanDaDanCamps.SPECIAL);
+        getAbilities().add(hamonPassive);
+        getAbilities().add(bandanaPassive);
     }
 
-    @Override public int getId()                { return 24; }
-    @Override public String getName()           { return "Caesar"; }
-    @Override public Material getIconMaterial() { return Material.SKULL_ITEM; }
+    @Override public String getName() { return "Caesar"; }
+    @Override public Material getIconMaterial() { return Material.GLASS; }
+
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
+
+    @Override
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.CAESAR_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CAESAR_BANDANA_TEXT), L(DanDaDanDescLang.CAESAR_BANDANA_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CAESAR_HAMON_TEXT), L(DanDaDanDescLang.CAESAR_HAMON_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CAESAR_SAVON_L_TEXT), L(DanDaDanDescLang.CAESAR_SAVON_L_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CAESAR_SAVON_LE_TEXT), L(DanDaDanDescLang.CAESAR_SAVON_LE_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CAESAR_SAVON_C_TEXT), L(DanDaDanDescLang.CAESAR_SAVON_C_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+    }
 
     @Override
     public void onGive(UHCPlayer uhcPlayer) {
-        // Informe Caesar du pseudo de Joseph
-        if (DanDaDan.get() != null) {
-            UHCPlayerManager.get().getPlayingOnlineUHCPlayers().forEach(p -> {
-                var role = DanDaDan.get().getRoleByUHCPlayer(p);
-                if (role instanceof JosephRole && uhcPlayer.getPlayer() != null) {
-                    String msg = LangManager.get().get(DanDaDanLangExt3.CAESAR_JOSEPH_NAME, uhcPlayer.getPlayer())
-                            .replace("%name%", p.getPlayer() != null ? p.getPlayer().getName() : "?");
-                    uhcPlayer.getPlayer().sendMessage(msg);
-                }
-            });
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.GLASS).setName(LangManager.get().get(DanDaDanLang.ITEM_CAESAR_BSAVON_LAUNCHER)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.GLASS_BOTTLE).setName(LangManager.get().get(DanDaDanLang.ITEM_CAESAR_ESAVON_LENSES)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.SHEARS).setName(LangManager.get().get(DanDaDanLang.ITEM_CAESAR_CSAVON_CUTTER)).getItemstack());
         }
         super.onGive(uhcPlayer);
     }
 
-    @Override
-    public String getDescription(Player player) {
-        return LangManager.get().get(DanDaDanLangExt3.CAESAR_DESC, player);
-    }
-
-    // Passif Hamon : renvoie feu/poison
-
-    // Passif Bandana : 10% résistance, transmissible à Joseph
-
-    // Savon Launcher
-
-    // Savon Lenses
-
-    // Savon Cutter
-
 }
-
-// ════════════════════════════════════════════
-//  Joseph (id 25) — duo avec Caesar
-// ════════════════════════════════════════════

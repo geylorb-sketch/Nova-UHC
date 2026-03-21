@@ -1,6 +1,6 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.PassiveAbility;
+import net.novaproject.novauhc.ability.template.PassiveAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -64,7 +65,7 @@ public class MarionnettistePuppetPassive extends PassiveAbility {
     }
 
     @Override
-    public void onDeath() {
+    public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
         for (UUID uuid : puppets) {
             Player puppet = org.bukkit.Bukkit.getPlayer(uuid);
             if (puppet != null && puppet.isOnline()) puppet.setHealth(0.0);

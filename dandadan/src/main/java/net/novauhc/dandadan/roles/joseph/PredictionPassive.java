@@ -1,27 +1,18 @@
 package net.novauhc.dandadan.roles.joseph;
 
-import net.novaproject.novauhc.ability.Ability;
-import net.novaproject.novauhc.ability.utils.AbilityVariable;
-import net.novaproject.novauhc.utils.VariableType;
-import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import org.bukkit.Material;
+import net.novaproject.novauhc.ability.template.PassiveAbility;
 import org.bukkit.entity.Player;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
-public class PredictionPassive extends Ability {
-    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "PREDICTION_CHANCE_NAME", descKey = "PREDICTION_CHANCE_DESC", type = VariableType.PERCENTAGE)
-    private int saveChancePct = 5; // % de chance de conserver la pomme
-
-    @Override public String getName()       { return "Prédiction de réplique"; }
-    @Override public Material getMaterial() { return null; }
-    @Override public void onConsume(org.bukkit.event.player.PlayerItemConsumeEvent event) {
-        if (ThreadLocalRandom.current().nextDouble() < saveChancePct / 100.0) {
-            event.setCancelled(true);
-            event.getPlayer().sendMessage("§e[Joseph] §7Prédiction ! Pomme conservée.");
-        }
-    }
+public class PredictionPassive extends PassiveAbility {
+    @Override public String getName() { return "Prediction"; }
 
     @Override
-    public boolean onEnable(Player player) { return true; }
+    public boolean onEnable(Player player) {
+        return false;
+    }
+
+    private final Random random = new Random();
+    public boolean shouldPredict() { return random.nextDouble() < 0.05; }
 }

@@ -9,6 +9,7 @@
         </processorPath>
         <module name="UHC.dandadan.main" />
         <module name="UHC.core.main" />
+        <module name="UHC.monster.main" />
         <module name="UHC.ultimate.main" />
         <module name="UHC.jjk.main" />
       </profile>

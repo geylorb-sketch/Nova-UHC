@@ -14,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -151,6 +153,7 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
 
             T role = pool.remove(0);
             players_roles.put(player, role);
+            role.setOwner(player);
             RoleVariableProcessor.process(role,player,this);
             role.onGive(player);
         }
@@ -221,6 +224,11 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
     }
 
     @Override
+    public void onBow(Entity entity, Player player, EntityShootBowEvent event) {
+        players_roles.forEach((p,role) -> role.onBow(entity,player,event));
+    }
+
+    @Override
     public void onKill(UHCPlayer killer, UHCPlayer victim) {
         players_roles.forEach((p, role) -> role.onKill(killer, victim));
     }
@@ -242,6 +250,11 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
         });
 
         return counts.size() == 1 ? counts.keySet().iterator().next() : null;
+    }
+
+    @Override
+    public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
+        players_roles.forEach((p, role) -> role.onDeath(uhcPlayer, killer, event));
     }
 
     @Override

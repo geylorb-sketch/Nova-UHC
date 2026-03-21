@@ -1,6 +1,6 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbiliy;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import org.bukkit.entity.Player;
 

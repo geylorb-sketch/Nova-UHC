@@ -5,6 +5,7 @@ import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.lang.ui.GameUiLang;
 import net.novaproject.novauhc.lang.ui.UiTitleLang;
+import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.ui.config.DropUi;
 import net.novaproject.novauhc.ui.config.LimiteStuffUi;
 import net.novaproject.novauhc.ui.config.PotionUi;
@@ -133,7 +134,10 @@ public class GameUi extends CustomInventory {
         addMenu(29, potion, new PotionUi(getPlayer()));
         addMenu(33, drop,   new DropUi(getPlayer()));
         addMenu(15, diams,  new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, UHCManager.get().getDimamondLimit(), 0, 0, this) {
-            @Override public void onChange(Number newValue) { UHCManager.get().setDimamondLimit((int) newValue); }
+            @Override public void onChange(Number newValue) {
+                UHCManager.get().setDimamondLimit((int) newValue);
+                UHCPlayerManager.get().getOnlineUHCPlayers().forEach(p -> p.setDimamondLimit((int) newValue));
+            }
         });
         addMenu(10, pvp, new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, UHCManager.get().getTimerpvp() / 60, 1, 60, this) {
             @Override public void onChange(Number newValue) { UHCManager.get().setTimerpvp((int) newValue * 60); }

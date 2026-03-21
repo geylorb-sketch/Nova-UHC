@@ -1,27 +1,20 @@
 package net.novauhc.dandadan.roles.minotaure;
 
-import net.novaproject.novauhc.ability.Ability;
-import net.novaproject.novauhc.ability.utils.AbilityVariable;
-import net.novaproject.novauhc.utils.VariableType;
-import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import org.bukkit.Material;
+import net.novaproject.novauhc.ability.template.PassiveAbility;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-public class OxydationPassive extends Ability {
+import java.util.Random;
 
-    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "OXYDATION_FIRE_PCT_NAME", descKey = "OXYDATION_FIRE_PCT_DESC", type = VariableType.PERCENTAGE)
-    private int fireReductionPct = 100; // 100 = immunité totale au feu
+public class OxydationPassive extends PassiveAbility {
+    @Override public String getName() { return "Oxydation"; }
 
-    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "OXYDATION_FIRE_AMP_NAME", descKey = "OXYDATION_FIRE_AMP_DESC", type = VariableType.INTEGER)
-    private int fireResistanceAmp = 0;
-    @Override public String getName()       { return "Oxydation"; }
-    @Override public Material getMaterial() { return null; }
+    @Override
+    public boolean onEnable(Player player) {
+        return false;
+    }
 
-    @Override public boolean onEnable(Player player) { return true; }
-
-    @Override public void onSec(Player player) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 40, fireResistanceAmp, false, false));
+    private final Random random = new Random();
+    public void onHit(Player victim) {
+        if (random.nextDouble() < 0.15) victim.setFireTicks(60);
     }
 }

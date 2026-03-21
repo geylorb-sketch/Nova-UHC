@@ -4,102 +4,74 @@ import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanCamps;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt3;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import org.bukkit.Location;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-
 public class KiraRole extends DanDaDanRole {
 
-    private boolean standActive = false;
-    private final Set<UUID>    explodedPlayers  = new HashSet<>();
-    private final Map<UUID, Location> lastPositions = new HashMap<>();
-    private int   mainHits  = 0;
-    private boolean mainActive = false;
-    private int   currentEnchant = 3;
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_KILLERQUEEN_NAME", type = VariableType.ABILITY)
+    private Ability killerQueenAbility = new KillerQueenAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_SHEERHEART_NAME", type = VariableType.ABILITY)
+    private Ability sheerHeartAbility = new SheerHeartAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_BITESDUST_NAME", type = VariableType.ABILITY)
+    private Ability bitesDustAbility = new BitesDustAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_STRAYCAT_NAME", type = VariableType.ABILITY)
+    private Ability strayCatAbility = new StrayCatAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability strayCat = new StrayCatAbility();
+    private final MainPassive mainPassive  = new MainPassive();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability bombe = new BombeKiraAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability killerQueen = new KillerQueenAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability sheerHeartAttack = new SheerHeartAttackAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability bitesDust = new BitesDustAbility();
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_PASSIVE_MAIN_NAME", type = VariableType.ABILITY)
-    private Ability mainPassive = new MainPassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_PASSIVE_EXPLOSION_IMMUNE_NAME", type = VariableType.ABILITY)
-    private Ability explosionImmunePassive = new ExplosionImmunePassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KIRA_PASSIVE_NAME_NAME", type = VariableType.ABILITY)
-    private Ability kiraNamePassive = new KiraNamePassive();
-
-public KiraRole() {
-        setCamp(DanDaDanCamps.SOLO);
+    public KiraRole() {
+        setCamp(DanDaDanCamps.SPECIAL);
+        getAbilities().add(mainPassive);
     }
 
-    @Override public int getId()                { return 31; }
-    @Override public String getName()           { return "Kira"; }
-    @Override public Material getIconMaterial() { return Material.TNT; }
-    @Override public String getDescription(Player player) { return LangManager.get().get(DanDaDanLangExt3.KIRA_DESC, player); }
+    @Override public String getName() { return "Kira"; }
+    @Override public Material getIconMaterial() { return Material.SKULL_ITEM; }
 
-    @Override public void onKill(UHCPlayer killer, UHCPlayer victim) {
-        super.onKill(killer, victim);
-        if (victim.getPlayer() == null) return;
-        // Épée volée apparaît en l'air
-        mainActive = true; mainHits = 0; currentEnchant++;
-        LangManager.get().send(DanDaDanLangExt3.KIRA_MAIN_PASSIVE, killer.getPlayer() != null ? killer.getPlayer() : null);
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
+
+    @Override
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.KIRA_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.KIRA_MAIN_TEXT), L(DanDaDanDescLang.KIRA_MAIN_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.KIRA_EXPLO_IM_TEXT), L(DanDaDanDescLang.KIRA_EXPLO_IM_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.KIRA_NOM_TEXT), L(DanDaDanDescLang.KIRA_NOM_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.KIRA_KILLER_TEXT), L(DanDaDanDescLang.KIRA_KILLER_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.KIRA_SHA_TEXT), L(DanDaDanDescLang.KIRA_SHA_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.KIRA_BTD_TEXT), L(DanDaDanDescLang.KIRA_BTD_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.KIRA_STRAY_TEXT), L(DanDaDanDescLang.KIRA_STRAY_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
     }
 
-    public boolean isMainActive() { return mainActive; }
-    public void setMainActive(boolean mainActive) { this.mainActive = mainActive; }
-    public int getMainHits() { return mainHits; }
-    public void setMainHits(int mainHits) { this.mainHits = mainHits; }
-    public void addMainHit() { this.mainHits++; }
-
-    public boolean isStandActive() { return standActive; }
-    public void setStandActive(boolean b) { standActive = b; }
-    public boolean isExploded(UUID id) { return explodedPlayers.contains(id); }
-    public void addExploded(UUID id, Player victim) {
-        explodedPlayers.add(id);
-        lastPositions.put(id, victim.getLocation().clone());
-        victim.sendMessage(LangManager.get().get(DanDaDanLangExt3.KIRA_EXPLODED_STATUS, victim));
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.SKULL_ITEM).setName(LangManager.get().get(DanDaDanLang.ITEM_KIRA_DKILLER_QUEEN)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.EXPLOSIVE_MINECART).setName(LangManager.get().get(DanDaDanLang.ITEM_KIRA_CSHEER_HEART_ATTACK)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.WATCH).setName(LangManager.get().get(DanDaDanLang.ITEM_KIRA_5BITES_THE_DUST)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.GLASS).setName(LangManager.get().get(DanDaDanLang.ITEM_KIRA_ASTRAYCAT)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
     }
-    public Set<UUID> getExplodedPlayers() { return explodedPlayers; }
-    public Map<UUID, Location> getLastPositions() { return lastPositions; }
-    public void recordPosition(UUID id, Location loc) { lastPositions.put(id, loc); }
 
-    // Passif Main
-
-    // Passif immunité explosion
-
-    // Passif Kira name change
-
-    // Stray Cat
-
-    // Bombe
-
-    // Killer Queen (Stand)
-
-    // Sheer Heart Attack
-
-    // Bites the Dust
 }
-
-// ════════════════════════════════════════════
-//  Polnareff (id 32)
-// ════════════════════════════════════════════

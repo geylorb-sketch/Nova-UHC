@@ -11,8 +11,11 @@ import net.novaproject.novauhc.utils.ShortCooldownManager;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bson.Document;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -32,6 +35,7 @@ public abstract class Ability implements Cloneable {
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ABILITY_VAR_ACTIVE_NAME", descKey = "ABILITY_VAR_ACTIVE_DESC", type = VariableType.BOOLEAN)
     private boolean active = true;
 
+    private UHCPlayer owner;
     public abstract String getName();
 
     public void decrementMaxUse() {
@@ -105,9 +109,7 @@ public abstract class Ability implements Cloneable {
     }
 
     public void onGive(UHCPlayer uhcPlayer) {
-        if(getItemStack().getType() != Material.AIR){
-            uhcPlayer.getPlayer().getInventory().addItem(getItemStack());
-        }
+
     }
 
     public UHCPlayer getUHCPlayer(Player player) {
@@ -128,7 +130,7 @@ public abstract class Ability implements Cloneable {
     public void onDrop(UHCPlayer uhcPlayer, PlayerDropItemEvent event){
 
     }
-    public void onDeath() {
+    public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
     }
 
     public void onKill(UHCPlayer killedP) {
@@ -139,7 +141,8 @@ public abstract class Ability implements Cloneable {
 
     public void onConsume(PlayerItemConsumeEvent event) {
     }
-
+    public void onBow(Entity shooter, Player target, EntityShootBowEvent event) {
+    }
 
     @Override
     public Ability clone() {
@@ -235,5 +238,6 @@ public abstract class Ability implements Cloneable {
             clazz = clazz.getSuperclass();
         }
     }
+
 
 }

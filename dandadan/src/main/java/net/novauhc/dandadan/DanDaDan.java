@@ -2,26 +2,18 @@ package net.novauhc.dandadan;
 
 import net.novaproject.novauhc.Common;
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.UHCManager;
 import net.novaproject.novauhc.command.CommandManager;
 import net.novaproject.novauhc.lang.LangManager;
+import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.scenario.role.camps.Camps;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
-import net.novaproject.novauhc.uhcteam.UHCTeam;
-import net.novaproject.novauhc.uhcteam.UHCTeamManager;
 import net.novaproject.novauhc.utils.ItemCreator;
-import net.novaproject.novauhc.utils.UHCUtils;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novaproject.novauhc.world.utils.LobbyCreator;
-import net.novauhc.dandadan.events.MoriohRadio;
-import net.novauhc.dandadan.events.RandomEventScheduler;
-import net.novauhc.dandadan.lang.*;
-import net.novauhc.dandadan.particularity.AmourManager;
-import net.novauhc.dandadan.particularity.AuraManager;
-import net.novauhc.dandadan.particularity.EspaceVideManager;
-import net.novauhc.dandadan.particularity.KintamaManager;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
+import net.novauhc.dandadan.lang.DanDaDanVarLang;
 import net.novauhc.dandadan.roles.acrobatique.AcrobatiqueSoyeuseRole;
 import net.novauhc.dandadan.roles.bamora.BamoraRole;
 import net.novauhc.dandadan.roles.caesar.CaesarRole;
@@ -55,75 +47,69 @@ import net.novauhc.dandadan.roles.rokuro.RokuroSerpoRole;
 import net.novauhc.dandadan.roles.seiko.SeikoRole;
 import net.novauhc.dandadan.roles.tsuchinoko.TsuchinokoRole;
 import net.novauhc.dandadan.roles.umbrella.UmbrellaBoyRole;
-import net.novauhc.dandadan.structure.StructureManager;
+import net.novauhc.dandadan.world.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import net.novauhc.dandadan.world.DanDaDanWorldManager;
-import net.novaproject.novauhc.scenario.ScenarioVariable;
 
+/**
+ * DanDaDan — ScenarioRole principal.
+ *
+ * Système d'obtention des Yokai :
+ *  GameWorld → Portails → DanDaDan → Zones Yokai → Épreuve → Pacte → Retour
+ *
+ * Avant de déclencher un événement lié à un Yokai (arène Doom, Time Freeze, etc.),
+ * on vérifie TOUJOURS que le Yokai est activé via YokaiRegistry.isEnabled().
+ */
 public class DanDaDan extends ScenarioRole<DanDaDanRole> {
 
     private static DanDaDan instance;
     private final Set<Class<? extends DanDaDanRole>> claimedRoles = new HashSet<>();
 
-    // ── ScenarioVariables : activer/désactiver les fonctionnalités ──
+    // ── ScenarioVariables (visibles dans le menu UI du framework) ──────
 
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_DOOM_ARENA_NAME", descKey = "SCENARIO_ENABLE_DOOM_ARENA_DESC", type = VariableType.BOOLEAN)
-    private boolean enableDoomArena = true;
+    @ScenarioVariable(lang = DanDaDanVarLang.class,
+            nameKey = "PORTAL_COUNT_NAME", descKey = "PORTAL_COUNT_DESC",
+            type = VariableType.INTEGER)
+    private int portalCount = 4;
 
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_AURA_NAME", descKey = "SCENARIO_ENABLE_AURA_DESC", type = VariableType.BOOLEAN)
-    private boolean enableAura = true;
+    @ScenarioVariable(lang = DanDaDanVarLang.class,
+            nameKey = "PORTAL_RADIUS_NAME", descKey = "PORTAL_RADIUS_DESC",
+            type = VariableType.INTEGER)
+    private int portalRadius = 60;
 
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_KINTAMA_NAME", descKey = "SCENARIO_ENABLE_KINTAMA_DESC", type = VariableType.BOOLEAN)
-    private boolean enableKintama = true;
+    @ScenarioVariable(lang = DanDaDanVarLang.class,
+            nameKey = "ZONE_DETECT_RADIUS_NAME", descKey = "ZONE_DETECT_RADIUS_DESC",
+            type = VariableType.INTEGER)
+    private int zoneDetectRadius = 3;
 
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_ESPACE_VIDE_NAME", descKey = "SCENARIO_ENABLE_ESPACE_VIDE_DESC", type = VariableType.BOOLEAN)
-    private boolean enableEspaceVide = true;
-
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_AMOUR_NAME", descKey = "SCENARIO_ENABLE_AMOUR_DESC", type = VariableType.BOOLEAN)
-    private boolean enableAmour = true;
-
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_MORIOH_RADIO_NAME", descKey = "SCENARIO_ENABLE_MORIOH_RADIO_DESC", type = VariableType.BOOLEAN)
-    private boolean enableMoriohRadio = true;
-
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_TYPHOON_HUMAN_NAME", descKey = "SCENARIO_ENABLE_TYPHOON_HUMAN_DESC", type = VariableType.BOOLEAN)
-    private boolean enableTyphoonHuman = true;
-
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_ENABLE_WORLD_DANDADAN_NAME", descKey = "SCENARIO_ENABLE_WORLD_DANDADAN_DESC", type = VariableType.BOOLEAN)
-    private boolean enableDanDaDanWorld = true;
-
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_DOOM_DELAY_NAME", descKey = "SCENARIO_DOOM_DELAY_DESC", type = VariableType.TIME)
-    private int doomArenaDelay = 60; // secondes avant le lancement de l'arène Doom
-
-    @ScenarioVariable(lang = DanDaDanVarLang.class, nameKey = "SCENARIO_PORTAL_RADIUS_NAME", descKey = "SCENARIO_PORTAL_RADIUS_DESC", type = VariableType.INTEGER)
-    private int portalRadius = 60; // rayon de placement des portails autour du spawn
-
-    // ── Monde dédié Doom (arène à 1 minute) ──────────────────
-    private static final String DOOM_WORLD_TEMPLATE = "template_doom_arena";
-    private static final String DOOM_WORLD_NAME     = "dandadan_doom";
-    private World doomWorld;
+    @ScenarioVariable(lang = DanDaDanVarLang.class,
+            nameKey = "INVOCATION_TIME_NAME", descKey = "INVOCATION_TIME_DESC",
+            type = VariableType.TIME)
+    private int invocationTime = 3;
 
     public static DanDaDan get() { return instance; }
-    public World getDoomWorld()  { return doomWorld; }
 
     // ── Identité ─────────────────────────────────────────────
     @Override public String getName()                { return "DanDaDan UHC"; }
-    @Override public String getDescription(Player p) { return "§5Explorez le Dandadan et réclamez la malédiction d'un yokai !"; }
+    @Override public String getDescription(Player p) { return "§5Explorez le DanDaDan et réclamez la malédiction d'un Yokai !"; }
     @Override public ItemCreator getItem()            { return new ItemCreator(Material.EYE_OF_ENDER); }
     @Override public Camps[] getCamps()               { return DanDaDanCamps.values(); }
 
     // ── Lifecycle ────────────────────────────────────────────
+
+
+    @Override
+    public String getPath() {
+        return "special/dandadan";
+    }
+
     @Override
     public void setup() {
         super.setup();
@@ -131,20 +117,6 @@ public class DanDaDan extends ScenarioRole<DanDaDanRole> {
         claimedRoles.clear();
         registerRoles();
 
-        // ── Monde Doom ───────────────────────────────────────────
-        LobbyCreator.cloneWorld(DOOM_WORLD_TEMPLATE, DOOM_WORLD_NAME);
-        Main.get().getServer().getScheduler().runTaskLater(Main.get(), () -> {
-            doomWorld = Bukkit.getWorld(DOOM_WORLD_NAME);
-        }, 40L);
-
-        // ── Dimension DanDaDan (portails + monde) ──────────────────
-        if (enableDanDaDanWorld) DanDaDanWorldManager.get().init();
-
-        // ── Monde Espace Vide ────────────────────────────────────
-        if (enableEspaceVide) EspaceVideManager.get().init();
-
-        // ── Monde Café (système Amour) ───────────────────────────
-        // (LobbyCreator.cloneWorld déclenché dans AmourManager.init())
     }
 
     private void registerRoles() {
@@ -165,12 +137,12 @@ public class DanDaDan extends ScenarioRole<DanDaDanRole> {
         addRole(MonstreFlatwoodsRole.class);
         addRole(ReikoKashimaRole.class);
         addRole(JetBoosterKurRole.class);
-        addRole(NessieRole.class);
         addRole(AcrobatiqueSoyeuseRole.class);
+        addRole(NessieRole.class);
         addRole(MinotaureRole.class);
         addRole(UmbrellaBoyRole.class);
         addRole(DevilmanRole.class);
-        // ── Malédictions spéciales ──────────────────────────────
+        // ── Yokai spéciaux (camp SPECIAL) ──
         addRole(CompteSaintGermainRole.class);
         addRole(CaesarRole.class);
         addRole(JosephRole.class);
@@ -185,227 +157,159 @@ public class DanDaDan extends ScenarioRole<DanDaDanRole> {
     }
 
     @Override
+    public void toggleActive() {
+        super.toggleActive();
+        if(isActive()) {
+            DanDaDanWorldManager.get().init();
+            YokaiConfig.get().init();
+            YokaiConfig.get().loadTrialLocations();
+            Bukkit.getPluginManager().registerEvents(TrialNpcManager.get(), Main.get());
+            CourseManager.get().loadConfig();
+            return;
+        }
+        cleanup();
+    }
+
+    @Override
     public void onGameStart() {
         CommandManager.get().register("ddd", new DanDaDanCMD(), "dandadan");
         LangManager.get().register(DanDaDanLang.values());
         LangManager.get().register(DanDaDanVarLang.values());
-        LangManager.get().register(DanDaDanLangExt.values());
-        LangManager.get().register(DanDaDanLangExt2.values());
-        LangManager.get().register(DanDaDanLangExt3.values());
-        LangManager.get().register(DanDaDanVarLangExt4.values());
-        LangManager.get().register(DanDaDanVarLangExt5.values());
-        LangManager.get().register(DanDaDanVarLangExt6.values());
-        LangManager.get().register(DanDaDanVarLangExt7.values());
+        LangManager.get().register(DanDaDanDescLang.values());
 
-        // ── Arène Doom à 60 secondes ─────────────────────────────
-//        if (enableDoomArena) Main.get().getServer().getScheduler().runTaskLater(Main.get(),
-//                this::launchDoomArena, 20L * doomArenaDelay);
-
-        // ── Portails custom sur la map principale ────────────────
+        // Portails GameWorld → DanDaDan
         World gameWorld = Common.get().getArena();
-        if (enableDanDaDanWorld) DanDaDanWorldManager.get().spawnPortals(gameWorld);
+        if (gameWorld != null) {
+            PortalManager.get().generatePortals(gameWorld, portalRadius, portalCount);
+        }
 
-        // ── Structures d'obtention de yokai DANS la dimension ────
-        World dimWorld = DanDaDanWorldManager.get().getDandadanWorld();
-        StructureManager.get().init(dimWorld != null ? dimWorld : gameWorld);
-//
-//        // ── Kintama (spawn entre 20-40min) ───────────────────────
-//        if (enableKintama) KintamaManager.get().start(gameWorld);
-//
-//        // ── Aura (pastilles couleur) ─────────────────────────────
-//        if (enableAura) AuraManager.get().start();
-
-        // ── Événements aléatoires ─────────────────────────────────
-        //RandomEventScheduler.get().setEnableRadio(enableMoriohRadio);
-        //RandomEventScheduler.get().setEnableTyphoon(enableTyphoonHuman);
-        //RandomEventScheduler.get().start();
-
-        // ── Système Amour (Denji/Reze + Okarun/Momo) ────────────
-        // (enableAmour) AmourManager.get().init();
-
-        // ── Compte de Saint-Germain : donner le rôle aléatoirement
-        //giveCompteSaintGermain();
+        // ── Construire les zones Yokai dans DanDaDan ──
+        YokaiZoneManager.get().buildZones();
     }
 
-    /** Donne le rôle Compte de Saint-Germain à un joueur aléatoire. */
-    private void giveCompteSaintGermain() {
-        Main.get().getServer().getScheduler().runTaskLater(Main.get(), () -> {
-            var players = UHCPlayerManager.get().getPlayingOnlineUHCPlayers().stream()
-                    .filter(p -> getRoleByUHCPlayer(p) == null && p.getPlayer() != null)
-                    .toList();
-            if (players.isEmpty()) return;
-            UHCPlayer chosen = players.get(
-                    (int)(Math.random() * players.size()));
-            claimRole(chosen, CompteSaintGermainRole.class);
-        }, 20L * 5); // 5 secondes après le start
+    // ── Tick chaque seconde ─────────────────────────────────
+    @Override
+    public void onSec(Player p) {
+        super.onSec(p);
+
+        World dandadanWorld = DanDaDanWorldManager.get().getDandadanWorld();
+
+        // Portails : détection + particules
+        PortalManager.get().tick();
+        PortalManager.get().tickParticles();
+
+        // Zones Yokai : détection joueurs dans DanDaDan
+        YokaiZoneManager.get().tick(dandadanWorld);
+
+        // Épreuves en cours : détection vide (refus du pacte)
+        YokaiZoneManager.get().tickTrials(dandadanWorld);
     }
-
-
-    /*
-     * Lance l'arène Doom : téléporte tous les joueurs,
-     * équipe chacun en fer + épée sharp II + arc + pommes.
-     * Le dernier en vie reçoit le rôle Doomslayer.
-     */
-    private void launchDoomArena() {
-        if (doomWorld == null) return;
-        List<UHCPlayer> players = UHCPlayerManager.get().getPlayingOnlineUHCPlayers();
-        if (players.isEmpty()) return;
-
-        // Centre de l'arène au spawn du monde Doom
-        Location spawnLoc = doomWorld.getSpawnLocation().clone().add(0, 1, 0);
-
-        players.forEach(up -> {
-            Player p = up.getPlayer();
-            if (p == null) return;
-
-            // Téléportation + équipement arène
-            p.teleport(spawnLoc.clone().add(
-                    (Math.random() - 0.5) * 20, 0, (Math.random() - 0.5) * 20));
-            UHCUtils.clearPlayerInventory(p);
-            p.getInventory().setHelmet    (new ItemCreator(Material.IRON_HELMET).getItemstack());
-            p.getInventory().setChestplate(new ItemCreator(Material.IRON_CHESTPLATE).getItemstack());
-            p.getInventory().setLeggings  (new ItemCreator(Material.IRON_LEGGINGS).getItemstack());
-            p.getInventory().setBoots     (new ItemCreator(Material.IRON_BOOTS).getItemstack());
-
-            org.bukkit.inventory.ItemStack sword = new org.bukkit.inventory.ItemStack(Material.IRON_SWORD);
-            sword.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.DAMAGE_ALL, 2);
-            p.getInventory().addItem(sword);
-
-            org.bukkit.inventory.ItemStack bow = new org.bukkit.inventory.ItemStack(Material.BOW);
-            p.getInventory().addItem(bow);
-            p.getInventory().addItem(new org.bukkit.inventory.ItemStack(Material.ARROW, 24));
-            p.getInventory().addItem(new org.bukkit.inventory.ItemStack(Material.GOLDEN_APPLE, 10));
-
-            LangManager.get().send(DanDaDanLangExt3.DOOM_ARENA_START, p);
-        });
-    }
-
-    /** Appelé par DoomslayerRole quand il détecte la fin de l'arène. */
-    public void endDoomArena(Player winner) {
-        if (winner != null) LangManager.get().send(DanDaDanLangExt3.DOOM_ARENA_WIN, winner);
-
-        // Renvoyer les joueurs survivants dans le monde principal
-        World mainWorld = Bukkit.getWorlds().get(0);
-        Location mainSpawn = mainWorld.getSpawnLocation().clone().add(0, 1, 0);
-        doomWorld.getPlayers().forEach(p -> p.teleport(mainSpawn));
-    }
-
 
     // ── Rôle on-demand ──────────────────────────────────────
     @Override
-    public void giveRoles() { /* no-op : rôles obtenus en jeu */ }
+    public void giveRoles() { /* no-op : rôles obtenus via le système d'acquisition */ }
 
+    /**
+     * Attribue un rôle Yokai à un joueur.
+     * Vérifie que le Yokai est activé avant d'attribuer.
+     */
     public boolean claimRole(UHCPlayer player, Class<? extends DanDaDanRole> roleClass) {
-        Player bp = player.getPlayer();
-        if (getRoleByUHCPlayer(player) != null) {
-            if (bp != null) LangManager.get().send(DanDaDanLang.YOKAI_ALREADY_HAVE, bp);
-            return false;
+        if (getRoleByUHCPlayer(player) != null) return false;
+        if (claimedRoles.contains(roleClass)) return false;
+
+        // ── GUARD : vérifier que le Yokai est activé ──
+        boolean yokaiEnabled = false;
+        for (YokaiRegistry y : YokaiRegistry.values()) {
+            if (y.getRoleClass().equals(roleClass)) {
+                yokaiEnabled = y.isEnabled();
+                break;
+            }
         }
-        if (claimedRoles.contains(roleClass)) {
-            if (bp != null) LangManager.get().send(DanDaDanLang.YOKAI_ALREADY_CLAIMED, bp);
-            return false;
-        }
+        if (!yokaiEnabled) return false;
+
         DanDaDanRole role;
         try {
             role = roleClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException("Impossible de créer le rôle " + roleClass.getName(), e);
         }
-        claimedRoles.add(roleClass);
-        giveRole(player, role);
-        // ── Libérer de la dimension DanDaDan ─────────────────────
-        if (player.getPlayer() != null) {
-            DanDaDanWorldManager.get().onYokaiObtained(player.getPlayer());
-        }
 
-        // ── Radio : annonce l'obtention du yokai ─────────────────
-        if (player.getPlayer() != null) {
-            MoriohRadio.get().onYokaiObtained(player.getPlayer().getName(), role.getName());
-        }
+        claimedRoles.add(roleClass);
+        role.onGive(player);
+
+        // Annonce globale
+        String roleName = role.getName();
+        String playerName = player.getPlayer() != null ? player.getPlayer().getName() : "???";
+        LangManager.get().sendAll(DanDaDanLang.YOKAI_CLAIMED_BROADCAST,
+                java.util.Map.of("%player%", playerName, "%yokai%", roleName));
+
         return true;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  GUARD : Vérifier qu'un Yokai est actif avant un événement
+    // ══════════════════════════════════════════════════════════
+
+    /**
+     * Vérifie si un Yokai est activé dans la partie.
+     * À appeler AVANT de déclencher un événement lié à un Yokai.
+     *
+     * Exemples :
+     *   if (!DanDaDan.get().isYokaiActive(YokaiRegistry.DOOMSLAYER)) return;
+     *   if (!DanDaDan.get().isYokaiActive(YokaiRegistry.JOTARO)) return;
+     */
+    public boolean isYokaiActive(YokaiRegistry yokai) {
+        return yokai.isEnabled();
+    }
+
+    /**
+     * Vérifie si un Yokai est activé par sa classe de rôle.
+     */
+    public boolean isYokaiActive(Class<? extends DanDaDanRole> roleClass) {
+        for (YokaiRegistry y : YokaiRegistry.values()) {
+            if (y.getRoleClass().equals(roleClass)) return y.isEnabled();
+        }
+        return false;
     }
 
     // ── Victoire ─────────────────────────────────────────────
     @Override
     public boolean isWin() {
-        // Solo : dernier en vie gagne
         return UHCPlayerManager.get().getPlayingOnlineUHCPlayers().size() <= 1;
     }
 
     @Override public boolean overridesVictory() { return true; }
-    /**
-     * Hook onDeath : vérifie si le joueur possède 2 Kintamas (passif Yokai — survie).
-     */
-
-    @Override
-    public void onPlayerTakeDamage(Entity entity, EntityDamageEvent event) {
-        if(!(entity instanceof Player)) return;
-        Player p = (Player) entity;
-        UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(p);
-        if (uhcPlayer.getPlayer() == null || event == null) return;
-        if (KintamaManager.get().tryYokaiSurvive(uhcPlayer.getPlayer())) {
-            event.setCancelled(true);
-        }
-        // Denji/Pochita : mort devant Pochita
-        if (net.novaproject.novauhc.utils.ShortCooldownManager
-                .get(uhcPlayer.getPlayer(), "PochitaInteracted") > 0
-                && DanDaDan.get() != null) {
-            UHCPlayer uhcp = uhcPlayer;
-            Main.get().getServer().getScheduler().runTaskLater(
-                    Main.get(),
-                    () -> claimRole(uhcp, DenjiRole.class), 20L);
-        }
-    }
 
     // ── Mort custom ──────────────────────────────────────────
     @Override public boolean hascustomDeathMessage() { return true; }
 
     @Override
-    public void sendCustomDeathMessage(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
-        DanDaDanRole role    = getRoleByUHCPlayer(uhcPlayer);
-        String yokaiName     = (role != null) ? role.getName() : "Aucun yokai";
-        String victimName    = uhcPlayer.getPlayer() != null ? uhcPlayer.getPlayer().getName() : "???";
-        String killerPart    = "";
-        if (killer != null && killer.getPlayer() != null) {
-            killerPart = LangManager.get().get(DanDaDanLang.DEATH_MESSAGE_KILLER)
-                    .replace("%killer%", killer.getPlayer().getName());
-        }
+    public void sendCustomDeathMessage(UHCPlayer victim, UHCPlayer killer, PlayerDeathEvent event) {
+        DanDaDanRole role = getRoleByUHCPlayer(victim);
+        String yokaiName = (role != null) ? role.getName() : "Aucun Yokai";
+        String victimName = victim.getPlayer() != null ? victim.getPlayer().getName() : "???";
+
         String msg = LangManager.get().get(DanDaDanLang.DEATH_MESSAGE)
                 .replace("%player%", victimName)
-                .replace("%killer%", killerPart)
-                .replace("%yokai%",  yokaiName);
+                .replace("%yokai%", yokaiName);
+
         UHCPlayerManager.get().getOnlineUHCPlayers()
                 .forEach(p -> { if (p.getPlayer() != null) p.getPlayer().sendMessage(msg); });
         event.setDeathMessage(null);
-        // ── Morioh-Cho Radio ─────────────────────────────────────
-        String killerName = (killer != null && killer.getPlayer() != null)
-                ? killer.getPlayer().getName() : "le monde";
-        MoriohRadio.get().onPlayerDeath(victimName, killerName);
+    }
 
-        // ── Denji/Pochita : mort devant Pochita = obtention du rôle
-        if (uhcPlayer.getPlayer() != null
-                && net.novaproject.novauhc.utils.ShortCooldownManager
-                   .get(uhcPlayer.getPlayer(), "PochitaInteracted") > 0) {
-            UHCPlayer uhcp = uhcPlayer;
-            Main.get().getServer().getScheduler().runTaskLater(Main.get(), () ->
-                    claimRole(uhcp, DenjiRole.class), 20L);
-        }
+    // ── Cleanup ──────────────────────────────────────────────
+    public void cleanup() {
+        TrialNpcManager.get().cleanupAll();
+        Location fallback = Common.get().getLobbySpawn();
+        DanDaDanWorldManager.get().cleanup(fallback);
     }
 
     // ── Helpers ──────────────────────────────────────────────
     public boolean isRoleClaimed(Class<? extends DanDaDanRole> roleClass) {
         return claimedRoles.contains(roleClass);
     }
-    public Set<Class<? extends DanDaDanRole>> getClaimedRoles() { return claimedRoles; }
 
-    // ── Cleanup : supprimer les mondes dédiés en fin de partie ──
-
-    @Override
-    public void scatter(UHCPlayer uhcPlayer, Location location, HashMap<UHCTeam, Location> teamloc) {
-        if (UHCManager.get().getTeam_size() != 1) {
-            UHCTeamManager.get().scatterTeam(uhcPlayer, teamloc);
-        } else {
-            uhcPlayer.getPlayer().teleport(location);
-        }
-    }
+    public int getZoneDetectRadius()  { return zoneDetectRadius; }
+    public int getInvocationTime()    { return invocationTime; }
 }

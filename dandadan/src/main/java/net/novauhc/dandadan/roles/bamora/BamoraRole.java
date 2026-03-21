@@ -1,68 +1,102 @@
 package net.novauhc.dandadan.roles.bamora;
 
 import net.novaproject.novauhc.ability.Ability;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanRole;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class BamoraRole extends DanDaDanRole {
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_KAIJU_MAX_TIME_NAME", descKey = "BAMORA_KAIJU_MAX_TIME_DESC", type = VariableType.TIME)
-    private int kaijuMaxTime = 600;
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_KAIJU_KILL_BONUS_NAME", descKey = "BAMORA_KAIJU_KILL_BONUS_DESC", type = VariableType.TIME)
-    private int kaijuKillBonus = 60;
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_KAIJU_STRENGTH_PCT_NAME", descKey = "BAMORA_KAIJU_STRENGTH_PCT_DESC", type = VariableType.PERCENTAGE)
-    private double kaijuStrengthPct = 0.15;
-
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_ABILITY_KAIJU_NAME", type = VariableType.ABILITY)
-    private Ability kaiju = new BamoraKaijuAbility();
+    private Ability kaiju = new KaijuAbility();
 
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_ABILITY_INVIS_NAME", type = VariableType.ABILITY)
-    private Ability invisibilite = new BamoraInvisAbility();
+    private Ability invisibilite = new InvisibiliteAbility();
 
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_ABILITY_SYSTEME_NAME", type = VariableType.ABILITY)
-    private Ability systeme = new SystemeAbility();
+    private Ability systeme = new SystemeCommand();
 
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_PASSIVE_PROJECTILE_NAME", type = VariableType.ABILITY)
-    private Ability projectilePassive = new BamoraProjectilePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_ABILITY_VILLE_NAME", type = VariableType.ABILITY)
+    private Ability ville = new VilleAbility();
 
-    @RoleVariable(lang = DanDaDanVarLangExt4.class, nameKey = "BAMORA_ABILITY_SLAUGHTER_NAME", type = VariableType.ABILITY)
-    private Ability slaughter = new SlaughterModeAbility();
+    private final ProjectilePassive projectilePassive = new ProjectilePassive();
 
-    @RoleVariable(lang = DanDaDanVarLangExt4.class, nameKey = "BAMORA_ABILITY_VILLE_NAME", type = VariableType.ABILITY)
-    private Ability ville = new VilleEspaceVideAbility();
-
-public BamoraRole() {
-    }
-
-    @Override public int getId()                { return 3; }
-    @Override public String getName()           { return "Bamora"; }
-    @Override public Material getIconMaterial() { return Material.GOLD_BLOCK; }
-
-    @Override
-    public String getDescription(Player player) {
-        return net.novaproject.novauhc.lang.LangManager.get()
-                .get(DanDaDanLang.BAMORA_DESC, player);
+    public BamoraRole() {
+        getAbilities().add(projectilePassive);
     }
 
     @Override
-    public void onKill(UHCPlayer killer, UHCPlayer victim) {
-        super.onKill(killer, victim);
-        // Bonus sur Kaiju géré dans BamoraKaijuAbility via référence au role
-        Player bp = killer.getPlayer();
-        if (bp != null) net.novaproject.novauhc.lang.LangManager.get()
-                .send(DanDaDanLang.BAMORA_KILL_BONUS, bp);
+    public String getName() {
+        return "Bamora";
     }
 
-    public int getKaijuMaxTime()    { return kaijuMaxTime; }
-    public int getKaijuKillBonus()  { return kaijuKillBonus; }
-    public double getKaijuStrengthPct() { return kaijuStrengthPct; }
+    @Override
+    public Material getIconMaterial() {
+        return Material.GOLD_BLOCK;
+    }
+
+    public KaijuAbility getKaijuAbility() {
+        return (KaijuAbility) kaiju;
+    }
+
+    @Override
+    public void sendDescription(Player p) {
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.ROLE_PREFIX) + LangManager.get().get(DanDaDanDescLang.BAMORA_NAME));
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.CAMP_YOKAI));
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_PROJECTILE_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_PROJECTILE_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_KAIJU_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_KAIJU_HOVER));
+        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_INVIS_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_INVIS_HOVER));
+        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_SYSTEME_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_SYSTEME_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ESPACE));
+        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_VILLE_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_VILLE_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+    }
+
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.GOLD_BLOCK).setName(LangManager.get().get(DanDaDanLang.ITEM_BAMORA_KAIJU)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.GLASS).setName(LangManager.get().get(DanDaDanLang.ITEM_BAMORA_INVIS)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.ENDER_PEARL).setName(LangManager.get().get(DanDaDanLang.ITEM_BAMORA_VILLE)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
+    }
+
+
+    @Override
+    public void onHit(Entity entity, Entity dammager, EntityDamageByEntityEvent event) {
+        if (!(entity instanceof Player victim)) return;
+        if (!(event.getDamager() instanceof Player attacker)) return;
+        if (victim.getPlayer() == null) return;
+        projectilePassive.onHit(attacker, victim.getPlayer());
+        if (invisibilite instanceof InvisibiliteAbility ia){
+            ia.onDealtHit(attacker);
+            ia.onTookHit(attacker);
+        }
+
+
+    }
+
 }

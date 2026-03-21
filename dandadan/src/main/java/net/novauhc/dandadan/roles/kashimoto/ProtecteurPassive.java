@@ -1,85 +1,69 @@
 package net.novauhc.dandadan.roles.kashimoto;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.Ability;
-import net.novaproject.novauhc.ability.utils.AbilityVariable;
+import net.novaproject.novauhc.ability.template.PassiveAbility;
 import net.novaproject.novauhc.lang.LangManager;
-import net.novaproject.novauhc.uhcplayer.UHCPlayer;
-import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.lang.DanDaDanLang;
-import net.novauhc.dandadan.lang.DanDaDanVarLang;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 /**
- * Protecteur — Passif
- * Quand Kashimoto "brise" une pièce d'armure, elle est remplacée par fer Prot2 pendant 5s.
- * Détecte via onAttack quand une pièce est à 0 de durabilité.
+ * Protecteur — Passif Kashimoto
+ * Quand une piece d'armure casse, remplacee par fer Prot II pendant 5s.
  */
-public class ProtecteurPassive extends Ability {
+public class ProtecteurPassive extends PassiveAbility {
 
-        @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "PROTECT_DURATION_NAME", descKey = "PROTECT_DURATION_DESC", type = VariableType.TIME)
-    private int replacementDuration = 5; // secondes
-
-    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "PROTECT_DURABILITY_THRESHOLD_NAME", descKey = "PROTECT_DURABILITY_THRESHOLD_DESC", type = VariableType.INTEGER)
-    private int durabilityThreshold = 5; // dommages restants avant déclenchement
-
-    private final Map<UUID, Long> replacedUntil = new HashMap<>();
-
-    @Override public String getName()       { return "Protecteur"; }
-    @Override public Material getMaterial() { return null; }
-    @Override public boolean onEnable(Player player) { return true; }
+    @Override public String getName() { return "Protecteur"; }
 
     @Override
-    public void onAttack(UHCPlayer victimP, EntityDamageByEntityEvent event) {
-        // Protège Kashimoto lui-même — hook onSec pour vérifier l'armure
+    public boolean onEnable(Player player) {
+        return false;
     }
 
-    @Override
-    public void onSec(Player player) {
-        long now = System.currentTimeMillis();
-        if (replacedUntil.getOrDefault(player.getUniqueId(), 0L) > now) return;
 
-        ItemStack[] armor = player.getInventory().getArmorContents();
-        for (int i = 0; i < armor.length; i++) {
-            if (armor[i] == null || armor[i].getType() == Material.AIR) continue;
-            short durability = armor[i].getDurability();
-            short maxDurability = armor[i].getType().getMaxDurability();
-            if (maxDurability > 0 && durability >= maxDurability - durabilityThreshold) {
-                // Pièce quasi-cassée : remplace par fer Prot2 temporairement
-                ItemStack replacement = getIronProtReplacement(i);
-                final int slot = i;
-                final ItemStack original = armor[i].clone();
-                armor[i] = replacement;
-                player.getInventory().setArmorContents(armor);
-                replacedUntil.put(player.getUniqueId(), now + (replacementDuration * 1000L));
-                LangManager.get().send(DanDaDanLang.KASHIMOTO_PROTECTEUR_TRIGGERED, player);
+    /**
+     * Appelé quand une piece d'armure est cassee.
+     * Remplace par fer Prot II pendant 5s.
+     */
+    public void onArmorBreak(Player player, int slot) {
+        ItemStack replacement = createProtArmor(slot);
+        if (replacement == null) return;
 
-                Main.get().getServer().getScheduler().runTaskLater(Main.get(), () -> {
-                    ItemStack[] current = player.getInventory().getArmorContents();
-                    current[slot] = original;
-                    player.getInventory().setArmorContents(current);
-                }, (long)(replacementDuration * 20));
-                break;
-            }
+        switch (slot) {
+            case 0 -> player.getInventory().setBoots(replacement);
+            case 1 -> player.getInventory().setLeggings(replacement);
+            case 2 -> player.getInventory().setChestplate(replacement);
+            case 3 -> player.getInventory().setHelmet(replacement);
         }
+
+        LangManager.get().send(DanDaDanLang.KASHIMOTO_PROTECTEUR_TRIGGER, player);
+
+        // Retirer apres 5s
+        Bukkit.getScheduler().runTaskLater(Main.get(), () -> {
+            if (!player.isOnline()) return;
+            switch (slot) {
+                case 0 -> player.getInventory().setBoots(null);
+                case 1 -> player.getInventory().setLeggings(null);
+                case 2 -> player.getInventory().setChestplate(null);
+                case 3 -> player.getInventory().setHelmet(null);
+            }
+        }, 100L); // 5s
     }
 
-    private ItemStack getIronProtReplacement(int slot) {
+    private ItemStack createProtArmor(int slot) {
         Material mat = switch (slot) {
-            case 3 -> Material.IRON_HELMET;
-            case 2 -> Material.IRON_CHESTPLATE;
+            case 0 -> Material.IRON_BOOTS;
             case 1 -> Material.IRON_LEGGINGS;
-            default -> Material.IRON_BOOTS;
+            case 2 -> Material.IRON_CHESTPLATE;
+            case 3 -> Material.IRON_HELMET;
+            default -> null;
         };
+        if (mat == null) return null;
         ItemStack item = new ItemStack(mat);
-        item.addEnchantment(org.bukkit.enchantments.Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
         return item;
     }
 }

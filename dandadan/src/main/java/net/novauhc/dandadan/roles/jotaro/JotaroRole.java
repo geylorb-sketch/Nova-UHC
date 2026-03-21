@@ -4,79 +4,76 @@ import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanCamps;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt3;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class JotaroRole extends DanDaDanRole {
 
-    private boolean standActive = false;
-    private double timeFreeze   = 5.0;    // secondes disponibles
-    private int    starFingerPierce = 0;  // coups qui passent la résistance
-    private int    oraOraTarget = -1;
-    private int    kills = 0;
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_STARFINGER_NAME", type = VariableType.ABILITY)
+    private Ability starFingerAbility = new StarFingerAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_STARPLATINUM_NAME", type = VariableType.ABILITY)
+    private Ability starPlatinumAbility = new StarPlatinumAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_ARRETTEMPSJ_NAME", type = VariableType.ABILITY)
+    private Ability arretTempsJAbility = new ArretTempsJAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_ORAORA_NAME", type = VariableType.ABILITY)
+    private Ability oraOraAbility = new OraOraAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability starFinger = new StarFingerAbility();
+    private final ReactionPassive reactionPassive  = new ReactionPassive();
+    private final CasquettePassive casquettePassive  = new CasquettePassive();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability starPlatinum = new StarPlatinumAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability timeStop = new TimeStopAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability oraOra = new OraOraAbility();
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_PASSIVE_REACTION_NAME", type = VariableType.ABILITY)
-    private Ability reactionPassive = new ReactionPassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_PASSIVE_DETECTIVE_NAME", type = VariableType.ABILITY)
-    private Ability detectivePassive = new DetectivePassive();
-
-    // Passif non-configurable → ajouté manuellement
-    private final CasquettePassive casquette = new CasquettePassive();
-
-public JotaroRole() {
-        setCamp(DanDaDanCamps.SOLO);
-            getAbilities().add(casquette);
-}
-
-    @Override public int getId()                { return 29; }
-    @Override public String getName()           { return "Jotaro"; }
-    @Override public Material getIconMaterial() { return Material.NETHER_STAR; }
-    @Override public String getDescription(Player player) { return LangManager.get().get(DanDaDanLangExt3.JOTARO_DESC, player); }
-
-    @Override public void onKill(UHCPlayer killer, UHCPlayer victim) {
-        super.onKill(killer, victim);
-        kills++;
-        timeFreeze = Math.min(9.0, timeFreeze + 0.5);
+    public JotaroRole() {
+        setCamp(DanDaDanCamps.SPECIAL);
+        getAbilities().add(reactionPassive);
+        getAbilities().add(casquettePassive);
     }
 
-    public boolean isStandActive() { return standActive; }
-    public void setStandActive(boolean b) { standActive = b; }
-    public double getTimeFreeze() { return timeFreeze; }
-    public int getStarFingerPierce() { return starFingerPierce; }
-    public void useStarFingerPierce() { if (starFingerPierce > 0) starFingerPierce--; }
-    public void setStarFingerPierce(int n) { starFingerPierce = n; }
+    @Override public String getName() { return "Jotaro"; }
+    @Override public Material getIconMaterial() { return Material.NETHER_STAR; }
 
-    // Passif Réaction
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
 
-    // Passif Détective : voit le nom du yokai de chaque joueur
+    @Override
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.JOTARO_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_REACTION_TEXT), L(DanDaDanDescLang.JOTARO_REACTION_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_DETECTIVE_TEXT), L(DanDaDanDescLang.JOTARO_DETECTIVE_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_CASQUETTE_TEXT), L(DanDaDanDescLang.JOTARO_CASQUETTE_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_STAR_F_TEXT), L(DanDaDanDescLang.JOTARO_STAR_F_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_STAR_P_TEXT), L(DanDaDanDescLang.JOTARO_STAR_P_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_TIME_S_TEXT), L(DanDaDanDescLang.JOTARO_TIME_S_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_ORA_TEXT), L(DanDaDanDescLang.JOTARO_ORA_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+    }
 
-    // Star Finger
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.IRON_SWORD).setName(LangManager.get().get(DanDaDanLang.ITEM_JOTARO_9STAR_FINGER)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.NETHER_STAR).setName(LangManager.get().get(DanDaDanLang.ITEM_JOTARO_DSTAR_PLATINUM)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.WATCH).setName(LangManager.get().get(DanDaDanLang.ITEM_JOTARO_5ARRET_DU_TEMPS)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.DIAMOND).setName(LangManager.get().get(DanDaDanLang.ITEM_JOTARO_6ORA_ORA)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
+    }
 
-    // Star Platinum (Stand)
-
-    // Arrêt du temps
-
-    // Ora Ora
 }
-
-// ════════════════════════════════════════════
-//  Dio (id 30)
-// ════════════════════════════════════════════

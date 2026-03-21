@@ -3,71 +3,74 @@ package net.novauhc.dandadan.roles.polnareff;
 import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
+import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanCamps;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt3;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class PolnareffRole extends DanDaDanRole {
 
-    private boolean standActive     = false;
-    private boolean autoAimActive   = false;
-    private boolean horaRushActive  = false;
-    private double  totalDmgReceived = 0; // pour le switch force/speed
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_SILVERCHARIOT_NAME", type = VariableType.ABILITY)
+    private Ability silverChariotAbility = new SilverChariotAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_SWORDLAUNCH_NAME", type = VariableType.ABILITY)
+    private Ability swordLaunchAbility = new SwordLaunchAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_HORARUSH_NAME", type = VariableType.ABILITY)
+    private Ability horaRushAbility = new HoraRushAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_IMAGEREMAN_NAME", type = VariableType.ABILITY)
+    private Ability imageRemanAbility = new ImageRemanAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability swordLaunch = new SwordLaunchAbility();
+    private final FrancaisPassive francaisPassive  = new FrancaisPassive();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability silverChariot = new SilverChariotAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability horaRush = new HoraRushAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability imageRemanente = new ImageRemanteAbility();
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_PASSIVE_FRANCAIS_NAME", type = VariableType.ABILITY)
-    private Ability francaisPassive = new FrancaisPassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_PASSIVE_PRECISION_NAME", type = VariableType.ABILITY)
-    private Ability precisionPassive = new PrecisionPassive();
-
-public PolnareffRole() {
-        setCamp(DanDaDanCamps.SOLO);
+    public PolnareffRole() {
+        setCamp(DanDaDanCamps.SPECIAL);
+        getAbilities().add(francaisPassive);
     }
 
-    @Override public int getId()                { return 32; }
-    @Override public String getName()           { return "Jean-Pierre Polnareff"; }
+    @Override public String getName() { return "Jean-Pierre Polnareff"; }
     @Override public Material getIconMaterial() { return Material.IRON_SWORD; }
-    @Override public String getDescription(Player player) { return LangManager.get().get(DanDaDanLangExt3.POLNA_DESC, player); }
 
-    public boolean isStandActive()   { return standActive; }
-    public void setStandActive(boolean b) { standActive = b; }
-    public boolean isAutoAimActive() { return autoAimActive; }
-    public void setAutoAimActive(boolean b) { autoAimActive = b; }
-    public boolean isHoraRushActive(){ return horaRushActive; }
-    public void setHoraRushActive(boolean b) { horaRushActive = b; }
-    public double getTotalDmgReceived() { return totalDmgReceived; }
-    public void addDmgReceived(double d) { totalDmgReceived += d; }
-    public void resetDmgReceived() { totalDmgReceived = 0; }
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
 
-    // Passif Français : pomme = nourriture pleine
+    @Override
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.POLNAREFF_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_FRANCAIS_TEXT), L(DanDaDanDescLang.POLNAREFF_FRANCAIS_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_PRECISION_TEXT), L(DanDaDanDescLang.POLNAREFF_PRECISION_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_SILVER_TEXT), L(DanDaDanDescLang.POLNAREFF_SILVER_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_SWORD_L_TEXT), L(DanDaDanDescLang.POLNAREFF_SWORD_L_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_HORA_TEXT), L(DanDaDanDescLang.POLNAREFF_HORA_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_IMAGE_TEXT), L(DanDaDanDescLang.POLNAREFF_IMAGE_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+    }
 
-    // Passif Précision : 25% auto-aim
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.IRON_SWORD).setName(LangManager.get().get(DanDaDanLang.ITEM_POLNAREFF_7SILVER_CHARIOT)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.IRON_SWORD).setName(LangManager.get().get(DanDaDanLang.ITEM_POLNAREFF_BSWORD_LAUNCH)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.DIAMOND_SWORD).setName(LangManager.get().get(DanDaDanLang.ITEM_POLNAREFF_EHORA_RUSH)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.ARMOR_STAND).setName(LangManager.get().get(DanDaDanLang.ITEM_POLNAREFF_5IMAGE_REMANENTE)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
+    }
 
-    // Sword Launch
-
-    // Silver Chariot (Stand)
-
-    // Hora Rush
-
-    // Image rémanente : 6 PNJ zombies
 }
-
-// ════════════════════════════════════════════
-//  Rohan (id 33)
-// ════════════════════════════════════════════

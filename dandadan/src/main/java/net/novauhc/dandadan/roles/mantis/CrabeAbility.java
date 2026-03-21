@@ -1,56 +1,26 @@
 package net.novauhc.dandadan.roles.mantis;
 
-import net.novaproject.novauhc.ability.CommandAbility;
+import net.novaproject.novauhc.ability.template.UseAbiliy;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-public class CrabeAbility extends CommandAbility {
-    public CrabeAbility() { setMaxUse(-1); setCooldown(0); }
-    @Override public String getName()       { return "Crabe"; }
-    @Override public String getCommandKey() { return "crabe"; }
+import java.util.Map;
 
-    @Override
-    public boolean onCommand(Player player, String[] args) {
-        // Coûte 20 pommes en or
-        int gappleCount = 0;
-        ItemStack[] inv = player.getInventory().getContents();
-        for (ItemStack item : inv) {
-            if (item != null && (item.getType() == Material.GOLDEN_APPLE))
-                gappleCount += item.getAmount();
+public class CrabeAbility extends UseAbiliy {
+    @Override public String getName() { return "Crabe"; }
+    @Override public Material getMaterial() { return Material.PRISMARINE_SHARD; }
+    @Override public boolean onEnable(Player p) {
+        Player target = null;
+        for (Entity e : p.getNearbyEntities(8,8,8)) {
+            if (e instanceof Player t) { target = t; break; }
         }
-        if (gappleCount < 20) {
-            LangManager.get().send(DanDaDanLang.MANTIS_CRABE_NO_GAP, player);
-            return false;
-        }
-
-        // Retire 20 pommes
-        int toRemove = 20;
-        for (ItemStack item : player.getInventory().getContents()) {
-            if (item == null) continue;
-            if (item.getType() == Material.GOLDEN_APPLE) {
-                if (item.getAmount() <= toRemove) {
-                    toRemove -= item.getAmount();
-                    item.setType(Material.AIR);
-                } else {
-                    item.setAmount(item.getAmount() - toRemove);
-                    toRemove = 0; break;
-                }
-            }
-        }
-
-        // +1 Death Rider sur les bottes (Knockback enchant comme proxy Death Rider)
-        ItemStack boots = player.getInventory().getBoots();
-        if (boots != null && boots.getType() != Material.AIR) {
-            int current = boots.getEnchantmentLevel(Enchantment.KNOCKBACK);
-            boots.addUnsafeEnchantment(Enchantment.KNOCKBACK, current + 1);
-            player.getInventory().setBoots(boots);
-        }
-
-        LangManager.get().send(DanDaDanLang.MANTIS_CRABE_SUCCESS, player);
-        return true;
-    }
+        if (target == null) return false;
+        target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 127, false, false));
+        LangManager.get().send(DanDaDanLang.GENERIC_ABILITY_ON, p, Map.of("%name%", getName()));
+        setCooldown(300); return true; }
 }

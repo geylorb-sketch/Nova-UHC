@@ -1,7 +1,7 @@
 package net.novaproject.jjk.pouvoir;
 
 import net.novaproject.jjk.lang.JJKLang;
-import net.novaproject.novauhc.ability.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbiliy;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;

@@ -1,11 +1,13 @@
 package net.novauhc.dandadan.roles.okarun;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.PassiveAbility;
+import net.novaproject.novauhc.ability.template.PassiveAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
+import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.utils.ShortCooldownManager;
 import net.novaproject.novauhc.utils.VariableType;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
+import net.novauhc.dandadan.lang.DanDaDanLang;
+import net.novauhc.dandadan.lang.DanDaDanVarLang;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,81 +16,80 @@ import org.bukkit.potion.PotionEffectType;
 import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
-import java.awt.Color;
+import java.util.Map;
 
 /**
  * Toubillion — Passif Okarun
- * Gitbook: Lorsque Okarun prend un coup à moins de 3❤️, il voit des particules bleues
- * au-dessus de sa tête sur lesquelles il peut cliquer pour se mettre en spectateur 5s
- * et obtenir une régénération de 2❤️.
+ * À moins de 3❤️ et quand il prend un coup, Okarun voit des particules bleues.
+ * Il peut se mettre en spectateur 5s et régénérer 2❤️.
  *
- * Implémentation: chaque seconde, si < 3❤️ et pas en cooldown, le joueur peut
- * activer l'esquive (clic droit sur FEATHER donné temporairement).
- * Simplifié: détection automatique quand touché < 3❤️ → mode spectateur 5s + regen.
+ * Implémentation : onEnable() détecte le seuil HP et affiche les particules.
+ * L'activation réelle se fait via triggerToubillion() appelé depuis OkarunRole.onDamage().
  */
 public class ToubillionPassive extends PassiveAbility {
 
-    @AbilityVariable(lang = DanDaDanVarLangExt4.class, nameKey = "TOUBILLION_HP_THRESHOLD_NAME",
+    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "TOUBILLION_HP_THRESHOLD_NAME",
             descKey = "TOUBILLION_HP_THRESHOLD_DESC", type = VariableType.DOUBLE)
     private double hpThreshold = 6.0; // 3❤️
 
-    @AbilityVariable(lang = DanDaDanVarLangExt4.class, nameKey = "TOUBILLION_SPEC_DURATION_NAME",
+    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "TOUBILLION_SPEC_DURATION_NAME",
             descKey = "TOUBILLION_SPEC_DURATION_DESC", type = VariableType.INTEGER)
-    private int specDuration = 5; // secondes
+    private int specDuration = 5;
 
-    @AbilityVariable(lang = DanDaDanVarLangExt4.class, nameKey = "TOUBILLION_REGEN_AMOUNT_NAME",
-            descKey = "TOUBILLION_REGEN_AMOUNT_DESC", type = VariableType.DOUBLE)
+    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "TOUBILLION_REGEN_NAME",
+            descKey = "TOUBILLION_REGEN_DESC", type = VariableType.DOUBLE)
     private double regenAmount = 4.0; // 2❤️
 
-    private static final String COOLDOWN_KEY = "ToubillionCD";
+    private static final String CD_KEY = "ToubillionCD";
+    private boolean ready = false;
 
     @Override public String getName() { return "Toubillion"; }
 
     @Override
     public boolean onEnable(Player player) {
-        if (player.getHealth() > hpThreshold) return false;
-        if (ShortCooldownManager.get(player, COOLDOWN_KEY) > 0) return false;
+        // Chaque seconde, vérifier si on est sous le seuil
+        if (player.getHealth() > hpThreshold || ShortCooldownManager.get(player, CD_KEY) > 0) {
+            ready = false;
+            return false;
+        }
 
-        // Particules bleues au-dessus de la tête
+        // Afficher les particules bleues au-dessus de la tête
+        ready = true;
         Location above = player.getLocation().clone().add(0, 2.5, 0);
         for (int i = 0; i < 8; i++) {
             double angle = Math.toRadians(i * 45);
-            Location pt = above.clone().add(Math.cos(angle) * 0.5, 0, Math.sin(angle) * 0.5);
             new ParticleBuilder(ParticleEffect.REDSTONE)
-                    .setColor(Color.CYAN).setLocation(pt).setAmount(2).display();
+                    .setColor(java.awt.Color.CYAN)
+                    .setLocation(above.clone().add(Math.cos(angle) * 0.5, 0, Math.sin(angle) * 0.5))
+                    .setAmount(2).display();
         }
-
-        // Activation automatique si coup reçu (via onHit dans le Role)
-        return false; // Passive check only — real activation via triggerToubillion()
+        return false;
     }
 
     /**
-     * Appelé depuis OkarunRole.onDamage() quand Okarun est touché < 3❤️
+     * Déclenché quand Okarun prend un coup et est sous le seuil.
+     * Appelé depuis OkarunRole.
      */
     public void triggerToubillion(Player player) {
-        if (ShortCooldownManager.get(player, COOLDOWN_KEY) > 0) return;
+        if (!ready) return;
+        if (ShortCooldownManager.get(player, CD_KEY) > 0) return;
 
-        // Sauvegarder position et mode
+        ready = false;
         Location savedLoc = player.getLocation().clone();
         GameMode savedMode = player.getGameMode();
 
-        // Mode spectateur
         player.setGameMode(GameMode.SPECTATOR);
-        player.sendMessage("§b§l✦ Toubillion ! §r§bMode spectateur pendant " + specDuration + "s...");
+        LangManager.get().send(DanDaDanLang.OKARUN_TOUBILLION_START, player, Map.of("%duration%", String.valueOf(specDuration)));
+        ShortCooldownManager.put(player, CD_KEY, 60000); // 60s cooldown
 
-        ShortCooldownManager.put(player, COOLDOWN_KEY, 60000); // 60s cooldown
-
-        // Retour après 5 secondes
         Main.get().getServer().getScheduler().runTaskLater(Main.get(), () -> {
-            if (player.isOnline()) {
-                player.setGameMode(savedMode);
-                player.teleport(savedLoc);
-                // Regen 2❤️
-                double newHp = Math.min(player.getMaxHealth(), player.getHealth() + regenAmount);
-                player.setHealth(newHp);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1, false, false));
-                player.sendMessage("§a§l✦ Toubillion terminé ! §r§a+2❤️ régénérés.");
-            }
+            if (!player.isOnline()) return;
+            player.setGameMode(savedMode);
+            player.teleport(savedLoc);
+            double newHp = Math.min(player.getMaxHealth(), player.getHealth() + regenAmount);
+            player.setHealth(newHp);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 1, false, false));
+            LangManager.get().send(DanDaDanLang.OKARUN_TOUBILLION_END, player, Map.of("%hearts%", String.valueOf((int)(regenAmount / 2))));
         }, 20L * specDuration);
     }
 }

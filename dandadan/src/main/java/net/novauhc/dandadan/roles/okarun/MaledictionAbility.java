@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.okarun;
 
-import net.novaproject.novauhc.ability.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbiliy;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.utils.VariableType;
@@ -11,21 +11,32 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Map;
+
+/**
+ * Malédiction — Actif Okarun (Clic-Droit, BLAZE_POWDER)
+ * Okarun obtient 30% de speed. Durée max 10min, +1min par kill.
+ */
 public class MaledictionAbility extends UseAbiliy {
 
-    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "OKARUN_CURSE_DURATION_NAME", descKey = "OKARUN_CURSE_DURATION_DESC", type = VariableType.TIME)
-    private int duration = 30;
+    @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "OKARUN_CURSE_DURATION_NAME",
+            descKey = "OKARUN_CURSE_DURATION_DESC", type = VariableType.TIME)
+    private int duration = 30; // secondes d'effet
 
-    @Override public String getName()       { return "Malédiction"; }
+    private boolean transformed = false;
+
+    @Override public String getName()       { return "Malediction"; }
     @Override public Material getMaterial() { return Material.BLAZE_POWDER; }
 
     @Override
     public boolean onEnable(Player player) {
+        transformed = true;
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * duration, 1, false, true));
-        String msg = LangManager.get().get(DanDaDanLang.OKARUN_CURSE_ACTIVATED, player)
-                .replace("%duration%", String.valueOf(duration));
-        player.sendMessage(msg);
-        setCooldown(duration); // cooldown = durée de l'effet
+        LangManager.get().send(DanDaDanLang.OKARUN_MALEDICTION_ON, player, Map.of("%duration%", String.valueOf(duration)));
+        setCooldown(duration);
         return true;
     }
+
+    public boolean isTransformed() { return transformed; }
+    public void setTransformed(boolean t) { this.transformed = t; }
 }

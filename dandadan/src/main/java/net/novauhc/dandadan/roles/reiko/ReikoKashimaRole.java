@@ -3,58 +3,68 @@ package net.novauhc.dandadan.roles.reiko;
 import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
+import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-// ════════════════════════════════════════════
-//  Reiko Kashima (id 16)
-// ════════════════════════════════════════════
 public class ReikoKashimaRole extends DanDaDanRole {
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability thorns = new ThornsAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_ABILITY_THORNS_NAME", type = VariableType.ABILITY)
+    private Ability thornsAbility = new ThornsAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_ABILITY_MIROIRACTIF_NAME", type = VariableType.ABILITY)
+    private Ability miroirActifAbility = new MiroirActifAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_ABILITY_EMPRISONNEMENT_NAME", type = VariableType.ABILITY)
+    private Ability emprisonnementAbility = new EmprisonnementAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability miroir = new MiroirAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability cage = new EmprisonnementAbility();
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_PASSIVE_MIROIR_NAME", type = VariableType.ABILITY)
-    private Ability miroirPassive = new MiroirPassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REIKO_PASSIVE_BOYFRIEND_NAME", type = VariableType.ABILITY)
-    private Ability boyfriendPassive = new BoyfriendPassive();
+    private final MiroirPassive miroirPassive  = new MiroirPassive();
 
 
-    @RoleVariable(lang = DanDaDanVarLangExt4.class, nameKey = "REIKO_ABILITY_ESPACE_VIDE_NAME", type = VariableType.ABILITY)
-    private Ability espaceVideReiko = new EspaceVideReikoAbility();
-public ReikoKashimaRole() {
+    public ReikoKashimaRole() {
+        getAbilities().add(miroirPassive);
     }
 
-    @Override public int getId()                { return 16; }
-    @Override public String getName()           { return "Reiko Kashima"; }
+    @Override public String getName() { return "Reiko Kashima"; }
+    @Override public Material getIconMaterial() { return Material.COMPASS; }
+
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
 
     @Override
-    public Material getIconMaterial() { return Material.GLASS; }
-
-    @Override
-    public String getDescription(Player player) {
-        return LangManager.get().get(DanDaDanLangExt.REIKO_DESC, player);
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.REIKO_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REIKO_MIROIR_TEXT), L(DanDaDanDescLang.REIKO_MIROIR_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REIKO_BF_TEXT), L(DanDaDanDescLang.REIKO_BF_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REIKO_THORNS_TEXT), L(DanDaDanDescLang.REIKO_THORNS_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REIKO_MIROIR_A_TEXT), L(DanDaDanDescLang.REIKO_MIROIR_A_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REIKO_PRISON_TEXT), L(DanDaDanDescLang.REIKO_PRISON_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
     }
 
-    // Passif Miroir
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.CACTUS).setName(LangManager.get().get(DanDaDanLang.ITEM_REIKO_2THORNS)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.GLASS).setName(LangManager.get().get(DanDaDanLang.ITEM_REIKO_FMIROIR_ACTIF)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.IRON_FENCE).setName(LangManager.get().get(DanDaDanLang.ITEM_REIKO_7EMPRISONNEMENT)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
+    }
 
-    // Passif Boyfriend (bonus vs certains yokais)
-
-    // Thorns (renvoie 50% dégâts)
-
-    // Miroir Ability (compteur 6 coups → invoque miroir)
-
-    // Emprisonnement
 }

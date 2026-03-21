@@ -1,6 +1,7 @@
 package net.novaproject.novauhc.scenario;
 
 import net.novaproject.novauhc.ability.Ability;
+import net.novaproject.novauhc.scenario.role.Role;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -45,6 +46,9 @@ public class RoleVariableProcessor {
 
         Ability instance = base.clone();
         System.out.println(instance.getName()+"nouveaux active :" + instance.active() + " cooldown : " + instance.getCooldown() + "max use : " + instance.getMaxUse());
-        scenarioRole.getRoleByUHCPlayer(player).getAbilities().add(instance);
+        Role playerRole = scenarioRole.getRoleByUHCPlayer(player);
+        instance.setOwner(playerRole.getOwner());
+                playerRole.getAbilities().add(instance);
+
     }
 }

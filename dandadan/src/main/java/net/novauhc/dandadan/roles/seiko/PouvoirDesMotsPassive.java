@@ -1,76 +1,61 @@
 package net.novauhc.dandadan.roles.seiko;
 
-import net.novaproject.novauhc.ability.PassiveAbility;
-import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.ability.template.PassiveAbility;
+import net.novaproject.novauhc.lang.LangManager;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 /**
- * Le pouvoir des mots — Passif Seiko
- * Gitbook: En renommant son épée, Seiko acquiert des passifs:
- *  - "Nessie": 5%/coup → critique qui passe à travers la résistance, 1.5x dégâts
- *  - "Ongle": 5%/coup → lance une flèche, casse une pièce d'armure 1s
- *  - "Harisen": 5%/coup → empêche le joueur d'utiliser ses pouvoirs sur Seiko 1min
+ * Pouvoir des mots — Passif Seiko
+ * Renomme ton epee pour un passif :
+ *   Nessie: 5% coup crit x1.5
+ *   Ongle: 5% fleche + casse armure 1s
+ *   Harisen: 5% bloque pouvoirs adverses 1min
  */
 public class PouvoirDesMotsPassive extends PassiveAbility {
 
     private final Random random = new Random();
+    private final Set<UUID> blockedPlayers = new HashSet<>();
 
     @Override public String getName() { return "Pouvoir des mots"; }
 
     @Override
-    public void onAttack(UHCPlayer victim, EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player attacker)) return;
-        Player target = victim.getPlayer();
-        if (target == null) return;
+    public boolean onEnable(Player player) {
+        return false;
+    }
 
-        ItemStack hand = attacker.getItemInHand();
+
+    public void onHit(Player seiko, Player victim, EntityDamageByEntityEvent event) {
+        ItemStack hand = seiko.getItemInHand();
         if (hand == null || !hand.hasItemMeta() || !hand.getItemMeta().hasDisplayName()) return;
+        String name = hand.getItemMeta().getDisplayName().toLowerCase();
 
-        String swordName = hand.getItemMeta().getDisplayName().toLowerCase()
-                .replace("§", "").replaceAll("[^a-z]", "");
+        if (random.nextDouble() >= 0.05) return; // 5% chance
 
-        if (random.nextDouble() > 0.05) return; // 5% chance
-
-        if (swordName.contains("nessie")) {
-            // Critique passant à travers la résistance, 1.5x dégâts
+        if (name.contains("nessie")) {
             event.setDamage(event.getDamage() * 1.5);
-            target.removePotionEffect(org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE);
-            attacker.sendMessage("§b§l✦ Nessie ! §r§bCoup critique x1.5 !");
-
-        } else if (swordName.contains("ongle")) {
-            // Lancer une flèche + casser une pièce d'armure 1s
-            Arrow arrow = attacker.launchProjectile(Arrow.class);
-            arrow.setVelocity(attacker.getLocation().getDirection().multiply(2));
-            attacker.sendMessage("§e§l✦ Ongle ! §r§eFlèche lancée + armure brisée 1s !");
-            // Casser temporairement une pièce d'armure
-            ItemStack[] armor = target.getInventory().getArmorContents();
-            int idx = random.nextInt(4);
-            if (armor[idx] != null) {
-                ItemStack saved = armor[idx].clone();
-                armor[idx] = null;
-                target.getInventory().setArmorContents(armor);
-                net.novaproject.novauhc.Main.get().getServer().getScheduler().runTaskLater(
-                        net.novaproject.novauhc.Main.get(), () -> {
-                            ItemStack[] a = target.getInventory().getArmorContents();
-                            if (a[idx] == null) { a[idx] = saved; target.getInventory().setArmorContents(a); }
-                        }, 20L); // 1 seconde
-            }
-
-        } else if (swordName.contains("harisen")) {
-            // Empêche le joueur d'utiliser ses pouvoirs sur Seiko 1min
-            net.novaproject.novauhc.utils.ShortCooldownManager.put(target, "HarisenBlock_" + attacker.getUniqueId(), 60000);
-            attacker.sendMessage("§d§l✦ Harisen ! §r§d" + target.getName() + " ne peut plus utiliser ses pouvoirs sur toi 1min !");
-            target.sendMessage("§c✦ Harisen ! Vos pouvoirs sont bloqués contre Seiko pendant 1min !");
+            LangManager.get().send(DanDaDanLang.SEIKO_MOTS_NESSIE, seiko);
+        } else if (name.contains("ongle")) {
+            // Fleche bonus
+            Arrow arrow = seiko.launchProjectile(Arrow.class);
+            arrow.setVelocity(seiko.getLocation().getDirection().multiply(2.0));
+            LangManager.get().send(DanDaDanLang.SEIKO_MOTS_ONGLE, seiko);
+        } else if (name.contains("harisen")) {
+            blockedPlayers.add(victim.getUniqueId());
+            LangManager.get().send(DanDaDanLang.SEIKO_MOTS_HARISEN, seiko);
+            // Retirer le blocage apres 1min
+            org.bukkit.Bukkit.getScheduler().runTaskLater(
+                    net.novaproject.novauhc.Main.get(), () -> blockedPlayers.remove(victim.getUniqueId()), 60 * 20L);
         }
     }
 
-    @Override
-    public boolean onEnable(Player player) {
-        return false; // Passif pur via onAttack
-    }
+    public boolean isBlocked(UUID uuid) { return blockedPlayers.contains(uuid); }
 }

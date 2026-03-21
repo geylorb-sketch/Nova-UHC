@@ -3,42 +3,65 @@ package net.novauhc.dandadan.roles.rohan;
 import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
+import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanCamps;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt3;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class RohanRole extends DanDaDanRole {
 
-    private boolean standActive = false;
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROHAN_ABILITY_HEAVENSDOOR_NAME", type = VariableType.ABILITY)
+    private Ability heavensDoorAbility = new HeavensDoorAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROHAN_ABILITY_LIVRE_NAME", type = VariableType.ABILITY)
+    private Ability livreAbility = new LivreAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROHAN_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability heavensDoor = new HeavensDoorAbility();
+    private final EcrivainPassive ecrivainPassive  = new EcrivainPassive();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROHAN_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability livre = new LivreAbility();
 
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROHAN_PASSIVE_ECRIVAIN_NAME", type = VariableType.ABILITY)
-    private Ability ecrivainPassive = new EcrivainPassive();
-
-public RohanRole() {
-        setCamp(DanDaDanCamps.SOLO);
+    public RohanRole() {
+        setCamp(DanDaDanCamps.SPECIAL);
+        getAbilities().add(ecrivainPassive);
     }
 
-    @Override public int getId()                { return 33; }
-    @Override public String getName()           { return "Rohan"; }
+    @Override public String getName() { return "Rohan"; }
     @Override public Material getIconMaterial() { return Material.BOOK; }
-    @Override public String getDescription(Player player) { return LangManager.get().get(DanDaDanLangExt3.ROHAN_DESC, player); }
 
-    public boolean isStandActive() { return standActive; }
-    public void setStandActive(boolean b) { standActive = b; }
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
 
-    // Passif écrivain (placeholder)
+    @Override
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.ROHAN_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROHAN_ECRIVAIN_TEXT), L(DanDaDanDescLang.ROHAN_ECRIVAIN_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROHAN_HEAVEN_TEXT), L(DanDaDanDescLang.ROHAN_HEAVEN_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROHAN_LIVRE_TEXT), L(DanDaDanDescLang.ROHAN_LIVRE_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+    }
 
-    // Heaven's Door (Stand)
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.BOOK).setName(LangManager.get().get(DanDaDanLang.ITEM_ROHAN_BHEAVENS_DOOR)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.BOOK_AND_QUILL).setName(LangManager.get().get(DanDaDanLang.ITEM_ROHAN_ELIVRE)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
+    }
 
-    // Livre : transforme un joueur en livre 5s
 }

@@ -1,29 +1,31 @@
 package net.novauhc.dandadan.roles.nessie;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbiliy;
 import net.novaproject.novauhc.lang.LangManager;
-import net.novauhc.dandadan.lang.DanDaDanLangExt;
+import net.novauhc.dandadan.lang.DanDaDanLang;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 public class DelugeAbility extends UseAbiliy {
-    @Override public String getName()       { return "Création du Déluge"; }
-    @Override public Material getMaterial() { return Material.BUCKET; }
-    @Override public boolean onEnable(Player player) {
-        LangManager.get().send(DanDaDanLangExt.NESSIE_DELUGE_ACTIVATED, player);
-        // Remplit la hotbar de seaux d'eau, se retirent un par un
-        for (int i = 0; i < 9; i++) {
-            player.getInventory().setItem(i, new ItemStack(Material.WATER_BUCKET));
+    @Override public String getName() { return "Deluge"; }
+    @Override public Material getMaterial() { return Material.WATER_BUCKET; }
+    @Override public boolean onEnable(Player p) {
+        Location center = p.getLocation();
+        for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++) {
+            Location bl = center.clone().add(x, 0, z);
+            if (bl.getBlock().getType() == Material.AIR) bl.getBlock().setType(Material.WATER);
         }
-        var taskId = new int[1];
-        int[] slot = {0};
-        taskId[0] = Main.get().getServer().getScheduler().scheduleSyncRepeatingTask(Main.get(), () -> {
-            if (slot[0] >= 9) { Main.get().getServer().getScheduler().cancelTask(taskId[0]); return; }
-            player.getInventory().setItem(slot[0], new ItemStack(Material.AIR));
-            slot[0]++;
-        }, 40L, 40L); // un seau toutes les 2s
-        setCooldown(420); return true;
-    }
+        Bukkit.getScheduler().runTaskLater(Main.get(), () -> {
+            for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++) {
+                Location bl = center.clone().add(x, 0, z);
+                if (bl.getBlock().getType() == Material.WATER) bl.getBlock().setType(Material.AIR);
+            }
+        }, 10*20L);
+        LangManager.get().send(DanDaDanLang.GENERIC_ABILITY_ON, p, Map.of("%name%", getName()));
+        setCooldown(420); return true; }
 }

@@ -4,72 +4,65 @@ import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanRole;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novauhc.dandadan.lang.DanDaDanVarLangExt4;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class JiangshiRole extends DanDaDanRole {
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_REVIVE_COOLDOWN_NAME", descKey = "JIANGSHI_REVIVE_COOLDOWN_DESC", type = VariableType.TIME)
-    private int reviveCooldown = 1200; // 20 minutes
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_INVOCATION_NAME", type = VariableType.ABILITY)
+    private Ability invocationAbility = new InvocationAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_ALLOUTJ_NAME", type = VariableType.ABILITY)
+    private Ability allOutJAbility = new AllOutJAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_BASE_ZOMBIES_NAME", descKey = "JIANGSHI_BASE_ZOMBIES_DESC", type = VariableType.INTEGER)
-    private int baseZombies = 10;
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_BASE_SKELETONS_NAME", descKey = "JIANGSHI_BASE_SKELETONS_DESC", type = VariableType.INTEGER)
-    private int baseSkeletons = 2;
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_SUMMON_NAME", type = VariableType.ABILITY)
-    private Ability invocation = new JiangshiInvocationAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_ALLOUT_NAME", type = VariableType.ABILITY)
-    private Ability allOut = new JiangshiAllOutAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_ALLOUT_NAME", type = VariableType.ABILITY)
-    private Ability revivePassive = new JiangshiRevivePassive();
+    private final  RevivePassive revivePassive = new RevivePassive();
+    private final  KiRegenPassive kiPassive  = new KiRegenPassive ();
 
 
-    @RoleVariable(lang = DanDaDanVarLangExt4.class, nameKey = "JIANGSHI_ABILITY_ESPACE_VIDE_NAME", type = VariableType.ABILITY)
-    private Ability espaceVideJiangshi = new EspaceVideJiangshiAbility();
-    private int ki = 10;
-    private int kills = 0;
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_PASSIVE_REVIVE", type = VariableType.ABILITY)
-    private Ability kiRegenPassive = new KiRegenPassive();
-
-public JiangshiRole() {
+    public JiangshiRole() {
+        getAbilities().add(revivePassive);
+        getAbilities().add(kiPassive);
     }
 
-    @Override public int getId()                { return 11; }
-    @Override public String getName()           { return "Jiangshi"; }
+    @Override public String getName() { return "Jiangshi"; }
     @Override public Material getIconMaterial() { return Material.SKULL_ITEM; }
 
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
+
     @Override
-    public String getDescription(Player player) {
-        return LangManager.get().get(DanDaDanLang.JIANGSHI_DESC, player);
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.JIANGSHI_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_REVIVE_TEXT), L(DanDaDanDescLang.JIANGSHI_REVIVE_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_KI_TEXT), L(DanDaDanDescLang.JIANGSHI_KI_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_INVOC_TEXT), L(DanDaDanDescLang.JIANGSHI_INVOC_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_ALLOUT_J_TEXT), L(DanDaDanDescLang.JIANGSHI_ALLOUT_J_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
     }
 
     @Override
-    public void onKill(UHCPlayer killer, UHCPlayer victim) {
-        super.onKill(killer, victim);
-        kills++;
-        ki += 10;
-        Player bp = killer.getPlayer();
-        if (bp != null) LangManager.get().send(DanDaDanLang.JIANGSHI_KILL_BONUS, bp);
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.BONE).setName(LangManager.get().get(DanDaDanLang.ITEM_JIANGSHI_7INVOCATION)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.SKULL_ITEM).setName(LangManager.get().get(DanDaDanLang.ITEM_JIANGSHI_CALLOUT)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
     }
 
-    // ── Accesseurs pour les abilities ──
-    public int getKi()           { return ki; }
-    public boolean spendKi(int cost) {
-        if (ki < cost) return false;
-        ki -= cost; return true;
-    }
-    public int getKills()         { return kills; }
-    public int getBaseZombies()   { return baseZombies + (kills >= 1 ? 8 : 0) + (kills >= 2 ? 10 : 0) + (kills >= 3 ? 12 : 0); }
-    public int getBaseSkeletons() { return baseSkeletons + (kills >= 1 ? 2 : 0) + (kills >= 2 ? 3 : 0) + (kills >= 3 ? 6 : 0); }
-    public int getReviveCooldown(){ return reviveCooldown; }
 }

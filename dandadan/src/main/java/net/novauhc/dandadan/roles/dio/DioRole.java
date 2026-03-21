@@ -4,79 +4,77 @@ import net.novaproject.novauhc.ability.Ability;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.RoleVariable;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
 import net.novauhc.dandadan.DanDaDanCamps;
 import net.novauhc.dandadan.DanDaDanRole;
-import net.novauhc.dandadan.lang.DanDaDanLangExt3;
+import net.novauhc.dandadan.lang.DanDaDanDescLang;
+import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
+import net.novaproject.novauhc.utils.HoverUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class DioRole extends DanDaDanRole {
 
-    private boolean standActive = false;
-    private double  timeFreeze  = 9.0;
-    private int     timeSkipUses = 3;
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_COUTEAUDIO_NAME", type = VariableType.ABILITY)
+    private Ability couteauDioAbility = new CouteauDioAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_ROADROLLER_NAME", type = VariableType.ABILITY)
+    private Ability roadRollerAbility = new RoadRollerAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_THEWORLD_NAME", type = VariableType.ABILITY)
+    private Ability theWorldAbility = new TheWorldAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_ARRETTEMPSD_NAME", type = VariableType.ABILITY)
+    private Ability arretTempsDAbility = new ArretTempsDAbility();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_TIMESKIP_NAME", type = VariableType.ABILITY)
+    private Ability timeSkipAbility = new TimeSkipAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability couteau = new DioKnifeAbility();
+    private final  VampirePassive vampirePassive = new VampirePassive();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability roadRoller = new RoadRollerAbility();
 
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability theWorld = new TheWorldAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability timeStop = new DioTimeStopAbility();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_NAME_KEY_NAME", type = VariableType.ABILITY)
-    private Ability timeSkip = new TimeSkipAbility();
-
-        @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_PASSIVE_VAMPIRE_NAME", type = VariableType.ABILITY)
-    private Ability vampirePassive = new VampirePassive();
-
-    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_PASSIVE_ETOILE_JOESTAR_NAME", type = VariableType.ABILITY)
-    private Ability etoileJoestarPassive = new EtoileJoestarPassive();
-
-public DioRole() {
-        setCamp(DanDaDanCamps.SOLO);
+    public DioRole() {
+        setCamp(DanDaDanCamps.SPECIAL);
+        getAbilities().add(vampirePassive);
     }
 
-    @Override public int getId()                { return 30; }
-    @Override public String getName()           { return "Dio"; }
-    @Override public Material getIconMaterial() { return Material.GOLD_SWORD; }
-    @Override public String getDescription(Player player) { return LangManager.get().get(DanDaDanLangExt3.DIO_DESC, player); }
+    @Override public String getName() { return "Dio"; }
+    @Override public Material getIconMaterial() { return Material.REDSTONE; }
 
-    @Override public void onKill(UHCPlayer killer, UHCPlayer victim) {
-        super.onKill(killer, victim);
-        Player p = killer.getPlayer(); if (p == null) return;
-        p.setHealth(Math.min(p.getMaxHealth(), p.getHealth() + 6));
-        timeFreeze = Math.min(15.0, timeFreeze + 0.5);
+    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
+
+    @Override
+    public void sendDescription(Player p) {
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
+        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.DIO_NAME));
+        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
+        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_VAMPIRE_TEXT), L(DanDaDanDescLang.DIO_VAMPIRE_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_ETOILE_TEXT), L(DanDaDanDescLang.DIO_ETOILE_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_COUTEAU_D_TEXT), L(DanDaDanDescLang.DIO_COUTEAU_D_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_ROAD_TEXT), L(DanDaDanDescLang.DIO_ROAD_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_THEWORLD_TEXT), L(DanDaDanDescLang.DIO_THEWORLD_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_TIME_D_TEXT), L(DanDaDanDescLang.DIO_TIME_D_HOVER));
+        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_TIMESKIP_TEXT), L(DanDaDanDescLang.DIO_TIMESKIP_HOVER));
+        p.sendMessage(" ");
+        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
     }
 
-    public boolean isStandActive() { return standActive; }
-    public void setStandActive(boolean b) { standActive = b; }
-    public double getTimeFreeze() { return timeFreeze; }
-    public int getTimeSkipUses() { return timeSkipUses; }
-    public void useTimeSkip() { if (timeSkipUses > 0) timeSkipUses--; }
-    public void resetTimeSkip() { timeSkipUses = 3; }
+    @Override
+    public void onGive(UHCPlayer uhcPlayer) {
+        Player player = uhcPlayer.getPlayer();
+        if (player != null) {
+            player.getInventory().addItem(new ItemCreator(Material.SNOW_BALL).setName(LangManager.get().get(DanDaDanLang.ITEM_DIO_7COUTEAU)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.ANVIL).setName(LangManager.get().get(DanDaDanLang.ITEM_DIO_6ROAD_ROLLER)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.REDSTONE).setName(LangManager.get().get(DanDaDanLang.ITEM_DIO_CTHE_WORLD)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.WATCH).setName(LangManager.get().get(DanDaDanLang.ITEM_DIO_5ARRET_DU_TEMPS)).getItemstack());
+            player.getInventory().addItem(new ItemCreator(Material.ENDER_PEARL).setName(LangManager.get().get(DanDaDanLang.ITEM_DIO_DTIME_SKIP)).getItemstack());
+        }
+        super.onGive(uhcPlayer);
+    }
 
-    // Passif Vampire : force de nuit + regen sur kill
-
-    // Passif Étoile des Joestar : alerte quand joueur dans 100 blocs
-
-    // Couteaux (5 boules de neige)
-
-    // Road Roller
-
-    // The World (Stand)
-
-    // Arrêt du temps
-
-    // Time Skip (3x TP à 15 blocs)
 }
-
-// ════════════════════════════════════════════
-//  Kira (id 31)
-// ════════════════════════════════════════════
