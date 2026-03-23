@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.polnareff;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 
-public class HoraRushAbility extends UseAbiliy {
+public class HoraRushAbility extends UseAbility {
     @Override public String getName() { return "Hora Rush"; }
     @Override public Material getMaterial() { return Material.DIAMOND_SWORD; }
     @Override public boolean onEnable(Player p) {

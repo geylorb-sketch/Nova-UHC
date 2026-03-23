@@ -33,8 +33,11 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
     
     private final Map<UHCPlayer, T> players_roles = new HashMap<>();
     private boolean isgived = false;
+    private WinCondition<T> winCondition = null;
 
     public abstract Camps[] getCamps();
+
+    public void setWinCondition(WinCondition<T> condition) { this.winCondition = condition; }
 
 
     public void addRole(Class<? extends T> roleClass) {
@@ -210,7 +213,7 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
 
     @Override
     public void onPlayerInteract(Player player, PlayerInteractEvent event) {
-        players_roles.forEach((p, role) -> role.onIteract(player, event));
+        players_roles.forEach((p, role) -> role.onInteract(player, event));
     }
 
     @Override
@@ -259,6 +262,7 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
 
     @Override
     public boolean isWin() {
+        if (winCondition != null) return winCondition.isWin(players_roles);
         Map<Camps, Integer> campCounts = new HashMap<>();
 
         for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
@@ -269,6 +273,6 @@ public abstract class ScenarioRole<T extends Role> extends Scenario {
             campCounts.put(camp, campCounts.getOrDefault(camp, 0) + 1);
         }
 
-        return campCounts.size() == 1;
+        return campCounts.size() <= 1;
     }
 }

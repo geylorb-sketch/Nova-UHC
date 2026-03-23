@@ -16,7 +16,7 @@ import net.novaproject.novauhc.lang.LangManager;
 public class HasteyBabie extends Scenario {
     @Override
     public String getName() {
-        return "HasteyAlpha";
+        return "HasteyBabie";
     }
 
     @Override

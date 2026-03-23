@@ -38,6 +38,7 @@ public class ArcherBowPassive extends Ability {
 
         if (!(event.getDamager() instanceof Arrow arrow)) return;
         if (!(arrow.getShooter() instanceof Player shooter)) return;
+        if (getOwner() == null || !shooter.equals(getOwner().getPlayer())) return;
 
         Player victim = victimP.getPlayer();
         if (victim == null) return;

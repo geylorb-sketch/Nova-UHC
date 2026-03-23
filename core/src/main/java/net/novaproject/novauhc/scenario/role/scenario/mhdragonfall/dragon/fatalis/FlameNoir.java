@@ -1,7 +1,7 @@
 package net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.dragon.fatalis;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 
-public class FlameNoir extends UseAbiliy {
+public class FlameNoir extends UseAbility {
 
 
 

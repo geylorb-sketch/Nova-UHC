@@ -21,13 +21,12 @@ public class AbilityManager {
 
 
     public void setup() {
-        regesiterAbility(new AuraPeur());
-        regesiterAbility(new FlameNoir());
-        regesiterAbility(new FlameNoir());
+        registerAbility(new AuraPeur());
+        registerAbility(new FlameNoir());
 
     }
 
-    public void regesiterAbility(Ability ability) {
+    public void registerAbility(Ability ability) {
         abilities.add(ability);
     }
 

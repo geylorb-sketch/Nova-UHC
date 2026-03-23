@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -24,42 +24,42 @@ public class JosephRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOSEPH_ABILITY_CLACKER_NAME", type = VariableType.ABILITY)
     private Ability clackerAbility = new ClackerAbility();
 
-    private final PredictionPassive predPassive  = new PredictionPassive();
-    private final  HermitPassive  hermitPassive = new HermitPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOSEPH_ABILITY_PREDICTION_NAME", type = VariableType.ABILITY)
+    private Ability predPassive = new PredictionPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOSEPH_ABILITY_HERMIT_NAME", type = VariableType.ABILITY)
+    private Ability hermitPassive = new HermitPassive();
 
 
     public JosephRole() {
         setCamp(DanDaDanCamps.SPECIAL);
-        getAbilities().add(predPassive);
-        getAbilities().add(hermitPassive);
     }
 
     @Override public String getName() { return "Joseph"; }
     @Override public Material getIconMaterial() { return Material.BOW; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.JOSEPH_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOSEPH_PREDICT_TEXT), L(DanDaDanDescLang.JOSEPH_PREDICT_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOSEPH_THOMSON_TEXT), L(DanDaDanDescLang.JOSEPH_THOMSON_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOSEPH_HERMIT_TEXT), L(DanDaDanDescLang.JOSEPH_HERMIT_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOSEPH_HAMON_O_TEXT), L(DanDaDanDescLang.JOSEPH_HAMON_O_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOSEPH_REBUFF_TEXT), L(DanDaDanDescLang.JOSEPH_REBUFF_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOSEPH_CLACKER_TEXT), L(DanDaDanDescLang.JOSEPH_CLACKER_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOSEPH_NIGE_TEXT), L(DanDaDanDescLang.JOSEPH_NIGE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.JOSEPH_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.JOSEPH_PREDICT_TEXT, DanDaDanDescLang.JOSEPH_PREDICT_HOVER)
+            .hover(DanDaDanDescLang.JOSEPH_THOMSON_TEXT, DanDaDanDescLang.JOSEPH_THOMSON_HOVER)
+            .hover(DanDaDanDescLang.JOSEPH_HERMIT_TEXT, DanDaDanDescLang.JOSEPH_HERMIT_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.JOSEPH_HAMON_O_TEXT, DanDaDanDescLang.JOSEPH_HAMON_O_HOVER)
+            .hover(DanDaDanDescLang.JOSEPH_REBUFF_TEXT, DanDaDanDescLang.JOSEPH_REBUFF_HOVER)
+            .hover(DanDaDanDescLang.JOSEPH_CLACKER_TEXT, DanDaDanDescLang.JOSEPH_CLACKER_HOVER)
+            .hover(DanDaDanDescLang.JOSEPH_NIGE_TEXT, DanDaDanDescLang.JOSEPH_NIGE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

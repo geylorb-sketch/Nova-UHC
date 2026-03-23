@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.kashimoto;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -17,7 +17,7 @@ import java.util.Map;
  * Enflamme le joueur vise (pas de degats). Armure perd 1 niveau d'enchant
  * + 1.5x durabilite. Glowing 1min. CD 8min.
  */
-public class FlammeGlaceAbility extends UseAbiliy {
+public class FlammeGlaceAbility extends UseAbility {
 
     @Override public String getName()       { return "Flamme de glace"; }
     @Override public Material getMaterial() { return Material.ICE; }

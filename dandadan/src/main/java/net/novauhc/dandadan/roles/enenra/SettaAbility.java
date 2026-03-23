@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.enenra;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-public class SettaAbility extends UseAbiliy {
+public class SettaAbility extends UseAbility {
     @Override public String getName() { return "Setta"; }
     @Override public Material getMaterial() { return Material.COAL; }
 

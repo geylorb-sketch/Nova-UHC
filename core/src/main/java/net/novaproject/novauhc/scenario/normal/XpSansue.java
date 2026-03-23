@@ -15,9 +15,9 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 import net.novaproject.novauhc.lang.LangManager;
 
 public class XpSansue extends Scenario {
-    private boolean active = false;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "XPSANSUE_VAR_DAMAGE_NAME", descKey = "XPSANSUE_VAR_DAMAGE_DESC", type = VariableType.INTEGER)
-    private final int damage = 1;
+    private int damage = 1;
+
     @Override
     public String getName() {
         return "XpSansue";
@@ -34,21 +34,19 @@ public class XpSansue extends Scenario {
     }
 
     @Override
-    public void onStart(Player player) {
-        if (!active) {
-            active = true;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    for (UHCPlayer p : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
-                        if (p.getPlayer().getLevel() > 0) {
-                            p.getPlayer().setLevel(p.getPlayer().getLevel() - damage );
-                        } else {
-                            p.getPlayer().damage(2);
-                        }
+    public void onGameStart() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!isActive()) { cancel(); return; }
+                for (UHCPlayer p : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
+                    if (p.getPlayer().getLevel() > 0) {
+                        p.getPlayer().setLevel(p.getPlayer().getLevel() - damage);
+                    } else {
+                        p.getPlayer().damage(2);
                     }
                 }
-            }.runTaskTimer(Main.get(), 20 * 300 * 2, 20 * 300 * 2);
-        }
+            }
+        }.runTaskTimer(Main.get(), 20 * 300 * 2, 20 * 300 * 2);
     }
 }

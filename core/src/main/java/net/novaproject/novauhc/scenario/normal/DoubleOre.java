@@ -27,16 +27,16 @@ public class DoubleOre extends Scenario {
     private static final String PLAYER_PLACED_TAG = "playerPlaced";
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_IRON_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_IRON_DESC", type = VariableType.BOOLEAN)
-    private final boolean doubleIron = true;
+    private boolean doubleIron = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_GOLD_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_GOLD_DESC", type = VariableType.BOOLEAN)
-    private final boolean doubleGold = true;
+    private boolean doubleGold = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_DIAMOND_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_DIAMOND_DESC", type = VariableType.BOOLEAN)
-    private final boolean doubleDiamond = true;
+    private boolean doubleDiamond = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DOUBLEORE_VAR_DOUBLE_EMERALD_NAME", descKey = "DOUBLEORE_VAR_DOUBLE_EMERALD_DESC", type = VariableType.BOOLEAN)
-    private final boolean doubleEmerald = true;
+    private boolean doubleEmerald = true;
 
     @Override
     public String getName() {
@@ -70,7 +70,7 @@ public class DoubleOre extends Scenario {
         block.setType(Material.AIR);
 
         Location loc = block.getLocation().clone().add(0.5, 0.5, 0.5);
-        Optional<Scenario> cutCleanScenario = ScenarioManager.get().getScenarioByName("cutclean");
+        Optional<Scenario> cutCleanScenario = ScenarioManager.get().getScenarioByName("Cutclean");
         boolean cutCleanActive = cutCleanScenario.isPresent() && ScenarioManager.get().getActiveScenarios().contains(cutCleanScenario.get());
 
         switch (type) {

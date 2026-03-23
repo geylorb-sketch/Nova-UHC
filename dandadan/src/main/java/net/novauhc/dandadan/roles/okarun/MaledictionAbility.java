@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.okarun;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.utils.VariableType;
@@ -17,7 +17,7 @@ import java.util.Map;
  * Malédiction — Actif Okarun (Clic-Droit, BLAZE_POWDER)
  * Okarun obtient 30% de speed. Durée max 10min, +1min par kill.
  */
-public class MaledictionAbility extends UseAbiliy {
+public class MaledictionAbility extends UseAbility {
 
     @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "OKARUN_CURSE_DURATION_NAME",
             descKey = "OKARUN_CURSE_DURATION_DESC", type = VariableType.TIME)

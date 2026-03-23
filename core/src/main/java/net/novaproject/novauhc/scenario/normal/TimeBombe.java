@@ -26,13 +26,13 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 public class TimeBombe extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TIMEBOMBE_VAR_EXPLOSION_DELAY_NAME", descKey = "TIMEBOMBE_VAR_EXPLOSION_DELAY_DESC", type = VariableType.INTEGER)
-    private final int explosion_delay = 30;
+    private int explosion_delay = 30;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TIMEBOMBE_VAR_EXPLOSION_POWER_NAME", descKey = "TIMEBOMBE_VAR_EXPLOSION_POWER_DESC", type = VariableType.INTEGER)
-    private final int explosion_power = 2;
+    private int explosion_power = 2;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "TIMEBOMBE_VAR_GIVE_GOLDEN_APPLE_NAME", descKey = "TIMEBOMBE_VAR_GIVE_GOLDEN_APPLE_DESC", type = VariableType.BOOLEAN)
-    private final boolean give_golden_apple = true;
+    private boolean give_golden_apple = true;
 
     @Override
     public String getName() {
@@ -100,9 +100,7 @@ public class TimeBombe extends Scenario {
 
                 if (time <= 0) {
                     Bukkit.broadcastMessage(
-                            LangManager.get().get(CommonLang.valueOf(
-                                    LangManager.get().get(CommonLang.TIMEBOMB_EXPLOSION)), uhcPlayer.getPlayer()
-                            )
+                            LangManager.get().get(CommonLang.TIMEBOMB_EXPLOSION, uhcPlayer.getPlayer())
                     );
 
                     loc.getBlock().setType(Material.AIR);

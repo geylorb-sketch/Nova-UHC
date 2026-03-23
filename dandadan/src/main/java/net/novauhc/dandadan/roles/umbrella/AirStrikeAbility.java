@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.umbrella;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class AirStrikeAbility extends UseAbiliy {
+public class AirStrikeAbility extends UseAbility {
     @Override public String getName() { return "Air Strike"; }
     @Override public Material getMaterial() { return Material.FIREWORK; }
     @Override public boolean onEnable(Player p) {

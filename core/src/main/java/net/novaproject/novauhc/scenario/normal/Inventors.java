@@ -24,17 +24,17 @@ public class Inventors extends Scenario {
     private final Map<UUID, Integer> playerInventions = new HashMap<>();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_WOOD_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_WOOD_TOOL_BONUS_DESC", type = VariableType.INTEGER)
-    private final int woodToolBonus = 2;
+    private int woodToolBonus = 2;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_STONE_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_STONE_TOOL_BONUS_DESC", type = VariableType.INTEGER)
-    private final int stoneToolBonus = 3;
+    private int stoneToolBonus = 3;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_IRON_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_IRON_TOOL_BONUS_DESC", type = VariableType.INTEGER)
-    private final int ironToolBonus = 2;
+    private int ironToolBonus = 2;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_DIAMOND_TOOL_BONUS_NAME", descKey = "INVENTORS_VAR_DIAMOND_TOOL_BONUS_DESC", type = VariableType.INTEGER)
-    private final int diamondToolBonus = 1;
+    private int diamondToolBonus = 1;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_MILESTONE5REWARD_NAME", descKey = "INVENTORS_VAR_MILESTONE5REWARD_DESC", type = VariableType.STRING)
-    private final String milestone5Reward = "ENCHANTED_BOOK";
+    private String milestone5Reward = "ENCHANTED_BOOK";
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "INVENTORS_VAR_MILESTONE10REWARD_NAME", descKey = "INVENTORS_VAR_MILESTONE10REWARD_DESC", type = VariableType.STRING)
-    private final String milestone10Reward = "NETHER_STAR";
+    private String milestone10Reward = "NETHER_STAR";
 
     private String t(InventorsLang key, Map<String,Object> p) { return LangManager.get().get(key, p); }
 

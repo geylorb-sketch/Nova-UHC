@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -35,23 +35,23 @@ public class CompteSaintGermainRole extends DanDaDanRole {
     @Override public String getName() { return "Compte de Saint-Germain"; }
     @Override public Material getIconMaterial() { return Material.DIAMOND_SWORD; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.CSG_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CSG_COUTEAU_TEXT), L(DanDaDanDescLang.CSG_COUTEAU_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CSG_FIOLE_TEXT), L(DanDaDanDescLang.CSG_FIOLE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.CSG_CARTE_TEXT), L(DanDaDanDescLang.CSG_CARTE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.CSG_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.CSG_COUTEAU_TEXT, DanDaDanDescLang.CSG_COUTEAU_HOVER)
+            .hover(DanDaDanDescLang.CSG_FIOLE_TEXT, DanDaDanDescLang.CSG_FIOLE_HOVER)
+            .hover(DanDaDanDescLang.CSG_CARTE_TEXT, DanDaDanDescLang.CSG_CARTE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

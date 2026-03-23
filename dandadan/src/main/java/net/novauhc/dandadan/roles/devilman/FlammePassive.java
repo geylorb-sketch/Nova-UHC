@@ -1,14 +1,13 @@
 package net.novauhc.dandadan.roles.devilman;
 
 import net.novaproject.novauhc.ability.template.MeleeAbility;
-import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Random;
 
 public class FlammePassive extends MeleeAbility {
-    public FlammePassive(UHCPlayer target) {
-        super(target);
+    public FlammePassive() {
+        super();
     }
 
     @Override public String getName() { return "Flamme"; }

@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.csg;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 
-public class CarteAbility extends UseAbiliy {
+public class CarteAbility extends UseAbility {
     @Override public String getName() { return "Carte"; }
     @Override public Material getMaterial() { return Material.MAP; }
     @Override public boolean onEnable(Player p) {

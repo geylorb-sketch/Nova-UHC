@@ -30,22 +30,22 @@ public class Fallout extends Scenario {
     private boolean falloutStarted = false;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_FALLOUT_START_TIME_NAME", descKey = "FALLOUT_VAR_FALLOUT_START_TIME_DESC", type = VariableType.TIME)
-    private final int falloutStartTime = 45 * 60;
+    private int falloutStartTime = 45 * 60;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_SAFE_YLEVEL_NAME", descKey = "FALLOUT_VAR_SAFE_YLEVEL_DESC", type = VariableType.INTEGER)
-    private final int safeYLevel = 60;
+    private int safeYLevel = 60;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_BASE_DAMAGE_NAME", descKey = "FALLOUT_VAR_BASE_DAMAGE_DESC", type = VariableType.DOUBLE)
-    private final double baseDamage = 0.5;
+    private double baseDamage = 0.5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_MODERATE_THRESHOLD_NAME", descKey = "FALLOUT_VAR_MODERATE_THRESHOLD_DESC", type = VariableType.INTEGER)
-    private final int moderateThreshold = 3;
+    private int moderateThreshold = 3;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_SEVERE_THRESHOLD_NAME", descKey = "FALLOUT_VAR_SEVERE_THRESHOLD_DESC", type = VariableType.INTEGER)
-    private final int severeThreshold = 5;
+    private int severeThreshold = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FALLOUT_VAR_MAX_DAMAGE_NAME", descKey = "FALLOUT_VAR_MAX_DAMAGE_DESC", type = VariableType.DOUBLE)
-    private final double maxDamage = 2.0;
+    private double maxDamage = 2.0;
 
     @Override
     public String getName() {
@@ -74,13 +74,7 @@ public class Fallout extends Scenario {
 
         int currentTime = UHCManager.get().getTimer();
 
-        if (!falloutStarted && currentTime >= falloutStartTime) {
-            startFallout();
-        }
-
-        if (falloutStarted) {
-            checkPlayerRadiation(p);
-        } else {
+        if (!falloutStarted) {
             sendFalloutWarnings(currentTime);
         }
     }

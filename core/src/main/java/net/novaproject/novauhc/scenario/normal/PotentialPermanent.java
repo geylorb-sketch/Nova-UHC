@@ -28,19 +28,19 @@ public class PotentialPermanent extends Scenario {
     
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_STARTING_PERMANENT_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_STARTING_PERMANENT_HEALTH_DESC", type = VariableType.DOUBLE)
-    private final double startingPermanentHealth = 20.0;
+    private double startingPermanentHealth = 20.0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_STARTING_ABSORPTION_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_STARTING_ABSORPTION_HEALTH_DESC", type = VariableType.DOUBLE)
-    private final double startingAbsorptionHealth = 20.0;
+    private double startingAbsorptionHealth = 20.0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_KILL_REWARD_NAME", descKey = "POTENTIALPERMANENT_VAR_KILL_REWARD_DESC", type = VariableType.DOUBLE)
-    private final double killReward = 4.0;
+    private double killReward = 4.0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_MAX_PERMANENT_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_MAX_PERMANENT_HEALTH_DESC", type = VariableType.DOUBLE)
-    private final double maxPermanentHealth = 60.0;
+    private double maxPermanentHealth = 60.0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "POTENTIALPERMANENT_VAR_MAX_ABSORPTION_HEALTH_NAME", descKey = "POTENTIALPERMANENT_VAR_MAX_ABSORPTION_HEALTH_DESC", type = VariableType.DOUBLE)
-    private final double maxAbsorptionHealth = 40.0;
+    private double maxAbsorptionHealth = 40.0;
 
     
 

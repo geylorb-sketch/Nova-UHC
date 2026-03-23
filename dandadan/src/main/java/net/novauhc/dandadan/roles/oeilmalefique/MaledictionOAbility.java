@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.oeilmalefique;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class MaledictionOAbility extends UseAbiliy {
+public class MaledictionOAbility extends UseAbility {
     @Override public String getName() { return "Malediction"; }
     @Override public Material getMaterial() { return Material.FERMENTED_SPIDER_EYE; }
     @Override public boolean onEnable(Player p) {

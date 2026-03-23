@@ -34,40 +34,40 @@ public class Blizzard extends Scenario {
     private boolean isBlizzardActive = false;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MIN_TIME_BETWEEN_BLIZZARDS_NAME", descKey = "BLIZZARD_VAR_MIN_TIME_BETWEEN_BLIZZARDS_DESC", type = VariableType.TIME)
-    private final int minTimeBetweenBlizzards = 240;
+    private int minTimeBetweenBlizzards = 240;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MAX_TIME_BETWEEN_BLIZZARDS_NAME", descKey = "BLIZZARD_VAR_MAX_TIME_BETWEEN_BLIZZARDS_DESC", type = VariableType.TIME)
-    private final int maxTimeBetweenBlizzards = 480;
+    private int maxTimeBetweenBlizzards = 480;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MIN_BLIZZARD_DURATION_NAME", descKey = "BLIZZARD_VAR_MIN_BLIZZARD_DURATION_DESC", type = VariableType.TIME)
-    private final int minBlizzardDuration = 90;
+    private int minBlizzardDuration = 90;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_MAX_BLIZZARD_DURATION_NAME", descKey = "BLIZZARD_VAR_MAX_BLIZZARD_DURATION_DESC", type = VariableType.TIME)
-    private final int maxBlizzardDuration = 180;
+    private int maxBlizzardDuration = 180;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_COLD_DAMAGE_INTERVAL_NAME", descKey = "BLIZZARD_VAR_COLD_DAMAGE_INTERVAL_DESC", type = VariableType.TIME)
-    private final int coldDamageInterval = 2;
+    private int coldDamageInterval = 2;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_DECREASE_PER_TICK_NAME", descKey = "BLIZZARD_VAR_WARMTH_DECREASE_PER_TICK_DESC", type = VariableType.INTEGER)
-    private final int warmthDecreasePerTick = 2;
+    private int warmthDecreasePerTick = 2;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_SLOW_EFFECT_LEVEL_NAME", descKey = "BLIZZARD_VAR_SLOW_EFFECT_LEVEL_DESC", type = VariableType.INTEGER)
-    private final int slowEffectLevel = 1;
+    private int slowEffectLevel = 1;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_BLIND_EFFECT_LEVEL_NAME", descKey = "BLIZZARD_VAR_BLIND_EFFECT_LEVEL_DESC", type = VariableType.INTEGER)
-    private final int blindEffectLevel = 0;
+    private int blindEffectLevel = 0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_NEAR_HEAT_SOURCE_BONUS_NAME", descKey = "BLIZZARD_VAR_WARMTH_NEAR_HEAT_SOURCE_BONUS_DESC", type = VariableType.INTEGER)
-    private final int warmthNearHeatSourceBonus = 5;
+    private int warmthNearHeatSourceBonus = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_NORMAL_GAIN_NAME", descKey = "BLIZZARD_VAR_WARMTH_NORMAL_GAIN_DESC", type = VariableType.INTEGER)
-    private final int warmthNormalGain = 1;
+    private int warmthNormalGain = 1;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_EXPOSURE_CHECK_HEIGHT_NAME", descKey = "BLIZZARD_VAR_EXPOSURE_CHECK_HEIGHT_DESC", type = VariableType.INTEGER)
-    private final int exposureCheckHeight = 5;
+    private int exposureCheckHeight = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLIZZARD_VAR_WARMTH_MAX_NAME", descKey = "BLIZZARD_VAR_WARMTH_MAX_DESC", type = VariableType.INTEGER)
-    private final int warmthMax = 100;
+    private int warmthMax = 100;
 
     @Override
     public String getName() {

@@ -32,6 +32,7 @@ public class DedaleAchaAbility extends Ability {
     public void onClick(PlayerInteractEvent event, ItemStack item) {
         if (item == null || item.getType() != Material.GOLD_HELMET) return;
         if (!event.getAction().name().contains("LEFT")) return;
+        if (getOwner() == null || !event.getPlayer().equals(getOwner().getPlayer())) return;
         tryUse(event.getPlayer());
     }
 
@@ -56,6 +57,7 @@ public class DedaleAchaAbility extends Ability {
     public void onAttack(UHCPlayer victim, EntityDamageByEntityEvent event) {
         if (!active) return;
         if (!(event.getDamager() instanceof Player attacker)) return;
+        if (getOwner() == null || !attacker.equals(getOwner().getPlayer())) return;
         Player vp = victim.getPlayer();
         if (vp == null) return;
 

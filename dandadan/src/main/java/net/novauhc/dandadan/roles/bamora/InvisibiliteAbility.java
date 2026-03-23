@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.bamora;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
  * Invisible avec armure 45s. Coup donne = visible 1s. Coup recu = visible 2s.
  * CD 7min -1min/kill.
  */
-public class InvisibiliteAbility extends UseAbiliy {
+public class InvisibiliteAbility extends UseAbility {
 
     private boolean invisActive = false;
 

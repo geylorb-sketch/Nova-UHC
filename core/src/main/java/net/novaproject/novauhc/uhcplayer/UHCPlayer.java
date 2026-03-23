@@ -44,7 +44,7 @@ public class UHCPlayer {
     private int protectionMax = uhcManager.getProtectionMax();
     private double forcePercent = 0.5;
     private double forceCriticPercent = 1;
-    private double resitancePercent = 1;
+    private double resistancePercent = 1;
     private int minedDiamond = 0;
     private int kill = 0;
     private String locale = null;
@@ -232,6 +232,20 @@ public class UHCPlayer {
 
         }
 
+    }
+
+    /**
+     * Retourne le rôle du joueur pour un ScenarioRole donné, ou {@link Optional#empty()} si aucun rôle.
+     * <pre>
+     * MyRole role = uhcPlayer.getRole(MyScenario.class).orElse(null);
+     * </pre>
+     */
+    public <T extends net.novaproject.novauhc.scenario.role.Role> Optional<T> getRole(
+            Class<? extends net.novaproject.novauhc.scenario.role.ScenarioRole<T>> scenarioClass) {
+        net.novaproject.novauhc.scenario.role.ScenarioRole<T> scenario =
+                ScenarioManager.get().getScenario(scenarioClass);
+        if (scenario == null) return Optional.empty();
+        return Optional.ofNullable(scenario.getRoleByUHCPlayer(this));
     }
 
     public String getArrowDirection(Location from, Location to, float playerYaw) {

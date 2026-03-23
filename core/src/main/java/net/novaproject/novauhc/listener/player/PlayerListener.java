@@ -191,7 +191,7 @@ public class PlayerListener implements Listener {
                 .collect(Collectors.toList());
 
         if (!chatScenarios.isEmpty()) {
-            chatScenarios.forEach(s -> s.onChatSpeek(player, message, event));
+            chatScenarios.forEach(s -> s.onChatSpeak(player, message, event));
             return;
         }
 

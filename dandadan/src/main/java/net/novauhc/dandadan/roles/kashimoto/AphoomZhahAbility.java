@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.kashimoto;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ import org.bukkit.util.Vector;
  * Bloc de glace. Joueurs attires + spectateur 5s. Structure de glace piege.
  * CD 10min.
  */
-public class AphoomZhahAbility extends UseAbiliy {
+public class AphoomZhahAbility extends UseAbility {
 
     @Override public String getName()       { return "Aphoom-Zhah"; }
     @Override public Material getMaterial() { return Material.PACKED_ICE; }

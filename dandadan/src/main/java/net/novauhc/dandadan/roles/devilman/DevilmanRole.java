@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,37 +23,37 @@ public class DevilmanRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DEVILMAN_ABILITY_CHALEUR_NAME", type = VariableType.ABILITY)
     private Ability chaleurAbility = new ChaleurAbility();
 
-    private final  FlammePassive flammePassive = new FlammePassive(null);
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DEVILMAN_ABILITY_FLAMME_NAME", type = VariableType.ABILITY)
+    private Ability flammePassive = new FlammePassive();
 
 
     public DevilmanRole() {
-        getAbilities().add(flammePassive);
     }
 
     @Override public String getName() { return "Devilman"; }
     @Override public Material getIconMaterial() { return Material.BLAZE_ROD; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.DEVILMAN_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DEVILMAN_FLAMME_D_TEXT), L(DanDaDanDescLang.DEVILMAN_FLAMME_D_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DEVILMAN_MALE_D_TEXT), L(DanDaDanDescLang.DEVILMAN_MALE_D_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DEVILMAN_CROC_TEXT), L(DanDaDanDescLang.DEVILMAN_CROC_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DEVILMAN_CHALEUR_TEXT), L(DanDaDanDescLang.DEVILMAN_CHALEUR_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DEVILMAN_CRYBABY_TEXT), L(DanDaDanDescLang.DEVILMAN_CRYBABY_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.DEVILMAN_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.DEVILMAN_FLAMME_D_TEXT, DanDaDanDescLang.DEVILMAN_FLAMME_D_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.DEVILMAN_MALE_D_TEXT, DanDaDanDescLang.DEVILMAN_MALE_D_HOVER)
+            .hover(DanDaDanDescLang.DEVILMAN_CROC_TEXT, DanDaDanDescLang.DEVILMAN_CROC_HOVER)
+            .hover(DanDaDanDescLang.DEVILMAN_CHALEUR_TEXT, DanDaDanDescLang.DEVILMAN_CHALEUR_HOVER)
+            .hover(DanDaDanDescLang.DEVILMAN_CRYBABY_TEXT, DanDaDanDescLang.DEVILMAN_CRYBABY_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

@@ -66,6 +66,7 @@ public class MarionnettistePuppetPassive extends PassiveAbility {
 
     @Override
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
+        if (!uhcPlayer.equals(getOwner())) return;
         for (UUID uuid : puppets) {
             Player puppet = org.bukkit.Bukkit.getPlayer(uuid);
             if (puppet != null && puppet.isOnline()) puppet.setHealth(0.0);

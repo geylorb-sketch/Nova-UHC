@@ -21,11 +21,11 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 public class RewardLongShot extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "REWARDLONGSHOT_VAR_MIN_DISTANCE_NAME", descKey = "REWARDLONGSHOT_VAR_MIN_DISTANCE_DESC", type = VariableType.INTEGER)
-    private final int min_distance = 75;
+    private int min_distance = 75;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "REWARDLONGSHOT_VAR_DAMAGE_MULTIPLIER_NAME", descKey = "REWARDLONGSHOT_VAR_DAMAGE_MULTIPLIER_DESC", type = VariableType.DOUBLE)
-    private final double damage_multiplier = 1.5;
+    private double damage_multiplier = 1.5;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "REWARDLONGSHOT_VAR_HEAL_AMOUNT_NAME", descKey = "REWARDLONGSHOT_VAR_HEAL_AMOUNT_DESC", type = VariableType.DOUBLE)
-    private final double heal_amount = 2.0;
+    private double heal_amount = 2.0;
 
     @Override public String getName() { return "Rewarding LongShot"; }
     @Override

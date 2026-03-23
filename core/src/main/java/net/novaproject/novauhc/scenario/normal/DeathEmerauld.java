@@ -22,10 +22,10 @@ public class DeathEmerauld extends Scenario {
     private final Random random = new Random();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEATHEMERAULD_VAR_DAMAGE_AMOUNT_NAME", descKey = "DEATHEMERAULD_VAR_DAMAGE_AMOUNT_DESC", type = VariableType.DOUBLE)
-    private final double damageAmount = 4.0;
+    private double damageAmount = 4.0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEATHEMERAULD_VAR_TARGET_BLOCK_NAME", descKey = "DEATHEMERAULD_VAR_TARGET_BLOCK_DESC", type = VariableType.STRING)
-    private final String targetBlock = "EMERALD_ORE";
+    private String targetBlock = "EMERALD_ORE";
 
     @Override
     public String getName() {
@@ -46,7 +46,8 @@ public class DeathEmerauld extends Scenario {
 
     @Override
     public void onBreak(Player player, Block block, BlockBreakEvent event) {
-        if (block.getType() != Material.getMaterial(targetBlock)) return;
+        Material target = Material.getMaterial(targetBlock);
+        if (target == null || block.getType() != target) return;
 
         List<UHCPlayer> players = UHCPlayerManager.get().getPlayingOnlineUHCPlayers();
         if (players.isEmpty()) return;

@@ -1,10 +1,10 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import org.bukkit.entity.Player;
 
-public class CorneMelodieHeal extends UseAbiliy {
+public class CorneMelodieHeal extends UseAbility {
     public CorneMelodieHeal() { setCooldown(600); setMaxUse(-1); }
     @Override public String getName() { return "Melodie : Heal"; }
     @Override

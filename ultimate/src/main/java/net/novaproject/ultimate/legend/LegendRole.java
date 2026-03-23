@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.novaproject.novauhc.lang.Lang;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.scenario.role.Role;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,7 +34,9 @@ public abstract class LegendRole extends Role {
 
     @Override
     public void sendDescription(Player player) {
-        LangManager.get().get(getDescriptionLang());
+        RoleDescription.of(player)
+                .line(getDescriptionLang())
+                .send();
     }
 
     @Override

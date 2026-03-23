@@ -522,7 +522,7 @@ public class FallenKingdom extends Scenario {
     }
 
     @Override
-    public void onEtityExplose(Entity entity, EntityExplodeEvent event) {
+    public void onEntityExplode(Entity entity, EntityExplodeEvent event) {
         if (isAssaultStarted()) return;
 
         if (entity.getType().toString().equals("PRIMED_TNT")

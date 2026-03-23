@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -21,37 +21,37 @@ public class OeilMalefiqueRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "OEILMALEFIQUE_ABILITY_MALEDICTIONO_NAME", type = VariableType.ABILITY)
     private Ability maledictionOAbility = new MaledictionOAbility();
 
-    private final EnviePassive enviePassive  = new EnviePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "OEILMALEFIQUE_ABILITY_ENVIE_NAME", type = VariableType.ABILITY)
+    private Ability enviePassive = new EnviePassive();
 
 
     public OeilMalefiqueRole() {
-        getAbilities().add(enviePassive);
     }
 
     @Override public String getName() { return "L'Oeil Malefique"; }
     @Override public Material getIconMaterial() { return Material.EYE_OF_ENDER; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.OEIL_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.OEIL_ENVIE_TEXT), L(DanDaDanDescLang.OEIL_ENVIE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.OEIL_JIJI_D_TEXT), L(DanDaDanDescLang.OEIL_JIJI_D_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.OEIL_BALLE_TEXT), L(DanDaDanDescLang.OEIL_BALLE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.OEIL_MALEDICTION_O_TEXT), L(DanDaDanDescLang.OEIL_MALEDICTION_O_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.OEIL_TRANSFO_TEXT), L(DanDaDanDescLang.OEIL_TRANSFO_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.OEIL_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.OEIL_ENVIE_TEXT, DanDaDanDescLang.OEIL_ENVIE_HOVER)
+            .hover(DanDaDanDescLang.OEIL_JIJI_D_TEXT, DanDaDanDescLang.OEIL_JIJI_D_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.OEIL_BALLE_TEXT, DanDaDanDescLang.OEIL_BALLE_HOVER)
+            .hover(DanDaDanDescLang.OEIL_MALEDICTION_O_TEXT, DanDaDanDescLang.OEIL_MALEDICTION_O_HOVER)
+            .hover(DanDaDanDescLang.OEIL_TRANSFO_TEXT, DanDaDanDescLang.OEIL_TRANSFO_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

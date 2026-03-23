@@ -21,7 +21,6 @@ public class Marionnettiste extends LegendRole {
 
     public Marionnettiste() {
         this.puppetPassive = new MarionnettistePuppetPassive();
-        getAbilities().add(puppetPassive);
     }
 
     @Override public int getId() { return 17; }

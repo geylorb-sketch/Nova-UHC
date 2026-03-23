@@ -25,7 +25,6 @@ public class Assassin extends LegendRole {
 
     public Assassin() {
         this.forcePassive = new AssassinForcePassive();
-        getAbilities().add(forcePassive);
     }
 
     @Override public int getId() { return 1; }

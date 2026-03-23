@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -21,38 +21,38 @@ public class JiangshiRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_ALLOUTJ_NAME", type = VariableType.ABILITY)
     private Ability allOutJAbility = new AllOutJAbility();
 
-    private final  RevivePassive revivePassive = new RevivePassive();
-    private final  KiRegenPassive kiPassive  = new KiRegenPassive ();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_REVIVE_NAME", type = VariableType.ABILITY)
+    private Ability revivePassive = new RevivePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JIANGSHI_ABILITY_KIREGEN_NAME", type = VariableType.ABILITY)
+    private Ability kiPassive = new KiRegenPassive();
 
 
     public JiangshiRole() {
-        getAbilities().add(revivePassive);
-        getAbilities().add(kiPassive);
     }
 
     @Override public String getName() { return "Jiangshi"; }
     @Override public Material getIconMaterial() { return Material.SKULL_ITEM; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.JIANGSHI_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_REVIVE_TEXT), L(DanDaDanDescLang.JIANGSHI_REVIVE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_KI_TEXT), L(DanDaDanDescLang.JIANGSHI_KI_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_INVOC_TEXT), L(DanDaDanDescLang.JIANGSHI_INVOC_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JIANGSHI_ALLOUT_J_TEXT), L(DanDaDanDescLang.JIANGSHI_ALLOUT_J_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.JIANGSHI_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.JIANGSHI_REVIVE_TEXT, DanDaDanDescLang.JIANGSHI_REVIVE_HOVER)
+            .hover(DanDaDanDescLang.JIANGSHI_KI_TEXT, DanDaDanDescLang.JIANGSHI_KI_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.JIANGSHI_INVOC_TEXT, DanDaDanDescLang.JIANGSHI_INVOC_HOVER)
+            .hover(DanDaDanDescLang.JIANGSHI_ALLOUT_J_TEXT, DanDaDanDescLang.JIANGSHI_ALLOUT_J_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

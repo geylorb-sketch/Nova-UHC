@@ -29,7 +29,7 @@ public class ApiConfigManager {
         return CompletableFuture.runAsync(() -> {
             try {
                 JsonObject configJson = configToJson(config);
-                api.saveConfig(config.getName(), configJson).join();
+                api.saveConfig(uuid.toString(), config.getName(), configJson).join();
                 LOGGER.info("✅ Configuration '" + config.getName() + "' sauvegardée via API");
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "❌ Erreur sauvegarde config: " + e.getMessage(), e);
@@ -39,7 +39,7 @@ public class ApiConfigManager {
 
 
     public CompletableFuture<UHCGameConfiguration> getConfig(UUID uuid, String configName) {
-        return api.getConfig(configName).thenApply(response -> {
+        return api.getConfig(uuid.toString(), configName).thenApply(response -> {
             try {
                 if (!response.has("success") || !response.get("success").getAsBoolean()) {
                     LOGGER.warning("⚠️ Config '" + configName + "' non trouvée dans l'API");
@@ -63,7 +63,7 @@ public class ApiConfigManager {
     }
 
     public CompletableFuture<List<String>> getPlayerConfigNames(UUID uuid) {
-        return api.listConfigs().thenApply(response -> {
+        return api.listConfigs(uuid.toString()).thenApply(response -> {
             List<String> names = new ArrayList<>();
             try {
                 JsonArray configs = response.getAsJsonObject("data").getAsJsonArray("configs");
@@ -78,7 +78,7 @@ public class ApiConfigManager {
     }
 
     public CompletableFuture<Boolean> deleteConfig(UUID uuid, String configName) {
-        return api.deleteConfig(configName).thenApply(response -> {
+        return api.deleteConfig(uuid.toString(), configName).thenApply(response -> {
             try {
                 boolean success = response.get("success").getAsBoolean();
                 if (success) {

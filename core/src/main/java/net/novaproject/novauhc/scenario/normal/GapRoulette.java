@@ -26,43 +26,43 @@ public class GapRoulette extends Scenario {
     private final Random random = new Random();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_SPEED_NAME", descKey = "GAPROULETTE_VAR_ENABLE_SPEED_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableSpeed = true;
+    private boolean enableSpeed = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_STRENGTH_NAME", descKey = "GAPROULETTE_VAR_ENABLE_STRENGTH_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableStrength = true;
+    private boolean enableStrength = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_RESISTANCE_NAME", descKey = "GAPROULETTE_VAR_ENABLE_RESISTANCE_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableResistance = true;
+    private boolean enableResistance = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_JUMP_NAME", descKey = "GAPROULETTE_VAR_ENABLE_JUMP_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableJump = true;
+    private boolean enableJump = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_FIRE_RESISTANCE_NAME", descKey = "GAPROULETTE_VAR_ENABLE_FIRE_RESISTANCE_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableFireResistance = true;
+    private boolean enableFireResistance = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_WEAKNESS_NAME", descKey = "GAPROULETTE_VAR_ENABLE_WEAKNESS_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableWeakness = true;
+    private boolean enableWeakness = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_POISON_NAME", descKey = "GAPROULETTE_VAR_ENABLE_POISON_DESC", type = VariableType.BOOLEAN)
-    private final boolean enablePoison = true;
+    private boolean enablePoison = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_SLOWNESS_NAME", descKey = "GAPROULETTE_VAR_ENABLE_SLOWNESS_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableSlowness = true;
+    private boolean enableSlowness = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_HUNGER_NAME", descKey = "GAPROULETTE_VAR_ENABLE_HUNGER_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableHunger = true;
+    private boolean enableHunger = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_ENABLE_WITHER_NAME", descKey = "GAPROULETTE_VAR_ENABLE_WITHER_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableWither = true;
+    private boolean enableWither = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_MIN_DURATION_NAME", descKey = "GAPROULETTE_VAR_MIN_DURATION_DESC", type = VariableType.INTEGER)
-    private final int minDuration = 5;
+    private int minDuration = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_MAX_DURATION_NAME", descKey = "GAPROULETTE_VAR_MAX_DURATION_DESC", type = VariableType.INTEGER)
-    private final int maxDuration = 15;
+    private int maxDuration = 15;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GAPROULETTE_VAR_MAX_AMPLIFIER_NAME", descKey = "GAPROULETTE_VAR_MAX_AMPLIFIER_DESC", type = VariableType.INTEGER)
-    private final int maxAmplifier = 1;
+    private int maxAmplifier = 1;
 
     public GapRoulette() {
         allEffects.add(PotionEffectType.SPEED);
@@ -115,6 +115,5 @@ public class GapRoulette extends Scenario {
         int amplifier = random.nextInt(maxAmplifier + 1);
 
         player.addPotionEffect(new PotionEffect(randomEffect, duration, amplifier));
-        player.sendMessage(ChatColor.GOLD + "Vous avez reçu l'effet : " + ChatColor.AQUA + randomEffect.getName());
     }
 }

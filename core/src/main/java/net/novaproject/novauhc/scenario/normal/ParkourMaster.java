@@ -31,40 +31,40 @@ public class ParkourMaster extends Scenario {
     private BukkitRunnable parkourTask;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_SPAWN_INTERVAL_NAME", descKey = "PARKOURMASTER_VAR_SPAWN_INTERVAL_DESC", type = VariableType.INTEGER)
-    private final int spawnInterval = 300;
+    private int spawnInterval = 300;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_MIN_CHECKPOINTS_NAME", descKey = "PARKOURMASTER_VAR_MIN_CHECKPOINTS_DESC", type = VariableType.INTEGER)
-    private final int minCheckpoints = 3;
+    private int minCheckpoints = 3;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_MAX_CHECKPOINTS_NAME", descKey = "PARKOURMASTER_VAR_MAX_CHECKPOINTS_DESC", type = VariableType.INTEGER)
-    private final int maxCheckpoints = 5;
+    private int maxCheckpoints = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MIN_NAME", descKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MIN_DESC", type = VariableType.INTEGER)
-    private final int checkpointDistanceMin = 5;
+    private int checkpointDistanceMin = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MAX_NAME", descKey = "PARKOURMASTER_VAR_CHECKPOINT_DISTANCE_MAX_DESC", type = VariableType.INTEGER)
-    private final int checkpointDistanceMax = 10;
+    private int checkpointDistanceMax = 10;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_PARKOUR_TIMEOUT_NAME", descKey = "PARKOURMASTER_VAR_PARKOUR_TIMEOUT_DESC", type = VariableType.INTEGER)
-    private final int parkourTimeout = 300;
+    private int parkourTimeout = 300;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_GOLDEN_APPLE_NAME", descKey = "PARKOURMASTER_VAR_REWARD_GOLDEN_APPLE_DESC", type = VariableType.INTEGER)
-    private final int rewardGoldenApple = 2;
+    private int rewardGoldenApple = 2;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_ARROW_NAME", descKey = "PARKOURMASTER_VAR_REWARD_ARROW_DESC", type = VariableType.INTEGER)
-    private final int rewardArrow = 16;
+    private int rewardArrow = 16;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_ENDER_PEARL_NAME", descKey = "PARKOURMASTER_VAR_REWARD_ENDER_PEARL_DESC", type = VariableType.INTEGER)
-    private final int rewardEnderPearl = 4;
+    private int rewardEnderPearl = 4;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_IRON_INGOT_NAME", descKey = "PARKOURMASTER_VAR_REWARD_IRON_INGOT_DESC", type = VariableType.INTEGER)
-    private final int rewardIronIngot = 8;
+    private int rewardIronIngot = 8;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_DIAMOND_NAME", descKey = "PARKOURMASTER_VAR_REWARD_DIAMOND_DESC", type = VariableType.INTEGER)
-    private final int rewardDiamond = 2;
+    private int rewardDiamond = 2;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "PARKOURMASTER_VAR_REWARD_ENCHANTED_BOOK_NAME", descKey = "PARKOURMASTER_VAR_REWARD_ENCHANTED_BOOK_DESC", type = VariableType.INTEGER)
-    private final int rewardEnchantedBook = 1;
+    private int rewardEnchantedBook = 1;
 
     @Override
     public String getName() {
@@ -133,6 +133,15 @@ public class ParkourMaster extends Scenario {
             }
         };
         parkourTask.runTaskTimer(Main.get(),0,20);
+    }
+
+    @Override
+    public void onStop() {
+        stopParkourTask();
+        for (ParkourChallenge c : activeChallenges.values()) {
+            cleanupParkour(c);
+        }
+        activeChallenges.clear();
     }
 
     private void stopParkourTask() {

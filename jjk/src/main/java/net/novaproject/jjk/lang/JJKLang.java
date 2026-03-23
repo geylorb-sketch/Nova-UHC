@@ -9,6 +9,7 @@ public enum JJKLang implements Lang {
     GOJO_DESC("Je suis Gojo","I am Gojo"),
     BLUE_VAR_DESC("",""),
     BLUE_VAR_TITLE("",""),
+    GOJO_BLUE_NAME("Blue","Blue"),
     ;
 
     private final Map<String, String> translations;

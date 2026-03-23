@@ -61,6 +61,7 @@ public class OgrePassive extends Ability {
     public void onConsume(PlayerItemConsumeEvent event) {
         if (event.getItem().getType() != Material.GOLDEN_APPLE) return;
         Player p = event.getPlayer();
+        if (getOwner() == null || !p.equals(getOwner().getPlayer())) return;
         PotionEffectType type = POOL.get(ThreadLocalRandom.current().nextInt(POOL.size()));
         p.addPotionEffect(new PotionEffect(type, 20 * effectDuration, 0));
     }

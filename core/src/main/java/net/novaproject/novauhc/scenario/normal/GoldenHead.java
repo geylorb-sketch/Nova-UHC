@@ -27,21 +27,21 @@ public class GoldenHead extends Scenario {
     private ShapedRecipe recipe;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_GOLDEN_HEAD_DESC", type = VariableType.TIME)
-    private final int absorptionDurationGoldenHead = 20 * 60 * 2;
+    private int absorptionDurationGoldenHead = 20 * 60 * 2;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_GOLDEN_HEAD_DESC", type = VariableType.INTEGER)
-    private final int absorptionAmplifierGoldenHead = 1;
+    private int absorptionAmplifierGoldenHead = 1;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_GOLDEN_HEAD_DESC", type = VariableType.TIME)
-    private final int regenerationDurationGoldenHead = 20 * 6;
+    private int regenerationDurationGoldenHead = 20 * 6;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_GOLDEN_HEAD_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_GOLDEN_HEAD_DESC", type = VariableType.INTEGER)
-    private final int regenerationAmplifierGoldenHead = 1;
+    private int regenerationAmplifierGoldenHead = 1;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_APPLE_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_DURATION_APPLE_DESC", type = VariableType.TIME)
-    private final int absorptionDurationApple = 20 * 60 * 2;
+    private int absorptionDurationApple = 20 * 60 * 2;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_APPLE_NAME", descKey = "GOLDENHEAD_VAR_ABSORPTION_AMPLIFIER_APPLE_DESC", type = VariableType.INTEGER)
-    private final int absorptionAmplifierApple = 0;
+    private int absorptionAmplifierApple = 0;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_APPLE_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_DURATION_APPLE_DESC", type = VariableType.TIME)
-    private final int regenerationDurationApple = 20 * 4;
+    private int regenerationDurationApple = 20 * 4;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_APPLE_NAME", descKey = "GOLDENHEAD_VAR_REGENERATION_AMPLIFIER_APPLE_DESC", type = VariableType.INTEGER)
-    private final int regenerationAmplifierApple = 1;
+    private int regenerationAmplifierApple = 1;
 
     private String t(GoldenHeadLang key) { return LangManager.get().get(key); }
     private String t(GoldenHeadLang key, Map<String,Object> p) { return LangManager.get().get(key, p); }
@@ -74,15 +74,15 @@ public class GoldenHead extends Scenario {
                 if (e.getType().equals(PotionEffectType.REGENERATION) || e.getType().equals(PotionEffectType.ABSORPTION))
                     player.removePotionEffect(e.getType());
             }
-            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*absorptionDurationGoldenHead, absorptionAmplifierGoldenHead, false, true));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*regenerationDurationGoldenHead, regenerationAmplifierGoldenHead, false, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, absorptionDurationGoldenHead, absorptionAmplifierGoldenHead, false, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, regenerationDurationGoldenHead, regenerationAmplifierGoldenHead, false, true));
         } else if (item.getType() == Material.GOLDEN_APPLE) {
             for (PotionEffect e : player.getActivePotionEffects()) {
                 if (e.getType().equals(PotionEffectType.REGENERATION) || e.getType().equals(PotionEffectType.ABSORPTION))
                     player.removePotionEffect(e.getType());
             }
-            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*absorptionDurationApple, absorptionAmplifierApple, false, true));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*regenerationDurationApple, regenerationAmplifierApple, false, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, absorptionDurationApple, absorptionAmplifierApple, false, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, regenerationDurationApple, regenerationAmplifierApple, false, true));
         }
     }
 

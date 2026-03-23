@@ -24,8 +24,6 @@ public class Succube extends LegendRole {
     public Succube() {
         this.lifestealPassive = new SuccubeLifestealPassive();
         this.absorptionActive = new SuccubeAbsorptionActive();
-        getAbilities().add(lifestealPassive);
-        getAbilities().add(absorptionActive);
     }
 
     @Override public int getId() { return 8; }

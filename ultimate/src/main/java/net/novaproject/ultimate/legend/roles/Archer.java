@@ -25,7 +25,6 @@ public class Archer extends LegendRole {
 
     public Archer() {
         this.bowPassive = new ArcherBowPassive();
-        getAbilities().add(bowPassive);
     }
 
     @Override public int getId() { return 3; }

@@ -1,8 +1,11 @@
 package net.novaproject.novauhc.command.cmd;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.novaproject.novauhc.Common;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.UHCManager;
+import net.novaproject.novauhc.api.ApiManager;
 import net.novaproject.novauhc.command.Command;
 import net.novaproject.novauhc.command.CommandArguments;
 import net.novaproject.novauhc.api.UHCGameConfiguration;
@@ -228,6 +231,16 @@ public class ConfigCMD extends Command {
 
         player.sendMessage(ChatColor.DARK_GREEN + "╚══════════════════════════════╝");
         player.sendMessage("");
+
+        // Push live config to API for public docs page
+        try {
+            JsonObject liveConfig = Main.get().buildLiveConfig();
+            if (liveConfig != null) {
+                ApiManager.get().pushLiveConfig(liveConfig);
+            }
+        } catch (Exception e) {
+            Main.get().getLogger().warning("Failed to push live config: " + e.getMessage());
+        }
     }
 
     private void deleteConfig(Player player, UUID playerUUID, String configName) {

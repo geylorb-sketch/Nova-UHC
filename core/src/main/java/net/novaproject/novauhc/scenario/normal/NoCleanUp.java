@@ -15,7 +15,7 @@ import net.novaproject.novauhc.lang.LangManager;
 public class NoCleanUp extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "NOCLEANUP_VAR_HEALTH_RESTORE_NAME", descKey = "NOCLEANUP_VAR_HEALTH_RESTORE_DESC", type = VariableType.DOUBLE)
-    private final double healthRestore = 8.0;
+    private double healthRestore = 8.0;
 
     @Override
     public String getName() {

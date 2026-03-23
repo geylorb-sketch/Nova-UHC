@@ -29,8 +29,6 @@ public class Dragon extends LegendRole {
     public Dragon() {
         this.firePassive    = new DragonFirePassive();
         this.fireballActive = new DragonFireballActive();
-        getAbilities().add(firePassive);
-        getAbilities().add(fireballActive);
     }
 
     @Override public int getId() { return 13; }

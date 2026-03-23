@@ -14,7 +14,7 @@ import net.novaproject.novauhc.lang.LangManager;
 
 public class BloodDiamonds extends Scenario {
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODDIAMONDS_VAR_DAMAGE_AMOUNT_NAME", descKey = "BLOODDIAMONDS_VAR_DAMAGE_AMOUNT_DESC", type = VariableType.DOUBLE)
-    private final int damageAmount = 1;
+    private double damageAmount = 1.0;
 
     @Override
     public String getName() {

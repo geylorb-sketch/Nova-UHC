@@ -36,7 +36,7 @@ public class LuckyOre extends Scenario {
     private final Random random = new Random();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LUCKYORE_VAR_LUCKY_CHANCE_NAME", descKey = "LUCKYORE_VAR_LUCKY_CHANCE_DESC", type = VariableType.PERCENTAGE)
-    private final int luckyChance = 10;
+    private int luckyChance = 10;
 
     @Override
     public String getName() {

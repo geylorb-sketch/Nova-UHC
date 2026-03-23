@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.okarun;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -21,7 +21,7 @@ import java.util.UUID;
  * Après activation, 5 coups sur un même joueur (avec min 1 épée de diff)
  * → no hit delay 60% pendant 7s. Cooldown 10min.
  */
-public class RythmeAbility extends UseAbiliy {
+public class RythmeAbility extends UseAbility {
 
     @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "RYTHME_HITS_NAME",
             descKey = "RYTHME_HITS_DESC", type = VariableType.INTEGER)
@@ -50,6 +50,7 @@ public class RythmeAbility extends UseAbiliy {
     public void onAttack(UHCPlayer victim, EntityDamageByEntityEvent event) {
         if (!active) return;
         if (!(event.getDamager() instanceof Player attacker)) return;
+        if (getOwner() == null || !attacker.equals(getOwner().getPlayer())) return;
         if (victim.getPlayer() == null) return;
 
         UUID victimId = victim.getPlayer().getUniqueId();

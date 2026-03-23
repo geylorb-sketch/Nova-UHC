@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.reiko;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 
-public class MiroirActifAbility extends UseAbiliy {
+public class MiroirActifAbility extends UseAbility {
     @Override public String getName() { return "Miroir Actif"; }
     @Override public Material getMaterial() { return Material.GLASS; }
     @Override public boolean onEnable(Player p) {

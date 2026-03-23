@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,38 +23,38 @@ public class JetBoosterKurRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JETBOOSTER_ABILITY_BOOST_NAME", type = VariableType.ABILITY)
     private Ability boostAbility = new BoostAbility();
 
-    private final  TeteHautePassive tetePassive  = new TeteHautePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JETBOOSTER_ABILITY_TETE_NAME", type = VariableType.ABILITY)
+    private Ability tetePassive = new TeteHautePassive();
 
 
     public JetBoosterKurRole() {
-        getAbilities().add(tetePassive);
     }
 
     @Override public String getName() { return "Jet Booster Kur"; }
     @Override public Material getIconMaterial() { return Material.FEATHER; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.JETBOOSTER_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JETBOOSTER_TETE_TEXT), L(DanDaDanDescLang.JETBOOSTER_TETE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JETBOOSTER_ESQUIVE_TEXT), L(DanDaDanDescLang.JETBOOSTER_ESQUIVE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JETBOOSTER_AVIATE_TEXT), L(DanDaDanDescLang.JETBOOSTER_AVIATE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JETBOOSTER_SUPER_TEXT), L(DanDaDanDescLang.JETBOOSTER_SUPER_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JETBOOSTER_BOOST_TEXT), L(DanDaDanDescLang.JETBOOSTER_BOOST_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JETBOOSTER_ABAND_TEXT), L(DanDaDanDescLang.JETBOOSTER_ABAND_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.JETBOOSTER_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.JETBOOSTER_TETE_TEXT, DanDaDanDescLang.JETBOOSTER_TETE_HOVER)
+            .hover(DanDaDanDescLang.JETBOOSTER_ESQUIVE_TEXT, DanDaDanDescLang.JETBOOSTER_ESQUIVE_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.JETBOOSTER_AVIATE_TEXT, DanDaDanDescLang.JETBOOSTER_AVIATE_HOVER)
+            .hover(DanDaDanDescLang.JETBOOSTER_SUPER_TEXT, DanDaDanDescLang.JETBOOSTER_SUPER_HOVER)
+            .hover(DanDaDanDescLang.JETBOOSTER_BOOST_TEXT, DanDaDanDescLang.JETBOOSTER_BOOST_HOVER)
+            .hover(DanDaDanDescLang.JETBOOSTER_ABAND_TEXT, DanDaDanDescLang.JETBOOSTER_ABAND_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

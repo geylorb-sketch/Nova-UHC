@@ -2,6 +2,7 @@ package net.novaproject.novauhc.scenario.normal;
 
 import net.novaproject.novauhc.lang.LangManager;
 
+import net.novaproject.novauhc.Common;
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.scenario.ScenarioVariable;
@@ -33,28 +34,28 @@ public class LootCrate extends Scenario {
     private BukkitRunnable lootCrateTask;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_SPAWN_INTERVAL_NAME", descKey = "LOOTCRATE_VAR_SPAWN_INTERVAL_DESC", type = VariableType.TIME)
-    private final int spawnInterval = 600;
+    private int spawnInterval = 600;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_MIN_CRATES_NAME", descKey = "LOOTCRATE_VAR_MIN_CRATES_DESC", type = VariableType.INTEGER)
-    private final int minCrates = 3;
+    private int minCrates = 3;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_MAX_CRATES_NAME", descKey = "LOOTCRATE_VAR_MAX_CRATES_DESC", type = VariableType.INTEGER)
-    private final int maxCrates = 5;
+    private int maxCrates = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_DIAMONDS_NAME", descKey = "LOOTCRATE_VAR_ENABLE_DIAMONDS_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableDiamonds = true;
+    private boolean enableDiamonds = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_GOLDEN_APPLES_NAME", descKey = "LOOTCRATE_VAR_ENABLE_GOLDEN_APPLES_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableGoldenApples = true;
+    private boolean enableGoldenApples = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_ENCHANTED_ITEMS_NAME", descKey = "LOOTCRATE_VAR_ENABLE_ENCHANTED_ITEMS_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableEnchantedItems = true;
+    private boolean enableEnchantedItems = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_POTIONS_NAME", descKey = "LOOTCRATE_VAR_ENABLE_POTIONS_DESC", type = VariableType.BOOLEAN)
-    private final boolean enablePotions = true;
+    private boolean enablePotions = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LOOTCRATE_VAR_ENABLE_FOOD_NAME", descKey = "LOOTCRATE_VAR_ENABLE_FOOD_DESC", type = VariableType.BOOLEAN)
-    private final boolean enableFood = true;
+    private boolean enableFood = true;
 
     @Override
     public String getName() {
@@ -132,7 +133,7 @@ public class LootCrate extends Scenario {
     }
 
     private Location findSuitableCrateLocation() {
-        World world = Bukkit.getWorld("world");
+        World world = Common.get().getArena();
         if (world == null) return null;
 
         for (int attempts = 0; attempts < 20; attempts++) {

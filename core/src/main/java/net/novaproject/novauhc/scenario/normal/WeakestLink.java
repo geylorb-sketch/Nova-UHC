@@ -29,7 +29,7 @@ public class WeakestLink extends Scenario {
     private final Map<UUID, Integer> playerKills = new HashMap<>();
     private BukkitRunnable updateTask;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "WEAKESTLINK_VAR_MULTIPLIER_NAME", descKey = "WEAKESTLINK_VAR_MULTIPLIER_DESC", type = VariableType.PERCENTAGE)
-    private final double multiplier = 2.0;
+    private double multiplier = 2.0;
 
     @Override
     public String getName() {
@@ -100,7 +100,7 @@ public class WeakestLink extends Scenario {
             }
         };
 
-        updateTask.runTaskTimerAsynchronously(Main.get(), 0, 600);
+        updateTask.runTaskTimer(Main.get(), 0, 600);
     }
 
 

@@ -42,6 +42,7 @@ public class DragonFirePassive extends Ability {
     @Override
     public void onAttack(UHCPlayer victimP, EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player attacker)) return;
+        if (getOwner() == null || !attacker.equals(getOwner().getPlayer())) return;
         Player victim = victimP.getPlayer();
         if (victim == null) return;
         pendingVictim = victim;

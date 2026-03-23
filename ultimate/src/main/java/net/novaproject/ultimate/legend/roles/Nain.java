@@ -22,7 +22,6 @@ public class Nain extends LegendRole {
 
     public Nain() {
         this.armorActive = new NainArmorActive();
-        getAbilities().add(armorActive);
     }
 
     @Override public int getId() { return 5; }

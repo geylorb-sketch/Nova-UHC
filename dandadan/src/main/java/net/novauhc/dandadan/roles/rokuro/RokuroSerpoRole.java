@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -25,38 +25,38 @@ public class RokuroSerpoRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROKURO_ABILITY_ZONEINTOUCHABLE_NAME", type = VariableType.ABILITY)
     private Ability zoneIntouchableAbility = new ZoneIntouchableAbility();
 
-    private final SerupoPassive serupoPassive  = new SerupoPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROKURO_ABILITY_SERUPO_NAME", type = VariableType.ABILITY)
+    private Ability serupoPassive = new SerupoPassive();
 
 
     public RokuroSerpoRole() {
-        getAbilities().add(serupoPassive);
     }
 
     @Override public String getName() { return "Rokuro Serpo"; }
     @Override public Material getIconMaterial() { return Material.ENDER_PEARL; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.ROKURO_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROKURO_SERUPO_TEXT), L(DanDaDanDescLang.ROKURO_SERUPO_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROKURO_SEIJIN_TEXT), L(DanDaDanDescLang.ROKURO_SEIJIN_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROKURO_FORME_TEXT), L(DanDaDanDescLang.ROKURO_FORME_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROKURO_ORGUE_TEXT), L(DanDaDanDescLang.ROKURO_ORGUE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROKURO_ZONE_I_TEXT), L(DanDaDanDescLang.ROKURO_ZONE_I_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROKURO_ZONE_IT_TEXT), L(DanDaDanDescLang.ROKURO_ZONE_IT_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.ROKURO_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.ROKURO_SERUPO_TEXT, DanDaDanDescLang.ROKURO_SERUPO_HOVER)
+            .hover(DanDaDanDescLang.ROKURO_SEIJIN_TEXT, DanDaDanDescLang.ROKURO_SEIJIN_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.ROKURO_FORME_TEXT, DanDaDanDescLang.ROKURO_FORME_HOVER)
+            .hover(DanDaDanDescLang.ROKURO_ORGUE_TEXT, DanDaDanDescLang.ROKURO_ORGUE_HOVER)
+            .hover(DanDaDanDescLang.ROKURO_ZONE_I_TEXT, DanDaDanDescLang.ROKURO_ZONE_I_HOVER)
+            .hover(DanDaDanDescLang.ROKURO_ZONE_IT_TEXT, DanDaDanDescLang.ROKURO_ZONE_IT_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

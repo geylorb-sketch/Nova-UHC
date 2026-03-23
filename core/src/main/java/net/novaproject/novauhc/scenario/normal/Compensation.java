@@ -17,7 +17,7 @@ import net.novaproject.novauhc.lang.LangManager;
 public class Compensation extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "COMPENSATION_VAR_HEARTS_PER_DEATH_NAME", descKey = "COMPENSATION_VAR_HEARTS_PER_DEATH_DESC", type = VariableType.DOUBLE)
-    private final double heartsPerDeath = 2.0;
+    private double heartsPerDeath = 2.0;
 
     @Override
     public String getName() {

@@ -18,13 +18,16 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 public class FinalHeal extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FINALHEAL_VAR_HEAL_TIME1_NAME", descKey = "FINALHEAL_VAR_HEAL_TIME1_DESC", type = VariableType.TIME)
-    private final int healTime1 = 600;
+    private int healTime1 = 600;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FINALHEAL_VAR_HEAL_TIME2_NAME", descKey = "FINALHEAL_VAR_HEAL_TIME2_DESC", type = VariableType.TIME)
-    private final int healTime2 = 1200;
+    private int healTime2 = 1200;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "FINALHEAL_VAR_HEAL_FOOD_NAME", descKey = "FINALHEAL_VAR_HEAL_FOOD_DESC", type = VariableType.BOOLEAN)
-    private final boolean healFood = true;
+    private boolean healFood = true;
+
+    private boolean healed1 = false;
+    private boolean healed2 = false;
 
     @Override
     public String getName() {
@@ -47,7 +50,19 @@ public class FinalHeal extends Scenario {
 
         if (!isActive()) return;
 
-        if (timer == healTime1 || timer == healTime2) {
+        if (timer == healTime1 && !healed1) {
+            healed1 = true;
+            for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
+                Player player = uhcPlayer.getPlayer();
+                player.setHealth(player.getMaxHealth());
+                if (healFood) {
+                    player.setFoodLevel(20);
+                    player.setSaturation(20f);
+                }
+            }
+            Bukkit.broadcastMessage(LangManager.get().get(CommonLang.FINAL_HEAL_BROADCAST));
+        } else if (timer == healTime2 && !healed2) {
+            healed2 = true;
             for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
                 Player player = uhcPlayer.getPlayer();
                 player.setHealth(player.getMaxHealth());

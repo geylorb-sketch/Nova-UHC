@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -25,10 +25,10 @@ public class KintaRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KINTA_ABILITY_NANOSKIN_NAME", type = VariableType.ABILITY)
     private Ability nanoskin = new NanoskinCommand();
 
-    private final LunettePassive lunettePassive = new LunettePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KINTA_ABILITY_LUNETTE_NAME", type = VariableType.ABILITY)
+    private Ability lunettePassive = new LunettePassive();
 
     public KintaRole() {
-        getAbilities().add(lunettePassive);
     }
 
     @Override public String getName()           { return "Kinta"; }
@@ -36,22 +36,24 @@ public class KintaRole extends DanDaDanRole {
 
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.ROLE_PREFIX) + LangManager.get().get(DanDaDanDescLang.KINTA_NAME));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KINTA_LUNETTE_TEXT), LangManager.get().get(DanDaDanDescLang.KINTA_LUNETTE_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KINTA_NANOSKIN_TEXT), LangManager.get().get(DanDaDanDescLang.KINTA_NANOSKIN_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KINTA_GREAT_TEXT), LangManager.get().get(DanDaDanDescLang.KINTA_GREAT_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KINTA_DEDALE_TEXT), LangManager.get().get(DanDaDanDescLang.KINTA_DEDALE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.KINTA_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.KINTA_LUNETTE_TEXT, DanDaDanDescLang.KINTA_LUNETTE_HOVER)
+            .hover(DanDaDanDescLang.KINTA_NANOSKIN_TEXT, DanDaDanDescLang.KINTA_NANOSKIN_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.KINTA_GREAT_TEXT, DanDaDanDescLang.KINTA_GREAT_HOVER)
+            .hover(DanDaDanDescLang.KINTA_DEDALE_TEXT, DanDaDanDescLang.KINTA_DEDALE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

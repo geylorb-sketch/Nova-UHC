@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -28,40 +28,40 @@ public class DioRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_TIMESKIP_NAME", type = VariableType.ABILITY)
     private Ability timeSkipAbility = new TimeSkipAbility();
 
-    private final  VampirePassive vampirePassive = new VampirePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DIO_ABILITY_VAMPIRE_NAME", type = VariableType.ABILITY)
+    private Ability vampirePassive = new VampirePassive();
 
 
     public DioRole() {
         setCamp(DanDaDanCamps.SPECIAL);
-        getAbilities().add(vampirePassive);
     }
 
     @Override public String getName() { return "Dio"; }
     @Override public Material getIconMaterial() { return Material.REDSTONE; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.DIO_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_VAMPIRE_TEXT), L(DanDaDanDescLang.DIO_VAMPIRE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_ETOILE_TEXT), L(DanDaDanDescLang.DIO_ETOILE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_COUTEAU_D_TEXT), L(DanDaDanDescLang.DIO_COUTEAU_D_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_ROAD_TEXT), L(DanDaDanDescLang.DIO_ROAD_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_THEWORLD_TEXT), L(DanDaDanDescLang.DIO_THEWORLD_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_TIME_D_TEXT), L(DanDaDanDescLang.DIO_TIME_D_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DIO_TIMESKIP_TEXT), L(DanDaDanDescLang.DIO_TIMESKIP_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.DIO_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.DIO_VAMPIRE_TEXT, DanDaDanDescLang.DIO_VAMPIRE_HOVER)
+            .hover(DanDaDanDescLang.DIO_ETOILE_TEXT, DanDaDanDescLang.DIO_ETOILE_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.DIO_COUTEAU_D_TEXT, DanDaDanDescLang.DIO_COUTEAU_D_HOVER)
+            .hover(DanDaDanDescLang.DIO_ROAD_TEXT, DanDaDanDescLang.DIO_ROAD_HOVER)
+            .hover(DanDaDanDescLang.DIO_THEWORLD_TEXT, DanDaDanDescLang.DIO_THEWORLD_HOVER)
+            .hover(DanDaDanDescLang.DIO_TIME_D_TEXT, DanDaDanDescLang.DIO_TIME_D_HOVER)
+            .hover(DanDaDanDescLang.DIO_TIMESKIP_TEXT, DanDaDanDescLang.DIO_TIMESKIP_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

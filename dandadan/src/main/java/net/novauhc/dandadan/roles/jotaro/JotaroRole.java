@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -26,42 +26,42 @@ public class JotaroRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_ORAORA_NAME", type = VariableType.ABILITY)
     private Ability oraOraAbility = new OraOraAbility();
 
-    private final ReactionPassive reactionPassive  = new ReactionPassive();
-    private final CasquettePassive casquettePassive  = new CasquettePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_REACTION_NAME", type = VariableType.ABILITY)
+    private Ability reactionPassive = new ReactionPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "JOTARO_ABILITY_CASQUETTE_NAME", type = VariableType.ABILITY)
+    private Ability casquettePassive = new CasquettePassive();
 
 
     public JotaroRole() {
         setCamp(DanDaDanCamps.SPECIAL);
-        getAbilities().add(reactionPassive);
-        getAbilities().add(casquettePassive);
     }
 
     @Override public String getName() { return "Jotaro"; }
     @Override public Material getIconMaterial() { return Material.NETHER_STAR; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.JOTARO_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_REACTION_TEXT), L(DanDaDanDescLang.JOTARO_REACTION_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_DETECTIVE_TEXT), L(DanDaDanDescLang.JOTARO_DETECTIVE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_CASQUETTE_TEXT), L(DanDaDanDescLang.JOTARO_CASQUETTE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_STAR_F_TEXT), L(DanDaDanDescLang.JOTARO_STAR_F_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_STAR_P_TEXT), L(DanDaDanDescLang.JOTARO_STAR_P_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_TIME_S_TEXT), L(DanDaDanDescLang.JOTARO_TIME_S_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.JOTARO_ORA_TEXT), L(DanDaDanDescLang.JOTARO_ORA_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.JOTARO_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.JOTARO_REACTION_TEXT, DanDaDanDescLang.JOTARO_REACTION_HOVER)
+            .hover(DanDaDanDescLang.JOTARO_DETECTIVE_TEXT, DanDaDanDescLang.JOTARO_DETECTIVE_HOVER)
+            .hover(DanDaDanDescLang.JOTARO_CASQUETTE_TEXT, DanDaDanDescLang.JOTARO_CASQUETTE_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.JOTARO_STAR_F_TEXT, DanDaDanDescLang.JOTARO_STAR_F_HOVER)
+            .hover(DanDaDanDescLang.JOTARO_STAR_P_TEXT, DanDaDanDescLang.JOTARO_STAR_P_HOVER)
+            .hover(DanDaDanDescLang.JOTARO_TIME_S_TEXT, DanDaDanDescLang.JOTARO_TIME_S_HOVER)
+            .hover(DanDaDanDescLang.JOTARO_ORA_TEXT, DanDaDanDescLang.JOTARO_ORA_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

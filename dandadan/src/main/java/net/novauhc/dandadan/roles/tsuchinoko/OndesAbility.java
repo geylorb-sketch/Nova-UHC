@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.tsuchinoko;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class OndesAbility extends UseAbiliy {
+public class OndesAbility extends UseAbility {
     @Override public String getName() { return "Ondes"; }
     @Override public Material getMaterial() { return Material.SLIME_BALL; }
     @Override public boolean onEnable(Player p) {

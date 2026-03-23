@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 public class ApiManager {
@@ -233,23 +234,32 @@ public class ApiManager {
 
     
 
-    public CompletableFuture<JsonObject> saveConfig(String name, JsonObject config) {
+    public CompletableFuture<JsonObject> pushLiveConfig(JsonObject config) {
+        return callAsync("POST", "/server/config", config);
+    }
+
+    public void startAutoUpdater(Supplier<JsonObject> configSupplier) {
+        new ApiAutoUpdater(this, configSupplier).start(scheduler);
+    }
+
+    public CompletableFuture<JsonObject> saveConfig(String playerUuid, String name, JsonObject config) {
         JsonObject body = new JsonObject();
+        body.addProperty("playerUuid", playerUuid);
         body.addProperty("name", name);
         body.add("config", config);
         return callAsync("POST", "/config/save", body);
     }
 
-    public CompletableFuture<JsonObject> listConfigs() {
-        return callAsync("GET", "/config/list", null);
+    public CompletableFuture<JsonObject> listConfigs(String playerUuid) {
+        return callAsync("GET", "/config/list?playerUuid=" + encode(playerUuid), null);
     }
 
-    public CompletableFuture<JsonObject> getConfig(String name) {
-        return callAsync("GET", "/config/" + encode(name), null);
+    public CompletableFuture<JsonObject> getConfig(String playerUuid, String name) {
+        return callAsync("GET", "/config/" + encode(name) + "?playerUuid=" + encode(playerUuid), null);
     }
 
-    public CompletableFuture<JsonObject> deleteConfig(String name) {
-        return callAsync("DELETE", "/config/" + encode(name), null);
+    public CompletableFuture<JsonObject> deleteConfig(String playerUuid, String name) {
+        return callAsync("DELETE", "/config/" + encode(name) + "?playerUuid=" + encode(playerUuid), null);
     }
 
     private String encode(String value) {

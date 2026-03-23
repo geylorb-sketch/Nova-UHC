@@ -4,8 +4,11 @@ import net.novaproject.novauhc.lang.LangManager;
 
 import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.scenario.Scenario;
+import net.novaproject.novauhc.scenario.ScenarioVariable;
 import net.novaproject.novauhc.lang.scenario.OreSwapLang;
 import net.novaproject.novauhc.utils.ItemCreator;
+import net.novaproject.novauhc.utils.VariableType;
+import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -17,6 +20,9 @@ import java.util.*;
 import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class OreSwap extends Scenario {
+
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "ORESWAP_VAR_SWAP_INTERVAL_NAME", descKey = "ORESWAP_VAR_SWAP_INTERVAL_DESC", type = VariableType.TIME)
+    private int swapInterval = 900;
 
     private final Map<Material, Material> currentOreMapping = new HashMap<>();
     private final List<Material> oreTypes = Arrays.asList(
@@ -152,8 +158,7 @@ public class OreSwap extends Scenario {
             }
         };
 
-        
-        int interval = getConfig().getInt("swap_interval", 900) * 20; 
+        int interval = swapInterval * 20;
         swapTask.runTaskTimer(Main.get(), interval, interval);
     }
 

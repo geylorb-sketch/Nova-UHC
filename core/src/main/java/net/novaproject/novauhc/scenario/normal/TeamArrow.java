@@ -14,7 +14,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 import net.novaproject.novauhc.lang.LangManager;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class TeamArrow extends Scenario {
+
+    private final Map<UUID, BukkitRunnable> playerTasks = new HashMap<>();
+
     @Override
     public String getName() {
         return "TeamArrow";
@@ -32,26 +39,48 @@ public class TeamArrow extends Scenario {
 
     @Override
     public void onStart(Player player) {
-        UHCPlayer player1 = UHCPlayerManager.get().getPlayer(player);
-        if (player1.getTeam().isPresent()) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    UHCTeam team = player1.getTeam().get();
-                    if (team.getPlayers().isEmpty()) {
-                        cancel();
-                        return;
-                    }
-                    for (UHCPlayer p : team.getPlayers()) {
-                        if (p == player1) {
-                            continue;
-                        }
-                        new Titles().sendActionText(player1.getPlayer(), " " + p.getPlayer().getName() + " : " + getArrowDirection(player1.getPlayer().getLocation(), p.getPlayer().getLocation(), player1.getPlayer().getLocation().getYaw()) 
-                        );
-                    }
+        if (!isActive()) return;
+        UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
+        if (!uhcPlayer.getTeam().isPresent()) return;
+
+        UUID uuid = player.getUniqueId();
+        BukkitRunnable existing = playerTasks.get(uuid);
+        if (existing != null) existing.cancel();
+
+        BukkitRunnable task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!isActive() || !uhcPlayer.getTeam().isPresent()) {
+                    playerTasks.remove(uuid);
+                    cancel();
+                    return;
                 }
-            }.runTaskTimer(Main.get(), 0, 20);
+                UHCTeam team = uhcPlayer.getTeam().get();
+                if (team.getPlayers().isEmpty()) {
+                    playerTasks.remove(uuid);
+                    cancel();
+                    return;
+                }
+                for (UHCPlayer p : team.getPlayers()) {
+                    if (p == uhcPlayer) continue;
+                    new Titles().sendActionText(uhcPlayer.getPlayer(),
+                            " " + p.getPlayer().getName() + " : " +
+                            getArrowDirection(uhcPlayer.getPlayer().getLocation(),
+                                    p.getPlayer().getLocation(),
+                                    uhcPlayer.getPlayer().getLocation().getYaw()));
+                }
+            }
+        };
+        playerTasks.put(uuid, task);
+        task.runTaskTimer(Main.get(), 0, 20);
+    }
+
+    @Override
+    public void onStop() {
+        for (BukkitRunnable task : playerTasks.values()) {
+            try { task.cancel(); } catch (Exception ignored) {}
         }
+        playerTasks.clear();
     }
 
     public String getArrowDirection(Location from, Location to, float playerYaw) {

@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.acrobatique;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class CheveuxAbility extends UseAbiliy {
+public class CheveuxAbility extends UseAbility {
 
     public CheveuxAbility (){
         setCooldown(300);

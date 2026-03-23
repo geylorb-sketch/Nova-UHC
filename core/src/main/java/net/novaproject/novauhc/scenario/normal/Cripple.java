@@ -17,10 +17,10 @@ import net.novaproject.novauhc.lang.LangManager;
 public class Cripple extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "CRIPPLE_VAR_WEAKNESS_DURATION_NAME", descKey = "CRIPPLE_VAR_WEAKNESS_DURATION_DESC", type = VariableType.TIME)
-    private final int weaknessDuration = 30;
+    private int weaknessDuration = 30;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "CRIPPLE_VAR_WEAKNESS_LEVEL_NAME", descKey = "CRIPPLE_VAR_WEAKNESS_LEVEL_DESC", type = VariableType.INTEGER)
-    private final int weaknessLevel = 0;
+    private int weaknessLevel = 0;
 
     @Override
     public String getName() {

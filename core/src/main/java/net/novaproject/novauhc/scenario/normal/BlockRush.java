@@ -24,19 +24,19 @@ public class BlockRush extends Scenario {
     private final Map<UUID, Integer> playerRewards = new HashMap<>();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOCKRUSH_VAR_BASE_REWARD_AMOUNT_NAME", descKey = "BLOCKRUSH_VAR_BASE_REWARD_AMOUNT_DESC", type = VariableType.INTEGER)
-    private final int baseRewardAmount = 1;
+    private int baseRewardAmount = 1;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOCKRUSH_VAR_DIAMOND_BONUS_NAME", descKey = "BLOCKRUSH_VAR_DIAMOND_BONUS_DESC", type = VariableType.INTEGER)
-    private final int diamondBonus = 2;
+    private int diamondBonus = 2;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOCKRUSH_VAR_EMERALD_BONUS_NAME", descKey = "BLOCKRUSH_VAR_EMERALD_BONUS_DESC", type = VariableType.INTEGER)
-    private final int emeraldBonus = 2;
+    private int emeraldBonus = 2;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOCKRUSH_VAR_GOLD_BONUS_NAME", descKey = "BLOCKRUSH_VAR_GOLD_BONUS_DESC", type = VariableType.INTEGER)
-    private final int goldBonus = 3;
+    private int goldBonus = 3;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOCKRUSH_VAR_MILESTONE10REWARD_NAME", descKey = "BLOCKRUSH_VAR_MILESTONE10REWARD_DESC", type = VariableType.INTEGER)
-    private final int milestone10Reward = 3;
+    private int milestone10Reward = 3;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOCKRUSH_VAR_MILESTONE25REWARD_NAME", descKey = "BLOCKRUSH_VAR_MILESTONE25REWARD_DESC", type = VariableType.INTEGER)
-    private final int milestone25Reward = 2;
+    private int milestone25Reward = 2;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOCKRUSH_VAR_MILESTONE50REWARD_NAME", descKey = "BLOCKRUSH_VAR_MILESTONE50REWARD_DESC", type = VariableType.INTEGER)
-    private final int milestone50Reward = 1;
+    private int milestone50Reward = 1;
 
     private String t(BlockRushLang key, Map<String,Object> p) { return LangManager.get().get(key, p); }
 

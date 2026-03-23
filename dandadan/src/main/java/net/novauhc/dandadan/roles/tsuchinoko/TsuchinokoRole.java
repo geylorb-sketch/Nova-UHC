@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,37 +23,37 @@ public class TsuchinokoRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "TSUCHINOKO_ABILITY_SUICIDE_NAME", type = VariableType.ABILITY)
     private Ability suicideAbility = new SuicideAbility();
 
-    private final VerMortPassive verMortPassive  = new VerMortPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "TSUCHINOKO_ABILITY_VERMORT_NAME", type = VariableType.ABILITY)
+    private Ability verMortPassive = new VerMortPassive();
 
 
     public TsuchinokoRole() {
-        getAbilities().add(verMortPassive);
     }
 
     @Override public String getName() { return "Tsuchinoko"; }
     @Override public Material getIconMaterial() { return Material.SLIME_BALL; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.TSUCHINOKO_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.TSUCHINOKO_VERMORT_TEXT), L(DanDaDanDescLang.TSUCHINOKO_VERMORT_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.TSUCHINOKO_VENIN_TEXT), L(DanDaDanDescLang.TSUCHINOKO_VENIN_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.TSUCHINOKO_ONDES_TEXT), L(DanDaDanDescLang.TSUCHINOKO_ONDES_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.TSUCHINOKO_SUICIDE_TEXT), L(DanDaDanDescLang.TSUCHINOKO_SUICIDE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.TSUCHINOKO_REGEN_TEXT), L(DanDaDanDescLang.TSUCHINOKO_REGEN_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.TSUCHINOKO_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.TSUCHINOKO_VERMORT_TEXT, DanDaDanDescLang.TSUCHINOKO_VERMORT_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.TSUCHINOKO_VENIN_TEXT, DanDaDanDescLang.TSUCHINOKO_VENIN_HOVER)
+            .hover(DanDaDanDescLang.TSUCHINOKO_ONDES_TEXT, DanDaDanDescLang.TSUCHINOKO_ONDES_HOVER)
+            .hover(DanDaDanDescLang.TSUCHINOKO_SUICIDE_TEXT, DanDaDanDescLang.TSUCHINOKO_SUICIDE_HOVER)
+            .hover(DanDaDanDescLang.TSUCHINOKO_REGEN_TEXT, DanDaDanDescLang.TSUCHINOKO_REGEN_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

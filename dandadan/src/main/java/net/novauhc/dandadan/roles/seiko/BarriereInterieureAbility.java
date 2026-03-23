@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.seiko;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -19,7 +19,7 @@ import java.awt.*;
  * Cercle 4x4 autour de Seiko 30s.
  * Joueur qui entre = enflamme + gapples 1 coeur. CD 10min +1min/kill.
  */
-public class BarriereInterieureAbility extends UseAbiliy {
+public class BarriereInterieureAbility extends UseAbility {
 
     @Override public String getName()       { return "Barriere interieure"; }
     @Override public Material getMaterial() { return Material.STAINED_GLASS; }

@@ -1,6 +1,6 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class SuccubeAbsorptionActive extends UseAbiliy {
+public class SuccubeAbsorptionActive extends UseAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "SUCCUBE_ABSORB_RADIUS_NAME", descKey = "SUCCUBE_ABSORB_RADIUS_DESC", type = VariableType.DOUBLE)
     private double radius = 11.0;

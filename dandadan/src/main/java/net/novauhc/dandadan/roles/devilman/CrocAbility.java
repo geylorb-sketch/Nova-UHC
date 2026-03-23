@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.devilman;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class CrocAbility extends UseAbiliy {
+public class CrocAbility extends UseAbility {
     @Override public String getName() { return "Croc"; }
     @Override public Material getMaterial() { return Material.IRON_SWORD; }
     @Override public boolean onEnable(Player p) {

@@ -29,13 +29,13 @@ public class AcidRain extends Scenario {
     private boolean isRaining = false;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "ACIDRAIN_VAR_NEXT_RAIN_IN_BASE_NAME", descKey = "ACIDRAIN_VAR_NEXT_RAIN_IN_BASE_DESC", type = VariableType.TIME)
-    private final int nextRainInBase = 300;
+    private int nextRainInBase = 300;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "ACIDRAIN_VAR_RAIN_DURATION_BASE_NAME", descKey = "ACIDRAIN_VAR_RAIN_DURATION_BASE_DESC", type = VariableType.TIME)
-    private final int rainDurationBase = 60;
+    private int rainDurationBase = 60;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "ACIDRAIN_VAR_RAIN_DAMAGE_NAME", descKey = "ACIDRAIN_VAR_RAIN_DAMAGE_DESC", type = VariableType.DOUBLE)
-    private final double rainDamage = 1.0;
+    private double rainDamage = 1.0;
 
     @Override
     public String getName() {

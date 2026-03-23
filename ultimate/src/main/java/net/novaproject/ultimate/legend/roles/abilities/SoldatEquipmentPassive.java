@@ -38,6 +38,7 @@ public class SoldatEquipmentPassive extends Ability {
     @Override
     public void onAttack(UHCPlayer victimP, EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player attacker)) return;
+        if (getOwner() == null || !attacker.equals(getOwner().getPlayer())) return;
         pendingAttacker = attacker;
         pendingEvent    = event;
         tryUse(attacker);

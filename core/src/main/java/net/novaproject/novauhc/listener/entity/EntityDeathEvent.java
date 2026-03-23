@@ -53,7 +53,7 @@ public class EntityDeathEvent implements Listener{
         Entity entity = event.getEntity();
 
         ScenarioManager.get().getActiveScenarios().forEach(scenario -> {
-            scenario.onEtityExplose(entity, event);
+            scenario.onEntityExplode(entity, event);
         });
     }
 

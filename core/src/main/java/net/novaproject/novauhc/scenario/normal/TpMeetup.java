@@ -20,8 +20,10 @@ import java.util.Map;
 
 public class TpMeetup extends Scenario {
 
-    @ScenarioVariable(nameKey = "TPMEETUP_VAR_TIMER_TP_NAME", descKey = "TPMEETUP_VAR_TIMER_TP_DESC",type = VariableType.TIME)
+    @ScenarioVariable(lang = net.novaproject.novauhc.lang.lang.ScenarioVarLang.class, nameKey = "TPMEETUP_VAR_TIMER_TP_NAME", descKey = "TPMEETUP_VAR_TIMER_TP_DESC", type = VariableType.TIME)
     private int timerTP = 3600;
+
+    private boolean tpDone = false;
 
     @Override
     public String getName() {
@@ -44,14 +46,14 @@ public class TpMeetup extends Scenario {
 
         if (!isActive()) return;
 
-        if (timer == timerTP) {
+        if (timer == timerTP && !tpDone) {
+            tpDone = true;
             int y = Common.get().getArena().getHighestBlockYAt(0, 0);
             Location loc = new Location(Common.get().getArena(), 0, y, 0);
             for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
                 uhcPlayer.getPlayer().teleport(loc);
                 LangManager.get().sendAll(CommonLang.TP_MESSAGE, Map.of("%player%", uhcPlayer.getPlayer().getName()));
             }
-
         }
     }
 }

@@ -9,6 +9,7 @@ import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.ui.config.ScenariosUi;
 import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.ItemCreator;
+import net.novaproject.novauhc.utils.VariableSerializer;
 import net.novaproject.novauhc.utils.ui.CustomInventory;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -33,11 +34,8 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Getter
 @Setter
@@ -104,56 +102,20 @@ public abstract class Scenario {
     }
 
     public Document scenarioToDoc() {
-        Document doc = new Document();
-        for (Field field : this.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(ScenarioVariable.class)) {
-                field.setAccessible(true);
-                try {
-                    doc.append(field.getName(), field.get(this));
-                } catch (IllegalAccessException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Could not access field " + field.getName(), e);
-                }
-            }
-        }
-        if(this instanceof ScenarioRole role){
+        Document doc = VariableSerializer.toDoc(this, ScenarioVariable.class, ScenarioVariable::type, false);
+        if (this instanceof ScenarioRole role) {
             doc.append("isRole", true);
-            doc.append("rolesConfig",role.getRolesDocument());
+            doc.append("rolesConfig", role.getRolesDocument());
         }
         return doc;
     }
 
     public void docToScenario(Document doc) {
         if (doc == null) return;
-        for (Field field : this.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(ScenarioVariable.class)) {
-                if (doc.containsKey(field.getName())) {
-                    field.setAccessible(true);
-                    try {
-                        Object value = doc.get(field.getName());
-                        if (value instanceof Number) {
-                            if (field.getType() == int.class || field.getType() == Integer.class) {
-                                field.set(this, ((Number) value).intValue());
-                            } else if (field.getType() == double.class || field.getType() == Double.class) {
-                                field.set(this, ((Number) value).doubleValue());
-                            } else if (field.getType() == float.class || field.getType() == Float.class) {
-                                field.set(this, ((Number) value).floatValue());
-                            } else if (field.getType() == long.class || field.getType() == Long.class) {
-                                field.set(this, ((Number) value).longValue());
-                            } else {
-                                field.set(this, value);
-                            }
-                        } else {
-                            field.set(this, value);
-                        }
-                    } catch (IllegalAccessException e) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Could not set field " + field.getName(), e);
-                    }
-                }
-            }
-            if (this instanceof ScenarioRole role && doc.containsKey("isRole") && doc.getBoolean("isRole")) {
-                Document rolesDoc = (Document) doc.get("rolesConfig");
-                role.loadRolesDocument(rolesDoc);
-            }
+        VariableSerializer.fromDoc(this, doc, ScenarioVariable.class, ScenarioVariable::type, false);
+        if (this instanceof ScenarioRole role && doc.containsKey("isRole") && doc.getBoolean("isRole")) {
+            Document rolesDoc = (Document) doc.get("rolesConfig");
+            role.loadRolesDocument(rolesDoc);
         }
     }
 
@@ -245,7 +207,7 @@ public abstract class Scenario {
 
     }
 
-    public void onEtityExplose(Entity entity, EntityExplodeEvent event) {
+    public void onEntityExplode(Entity entity, EntityExplodeEvent event) {
 
     }
 
@@ -264,11 +226,11 @@ public abstract class Scenario {
 
     }
 
-    public void onChatSpeek(Player player, String message, AsyncPlayerChatEvent event) {
+    public void onChatSpeak(Player player, String message, AsyncPlayerChatEvent event) {
 
     }
 
-    public void onPlayerInteractonEntity(Player player, PlayerInteractEntityEvent event) {
+    public void onPlayerInteractEntity(Player player, PlayerInteractEntityEvent event) {
 
     }
 
@@ -319,6 +281,10 @@ public abstract class Scenario {
     }
 
     public void onKill(UHCPlayer killer, UHCPlayer victim) {
+
+    }
+
+    public void onStop() {
 
     }
 }

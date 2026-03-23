@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.kinta;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
  * Great Kinta — Actif Kinta (Clic-Droit, GOLD_HELMET)
  * Armure en or avec +1 point d'armure. CD 10min +1min/kill.
  */
-public class GreatKintaAbility extends UseAbiliy {
+public class GreatKintaAbility extends UseAbility {
 
     private boolean active = false;
 

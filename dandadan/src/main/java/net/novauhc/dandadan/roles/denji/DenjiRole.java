@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -24,38 +24,38 @@ public class DenjiRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DENJI_ABILITY_CHAINSAWMAN_NAME", type = VariableType.ABILITY)
     private Ability chainsawManAbility = new ChainsawManAbility();
 
-    private final  SangPassive sangPassive = new SangPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "DENJI_ABILITY_SANG_NAME", type = VariableType.ABILITY)
+    private Ability sangPassive = new SangPassive();
 
 
     public DenjiRole() {
         setCamp(DanDaDanCamps.SPECIAL);
-        getAbilities().add(sangPassive);
     }
 
     @Override public String getName() { return "Denji"; }
     @Override public Material getIconMaterial() { return Material.IRON_AXE; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.DENJI_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DENJI_SANG_TEXT), L(DanDaDanDescLang.DENJI_SANG_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DENJI_OUBLIE_TEXT), L(DanDaDanDescLang.DENJI_OUBLIE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DENJI_MALE_DE_TEXT), L(DanDaDanDescLang.DENJI_MALE_DE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DENJI_CHAINE_TEXT), L(DanDaDanDescLang.DENJI_CHAINE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.DENJI_CHAINSAW_TEXT), L(DanDaDanDescLang.DENJI_CHAINSAW_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.DENJI_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.DENJI_SANG_TEXT, DanDaDanDescLang.DENJI_SANG_HOVER)
+            .hover(DanDaDanDescLang.DENJI_OUBLIE_TEXT, DanDaDanDescLang.DENJI_OUBLIE_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.DENJI_MALE_DE_TEXT, DanDaDanDescLang.DENJI_MALE_DE_HOVER)
+            .hover(DanDaDanDescLang.DENJI_CHAINE_TEXT, DanDaDanDescLang.DENJI_CHAINE_HOVER)
+            .hover(DanDaDanDescLang.DENJI_CHAINSAW_TEXT, DanDaDanDescLang.DENJI_CHAINSAW_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

@@ -23,25 +23,25 @@ public class BuffKiller extends Scenario {
     private final Random random = new Random();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_SPEED_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_SPEED_ACTIVE_DESC", type = VariableType.BOOLEAN)
-    private final boolean speedActive = true;
+    private boolean speedActive = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_STRENGTH_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_STRENGTH_ACTIVE_DESC", type = VariableType.BOOLEAN)
-    private final boolean strengthActive = true;
+    private boolean strengthActive = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_RESISTANCE_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_RESISTANCE_ACTIVE_DESC", type = VariableType.BOOLEAN)
-    private final boolean resistanceActive = true;
+    private boolean resistanceActive = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_FIRE_RESISTANCE_ACTIVE_NAME", descKey = "BUFFKILLER_VAR_FIRE_RESISTANCE_ACTIVE_DESC", type = VariableType.BOOLEAN)
-    private final boolean fireResistanceActive = true;
+    private boolean fireResistanceActive = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_MIN_DURATION_NAME", descKey = "BUFFKILLER_VAR_MIN_DURATION_DESC", type = VariableType.TIME)
-    private final int minDuration = 5;
+    private int minDuration = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_MAX_DURATION_NAME", descKey = "BUFFKILLER_VAR_MAX_DURATION_DESC", type = VariableType.TIME)
-    private final int maxDuration = 15;
+    private int maxDuration = 15;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BUFFKILLER_VAR_EFFECT_LEVEL_NAME", descKey = "BUFFKILLER_VAR_EFFECT_LEVEL_DESC", type = VariableType.INTEGER)
-    private final int effectLevel = 0;
+    private int effectLevel = 0;
 
     @Override
     public String getName() {

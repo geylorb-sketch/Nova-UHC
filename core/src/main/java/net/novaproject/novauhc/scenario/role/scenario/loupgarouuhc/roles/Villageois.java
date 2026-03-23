@@ -2,6 +2,7 @@ package net.novaproject.novauhc.scenario.role.scenario.loupgarouuhc.roles;
 
 import net.novaproject.novauhc.scenario.role.scenario.loupgarouuhc.LGCamps;
 import net.novaproject.novauhc.scenario.role.scenario.loupgarouuhc.LoupGarouRole;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,11 +22,13 @@ public class Villageois extends LoupGarouRole {
 
     @Override
     public void sendDescription(Player player) {
-        String message = "§8§m---------" + ChatColor.GREEN + "Villageois§8§m----------§r\n" +
-                "§fVotre Objectif : " + ChatColor.GREEN + "Gagnez avec le Village\n" +
-                "§fVos Pouvoir : " + ChatColor.BLUE + "Aucun\n" +
-                "§fDescription du roles : " + ChatColor.DARK_PURPLE + " Vous avez aucun pouvoir. Bonne chance et Bonne survie !\n" +
-                "§8§m--------------------------";
+        RoleDescription.of(player)
+                .raw("§8§m---------" + ChatColor.GREEN + "Villageois§8§m----------§r")
+                .raw("§fVotre Objectif : " + ChatColor.GREEN + "Gagnez avec le Village")
+                .raw("§fVos Pouvoir : " + ChatColor.BLUE + "Aucun")
+                .raw("§fDescription du roles : " + ChatColor.DARK_PURPLE + " Vous avez aucun pouvoir. Bonne chance et Bonne survie !")
+                .raw("§8§m--------------------------")
+                .send();
     }
 
 

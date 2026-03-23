@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.okarun;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -26,7 +26,7 @@ import java.util.Random;
  * Malus : 40% chance 0.5❤ dégâts, 40% chance arrêt sprint.
  * Cooldown 10min.
  */
-public class TunnelAbility extends UseAbiliy {
+public class TunnelAbility extends UseAbility {
 
     @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "TUNNEL_RADIUS_NAME",
             descKey = "TUNNEL_RADIUS_DESC", type = VariableType.INTEGER)

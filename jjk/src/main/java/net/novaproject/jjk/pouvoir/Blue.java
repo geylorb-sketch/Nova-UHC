@@ -1,7 +1,7 @@
 package net.novaproject.jjk.pouvoir;
 
 import net.novaproject.jjk.lang.JJKLang;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
-public class Blue extends UseAbiliy {
+public class Blue extends UseAbility {
     @AbilityVariable(lang = JJKLang.class,nameKey = "BLUE_VAR_TITLE", descKey = "BLUE_VAR_DESC",type = VariableType.INTEGER)
     private int level = 20;
 

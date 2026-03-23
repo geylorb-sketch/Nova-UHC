@@ -23,7 +23,6 @@ public class Tank extends LegendRole {
 
     public Tank() {
         this.resistancePassive = new TankResistancePassive();
-        getAbilities().add(resistancePassive);
     }
 
     @Override public int getId() { return 4; }

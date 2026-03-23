@@ -103,14 +103,13 @@ public class PlayerCraftEvent implements Listener {
             if (isDiamondArmor(result) && result.containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
                 int level = result.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
                 if (level > uhcPlayer.getProtectionMax()) {
-                    result.removeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL);
-                    LangManager.get().send(CommonLang.EXEDED_LIMITE, player);
+                    uhcPlayer.setProtectionMax(level);
                 }
             } else {
-                getBlockedEnchant(uhcPlayer, result.getEnchantments())
-                        .keySet()
-                        .forEach(result::removeEnchantment);
-                LangManager.get().send(CommonLang.BLOCKED_ENCHANT, player);
+                getBlockedEnchant(uhcPlayer, result.getEnchantments()).forEach((enchant, level) -> {
+                    Enchants ench = Enchants.getEnchant(enchant);
+                    if (ench != null) uhcPlayer.setEnchantLimit(ench, level);
+                });
             }
         }
     }

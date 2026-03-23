@@ -1,6 +1,6 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -10,7 +10,7 @@ import org.bukkit.entity.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class NecroSummonActive extends UseAbiliy {
+public class NecroSummonActive extends UseAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "NECRO_SKELETON_COUNT_NAME", descKey = "NECRO_SKELETON_COUNT_DESC", type = VariableType.INTEGER)
     private int skeletonCount = 2;

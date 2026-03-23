@@ -23,7 +23,6 @@ public class Medecin extends LegendRole {
 
     public Medecin() {
         this.healPassive = new MedecinHealPassive();
-        getAbilities().add(healPassive);
     }
 
     @Override public int getId() { return 14; }

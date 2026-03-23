@@ -23,8 +23,6 @@ public class Prisonnier extends LegendRole {
     public Prisonnier() {
         this.speedPassive = new PrisonnierSpeedPassive();
         this.chainActive  = new PrisonnierChainActive();
-        getAbilities().add(speedPassive);
-        getAbilities().add(chainActive);
     }
 
     @Override public int getId() { return 15; }

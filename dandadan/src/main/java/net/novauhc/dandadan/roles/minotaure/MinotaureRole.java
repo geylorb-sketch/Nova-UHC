@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -21,36 +21,36 @@ public class MinotaureRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_ABILITY_KUNGFU_NAME", type = VariableType.ABILITY)
     private Ability kungFuAbility = new KungFuAbility();
 
-    private final  OxydationPassive oxyPassive  = new OxydationPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MINOTAURE_ABILITY_OXYDATION_NAME", type = VariableType.ABILITY)
+    private Ability oxyPassive = new OxydationPassive();
 
 
     public MinotaureRole() {
-        getAbilities().add(oxyPassive);
     }
 
     @Override public String getName() { return "Minotaure"; }
     @Override public Material getIconMaterial() { return Material.IRON_INGOT; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.MINOTAURE_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_OXY_TEXT), L(DanDaDanDescLang.MINOTAURE_OXY_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_DURA_TEXT), L(DanDaDanDescLang.MINOTAURE_DURA_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_KUNGFU_TEXT), L(DanDaDanDescLang.MINOTAURE_KUNGFU_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MINOTAURE_FER_TEXT), L(DanDaDanDescLang.MINOTAURE_FER_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.MINOTAURE_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.MINOTAURE_OXY_TEXT, DanDaDanDescLang.MINOTAURE_OXY_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.MINOTAURE_DURA_TEXT, DanDaDanDescLang.MINOTAURE_DURA_HOVER)
+            .hover(DanDaDanDescLang.MINOTAURE_KUNGFU_TEXT, DanDaDanDescLang.MINOTAURE_KUNGFU_HOVER)
+            .hover(DanDaDanDescLang.MINOTAURE_FER_TEXT, DanDaDanDescLang.MINOTAURE_FER_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

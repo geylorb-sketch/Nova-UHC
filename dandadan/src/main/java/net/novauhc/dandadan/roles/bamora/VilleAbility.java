@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.bamora;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
@@ -21,7 +21,7 @@ import java.util.List;
  * TP joueurs 30 blocs dans une ville 1min. Glowing permanent.
  * Bamora obtient Slaughter Mode (golem). CD 15min.
  */
-public class VilleAbility extends UseAbiliy {
+public class VilleAbility extends UseAbility {
 
     private final List<Player> playersInVille = new ArrayList<>();
 

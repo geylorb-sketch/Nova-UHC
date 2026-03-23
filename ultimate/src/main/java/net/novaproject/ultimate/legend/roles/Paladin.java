@@ -29,8 +29,6 @@ public class Paladin extends LegendRole {
     public Paladin() {
         this.lowHealthPassive = new PaladinLowHealthPassive();
         this.blessingActive   = new PaladinBlessingActive();
-        getAbilities().add(lowHealthPassive);
-        getAbilities().add(blessingActive);
     }
 
     @Override public int getId() { return 18; }

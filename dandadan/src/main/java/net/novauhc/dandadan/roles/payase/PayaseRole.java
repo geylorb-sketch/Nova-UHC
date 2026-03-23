@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -25,37 +25,37 @@ public class PayaseRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "PAYASE_ABILITY_OMBRE_NAME", type = VariableType.ABILITY)
     private Ability ombre = new OmbreAbility();
 
-    private final PayasePassive payasePassive = new PayasePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "PAYASE_ABILITY_PAYASE_NAME", type = VariableType.ABILITY)
+    private Ability payasePassive = new PayasePassive();
 
 
     public PayaseRole() {
-        getAbilities().add(payasePassive);
     }
 
     @Override public String getName() { return "Payase"; }
     @Override public Material getIconMaterial() { return Material.PUMPKIN; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.PAYASE_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.PAYASE_JOUR_TEXT), L(DanDaDanDescLang.PAYASE_JOUR_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.PAYASE_NUIT_TEXT), L(DanDaDanDescLang.PAYASE_NUIT_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.PAYASE_DARKNESS_TEXT), L(DanDaDanDescLang.PAYASE_DARKNESS_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.PAYASE_PERMUTATION_TEXT), L(DanDaDanDescLang.PAYASE_PERMUTATION_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.PAYASE_OMBRE_TEXT), L(DanDaDanDescLang.PAYASE_OMBRE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.PAYASE_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.PAYASE_JOUR_TEXT, DanDaDanDescLang.PAYASE_JOUR_HOVER)
+            .hover(DanDaDanDescLang.PAYASE_NUIT_TEXT, DanDaDanDescLang.PAYASE_NUIT_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.PAYASE_DARKNESS_TEXT, DanDaDanDescLang.PAYASE_DARKNESS_HOVER)
+            .hover(DanDaDanDescLang.PAYASE_PERMUTATION_TEXT, DanDaDanDescLang.PAYASE_PERMUTATION_HOVER)
+            .hover(DanDaDanDescLang.PAYASE_OMBRE_TEXT, DanDaDanDescLang.PAYASE_OMBRE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PayaseRole extends DanDaDanRole {
     public void onHit(Entity entity, Entity dammager, EntityDamageByEntityEvent event) {
         super.onHit(entity, dammager, event);
         if (!(entity instanceof Player uhcPlayer)) return;
-        if (uhcPlayer.getPlayer() != null) payasePassive.onDamage(uhcPlayer.getPlayer(), event);
+        if (uhcPlayer.getPlayer() != null && payasePassive instanceof PayasePassive pp) pp.onDamage(uhcPlayer.getPlayer(), event);
 
     }
 }

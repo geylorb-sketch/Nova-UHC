@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.devilman;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class ChaleurAbility extends UseAbiliy {
+public class ChaleurAbility extends UseAbility {
     @Override public String getName() { return "Chaleur"; }
     @Override public Material getMaterial() { return Material.MAGMA_CREAM; }
     @Override public boolean onEnable(Player p) {

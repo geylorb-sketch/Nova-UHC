@@ -60,28 +60,30 @@ public abstract class Role implements Cloneable {
         if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onDrop(uhcPlayer,event));
     }
     public void onSec(Player player){
-        if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onSec(player));
+        if (getOwner() == null) return;
+        Player owner = getOwner().getPlayer();
+        if (owner == null) return;
+        if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onSec(owner));
     }
 
     public void onDeath(UHCPlayer uhcPlayer, UHCPlayer killer, PlayerDeathEvent event) {
         if (!getAbilities().isEmpty()) getAbilities().forEach(a -> a.onDeath(uhcPlayer,killer,event));
     }
+
     public void onBow(Entity shooter, Player target, EntityShootBowEvent event){
         if(!getAbilities().isEmpty()) getAbilities().forEach(a -> a.onBow(shooter,target,event));
     }
 
     public void onConsume(Player player, ItemStack item, PlayerItemConsumeEvent event) {
         if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onConsume(event));
-
     }
 
-    public void onIteract(Player player1, PlayerInteractEvent event) {
+    public void onInteract(Player player1, PlayerInteractEvent event) {
         if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onClick(event, event.getItem()));
     }
 
     public void onMove(UHCPlayer player1, PlayerMoveEvent event) {
         if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> ability.onMove(event));
-
     }
 
     public void onFfCMD(UHCPlayer player1, String subCommand, String[] args) {
@@ -96,7 +98,6 @@ public abstract class Role implements Cloneable {
         if (!getAbilities().isEmpty()) getAbilities().forEach(ability -> {
             if (entity instanceof Player) ability.onAttack(UHCPlayerManager.get().getPlayer((Player) entity), event);
         });
-
     }
 
     public void onKill(UHCPlayer killer, UHCPlayer victim) {

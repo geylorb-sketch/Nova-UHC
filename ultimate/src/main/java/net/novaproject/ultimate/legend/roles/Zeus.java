@@ -24,8 +24,6 @@ public class Zeus extends LegendRole {
     public Zeus() {
         this.lightningPassive = new ZeusLightningPassive();
         this.effectsActive    = new ZeusEffectsActive();
-        getAbilities().add(lightningPassive);
-        getAbilities().add(effectsActive);
     }
 
     @Override public int getId() { return 6; }

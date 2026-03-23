@@ -8,6 +8,7 @@ import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.ShortCooldownManager;
+import net.novaproject.novauhc.utils.VariableSerializer;
 import net.novaproject.novauhc.utils.VariableType;
 import org.bson.Document;
 import org.bukkit.Material;
@@ -21,8 +22,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.lang.reflect.Field;
 
 @Getter
 @Setter
@@ -154,89 +153,11 @@ public abstract class Ability implements Cloneable {
     }
 
     public Document abilityToDoc() {
-        Document doc = new Document();
-        Class<?> clazz = getClass();
-
-        while (clazz != null && clazz != Object.class) {
-            for (Field field : clazz.getDeclaredFields()) {
-
-                if (!field.isAnnotationPresent(AbilityVariable.class)) continue;
-
-                field.setAccessible(true);
-                AbilityVariable annotation = field.getAnnotation(AbilityVariable.class);
-
-                try {
-                    Object value = field.get(this);
-
-                    if (value == null) continue;
-
-                    switch (annotation.type()) {
-                        case TIME -> {
-                            if (value instanceof Integer i)
-                                doc.append(field.getName(), i);
-                        }
-                        case PERCENTAGE -> {
-                            if (value instanceof Double d)
-                                doc.append(field.getName(), d);
-                            else if (value instanceof Integer i)
-                                doc.append(field.getName(), i);
-                        }
-                        default -> doc.append(field.getName(), value);
-                    }
-
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return doc;
+        return VariableSerializer.toDoc(this, AbilityVariable.class, AbilityVariable::type, true);
     }
 
     public void docToAbility(Document doc) {
-        if (doc == null) return;
-
-        Class<?> clazz = getClass();
-        while (clazz != null && clazz != Object.class) {
-            for (Field field : clazz.getDeclaredFields()) {
-
-                if (!field.isAnnotationPresent(AbilityVariable.class)) continue;
-
-                field.setAccessible(true);
-
-                try {
-                    if (doc.containsKey(field.getName())) {
-                        Object value = doc.get(field.getName());
-
-                        AbilityVariable annotation = field.getAnnotation(AbilityVariable.class);
-
-                        switch (annotation.type()) {
-                            case TIME -> {
-                                if (value instanceof Number) {
-                                    field.set(this, ((Number) value).intValue());
-                                }
-                            }
-                            case PERCENTAGE -> {
-                                if (value instanceof Number) {
-                                    if (field.getType() == double.class || field.getType() == Double.class) {
-                                        field.set(this, ((Number) value).doubleValue());
-                                    } else if (field.getType() == int.class || field.getType() == Integer.class) {
-                                        field.set(this, ((Number) value).intValue());
-                                    }
-                                }
-                            }
-                            default -> field.set(this, value);
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            clazz = clazz.getSuperclass();
-        }
+        VariableSerializer.fromDoc(this, doc, AbilityVariable.class, AbilityVariable::type, true);
     }
 
 

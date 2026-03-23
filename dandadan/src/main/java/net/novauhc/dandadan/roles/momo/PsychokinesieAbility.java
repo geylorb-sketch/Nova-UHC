@@ -39,6 +39,7 @@ public class PsychokinesieAbility extends Ability {
     public void onClick(PlayerInteractEvent event, ItemStack item) {
         if (item == null || item.getType() != Material.DIAMOND) return;
         Player player = event.getPlayer();
+        if (getOwner() == null || !player.equals(getOwner().getPlayer())) return;
 
         if (event.getAction().name().contains("RIGHT")) {
             activateRightHand(player);

@@ -23,7 +23,10 @@ public class BestPvE extends Scenario {
     private final List<Player> listPve = new ArrayList<>();
     private final List<Player> listOutPve = new ArrayList<>();
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BESTPVE_VAR_TIMER_NAME", descKey = "BESTPVE_VAR_TIMER_DESC", type = VariableType.TIME)
-    private final int timer = 600; 
+    private int timer = 600;
+
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BESTPVE_VAR_HEART_GAIN_NAME", descKey = "BESTPVE_VAR_HEART_GAIN_DESC", type = VariableType.INTEGER)
+    private int heartGain = 2;
 
     @Override
     public String getName() {
@@ -53,7 +56,7 @@ public class BestPvE extends Scenario {
             @Override
             public void run() {
                 if (listPve.contains(player)) {
-                    player.setMaxHealth(player.getMaxHealth() + getConfig().getInt("heart_gain"));
+                    player.setMaxHealth(player.getMaxHealth() + heartGain);
                     LangManager.get().send(BestPvELang.GAIN_MESSAGE, player);
                 } else if (listOutPve.contains(player)) {
                     listOutPve.remove(player);

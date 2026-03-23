@@ -17,10 +17,10 @@ public class SafeMiner extends Scenario {
 
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SAFEMINER_VAR_MAX_HEIGHT_NAME", descKey = "SAFEMINER_VAR_MAX_HEIGHT_DESC", type = VariableType.INTEGER)
-    private final int max_height = 32;
+    private int max_height = 32;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SAFEMINER_VAR_DISABLE_AT_PVP_NAME", descKey = "SAFEMINER_VAR_DISABLE_AT_PVP_DESC", type = VariableType.BOOLEAN)
-    private final boolean disable_at_pvp = true;
+    private boolean disable_at_pvp = true;
 
     private boolean actived = true;
 
@@ -41,6 +41,7 @@ public class SafeMiner extends Scenario {
 
     @Override
     public void onPlayerTakeDamage(Entity entity, EntityDamageEvent event) {
+        if (!actived) return;
         if (!(entity instanceof Player player)) return;
 
         if (player.getLocation().getY() <= max_height) {

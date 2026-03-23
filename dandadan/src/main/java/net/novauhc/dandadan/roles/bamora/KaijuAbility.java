@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.bamora;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Location;
@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * Bloc d'or (coeur) sous les pieds. Tant qu'intact : 15% de force.
  * CD 10min +1min/kill.
  */
-public class KaijuAbility extends UseAbiliy {
+public class KaijuAbility extends UseAbility {
 
     private Location heartBlock = null;
     private boolean active = false;

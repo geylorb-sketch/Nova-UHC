@@ -1,6 +1,6 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import net.novaproject.novauhc.utils.VariableType;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ZeusEffectsActive extends UseAbiliy {
+public class ZeusEffectsActive extends UseAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "ZEUS_EFFECT_DURATION_NAME", descKey = "ZEUS_EFFECT_DURATION_DESC", type = VariableType.TIME)
     private int effectDuration = 120;

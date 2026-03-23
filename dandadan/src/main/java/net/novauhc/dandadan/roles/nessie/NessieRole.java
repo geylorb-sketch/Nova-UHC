@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -21,37 +21,37 @@ public class NessieRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_ABILITY_JETEAU_NAME", type = VariableType.ABILITY)
     private Ability jetEauAbility = new JetEauAbility();
 
-    private final PoissonPassive poissonPassive  = new PoissonPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "NESSIE_ABILITY_POISSON_NAME", type = VariableType.ABILITY)
+    private Ability poissonPassive = new PoissonPassive();
 
 
     public NessieRole() {
-        getAbilities().add(poissonPassive);
     }
 
     @Override public String getName() { return "Nessie"; }
     @Override public Material getIconMaterial() { return Material.WATER_BUCKET; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.NESSIE_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_POISSON_TEXT), L(DanDaDanDescLang.NESSIE_POISSON_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_COU_L_TEXT), L(DanDaDanDescLang.NESSIE_COU_L_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_DELUGE_TEXT), L(DanDaDanDescLang.NESSIE_DELUGE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_JET_E_TEXT), L(DanDaDanDescLang.NESSIE_JET_E_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.NESSIE_COU_TEXT), L(DanDaDanDescLang.NESSIE_COU_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.NESSIE_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.NESSIE_POISSON_TEXT, DanDaDanDescLang.NESSIE_POISSON_HOVER)
+            .hover(DanDaDanDescLang.NESSIE_COU_L_TEXT, DanDaDanDescLang.NESSIE_COU_L_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.NESSIE_DELUGE_TEXT, DanDaDanDescLang.NESSIE_DELUGE_HOVER)
+            .hover(DanDaDanDescLang.NESSIE_JET_E_TEXT, DanDaDanDescLang.NESSIE_JET_E_HOVER)
+            .hover(DanDaDanDescLang.NESSIE_COU_TEXT, DanDaDanDescLang.NESSIE_COU_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

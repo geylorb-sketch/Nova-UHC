@@ -81,6 +81,7 @@ public class UHCManager {
         Bukkit.getWhitelistedPlayers().forEach(wl -> {
             wl.setWhitelisted(false);
         });
+
     }
 
     public String getTimerFormatted() {
@@ -325,6 +326,8 @@ public class UHCManager {
         }
 
         ApiManager.get().gameEnd(mode, scenario, winCondition, winners, playerStats, duration, null);
+
+        ScenarioManager.get().getActiveScenarios().forEach(net.novaproject.novauhc.scenario.Scenario::onStop);
 
         for (UHCPlayer loser : UHCPlayerManager.get().getOnlineUHCPlayers()) {
             loser.getPlayer().teleport(Common.get().getLobbySpawn());

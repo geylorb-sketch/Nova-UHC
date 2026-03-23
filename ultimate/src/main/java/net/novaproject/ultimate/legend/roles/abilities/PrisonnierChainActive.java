@@ -1,6 +1,6 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PrisonnierChainActive extends UseAbiliy {
+public class PrisonnierChainActive extends UseAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "PRISONNIER_CHAIN_RADIUS_NAME", descKey = "PRISONNIER_CHAIN_RADIUS_DESC", type = VariableType.DOUBLE)
     private double chainRadius = 8.0;

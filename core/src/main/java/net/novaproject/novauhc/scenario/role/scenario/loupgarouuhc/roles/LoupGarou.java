@@ -2,6 +2,7 @@ package net.novaproject.novauhc.scenario.role.scenario.loupgarouuhc.roles;
 
 import net.novaproject.novauhc.scenario.role.scenario.loupgarouuhc.LGCamps;
 import net.novaproject.novauhc.scenario.role.scenario.loupgarouuhc.LoupGarouRole;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import net.novaproject.novauhc.utils.ItemCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,11 +25,13 @@ public class LoupGarou extends LoupGarouRole {
 
     @Override
     public void sendDescription(Player player) {
-        String message = "§8§m---------" + ChatColor.RED + "Loup-Garouf§8§m----------§r\n" +
-                "§fVotre Objectif : " + ChatColor.RED + "Gagnez avec les Loup-Garou\n" +
-                "§fVos Pouvoir : " + ChatColor.BLUE + "Vous possédez Force 1 de nuit.\n" +
-                "§fDescription du roles : " + ChatColor.DARK_PURPLE + "Vous possédez la liste de vos coéquipier.\n" +
-                "§8§m--------------------------";
+        RoleDescription.of(player)
+                .raw("§8§m---------" + ChatColor.RED + "Loup-Garouf§8§m----------§r")
+                .raw("§fVotre Objectif : " + ChatColor.RED + "Gagnez avec les Loup-Garou")
+                .raw("§fVos Pouvoir : " + ChatColor.BLUE + "Vous possédez Force 1 de nuit.")
+                .raw("§fDescription du roles : " + ChatColor.DARK_PURPLE + "Vous possédez la liste de vos coéquipier.")
+                .raw("§8§m--------------------------")
+                .send();
     }
 
 

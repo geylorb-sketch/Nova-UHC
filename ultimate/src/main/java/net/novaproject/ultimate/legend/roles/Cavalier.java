@@ -22,7 +22,6 @@ public class Cavalier extends LegendRole {
 
     public Cavalier() {
         this.horseActive = new CavalierHorseActive();
-        getAbilities().add(horseActive);
     }
 
     @Override public int getId() { return 11; }

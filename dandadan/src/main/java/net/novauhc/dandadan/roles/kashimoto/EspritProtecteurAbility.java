@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.kashimoto;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
  * PNJ tete a cote. 20% force. Re-clic: empeche de courir toutes les 5s 1min.
  * CD 3min.
  */
-public class EspritProtecteurAbility extends UseAbiliy {
+public class EspritProtecteurAbility extends UseAbility {
 
     private boolean spiritActive = false;
 

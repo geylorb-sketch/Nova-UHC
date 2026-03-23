@@ -22,7 +22,6 @@ public class Soldat extends LegendRole {
 
     public Soldat() {
         this.equipmentPassive = new SoldatEquipmentPassive();
-        getAbilities().add(equipmentPassive);
     }
 
     @Override public int getId() { return 9; }

@@ -21,9 +21,9 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 public class LongShoot extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LONGSHOOT_VAR_MIN_DISTANCE_NAME", descKey = "LONGSHOOT_VAR_MIN_DISTANCE_DESC", type = VariableType.INTEGER)
-    private final int minDistance = 75;
+    private int minDistance = 75;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "LONGSHOOT_VAR_DAMAGE_MULTIPLIER_NAME", descKey = "LONGSHOOT_VAR_DAMAGE_MULTIPLIER_DESC", type = VariableType.DOUBLE)
-    private final double damageMultiplier = 1.5;
+    private double damageMultiplier = 1.5;
 
     @Override public String getName() { return "LongShot"; }
     @Override

@@ -26,11 +26,11 @@ public class Vampire extends Scenario {
 
     private BukkitRunnable sunDamageTask;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "VAMPIRE_VAR_HEAL_AMOUNT_NAME", descKey = "VAMPIRE_VAR_HEAL_AMOUNT_DESC", type = VariableType.DOUBLE)
-    private final double healAmount = 2.0; 
+    private double healAmount = 2.0;
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "VAMPIRE_VAR_INTERVAL_NAME", descKey = "VAMPIRE_VAR_INTERVAL_DESC", type = VariableType.INTEGER)
-    private final int interval = 40;
-    @ScenarioVariable(nameKey = "VAMPIRE_VAR_SUN_DAMAGE_NAME",descKey = "VAMPIRE_VAR_SUN_DAMAGE_DESC",type = VariableType.DOUBLE)
-    private final double sunDamage = 2.0;
+    private int interval = 40;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "VAMPIRE_VAR_SUN_DAMAGE_NAME", descKey = "VAMPIRE_VAR_SUN_DAMAGE_DESC", type = VariableType.DOUBLE)
+    private double sunDamage = 2.0;
     @Override
     public String getName() {
         return "Vampire";

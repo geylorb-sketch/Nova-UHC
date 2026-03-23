@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -25,37 +25,37 @@ public class MantisRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MANTIS_ABILITY_CRABE_NAME", type = VariableType.ABILITY)
     private Ability crabeAbility = new CrabeAbility();
 
-    private final BusinessPassive businessPassive  = new BusinessPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MANTIS_ABILITY_BUSINESS_NAME", type = VariableType.ABILITY)
+    private Ability businessPassive = new BusinessPassive();
 
 
     public MantisRole() {
-        getAbilities().add(businessPassive);
     }
 
     @Override public String getName() { return "M. Mantis"; }
     @Override public Material getIconMaterial() { return Material.IRON_AXE; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.MANTIS_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MANTIS_BUSINESS_TEXT), L(DanDaDanDescLang.MANTIS_BUSINESS_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MANTIS_BOXE_TEXT), L(DanDaDanDescLang.MANTIS_BOXE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MANTIS_UPPERCUT_TEXT), L(DanDaDanDescLang.MANTIS_UPPERCUT_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MANTIS_JET_TEXT), L(DanDaDanDescLang.MANTIS_JET_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.MANTIS_CRABE_TEXT), L(DanDaDanDescLang.MANTIS_CRABE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.MANTIS_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.MANTIS_BUSINESS_TEXT, DanDaDanDescLang.MANTIS_BUSINESS_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.MANTIS_BOXE_TEXT, DanDaDanDescLang.MANTIS_BOXE_HOVER)
+            .hover(DanDaDanDescLang.MANTIS_UPPERCUT_TEXT, DanDaDanDescLang.MANTIS_UPPERCUT_HOVER)
+            .hover(DanDaDanDescLang.MANTIS_JET_TEXT, DanDaDanDescLang.MANTIS_JET_HOVER)
+            .hover(DanDaDanDescLang.MANTIS_CRABE_TEXT, DanDaDanDescLang.MANTIS_CRABE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

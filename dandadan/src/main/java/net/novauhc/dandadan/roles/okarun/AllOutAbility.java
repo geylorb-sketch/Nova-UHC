@@ -43,6 +43,7 @@ public class AllOutAbility extends Ability {
     public void onClick(PlayerInteractEvent event, ItemStack item) {
         if (item == null || item.getType() != Material.BLAZE_POWDER) return;
         if (!event.getAction().name().contains("LEFT")) return;
+        if (getOwner() == null || !event.getPlayer().equals(getOwner().getPlayer())) return;
         tryUse(event.getPlayer());
     }
 

@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -28,25 +29,25 @@ public class BloodLust extends Scenario {
     private final Map<UUID, BukkitRunnable> activeEffects = new HashMap<>();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_SPEED_DURATION_NAME", descKey = "BLOODLUST_VAR_SPEED_DURATION_DESC", type = VariableType.TIME)
-    private final int speedDuration = 30;
+    private int speedDuration = 30;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_STRENGTH_DURATION_NAME", descKey = "BLOODLUST_VAR_STRENGTH_DURATION_DESC", type = VariableType.TIME)
-    private final int strengthDuration = 30;
+    private int strengthDuration = 30;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_SPEED_LEVEL_NAME", descKey = "BLOODLUST_VAR_SPEED_LEVEL_DESC", type = VariableType.INTEGER)
-    private final int speedLevel = 1;
+    private int speedLevel = 1;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_STRENGTH_LEVEL_NAME", descKey = "BLOODLUST_VAR_STRENGTH_LEVEL_DESC", type = VariableType.INTEGER)
-    private final int strengthLevel = 0;
+    private int strengthLevel = 0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_COUNTDOWN10SEC_NAME", descKey = "BLOODLUST_VAR_COUNTDOWN10SEC_DESC", type = VariableType.BOOLEAN)
-    private final boolean countdown10Sec = true;
+    private boolean countdown10Sec = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_COUNTDOWN5SEC_NAME", descKey = "BLOODLUST_VAR_COUNTDOWN5SEC_DESC", type = VariableType.BOOLEAN)
-    private final boolean countdown5Sec = true;
+    private boolean countdown5Sec = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BLOODLUST_VAR_COUNTDOWN_END_NAME", descKey = "BLOODLUST_VAR_COUNTDOWN_END_DESC", type = VariableType.BOOLEAN)
-    private final boolean countdownEnd = true;
+    private boolean countdownEnd = true;
 
     @Override
     public String getName() {
@@ -135,7 +136,7 @@ public class BloodLust extends Scenario {
     public void toggleActive() {
         super.toggleActive();
         if (!isActive()) {
-            for (UUID playerUuid : activeEffects.keySet()) {
+            for (UUID playerUuid : new ArrayList<>(activeEffects.keySet())) {
                 cancelBloodLustEffect(playerUuid);
             }
             activeEffects.clear();

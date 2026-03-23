@@ -4,6 +4,8 @@ import net.novaproject.novauhc.Main;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.lang.scenario.NineSlotLang;
 import net.novaproject.novauhc.scenario.Scenario;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -21,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
-public class NineSlot extends Scenario {
+public class NineSlot extends Scenario implements Listener {
 
     private final Map<UUID, BukkitRunnable> inventoryTasks = new HashMap<>();
 
@@ -33,6 +35,12 @@ public class NineSlot extends Scenario {
         return LangManager.get().get(ScenarioDescLang.NINE_SLOT, player);
     }
     @Override public ItemCreator getItem() { return new ItemCreator(Material.CHEST); }
+
+    @Override
+    public void setup() {
+        super.setup();
+        org.bukkit.Bukkit.getPluginManager().registerEvents(this, net.novaproject.novauhc.Main.get());
+    }
 
     @Override
     public void onGameStart() { restrictAllPlayersInventory(); }
@@ -106,6 +114,7 @@ public class NineSlot extends Scenario {
         if (found) player.getInventory().setContents(contents);
     }
 
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!isActive() || !(event.getWhoClicked() instanceof Player player)) return;
         if (event.getSlotType() == InventoryType.SlotType.CONTAINER && event.getSlot() >= 9 && event.getSlot() <= 35) {

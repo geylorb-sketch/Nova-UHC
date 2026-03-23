@@ -17,7 +17,7 @@ public class HasteyAlpha extends Scenario {
 
     @Override
     public String getName() {
-        return "HasteyBabie";
+        return "HasteyAlpha";
     }
 
     @Override

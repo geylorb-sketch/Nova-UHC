@@ -20,7 +20,7 @@ import net.novaproject.novauhc.lang.LangManager;
 public class BatRoulette extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "BATROULETTE_VAR_CHANCE_NAME", descKey = "BATROULETTE_VAR_CHANCE_DESC", type = VariableType.PERCENTAGE)
-    private final int chance = 10;
+    private int chance = 10;
 
     @Override
     public String getName() {

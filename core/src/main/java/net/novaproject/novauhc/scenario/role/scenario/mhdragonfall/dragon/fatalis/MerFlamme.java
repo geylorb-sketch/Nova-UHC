@@ -1,7 +1,7 @@
 package net.novaproject.novauhc.scenario.role.scenario.mhdragonfall.dragon.fatalis;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.UUID;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 
-public class MerFlamme extends UseAbiliy {
+public class MerFlamme extends UseAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "MERFLAMME_VAR_DAMAGE_NAME", descKey = "MERFLAMME_VAR_DAMAGE_DESC", type = VariableType.DOUBLE)
     private final int DAMAGE = 1000;

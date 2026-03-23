@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.nessie;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class DelugeAbility extends UseAbiliy {
+public class DelugeAbility extends UseAbility {
     @Override public String getName() { return "Deluge"; }
     @Override public Material getMaterial() { return Material.WATER_BUCKET; }
     @Override public boolean onEnable(Player p) {

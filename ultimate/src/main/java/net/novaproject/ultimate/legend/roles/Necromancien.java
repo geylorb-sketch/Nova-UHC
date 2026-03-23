@@ -22,7 +22,6 @@ public class Necromancien extends LegendRole {
 
     public Necromancien() {
         this.summonActive = new NecroSummonActive();
-        getAbilities().add(summonActive);
     }
 
     @Override public int getId() { return 7; }

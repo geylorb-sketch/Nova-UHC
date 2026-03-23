@@ -240,7 +240,7 @@ public class PlayerInteractEvent implements Listener {
     public void onPlayerMountHorse(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         ScenarioManager.get().getActiveScenarios().forEach(scenario -> {
-            scenario.onPlayerInteractonEntity(player, event);
+            scenario.onPlayerInteractEntity(player, event);
         });
     }
 

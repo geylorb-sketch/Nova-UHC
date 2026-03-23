@@ -30,27 +30,26 @@ public class Democracy extends Scenario {
     private BukkitRunnable voteTask;
     private boolean voteActive = false;
 
-    
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEMOCRACY_VAR_VOTE_INTERVAL_NAME", descKey = "DEMOCRACY_VAR_VOTE_INTERVAL_DESC", type = VariableType.TIME)
-    private final int voteInterval = 1800; 
+    private int voteInterval = 1800;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEMOCRACY_VAR_VOTE_DURATION_NAME", descKey = "DEMOCRACY_VAR_VOTE_DURATION_DESC", type = VariableType.TIME)
-    private final int voteDuration = 120; 
+    private int voteDuration = 120;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEMOCRACY_VAR_WARNING5MIN_NAME", descKey = "DEMOCRACY_VAR_WARNING5MIN_DESC", type = VariableType.BOOLEAN)
-    private final boolean warning5Min = true;
+    private boolean warning5Min = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEMOCRACY_VAR_WARNING1MIN_NAME", descKey = "DEMOCRACY_VAR_WARNING1MIN_DESC", type = VariableType.BOOLEAN)
-    private final boolean warning1Min = true;
+    private boolean warning1Min = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEMOCRACY_VAR_WARNING1MIN_VOTE_NAME", descKey = "DEMOCRACY_VAR_WARNING1MIN_VOTE_DESC", type = VariableType.BOOLEAN)
-    private final boolean warning1MinVote = true;
+    private boolean warning1MinVote = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEMOCRACY_VAR_WARNING10SEC_VOTE_NAME", descKey = "DEMOCRACY_VAR_WARNING10SEC_VOTE_DESC", type = VariableType.BOOLEAN)
-    private final boolean warning10SecVote = true;
+    private boolean warning10SecVote = true;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "DEMOCRACY_VAR_MIN_PLAYERS_NAME", descKey = "DEMOCRACY_VAR_MIN_PLAYERS_DESC", type = VariableType.INTEGER)
-    private final int minPlayers = 3;
+    private int minPlayers = 3;
 
     @Override
     public String getName() {
@@ -272,17 +271,17 @@ public class Democracy extends Scenario {
 
     public String getVoteStatus() {
         if (!voteActive) {
-            return "§9[Democracy] §fAucun vote en cours.";
+            return LangManager.get().get(DemocracyLang.STATUS_NO_VOTE);
         }
 
         StringBuilder status = new StringBuilder();
-        status.append("§9[Democracy] §fVotes actuels :\n");
+        status.append(LangManager.get().get(DemocracyLang.STATUS_HEADER)).append("\n");
 
         for (Map.Entry<UUID, Integer> entry : voteCount.entrySet()) {
             Player player = Bukkit.getPlayer(entry.getKey());
             if (player != null) {
-                status.append("§9[Democracy] §f").append(player.getName())
-                        .append(": ").append(entry.getValue()).append(" vote(s)\n");
+                status.append(LangManager.get().get(DemocracyLang.STATUS_ENTRY,
+                        Map.of("%player%", player.getName(), "%votes%", String.valueOf(entry.getValue())))).append("\n");
             }
         }
 

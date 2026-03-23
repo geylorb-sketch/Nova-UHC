@@ -35,11 +35,6 @@ public class Corne extends LegendRole {
         this.melodieHeal     = new CorneMelodieHeal();
         this.melodieMetal    = new CorneMelodieMetal();
         this.melodieAir      = new CorneMelodieAir();
-        getAbilities().add(weaknessPassive);
-        getAbilities().add(melodieFeu);
-        getAbilities().add(melodieHeal);
-        getAbilities().add(melodieMetal);
-        getAbilities().add(melodieAir);
     }
 
     @Override public int getId() { return 16; }

@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.enenra;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 
-public class NinjaAbility extends UseAbiliy {
+public class NinjaAbility extends UseAbility {
     @Override public String getName() { return "Ninja"; }
     @Override public Material getMaterial() { return Material.ARMOR_STAND; }
 

@@ -1,6 +1,6 @@
 package net.novaproject.ultimate.legend.roles.abilities;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.lang.ScenarioVarLang;
 import net.novaproject.novauhc.utils.VariableType;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class CavalierHorseActive extends UseAbiliy {
+public class CavalierHorseActive extends UseAbility {
 
     @AbilityVariable(lang = ScenarioVarLang.class, nameKey = "CAVALIER_HORSE_HP_NAME", descKey = "CAVALIER_HORSE_HP_DESC", type = VariableType.INTEGER)
     private int horseHealth = 40;

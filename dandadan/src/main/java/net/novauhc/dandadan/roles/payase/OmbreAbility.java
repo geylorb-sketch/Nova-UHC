@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.payase;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ import org.bukkit.util.Vector;
 import java.util.HashSet;
 import java.util.Set;
 
-public class OmbreAbility extends UseAbiliy {
+public class OmbreAbility extends UseAbility {
     @Override public String getName() { return "Ombre"; }
     @Override public Material getMaterial() { return Material.OBSIDIAN; }
 

@@ -26,25 +26,25 @@ public class Genie extends Scenario {
     private final Map<UUID, Integer> playerKills = new HashMap<>();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_MAX_WISHES_NAME", descKey = "GENIE_VAR_MAX_WISHES_DESC", type = VariableType.INTEGER)
-    private final int maxWishes = 3;
+    private int maxWishes = 3;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_SPEED_DURATION_NAME", descKey = "GENIE_VAR_SPEED_DURATION_DESC", type = VariableType.INTEGER)
-    private final int speedDuration = 20 * 60 * 5;
+    private int speedDuration = 20 * 60 * 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_STRENGTH_DURATION_NAME", descKey = "GENIE_VAR_STRENGTH_DURATION_DESC", type = VariableType.INTEGER)
-    private final int strengthDuration = 20 * 60 * 5;
+    private int strengthDuration = 20 * 60 * 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_BASIC_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_BASIC_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
-    private final int basicKillRequirement = 0;
+    private int basicKillRequirement = 0;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_MEDIUM_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_MEDIUM_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
-    private final int mediumKillRequirement = 1;
+    private int mediumKillRequirement = 1;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_ADVANCED_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_ADVANCED_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
-    private final int advancedKillRequirement = 2;
+    private int advancedKillRequirement = 2;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GENIE_VAR_LEGENDARY_KILL_REQUIREMENT_NAME", descKey = "GENIE_VAR_LEGENDARY_KILL_REQUIREMENT_DESC", type = VariableType.INTEGER)
-    private final int legendaryKillRequirement = 3;
+    private int legendaryKillRequirement = 3;
 
     @Override
     public String getName() {
@@ -178,6 +178,55 @@ public class Genie extends Scenario {
             case "arrows":
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 32));
                 LangManager.get().send(GenieLang.RECEIVED_ARROWS, player);
+                return true;
+            case "diamond":
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND, 5));
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
+                return true;
+            case "enchanted_book":
+                player.getInventory().addItem(new ItemStack(Material.ENCHANTED_BOOK, 1));
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
+                return true;
+            case "golden_apple":
+                player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 3));
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
+                return true;
+            case "teleport": {
+                java.util.List<net.novaproject.novauhc.uhcplayer.UHCPlayer> players =
+                        net.novaproject.novauhc.uhcplayer.UHCPlayerManager.get().getPlayingOnlineUHCPlayers();
+                if (players.size() > 1) {
+                    net.novaproject.novauhc.uhcplayer.UHCPlayer target = players.get(new java.util.Random().nextInt(players.size()));
+                    while (target.getPlayer().equals(player) && players.size() > 1) {
+                        target = players.get(new java.util.Random().nextInt(players.size()));
+                    }
+                    player.teleport(target.getPlayer().getLocation());
+                }
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
+                return true;
+            }
+            case "full_diamond": {
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND_HELMET));
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND_CHESTPLATE));
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND_LEGGINGS));
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND_BOOTS));
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
+                return true;
+            }
+            case "enchanted_sword": {
+                org.bukkit.inventory.ItemStack sword = new org.bukkit.inventory.ItemStack(Material.DIAMOND_SWORD);
+                sword.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.DAMAGE_ALL, 5);
+                player.getInventory().addItem(sword);
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
+                return true;
+            }
+            case "notch_apple":
+                player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1));
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
+                return true;
+            case "flight":
+                player.setAllowFlight(true);
+                player.setFlying(true);
+                LangManager.get().send(GenieLang.WISH_GRANTED, player);
                 return true;
             default:
                 return false;

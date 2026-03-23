@@ -68,7 +68,7 @@ public class AutoRevive extends Scenario {
         int timer = UHCManager.get().getTimer();
         int pvptimer = UHCManager.get().getTimerpvp();
 
-        if (timer == pvptimer) {
+        if (timer == pvptimer && actived) {
             actived = false;
             Common.get().getArena().setGameRuleValue("keepInventory", "false");
 

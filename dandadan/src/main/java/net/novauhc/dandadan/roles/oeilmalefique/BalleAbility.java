@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.oeilmalefique;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Snowball;
 
 import java.util.Map;
 
-public class BalleAbility extends UseAbiliy {
+public class BalleAbility extends UseAbility {
     @Override public String getName() { return "Balle de Rancune"; }
     @Override public Material getMaterial() { return Material.EYE_OF_ENDER; }
     @Override public boolean onEnable(Player p) {

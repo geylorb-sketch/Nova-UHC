@@ -9,7 +9,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -64,14 +64,14 @@ public class OkarunRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "OKARUN_ABILITY_TUNNEL_NAME", type = VariableType.ABILITY)
     private Ability tunnel = new TunnelAbility();
 
-    // ── Passifs sans @RoleVariable → ajoutés dans le constructeur ──
+    // ── Passifs ──
 
-    private final MemePassive memePassive = new MemePassive();
-    private final ToubillionPassive toubillionPassive = new ToubillionPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "OKARUN_ABILITY_MEME_NAME", type = VariableType.ABILITY)
+    private Ability memePassive = new MemePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "OKARUN_ABILITY_TOUBILLION_NAME", type = VariableType.ABILITY)
+    private Ability toubillionPassive = new ToubillionPassive();
 
     public OkarunRole() {
-        getAbilities().add(memePassive);
-        getAbilities().add(toubillionPassive);
     }
 
     // ── Identité ──
@@ -81,27 +81,29 @@ public class OkarunRole extends DanDaDanRole {
 
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.ROLE_PREFIX) + LangManager.get().get(DanDaDanDescLang.OKARUN_NAME));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.OKARUN_MEME_TEXT), LangManager.get().get(DanDaDanDescLang.OKARUN_MEME_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.OKARUN_TOUBILLION_TEXT), LangManager.get().get(DanDaDanDescLang.OKARUN_TOUBILLION_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.OKARUN_MALEDICTION_TEXT), LangManager.get().get(DanDaDanDescLang.OKARUN_MALEDICTION_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.OKARUN_ALLOUT_TEXT), LangManager.get().get(DanDaDanDescLang.OKARUN_ALLOUT_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.OKARUN_RYTHME_TEXT), LangManager.get().get(DanDaDanDescLang.OKARUN_RYTHME_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.OKARUN_COURSE_TEXT), LangManager.get().get(DanDaDanDescLang.OKARUN_COURSE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ESPACE));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.OKARUN_TUNNEL_TEXT), LangManager.get().get(DanDaDanDescLang.OKARUN_TUNNEL_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.OKARUN_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.OKARUN_MEME_TEXT, DanDaDanDescLang.OKARUN_MEME_HOVER)
+            .hover(DanDaDanDescLang.OKARUN_TOUBILLION_TEXT, DanDaDanDescLang.OKARUN_TOUBILLION_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.OKARUN_MALEDICTION_TEXT, DanDaDanDescLang.OKARUN_MALEDICTION_HOVER)
+            .hover(DanDaDanDescLang.OKARUN_ALLOUT_TEXT, DanDaDanDescLang.OKARUN_ALLOUT_HOVER)
+            .hover(DanDaDanDescLang.OKARUN_RYTHME_TEXT, DanDaDanDescLang.OKARUN_RYTHME_HOVER)
+            .hover(DanDaDanDescLang.OKARUN_COURSE_TEXT, DanDaDanDescLang.OKARUN_COURSE_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ESPACE)
+            .hover(DanDaDanDescLang.OKARUN_TUNNEL_TEXT, DanDaDanDescLang.OKARUN_TUNNEL_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     // ── Lifecycle ──
@@ -150,7 +152,7 @@ public class OkarunRole extends DanDaDanRole {
             }
         }
         if (player.getHealth() - event.getFinalDamage() <= 6.0) {
-            toubillionPassive.triggerToubillion(player);
+            if (toubillionPassive instanceof ToubillionPassive tp) tp.triggerToubillion(player);
         }
     }
 

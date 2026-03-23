@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,37 +23,37 @@ public class UmbrellaBoyRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "UMBRELLA_ABILITY_AIRSTRIKE_NAME", type = VariableType.ABILITY)
     private Ability airStrikeAbility = new AirStrikeAbility();
 
-    private final UmbrellaPassive umbrellaPassive  = new UmbrellaPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "UMBRELLA_ABILITY_UMBRELLA_NAME", type = VariableType.ABILITY)
+    private Ability umbrellaPassive = new UmbrellaPassive();
 
 
     public UmbrellaBoyRole() {
-        getAbilities().add(umbrellaPassive);
     }
 
     @Override public String getName() { return "Umbrella Boy"; }
     @Override public Material getIconMaterial() { return Material.DIAMOND_SWORD; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.UMBRELLA_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.UMBRELLA_UMB_TEXT), L(DanDaDanDescLang.UMBRELLA_UMB_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.UMBRELLA_CURSE_U_TEXT), L(DanDaDanDescLang.UMBRELLA_CURSE_U_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.UMBRELLA_PARASOL_TEXT), L(DanDaDanDescLang.UMBRELLA_PARASOL_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.UMBRELLA_AIR_TEXT), L(DanDaDanDescLang.UMBRELLA_AIR_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.UMBRELLA_PROTEC_TEXT), L(DanDaDanDescLang.UMBRELLA_PROTEC_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.UMBRELLA_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.UMBRELLA_UMB_TEXT, DanDaDanDescLang.UMBRELLA_UMB_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.UMBRELLA_CURSE_U_TEXT, DanDaDanDescLang.UMBRELLA_CURSE_U_HOVER)
+            .hover(DanDaDanDescLang.UMBRELLA_PARASOL_TEXT, DanDaDanDescLang.UMBRELLA_PARASOL_HOVER)
+            .hover(DanDaDanDescLang.UMBRELLA_AIR_TEXT, DanDaDanDescLang.UMBRELLA_AIR_HOVER)
+            .hover(DanDaDanDescLang.UMBRELLA_PROTEC_TEXT, DanDaDanDescLang.UMBRELLA_PROTEC_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

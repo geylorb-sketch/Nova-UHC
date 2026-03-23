@@ -641,6 +641,7 @@ public enum ScenarioVarLang implements Lang {
     // ── Mage ──
     MAGE_REGEN_INTERVAL_NAME("Intervalle potions Mage (s)", "Mage Potion Interval (s)"),
     MAGE_REGEN_INTERVAL_DESC("Intervalle entre régénérations.", "Interval between regenerations."),
+    ARCHER_ABILITY_NAME("Arc Passif", "Bow Passive"),
     CAVALIER_HORSE_NAME("Cheval", "Horse"),
     ASSASSIN_FORCE_NAME("Force", "Force"),
     CORNE_WEAKNESS_NAME("Faiblesse", "Weakness"),

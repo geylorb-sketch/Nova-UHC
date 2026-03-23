@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -30,10 +30,10 @@ public class BamoraRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_ABILITY_VILLE_NAME", type = VariableType.ABILITY)
     private Ability ville = new VilleAbility();
 
-    private final ProjectilePassive projectilePassive = new ProjectilePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "BAMORA_ABILITY_PROJECTILE_NAME", type = VariableType.ABILITY)
+    private Ability projectilePassive = new ProjectilePassive();
 
     public BamoraRole() {
-        getAbilities().add(projectilePassive);
     }
 
     @Override
@@ -52,25 +52,27 @@ public class BamoraRole extends DanDaDanRole {
 
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.ROLE_PREFIX) + LangManager.get().get(DanDaDanDescLang.BAMORA_NAME));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_PROJECTILE_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_PROJECTILE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_KAIJU_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_KAIJU_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_INVIS_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_INVIS_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_SYSTEME_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_SYSTEME_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ESPACE));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.BAMORA_VILLE_TEXT), LangManager.get().get(DanDaDanDescLang.BAMORA_VILLE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.BAMORA_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.BAMORA_PROJECTILE_TEXT, DanDaDanDescLang.BAMORA_PROJECTILE_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.BAMORA_KAIJU_TEXT, DanDaDanDescLang.BAMORA_KAIJU_HOVER)
+            .hover(DanDaDanDescLang.BAMORA_INVIS_TEXT, DanDaDanDescLang.BAMORA_INVIS_HOVER)
+            .hover(DanDaDanDescLang.BAMORA_SYSTEME_TEXT, DanDaDanDescLang.BAMORA_SYSTEME_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ESPACE)
+            .hover(DanDaDanDescLang.BAMORA_VILLE_TEXT, DanDaDanDescLang.BAMORA_VILLE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override
@@ -90,7 +92,7 @@ public class BamoraRole extends DanDaDanRole {
         if (!(entity instanceof Player victim)) return;
         if (!(event.getDamager() instanceof Player attacker)) return;
         if (victim.getPlayer() == null) return;
-        projectilePassive.onHit(attacker, victim.getPlayer());
+        //projectilePassive.onHit(attacker, victim.getPlayer());
         if (invisibilite instanceof InvisibiliteAbility ia){
             ia.onDealtHit(attacker);
             ia.onTookHit(attacker);

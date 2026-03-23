@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.jetbooster;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Bukkit;
@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 
-public class AviateAbility extends UseAbiliy {
+public class AviateAbility extends UseAbility {
     @Override public String getName() { return "Aviate Exosuit"; }
     @Override public Material getMaterial() { return Material.FEATHER; }
     @Override public boolean onEnable(Player p) {

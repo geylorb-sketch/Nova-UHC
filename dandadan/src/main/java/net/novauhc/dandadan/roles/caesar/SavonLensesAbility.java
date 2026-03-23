@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.caesar;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 
-public class SavonLensesAbility extends UseAbiliy {
+public class SavonLensesAbility extends UseAbility {
     @Override public String getName() { return "Savon Lenses"; }
     @Override public Material getMaterial() { return Material.GLASS_BOTTLE; }
     @Override public boolean onEnable(Player p) {

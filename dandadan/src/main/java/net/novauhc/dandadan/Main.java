@@ -100,130 +100,130 @@ public class Main extends JavaPlugin {
 
                 AbilityManager a = AbilityManager.get();
 
-                a.regesiterAbility(new AcrobatePassive());
+                a.registerAbility(new AcrobatePassive());
 
-                a.regesiterAbility(new AirStrikeAbility());
-                a.regesiterAbility(new AllOutAbility());
-                a.regesiterAbility(new AphoomZhahAbility());
+                a.registerAbility(new AirStrikeAbility());
+                a.registerAbility(new AllOutAbility());
+                a.registerAbility(new AphoomZhahAbility());
 
-                a.regesiterAbility(new BandanaPassive());
+                a.registerAbility(new BandanaPassive());
 
-                a.regesiterAbility(new BarriereMystiqueAbility());
-                a.regesiterAbility(new BitesDustAbility());
+                a.registerAbility(new BarriereMystiqueAbility());
+                a.registerAbility(new BitesDustAbility());
 
-                a.regesiterAbility(new BombePassive());
-                a.regesiterAbility(new BoostAbility());
-                a.regesiterAbility(new BoumAbility());
-                a.regesiterAbility(new BoxeAbility());
+                a.registerAbility(new BombePassive());
+                a.registerAbility(new BoostAbility());
+                a.registerAbility(new BoumAbility());
+                a.registerAbility(new BoxeAbility());
 
-                a.regesiterAbility(new CarteAbility());
-                a.regesiterAbility(new ChaineAbility());
-                a.regesiterAbility(new ChainsawManAbility());
-                a.regesiterAbility(new ChaleurAbility());
-                a.regesiterAbility(new CheveuxAbility());
-                a.regesiterAbility(new ClackerAbility());
-                a.regesiterAbility(new ComboPassive());
+                a.registerAbility(new CarteAbility());
+                a.registerAbility(new ChaineAbility());
+                a.registerAbility(new ChainsawManAbility());
+                a.registerAbility(new ChaleurAbility());
+                a.registerAbility(new CheveuxAbility());
+                a.registerAbility(new ClackerAbility());
+                a.registerAbility(new ComboPassive());
 
-                a.regesiterAbility(new CrabeAbility());
-                a.regesiterAbility(new CrocAbility());
+                a.registerAbility(new CrabeAbility());
+                a.registerAbility(new CrocAbility());
 
-                a.regesiterAbility(new DarknessFormAbility());
-                a.regesiterAbility(new DelugeAbility());
+                a.registerAbility(new DarknessFormAbility());
+                a.registerAbility(new DelugeAbility());
 
-                a.regesiterAbility(new DieuRegionPassive());
+                a.registerAbility(new DieuRegionPassive());
 
-                a.regesiterAbility(new DoomPassive());
+                a.registerAbility(new DoomPassive());
 
-                a.regesiterAbility(new EcrivainPassive());
-                a.regesiterAbility(new EmprisonnementAbility());
+                a.registerAbility(new EcrivainPassive());
+                a.registerAbility(new EmprisonnementAbility());
 
-                a.regesiterAbility(new EspritProtecteurAbility());
+                a.registerAbility(new EspritProtecteurAbility());
 
-                a.regesiterAbility(new FioleAbility());
-                a.regesiterAbility(new FlammeGlaceAbility());
-                a.regesiterAbility(new FlammePassive(null));
-                a.regesiterAbility(new FlatwoodsPassive());
+                a.registerAbility(new FioleAbility());
+                a.registerAbility(new FlammeGlaceAbility());
+                a.registerAbility(new FlammePassive());
+                a.registerAbility(new FlatwoodsPassive());
 
-                a.regesiterAbility(new FrancaisPassive());
+                a.registerAbility(new FrancaisPassive());
 
-                a.regesiterAbility(new GreatKintaAbility());
-                a.regesiterAbility(new HamonOverdriveAbility());
+                a.registerAbility(new GreatKintaAbility());
+                a.registerAbility(new HamonOverdriveAbility());
 
-                a.regesiterAbility(new HeavensDoorAbility());
+                a.registerAbility(new HeavensDoorAbility());
 
-                a.regesiterAbility(new HoraRushAbility());
+                a.registerAbility(new HoraRushAbility());
 
-                a.regesiterAbility(new JetEauAbility());
-                a.regesiterAbility(new JetWaterAbility());
-
-
-
-                a.regesiterAbility(new KillerQueenAbility());
-
-                a.regesiterAbility(new KungFuAbility());
-                a.regesiterAbility(new LivreAbility());
-                a.regesiterAbility(new LunettePassive());
-                a.regesiterAbility(new MainPassive());
-                a.regesiterAbility(new MaledictionAbility());
+                a.registerAbility(new JetEauAbility());
+                a.registerAbility(new JetWaterAbility());
 
 
-                a.regesiterAbility(new MiroirPassive());
-                a.regesiterAbility(new MoeMoeAbility());
+
+                a.registerAbility(new KillerQueenAbility());
+
+                a.registerAbility(new KungFuAbility());
+                a.registerAbility(new LivreAbility());
+                a.registerAbility(new LunettePassive());
+                a.registerAbility(new MainPassive());
+                a.registerAbility(new MaledictionAbility());
 
 
-                a.regesiterAbility(new NinjaAbility());
-
-                a.regesiterAbility(new OmbreAbility());
-                a.regesiterAbility(new OndesAbility());
-                a.regesiterAbility(new OraOraAbility());
+                a.registerAbility(new MiroirPassive());
+                a.registerAbility(new MoeMoeAbility());
 
 
-                a.regesiterAbility(new OxydationPassive());
-                a.regesiterAbility(new ParasolAbility());
+                a.registerAbility(new NinjaAbility());
+
+                a.registerAbility(new OmbreAbility());
+                a.registerAbility(new OndesAbility());
+                a.registerAbility(new OraOraAbility());
 
 
-                a.regesiterAbility(new PermutationAbility());
-                a.regesiterAbility(new PoissonPassive());
+                a.registerAbility(new OxydationPassive());
+                a.registerAbility(new ParasolAbility());
 
 
-                a.regesiterAbility(new PredictionPassive());
-                a.regesiterAbility(new ProtecteurPassive());
+                a.registerAbility(new PermutationAbility());
+                a.registerAbility(new PoissonPassive());
 
-                a.regesiterAbility(new ReactionPassive());
-                a.regesiterAbility(new RebuffAbility());
 
-                a.regesiterAbility(new RoadRollerAbility());
+                a.registerAbility(new PredictionPassive());
+                a.registerAbility(new ProtecteurPassive());
 
-                a.regesiterAbility(new SangPassive());
-                a.regesiterAbility(new SavonCutterAbility());
-                a.regesiterAbility(new SavonLauncherAbility());
-                a.regesiterAbility(new SavonLensesAbility());
+                a.registerAbility(new ReactionPassive());
+                a.registerAbility(new RebuffAbility());
 
-                a.regesiterAbility(new SettaAbility());
+                a.registerAbility(new RoadRollerAbility());
 
-                a.regesiterAbility(new SilverChariotAbility());
-                a.regesiterAbility(new StarFingerAbility());
-                a.regesiterAbility(new StarPlatinumAbility());
-                a.regesiterAbility(new StrayCatAbility());
-                a.regesiterAbility(new SuicideAbility());
+                a.registerAbility(new SangPassive());
+                a.registerAbility(new SavonCutterAbility());
+                a.registerAbility(new SavonLauncherAbility());
+                a.registerAbility(new SavonLensesAbility());
 
-                a.regesiterAbility(new SuperchargeAbility());
-                a.regesiterAbility(new SwordLaunchAbility());
-                a.regesiterAbility(new TeteHautePassive());
-                a.regesiterAbility(new TheWorldAbility());
+                a.registerAbility(new SettaAbility());
 
-                a.regesiterAbility(new ThornsAbility());
-                a.regesiterAbility(new TimeSkipAbility());
+                a.registerAbility(new SilverChariotAbility());
+                a.registerAbility(new StarFingerAbility());
+                a.registerAbility(new StarPlatinumAbility());
+                a.registerAbility(new StrayCatAbility());
+                a.registerAbility(new SuicideAbility());
 
-                a.regesiterAbility(new TorpilleAbility());
-                a.regesiterAbility(new UmbrellaPassive());
-                a.regesiterAbility(new UppercutAbility());
-                a.regesiterAbility(new VampirePassive());
-                a.regesiterAbility(new VeninAbility());
-                a.regesiterAbility(new VerMortPassive());
+                a.registerAbility(new SuperchargeAbility());
+                a.registerAbility(new SwordLaunchAbility());
+                a.registerAbility(new TeteHautePassive());
+                a.registerAbility(new TheWorldAbility());
 
-                a.regesiterAbility(new ZoneIncroyableAbility());
-                a.regesiterAbility(new ZoneIntouchableAbility());
+                a.registerAbility(new ThornsAbility());
+                a.registerAbility(new TimeSkipAbility());
+
+                a.registerAbility(new TorpilleAbility());
+                a.registerAbility(new UmbrellaPassive());
+                a.registerAbility(new UppercutAbility());
+                a.registerAbility(new VampirePassive());
+                a.registerAbility(new VeninAbility());
+                a.registerAbility(new VerMortPassive());
+
+                a.registerAbility(new ZoneIncroyableAbility());
+                a.registerAbility(new ZoneIntouchableAbility());
             }
         }.runTaskLater(this, 20);
     }

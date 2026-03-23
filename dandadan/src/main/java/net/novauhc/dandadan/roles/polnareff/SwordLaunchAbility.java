@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.polnareff;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class SwordLaunchAbility extends UseAbiliy {
+public class SwordLaunchAbility extends UseAbility {
     @Override public String getName() { return "Sword Launch"; }
     @Override public Material getMaterial() { return Material.IRON_SWORD; }
     @Override public boolean onEnable(Player p) {

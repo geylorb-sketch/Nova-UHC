@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -38,10 +38,10 @@ public class MomoRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MOMO_ABILITY_PSYCHO_NAME", type = VariableType.ABILITY)
     private Ability psychokinesie = new PsychokinesieAbility();
 
-    private final ServeusePassive serveusePassive = new ServeusePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "MOMO_ABILITY_SERVEUSE_NAME", type = VariableType.ABILITY)
+    private Ability serveusePassive = new ServeusePassive();
 
     public MomoRole() {
-        getAbilities().add(serveusePassive);
     }
 
     @Override public String getName()           { return "Momo"; }
@@ -49,22 +49,24 @@ public class MomoRole extends DanDaDanRole {
 
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.ROLE_PREFIX) + LangManager.get().get(DanDaDanDescLang.MOMO_NAME));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.MOMO_SERVEUSE_TEXT), LangManager.get().get(DanDaDanDescLang.MOMO_SERVEUSE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.MOMO_MOEMOE_TEXT), LangManager.get().get(DanDaDanDescLang.MOMO_MOEMOE_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.MOMO_MEMOIRE_TEXT), LangManager.get().get(DanDaDanDescLang.MOMO_MEMOIRE_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.MOMO_PSYCHOKINESIE_TEXT), LangManager.get().get(DanDaDanDescLang.MOMO_PSYCHOKINESIE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.MOMO_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.MOMO_SERVEUSE_TEXT, DanDaDanDescLang.MOMO_SERVEUSE_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.MOMO_MOEMOE_TEXT, DanDaDanDescLang.MOMO_MOEMOE_HOVER)
+            .hover(DanDaDanDescLang.MOMO_MEMOIRE_TEXT, DanDaDanDescLang.MOMO_MEMOIRE_HOVER)
+            .hover(DanDaDanDescLang.MOMO_PSYCHOKINESIE_TEXT, DanDaDanDescLang.MOMO_PSYCHOKINESIE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override
@@ -87,7 +89,7 @@ public class MomoRole extends DanDaDanRole {
         if (vp == null) return;
 
         // Serveuse : 2% annuler KB si victime mange gapple
-        if (serveusePassive.shouldCancelKB(vp)) {
+        if (serveusePassive instanceof ServeusePassive sp && sp.shouldCancelKB(vp)) {
             event.setCancelled(false); // Le coup passe mais...
             vp.setVelocity(vp.getVelocity().multiply(0)); // KB annulé
             LangManager.get().send(DanDaDanLang.MOMO_SERVEUSE_TRIGGER, attacker);

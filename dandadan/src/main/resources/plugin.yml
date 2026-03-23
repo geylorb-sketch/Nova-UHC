@@ -3,5 +3,5 @@ main: net.novauhc.dandadan.Main
 version: 1.0
 authors:
   - Lezombie3D
-dependencies:
+depend:
   - NovaUHC

@@ -19,10 +19,10 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 public class Ninja extends Scenario {
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "NINJA_VAR_INVISIBILITY_DURATION_NAME", descKey = "NINJA_VAR_INVISIBILITY_DURATION_DESC", type = VariableType.TIME)
-    private final int invisibilityDuration = 200;
+    private int invisibilityDuration = 200;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "NINJA_VAR_INVISIBILITY_LEVEL_NAME", descKey = "NINJA_VAR_INVISIBILITY_LEVEL_DESC", type = VariableType.INTEGER)
-    private final int invisibilityLevel = 0;
+    private int invisibilityLevel = 0;
 
     @Override
     public String getName() {

@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.tsuchinoko;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Map;
 
-public class VeninAbility extends UseAbiliy {
+public class VeninAbility extends UseAbility {
     @Override public String getName() { return "Venin"; }
     @Override public Material getMaterial() { return Material.SPIDER_EYE; }
     @Override public boolean onEnable(Player p) {

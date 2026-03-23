@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.denji;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Material;
@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 
-public class ChaineAbility extends UseAbiliy {
+public class ChaineAbility extends UseAbility {
     @Override public String getName() { return "Chaine"; }
     @Override public Material getMaterial() { return Material.TRIPWIRE_HOOK; }
     @Override public boolean onEnable(Player p) {

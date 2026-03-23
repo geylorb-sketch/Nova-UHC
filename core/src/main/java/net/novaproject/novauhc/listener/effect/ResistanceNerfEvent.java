@@ -23,7 +23,7 @@ public class ResistanceNerfEvent implements Listener {
         if (!uhcPlayer.isPlaying()) return;
         if (!player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) return;
 
-        double resistancePercent = uhcPlayer.getResitancePercent();
+        double resistancePercent = uhcPlayer.getResistancePercent();
 
         ScenarioRole<?> activeScenarioRole = ScenarioManager.get()
                 .getActiveSpecialScenarios()

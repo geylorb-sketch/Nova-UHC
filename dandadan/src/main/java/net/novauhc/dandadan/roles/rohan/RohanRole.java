@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -22,36 +22,36 @@ public class RohanRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROHAN_ABILITY_LIVRE_NAME", type = VariableType.ABILITY)
     private Ability livreAbility = new LivreAbility();
 
-    private final EcrivainPassive ecrivainPassive  = new EcrivainPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "ROHAN_ABILITY_ECRIVAIN_NAME", type = VariableType.ABILITY)
+    private Ability ecrivainPassive = new EcrivainPassive();
 
 
     public RohanRole() {
         setCamp(DanDaDanCamps.SPECIAL);
-        getAbilities().add(ecrivainPassive);
     }
 
     @Override public String getName() { return "Rohan"; }
     @Override public Material getIconMaterial() { return Material.BOOK; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.ROHAN_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROHAN_ECRIVAIN_TEXT), L(DanDaDanDescLang.ROHAN_ECRIVAIN_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROHAN_HEAVEN_TEXT), L(DanDaDanDescLang.ROHAN_HEAVEN_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.ROHAN_LIVRE_TEXT), L(DanDaDanDescLang.ROHAN_LIVRE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.ROHAN_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.ROHAN_ECRIVAIN_TEXT, DanDaDanDescLang.ROHAN_ECRIVAIN_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.ROHAN_HEAVEN_TEXT, DanDaDanDescLang.ROHAN_HEAVEN_HOVER)
+            .hover(DanDaDanDescLang.ROHAN_LIVRE_TEXT, DanDaDanDescLang.ROHAN_LIVRE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

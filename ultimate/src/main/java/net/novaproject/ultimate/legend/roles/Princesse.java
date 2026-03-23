@@ -25,7 +25,6 @@ public class Princesse extends LegendRole {
 
     public Princesse() {
         this.noFallPassive = new PrincesseNoFallPassive();
-        getAbilities().add(noFallPassive);
     }
 
     @Override public int getId() { return 10; }

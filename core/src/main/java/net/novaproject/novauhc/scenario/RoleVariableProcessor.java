@@ -19,12 +19,20 @@ public class RoleVariableProcessor {
 
             try {
                 switch (variable.type()) {
-
-                    case ABILITY -> handleAbility(field, role, player,scenarioRole);
-
-                    case INTEGER, DOUBLE, BOOLEAN -> {
-
+                    case ABILITY -> handleAbility(field, role, player, scenarioRole);
+                    case INTEGER, TIME -> {
+                        Object value = field.get(role);
+                        if (value instanceof Number n) field.set(role, n.intValue());
                     }
+                    case DOUBLE, PERCENTAGE -> {
+                        Object value = field.get(role);
+                        if (value instanceof Number n) field.set(role, n.doubleValue());
+                    }
+                    case BOOLEAN -> {
+                        Object value = field.get(role);
+                        if (value instanceof Boolean b) field.set(role, b);
+                    }
+                    default -> { /* STRING and other types: leave as-is */ }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -37,18 +45,15 @@ public class RoleVariableProcessor {
 
         if (!Ability.class.isAssignableFrom(field.getType())) {
             throw new IllegalStateException(
-                    "@RoleVariable(type=ABILITY) doit être Ability");
+                    "@RoleVariable(type=ABILITY) doit être Ability sur le champ " + field.getName());
         }
 
         Ability base = (Ability) field.get(role);
-        System.out.println(base.getName()+" active :" + base.active() + " cooldown : " + base.getCooldown() + "max use : " + base.getMaxUse());
         if (base == null || !base.active()) return;
 
         Ability instance = base.clone();
-        System.out.println(instance.getName()+"nouveaux active :" + instance.active() + " cooldown : " + instance.getCooldown() + "max use : " + instance.getMaxUse());
         Role playerRole = scenarioRole.getRoleByUHCPlayer(player);
         instance.setOwner(playerRole.getOwner());
-                playerRole.getAbilities().add(instance);
-
+        playerRole.getAbilities().add(instance);
     }
 }

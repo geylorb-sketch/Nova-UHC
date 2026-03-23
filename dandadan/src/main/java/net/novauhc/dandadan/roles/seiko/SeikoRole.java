@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,12 +24,12 @@ public class SeikoRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "SEIKO_ABILITY_BARRIERE_I_NAME", type = VariableType.ABILITY)
     private Ability barriereI = new BarriereInterieureAbility();
 
-    private final PouvoirDesMotsPassive motsPassive = new PouvoirDesMotsPassive();
-    private final DieuRegionPassive dieuPassive = new DieuRegionPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "SEIKO_ABILITY_MOTS_NAME", type = VariableType.ABILITY)
+    private Ability motsPassive = new PouvoirDesMotsPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "SEIKO_ABILITY_DIEU_NAME", type = VariableType.ABILITY)
+    private Ability dieuPassive = new DieuRegionPassive();
 
     public SeikoRole() {
-        getAbilities().add(motsPassive);
-        getAbilities().add(dieuPassive);
     }
 
     @Override public String getName()           { return "Seiko"; }
@@ -37,22 +37,24 @@ public class SeikoRole extends DanDaDanRole {
 
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.ROLE_PREFIX) + LangManager.get().get(DanDaDanDescLang.SEIKO_NAME));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.SEIKO_MOTS_TEXT), LangManager.get().get(DanDaDanDescLang.SEIKO_MOTS_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.SEIKO_DIEU_TEXT), LangManager.get().get(DanDaDanDescLang.SEIKO_DIEU_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.SEIKO_BARRIERE_M_TEXT), LangManager.get().get(DanDaDanDescLang.SEIKO_BARRIERE_M_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.SEIKO_BARRIERE_I_TEXT), LangManager.get().get(DanDaDanDescLang.SEIKO_BARRIERE_I_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.SEIKO_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.SEIKO_MOTS_TEXT, DanDaDanDescLang.SEIKO_MOTS_HOVER)
+            .hover(DanDaDanDescLang.SEIKO_DIEU_TEXT, DanDaDanDescLang.SEIKO_DIEU_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.SEIKO_BARRIERE_M_TEXT, DanDaDanDescLang.SEIKO_BARRIERE_M_HOVER)
+            .hover(DanDaDanDescLang.SEIKO_BARRIERE_I_TEXT, DanDaDanDescLang.SEIKO_BARRIERE_I_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override
@@ -70,6 +72,6 @@ public class SeikoRole extends DanDaDanRole {
         if (!(event.getDamager() instanceof Player attacker)) return;
         if (!(entity instanceof Player victim)) return;
         if (victim.getPlayer() == null) return;
-        motsPassive.onHit(attacker, victim.getPlayer(), event);
+        if (motsPassive instanceof PouvoirDesMotsPassive pmp) pmp.onHit(attacker, victim.getPlayer(), event);
     }
 }

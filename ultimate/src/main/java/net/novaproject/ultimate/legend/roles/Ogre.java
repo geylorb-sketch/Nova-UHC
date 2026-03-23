@@ -25,7 +25,6 @@ public class Ogre extends LegendRole {
 
     public Ogre() {
         this.passive = new OgrePassive();
-        getAbilities().add(passive);
     }
 
     @Override public int getId() { return 12; }

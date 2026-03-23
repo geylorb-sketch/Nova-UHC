@@ -34,16 +34,16 @@ public class Gladiator extends Scenario {
     private final Map<UUID, Location> arenaLocations = new HashMap<>();
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_ARENA_RADIUS_NAME", descKey = "GLADIATOR_VAR_ARENA_RADIUS_DESC", type = VariableType.INTEGER)
-    private final int arenaRadius = 10;
+    private int arenaRadius = 10;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_ARENA_HEIGHT_NAME", descKey = "GLADIATOR_VAR_ARENA_HEIGHT_DESC", type = VariableType.INTEGER)
-    private final int arenaHeight = 5;
+    private int arenaHeight = 5;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_ARENA_SPAWN_Y_NAME", descKey = "GLADIATOR_VAR_ARENA_SPAWN_Y_DESC", type = VariableType.INTEGER)
-    private final int arenaSpawnY = 200;
+    private int arenaSpawnY = 200;
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "GLADIATOR_VAR_MAX_FIGHT_DURATION_NAME", descKey = "GLADIATOR_VAR_MAX_FIGHT_DURATION_DESC", type = VariableType.INTEGER)
-    private final int maxFightDuration = 20 * 60 * 5;
+    private int maxFightDuration = 20 * 60 * 5;
 
     @Override
     public String getName() {
@@ -166,8 +166,6 @@ public class Gladiator extends Scenario {
 
         originalLocations.remove(uuid1);
         originalLocations.remove(uuid2);
-        arenaLocations.remove(uuid1);
-        arenaLocations.remove(uuid2);
 
         if (winner != null) {
             LangManager.get().sendAll(GladiatorLang.ARENA_WINNER, Map.of("%player%", winner.getName()));
@@ -180,9 +178,13 @@ public class Gladiator extends Scenario {
             public void run() {
                 if (arenaLocations.containsKey(uuid1)) {
                     Location center = arenaLocations.get(uuid1).clone().subtract(5, 1, 0);
+                    arenaLocations.remove(uuid1);
+                    arenaLocations.remove(uuid2);
                     cleanupArena(center);
                 } else if (arenaLocations.containsKey(uuid2)) {
                     Location center = arenaLocations.get(uuid2).clone().add(5, 1, 0);
+                    arenaLocations.remove(uuid1);
+                    arenaLocations.remove(uuid2);
                     cleanupArena(center);
                 }
             }

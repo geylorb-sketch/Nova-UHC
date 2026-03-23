@@ -24,15 +24,15 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 
 public class SimonSays extends Scenario {
 
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MIN_DELAY_NAME", descKey = "SIMONSAYS_VAR_MIN_DELAY_DESC", type = VariableType.INTEGER) private final int min_delay = 120;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MAX_DELAY_NAME", descKey = "SIMONSAYS_VAR_MAX_DELAY_DESC", type = VariableType.INTEGER) private final int max_delay = 300;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_JUMP_DURATION_NAME", descKey = "SIMONSAYS_VAR_JUMP_DURATION_DESC", type = VariableType.INTEGER) private final int jump_duration = 15;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_CROUCH_DURATION_NAME", descKey = "SIMONSAYS_VAR_CROUCH_DURATION_DESC", type = VariableType.INTEGER) private final int crouch_duration = 10;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MOVE_DURATION_NAME", descKey = "SIMONSAYS_VAR_MOVE_DURATION_DESC", type = VariableType.INTEGER) private final int move_duration = 20;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_STOP_DURATION_NAME", descKey = "SIMONSAYS_VAR_STOP_DURATION_DESC", type = VariableType.INTEGER) private final int stop_duration = 10;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_DAMAGE_NAME", descKey = "SIMONSAYS_VAR_PENALTY_DAMAGE_DESC", type = VariableType.BOOLEAN) private final boolean penalty_damage = true;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_HUNGER_NAME", descKey = "SIMONSAYS_VAR_PENALTY_HUNGER_DESC", type = VariableType.BOOLEAN) private final boolean penalty_hunger = true;
-    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_EFFECTS_NAME", descKey = "SIMONSAYS_VAR_PENALTY_EFFECTS_DESC", type = VariableType.BOOLEAN) private final boolean penalty_effects = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MIN_DELAY_NAME", descKey = "SIMONSAYS_VAR_MIN_DELAY_DESC", type = VariableType.INTEGER) private int min_delay = 120;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MAX_DELAY_NAME", descKey = "SIMONSAYS_VAR_MAX_DELAY_DESC", type = VariableType.INTEGER) private int max_delay = 300;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_JUMP_DURATION_NAME", descKey = "SIMONSAYS_VAR_JUMP_DURATION_DESC", type = VariableType.INTEGER) private int jump_duration = 15;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_CROUCH_DURATION_NAME", descKey = "SIMONSAYS_VAR_CROUCH_DURATION_DESC", type = VariableType.INTEGER) private int crouch_duration = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_MOVE_DURATION_NAME", descKey = "SIMONSAYS_VAR_MOVE_DURATION_DESC", type = VariableType.INTEGER) private int move_duration = 20;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_STOP_DURATION_NAME", descKey = "SIMONSAYS_VAR_STOP_DURATION_DESC", type = VariableType.INTEGER) private int stop_duration = 10;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_DAMAGE_NAME", descKey = "SIMONSAYS_VAR_PENALTY_DAMAGE_DESC", type = VariableType.BOOLEAN) private boolean penalty_damage = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_HUNGER_NAME", descKey = "SIMONSAYS_VAR_PENALTY_HUNGER_DESC", type = VariableType.BOOLEAN) private boolean penalty_hunger = true;
+    @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "SIMONSAYS_VAR_PENALTY_EFFECTS_NAME", descKey = "SIMONSAYS_VAR_PENALTY_EFFECTS_DESC", type = VariableType.BOOLEAN) private boolean penalty_effects = true;
 
     private final Set<UUID> playersWhoComplied = new HashSet<>();
     private final Random random = new Random();
@@ -75,8 +75,6 @@ public class SimonSays extends Scenario {
 
     private void issueRandomCommand() {
         List<SimonCommand> commands = Arrays.asList(
-                new SimonCommand("JUMP", "Sautez 3 fois !", jump_duration, CommandType.JUMP),
-                new SimonCommand("CROUCH", "Accroupissez-vous 5 secondes !", crouch_duration, CommandType.CROUCH),
                 new SimonCommand("BREAK_BLOCK", "Cassez un bloc !", move_duration, CommandType.BREAK_BLOCK),
                 new SimonCommand("PLACE_BLOCK", "Placez un bloc !", move_duration, CommandType.PLACE_BLOCK),
                 new SimonCommand("MOVE_NORTH", "Déplacez-vous vers le Nord !", move_duration, CommandType.MOVE_NORTH),
@@ -138,7 +136,7 @@ public class SimonSays extends Scenario {
         if (isActive() && commandActive && currentCommand != null && currentCommand.type == CommandType.PLACE_BLOCK) playersWhoComplied.add(player.getUniqueId());
     }
 
-    private enum CommandType { JUMP, CROUCH, BREAK_BLOCK, PLACE_BLOCK, MOVE_NORTH, MOVE_SOUTH, STOP_MOVING }
+    private enum CommandType { BREAK_BLOCK, PLACE_BLOCK, MOVE_NORTH, MOVE_SOUTH, STOP_MOVING }
     private enum PenaltyType { DAMAGE, HUNGER, SLOWNESS, BLINDNESS, WEAKNESS }
     private record SimonCommand(String name, String description, int duration, CommandType type) {}
 }

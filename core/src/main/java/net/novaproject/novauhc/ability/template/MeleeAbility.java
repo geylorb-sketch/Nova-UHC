@@ -13,16 +13,14 @@ public abstract class MeleeAbility extends Ability {
 
     private UHCPlayer target;
 
-    public MeleeAbility(UHCPlayer target) {
-        this.target = target;
+    public MeleeAbility() {
     }
 
     @Override
     public void onAttack(UHCPlayer victimP, EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player player)) return;
+        if (getOwner() == null || !player.equals(getOwner().getPlayer())) return;
         setTarget(victimP);
         tryUse(player);
     }
-
-
 }

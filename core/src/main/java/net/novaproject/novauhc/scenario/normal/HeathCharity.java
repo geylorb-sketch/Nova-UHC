@@ -12,7 +12,6 @@ import net.novaproject.novauhc.lang.lang.ScenarioDescLang;
 import net.novaproject.novauhc.lang.LangManager;
 
 public class HeathCharity extends Scenario {
-    private boolean active = false;
 
     @Override
     public String getName() {
@@ -30,28 +29,26 @@ public class HeathCharity extends Scenario {
     }
 
     @Override
-    public void onStart(Player player) {
-        if (!active) {
-            active = true;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Player lowestHealthPlayer = null;
-                    double lowestHealth = Double.MAX_VALUE;
+    public void onGameStart() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!isActive()) return;
 
-                    for (UHCPlayer player : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
-                        double health = player.getPlayer().getHealth();
-                        if (health < lowestHealth) {
-                            lowestHealth = health;
-                            lowestHealthPlayer = player.getPlayer();
-                        }
-                    }
-                    if (lowestHealthPlayer != null) {
-                        lowestHealthPlayer.setHealth(lowestHealthPlayer.getMaxHealth());
-                    }
+                Player lowestHealthPlayer = null;
+                double lowestHealth = Double.MAX_VALUE;
 
+                for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
+                    double health = uhcPlayer.getPlayer().getHealth();
+                    if (health < lowestHealth) {
+                        lowestHealth = health;
+                        lowestHealthPlayer = uhcPlayer.getPlayer();
+                    }
                 }
-            }.runTaskTimer(Main.get(), 0, 20 * 300 * 2);
-        }
+                if (lowestHealthPlayer != null) {
+                    lowestHealthPlayer.setHealth(lowestHealthPlayer.getMaxHealth());
+                }
+            }
+        }.runTaskTimer(Main.get(), 0, 20 * 300 * 2);
     }
 }

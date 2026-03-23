@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -26,39 +26,39 @@ public class RezeRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REZE_ABILITY_TORPILLE_NAME", type = VariableType.ABILITY)
     private Ability torpilleAbility = new TorpilleAbility();
 
-    private final BombePassive bombePassive  = new BombePassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "REZE_ABILITY_BOMBE_NAME", type = VariableType.ABILITY)
+    private Ability bombePassive = new BombePassive();
 
 
     public RezeRole() {
         setCamp(DanDaDanCamps.SPECIAL);
-        getAbilities().add(bombePassive);
     }
 
     @Override public String getName() { return "Reze"; }
     @Override public Material getIconMaterial() { return Material.TNT; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.REZE_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REZE_BOMBE_TEXT), L(DanDaDanDescLang.REZE_BOMBE_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REZE_EXPLO_DJ_TEXT), L(DanDaDanDescLang.REZE_EXPLO_DJ_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REZE_MALE_R_TEXT), L(DanDaDanDescLang.REZE_MALE_R_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REZE_BOUM_TEXT), L(DanDaDanDescLang.REZE_BOUM_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REZE_TETE_C_TEXT), L(DanDaDanDescLang.REZE_TETE_C_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.REZE_TORPILLE_TEXT), L(DanDaDanDescLang.REZE_TORPILLE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.REZE_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.REZE_BOMBE_TEXT, DanDaDanDescLang.REZE_BOMBE_HOVER)
+            .hover(DanDaDanDescLang.REZE_EXPLO_DJ_TEXT, DanDaDanDescLang.REZE_EXPLO_DJ_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.REZE_MALE_R_TEXT, DanDaDanDescLang.REZE_MALE_R_HOVER)
+            .hover(DanDaDanDescLang.REZE_BOUM_TEXT, DanDaDanDescLang.REZE_BOUM_HOVER)
+            .hover(DanDaDanDescLang.REZE_TETE_C_TEXT, DanDaDanDescLang.REZE_TETE_C_HOVER)
+            .hover(DanDaDanDescLang.REZE_TORPILLE_TEXT, DanDaDanDescLang.REZE_TORPILLE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

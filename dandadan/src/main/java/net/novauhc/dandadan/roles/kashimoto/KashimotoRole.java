@@ -10,7 +10,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -25,10 +25,10 @@ public class KashimotoRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KASHIMOTO_ABILITY_APHOOM_NAME", type = VariableType.ABILITY)
     private Ability aphoom = new AphoomZhahAbility();
 
-    private final ProtecteurPassive protecteurPassive = new ProtecteurPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "KASHIMOTO_ABILITY_PROTECTEUR_NAME", type = VariableType.ABILITY)
+    private Ability protecteurPassive = new ProtecteurPassive();
 
     public KashimotoRole() {
-        getAbilities().add(protecteurPassive);
     }
 
     @Override public String getName()           { return "Kashimoto"; }
@@ -36,22 +36,24 @@ public class KashimotoRole extends DanDaDanRole {
 
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.ROLE_PREFIX) + LangManager.get().get(DanDaDanDescLang.KASHIMOTO_NAME));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.CAMP_YOKAI));
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KASHIMOTO_PROTECTEUR_TEXT), LangManager.get().get(DanDaDanDescLang.KASHIMOTO_PROTECTEUR_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KASHIMOTO_FLAMME_TEXT), LangManager.get().get(DanDaDanDescLang.KASHIMOTO_FLAMME_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KASHIMOTO_ESPRIT_TEXT), LangManager.get().get(DanDaDanDescLang.KASHIMOTO_ESPRIT_HOVER));
-        HoverUtils.sendHoverLine(p, LangManager.get().get(DanDaDanDescLang.KASHIMOTO_APHOOM_TEXT), LangManager.get().get(DanDaDanDescLang.KASHIMOTO_APHOOM_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(LangManager.get().get(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.KASHIMOTO_NAME)
+            .line(DanDaDanDescLang.CAMP_YOKAI)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.KASHIMOTO_PROTECTEUR_TEXT, DanDaDanDescLang.KASHIMOTO_PROTECTEUR_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.KASHIMOTO_FLAMME_TEXT, DanDaDanDescLang.KASHIMOTO_FLAMME_HOVER)
+            .hover(DanDaDanDescLang.KASHIMOTO_ESPRIT_TEXT, DanDaDanDescLang.KASHIMOTO_ESPRIT_HOVER)
+            .hover(DanDaDanDescLang.KASHIMOTO_APHOOM_TEXT, DanDaDanDescLang.KASHIMOTO_APHOOM_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

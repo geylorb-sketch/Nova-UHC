@@ -11,7 +11,7 @@ import net.novauhc.dandadan.DanDaDanRole;
 import net.novauhc.dandadan.lang.DanDaDanDescLang;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import net.novauhc.dandadan.lang.DanDaDanVarLang;
-import net.novaproject.novauhc.utils.HoverUtils;
+import net.novaproject.novauhc.scenario.role.RoleDescription;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -26,39 +26,39 @@ public class PolnareffRole extends DanDaDanRole {
     @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_IMAGEREMAN_NAME", type = VariableType.ABILITY)
     private Ability imageRemanAbility = new ImageRemanAbility();
 
-    private final FrancaisPassive francaisPassive  = new FrancaisPassive();
+    @RoleVariable(lang = DanDaDanVarLang.class, nameKey = "POLNAREFF_ABILITY_FRANCAIS_NAME", type = VariableType.ABILITY)
+    private Ability francaisPassive = new FrancaisPassive();
 
 
     public PolnareffRole() {
         setCamp(DanDaDanCamps.SPECIAL);
-        getAbilities().add(francaisPassive);
     }
 
     @Override public String getName() { return "Jean-Pierre Polnareff"; }
     @Override public Material getIconMaterial() { return Material.IRON_SWORD; }
 
-    private String L(DanDaDanDescLang k) { return LangManager.get().get(k); }
-
     @Override
     public void sendDescription(Player p) {
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_INFO));
-        p.sendMessage(L(DanDaDanDescLang.ROLE_PREFIX) + L(DanDaDanDescLang.POLNAREFF_NAME));
-        p.sendMessage(L(DanDaDanDescLang.CAMP_SPECIAL));
-        p.sendMessage(L(DanDaDanDescLang.OBJECTIVE));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_PASSIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_FRANCAIS_TEXT), L(DanDaDanDescLang.POLNAREFF_FRANCAIS_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_PRECISION_TEXT), L(DanDaDanDescLang.POLNAREFF_PRECISION_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SECTION_ACTIFS));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_SILVER_TEXT), L(DanDaDanDescLang.POLNAREFF_SILVER_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_SWORD_L_TEXT), L(DanDaDanDescLang.POLNAREFF_SWORD_L_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_HORA_TEXT), L(DanDaDanDescLang.POLNAREFF_HORA_HOVER));
-        HoverUtils.sendHoverLine(p, L(DanDaDanDescLang.POLNAREFF_IMAGE_TEXT), L(DanDaDanDescLang.POLNAREFF_IMAGE_HOVER));
-        p.sendMessage(" ");
-        p.sendMessage(L(DanDaDanDescLang.SEPARATOR));
+        RoleDescription.of(p)
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .space()
+            .line(DanDaDanDescLang.SECTION_INFO)
+            .line(DanDaDanDescLang.ROLE_PREFIX, DanDaDanDescLang.POLNAREFF_NAME)
+            .line(DanDaDanDescLang.CAMP_SPECIAL)
+            .line(DanDaDanDescLang.OBJECTIVE)
+            .space()
+            .line(DanDaDanDescLang.SECTION_PASSIFS)
+            .hover(DanDaDanDescLang.POLNAREFF_FRANCAIS_TEXT, DanDaDanDescLang.POLNAREFF_FRANCAIS_HOVER)
+            .hover(DanDaDanDescLang.POLNAREFF_PRECISION_TEXT, DanDaDanDescLang.POLNAREFF_PRECISION_HOVER)
+            .space()
+            .line(DanDaDanDescLang.SECTION_ACTIFS)
+            .hover(DanDaDanDescLang.POLNAREFF_SILVER_TEXT, DanDaDanDescLang.POLNAREFF_SILVER_HOVER)
+            .hover(DanDaDanDescLang.POLNAREFF_SWORD_L_TEXT, DanDaDanDescLang.POLNAREFF_SWORD_L_HOVER)
+            .hover(DanDaDanDescLang.POLNAREFF_HORA_TEXT, DanDaDanDescLang.POLNAREFF_HORA_HOVER)
+            .hover(DanDaDanDescLang.POLNAREFF_IMAGE_TEXT, DanDaDanDescLang.POLNAREFF_IMAGE_HOVER)
+            .space()
+            .separator(DanDaDanDescLang.SEPARATOR)
+            .send();
     }
 
     @Override

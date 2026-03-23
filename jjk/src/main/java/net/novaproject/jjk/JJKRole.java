@@ -2,7 +2,6 @@ package net.novaproject.jjk;
 
 import net.novaproject.novauhc.Common;
 import net.novaproject.novauhc.scenario.role.Role;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -37,30 +36,28 @@ public abstract class JJKRole extends Role {
 
     @Override
     public void onSec(Player p) {
-        World world = Common.get().getArena();
+        if (getOwner() == null) return;
+        Player owner = getOwner().getPlayer();
+        if (owner == null) return;
 
-        for (PotionEffect activeEffect : getEffects()) {
-            p.removePotionEffect(activeEffect.getType());
-        }
+        super.onSec(owner);
+
         for (PotionEffect effect : getEffects()) {
-            effect.apply(p);
+            owner.removePotionEffect(effect.getType());
+            effect.apply(owner);
         }
 
         if (isNight()) {
-            for (PotionEffect activeEffect : getNightEffects()) {
-                p.removePotionEffect(activeEffect.getType());
-            }
             for (PotionEffect effect : getNightEffects()) {
-                effect.apply(p);
+                owner.removePotionEffect(effect.getType());
+                effect.apply(owner);
             }
         }
 
         if (isDay()) {
-            for (PotionEffect activeEffect : getDayEffects()) {
-                p.removePotionEffect(activeEffect.getType());
-            }
             for (PotionEffect effect : getDayEffects()) {
-                effect.apply(p);
+                owner.removePotionEffect(effect.getType());
+                effect.apply(owner);
             }
         }
     }

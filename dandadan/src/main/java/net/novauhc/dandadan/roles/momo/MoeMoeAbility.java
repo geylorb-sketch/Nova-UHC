@@ -1,7 +1,7 @@
 package net.novauhc.dandadan.roles.momo;
 
 import net.novaproject.novauhc.Main;
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.ability.utils.AbilityVariable;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
@@ -28,7 +28,7 @@ import java.util.UUID;
  *   🔴 3e coup : Propulsé 10 blocs + -30% vie actuelle
  * Cooldown : 10min +1min/kill
  */
-public class MoeMoeAbility extends UseAbiliy {
+public class MoeMoeAbility extends UseAbility {
 
     @AbilityVariable(lang = DanDaDanVarLang.class, nameKey = "MOEMOE_MAX_HITS_NAME",
             descKey = "MOEMOE_MAX_HITS_DESC", type = VariableType.INTEGER)
@@ -55,6 +55,7 @@ public class MoeMoeAbility extends UseAbiliy {
     public void onAttack(UHCPlayer victim, EntityDamageByEntityEvent event) {
         if (!active) return;
         if (!(event.getDamager() instanceof Player attacker)) return;
+        if (getOwner() == null || !attacker.equals(getOwner().getPlayer())) return;
         Player vp = victim.getPlayer();
         if (vp == null) return;
 

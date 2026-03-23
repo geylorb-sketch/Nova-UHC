@@ -4,5 +4,5 @@ version: 1.0
 authors:
   - Lezombie3D
   - Sithey
-dependencies:
+depend:
   - NovaUHC

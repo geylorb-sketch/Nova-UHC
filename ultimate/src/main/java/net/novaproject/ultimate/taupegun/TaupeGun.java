@@ -224,7 +224,7 @@ public class TaupeGun extends Scenario {
     }
 
     @Override
-    public void onChatSpeek(Player player, String message, AsyncPlayerChatEvent event) {
+    public void onChatSpeak(Player player, String message, AsyncPlayerChatEvent event) {
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
 
         if (UHCManager.get().getGameState() != UHCManager.GameState.INGAME) {

@@ -17,7 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.Map;
 
-public class LimiteStuffbyPlayerUi extends CustomInventory {
+public class  LimiteStuffbyPlayerUi extends CustomInventory {
     Player target;
 
     public LimiteStuffbyPlayerUi(Player player, Player target) {

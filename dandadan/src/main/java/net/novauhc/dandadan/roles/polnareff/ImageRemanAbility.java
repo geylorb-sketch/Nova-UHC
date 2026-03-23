@@ -1,6 +1,6 @@
 package net.novauhc.dandadan.roles.polnareff;
 
-import net.novaproject.novauhc.ability.template.UseAbiliy;
+import net.novaproject.novauhc.ability.template.UseAbility;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
 import org.bukkit.Location;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class ImageRemanAbility extends UseAbiliy {
+public class ImageRemanAbility extends UseAbility {
     @Override public String getName() { return "Image Remanente"; }
     @Override public Material getMaterial() { return Material.ARMOR_STAND; }
     @Override public boolean onEnable(Player p) {

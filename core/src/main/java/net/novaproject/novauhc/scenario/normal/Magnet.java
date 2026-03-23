@@ -31,7 +31,7 @@ public class Magnet extends Scenario {
     );
 
     @ScenarioVariable(lang = ScenarioVarLang.class, nameKey = "MAGNET_VAR_MAGNET_RADIUS_NAME", descKey = "MAGNET_VAR_MAGNET_RADIUS_DESC", type = VariableType.INTEGER)
-    private final int magnetRadius = 5;
+    private int magnetRadius = 5;
 
     @Override
     public String getName() {

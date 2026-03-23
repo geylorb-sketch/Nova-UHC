@@ -19,7 +19,6 @@ public class Mage extends LegendRole {
 
     public Mage() {
         this.potionPassive = new MagePotionPassive();
-        getAbilities().add(potionPassive);
     }
 
     @Override public int getId() { return 2; }
