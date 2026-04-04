@@ -4,6 +4,7 @@ import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.lang.special.SkyHighLang;
 import net.novaproject.novauhc.scenario.Scenario;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
+import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
 import net.novaproject.novauhc.uhcteam.UHCTeamManager;
 import net.novaproject.novauhc.utils.ItemCreator;
@@ -102,7 +103,6 @@ public class SkyHigh extends Scenario {
         if (timer == UHCManager.get().getTimerborder() - 120) {
             LangManager.get().send(SkyHighLang.WARNING_SKY_HIGH, player);
         }
-
         int y = player.getLocation().getBlockY();
         if (timer >= UHCManager.get().getTimerborder()) {
             if (y < thirdLevel) {

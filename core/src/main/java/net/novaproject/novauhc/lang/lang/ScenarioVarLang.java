@@ -393,7 +393,10 @@ public enum ScenarioVarLang implements Lang {
     REWARDLONGSHOT_VAR_MIN_DISTANCE_DESC("Distance minimale pour un long shot", "Minimum distance for a long shot"),
     REWARDLONGSHOT_VAR_MIN_DISTANCE_NAME("Distance minimale", "Minimum Distance"),
 
-    
+    ROLEREVIVE_VAR_DELAY_DESC("Temps en secondes avant la mort définitive", "Time in seconds before definitive death"),
+    ROLEREVIVE_VAR_DELAY_NAME("Délai de revive", "Revive delay"),
+
+
     SAFEMINER_VAR_DISABLE_AT_PVP_DESC("Désactive SafeMiner automatiquement à l'activation du PvP.", "Automatically disables SafeMiner when PvP is enabled."),
     SAFEMINER_VAR_DISABLE_AT_PVP_NAME("Désactiver au PvP", "Disable At PvP"),
     SAFEMINER_VAR_MAX_HEIGHT_DESC("Hauteur maximale (Y) en dessous de laquelle les joueurs sont protégés.", "Maximum height (Y) below which players are protected."),
@@ -921,7 +924,7 @@ public enum ScenarioVarLang implements Lang {
     private final Map<String, String> translations;
 
     ScenarioVarLang(String fr, String en) {
-        this.translations = Map.of("fr_FR", fr, "en_US", en);
+        this.translations = Map.of("fr_FR", fr, "en_EN", en);
     }
 
     @Override

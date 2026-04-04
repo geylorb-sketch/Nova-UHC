@@ -87,7 +87,7 @@ public class WhiteListUi extends CustomInventory {
                         openAll();
                         return;
                     }
-                    new WhiteListUi(getPlayer()).open();
+                    WhiteListUi.this.open();
                 }).setSlot(t(WhiteListUiLang.ADD_PLAYER_ANVIL_HINT)).open();
             }
         });
@@ -125,7 +125,7 @@ public class WhiteListUi extends CustomInventory {
                                     openAll();
                                 },
                                 () -> openAll(),
-                                new WhiteListUi(getPlayer())).open();
+                                WhiteListUi.this).open();
                     }
                 }
             });

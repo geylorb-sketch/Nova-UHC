@@ -14,7 +14,7 @@ public enum InventorsLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    InventorsLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    InventorsLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "inventors." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

@@ -11,7 +11,7 @@ public enum CenterUiLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    CenterUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    CenterUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "ui.center." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

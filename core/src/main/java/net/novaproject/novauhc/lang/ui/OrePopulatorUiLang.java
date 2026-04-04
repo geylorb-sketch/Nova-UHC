@@ -16,7 +16,7 @@ public enum OrePopulatorUiLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    OrePopulatorUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    OrePopulatorUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "ui.orepop." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

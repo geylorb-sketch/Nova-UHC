@@ -77,7 +77,20 @@
       "Bash(./gradlew.bat :core:jar --rerun-tasks)",
       "Bash(powershell -Command \"Add-Type -AssemblyName System.IO.Compression.FileSystem; \\\\$zip = [System.IO.Compression.ZipFile]::OpenRead\\('F:\\\\\\\\plugin\\\\\\\\serv\\\\\\\\plugins\\\\\\\\API.jar'\\); \\\\$found = \\\\$zip.Entries | Where-Object { \\\\$_.FullName -match 'novauhc/lang/Lang.class|novauhc/lang/LangManager.class' }; \\\\$found | ForEach-Object { Write-Host \\\\$_.FullName }; Write-Host \\('Total found: ' + @\\(\\\\$found\\).Count\\); \\\\$zip.Dispose\\(\\)\")",
       "Bash(./gradlew.bat :dandadan:jar :monster:jar :jjk:jar :ultimate:jar --rerun-tasks)",
-      "Bash(git diff:*)"
+      "Bash(git diff:*)",
+      "Bash(./gradlew.bat :dandadan:build)",
+      "Bash(xargs -I {} basename {} .java)",
+      "Bash(sed 's/.*new //')",
+      "Bash(sed 's/\\(\\)\\).*//')",
+      "Bash(grep -v '^roles$')",
+      "Bash(chmod +x /tmp/check_abilities.sh)",
+      "Bash(/tmp/check_abilities.sh)",
+      "Bash([ -d \"/c/Users/mathy/Desktop/plugin/API/jjk\" ])",
+      "Bash(xargs -I {} basename {})",
+      "Bash([ -d \"/c/Users/mathy/Desktop/plugin/API/monster/src/main/java\" ])",
+      "Bash(find:*)",
+      "Bash(sed 's/\\\\.values\\(\\)//')",
+      "Read(//tmp/**)"
     ]
   }
 }

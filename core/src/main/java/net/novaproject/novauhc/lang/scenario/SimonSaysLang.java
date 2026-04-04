@@ -16,7 +16,7 @@ public enum SimonSaysLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    SimonSaysLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    SimonSaysLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "simonsays." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

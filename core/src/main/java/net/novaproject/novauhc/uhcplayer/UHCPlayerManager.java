@@ -24,7 +24,7 @@ public class UHCPlayerManager {
     }
 
     private final Map<UUID, UHCPlayer> players = new HashMap<>();
-    private final Map<UUID, FastBoard> boards = new HashMap<>();
+    public final Map<UUID, FastBoard> boards = new HashMap<>();
 
     public List<UHCPlayer> getOnlineUHCPlayers() {
         return players.values().stream().filter(UHCPlayer::isOnline).collect(Collectors.toList());

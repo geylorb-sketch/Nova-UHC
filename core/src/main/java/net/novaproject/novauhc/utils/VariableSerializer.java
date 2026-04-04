@@ -1,5 +1,6 @@
 package net.novaproject.novauhc.utils;
 
+import net.novaproject.novauhc.scenario.random.RandomGameEvent;
 import org.bson.Document;
 
 import java.lang.annotation.Annotation;
@@ -43,6 +44,10 @@ public class VariableSerializer {
                         case PERCENTAGE -> {
                             if (value instanceof Double d) doc.append(field.getName(), d);
                             else if (value instanceof Integer i) doc.append(field.getName(), i);
+                        }
+                        case RANDOM_EVENT -> {
+                            if (value instanceof RandomGameEvent<?> event)
+                                doc.append(field.getName(), event.toDoc());
                         }
                         default -> doc.append(field.getName(), value);
                     }
@@ -90,6 +95,13 @@ public class VariableSerializer {
                                     field.set(obj, n.doubleValue());
                                 else if (field.getType() == int.class || field.getType() == Integer.class)
                                     field.set(obj, n.intValue());
+                            }
+                        }
+                        case RANDOM_EVENT -> {
+                            if (value instanceof Document subDoc) {
+                                Object existing = field.get(obj);
+                                if (existing instanceof RandomGameEvent<?> event)
+                                    event.fromDoc(subDoc);
                             }
                         }
                         default -> {

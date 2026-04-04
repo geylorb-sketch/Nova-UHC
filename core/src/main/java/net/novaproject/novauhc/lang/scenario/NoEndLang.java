@@ -9,7 +9,7 @@ public enum NoEndLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    NoEndLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    NoEndLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "noend." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

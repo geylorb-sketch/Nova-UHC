@@ -22,6 +22,7 @@ import net.novaproject.novauhc.lang.scenario.*;
 import net.novaproject.novauhc.lang.special.*;
 import net.novaproject.novauhc.lang.ui.*;
 import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
+import net.novaproject.novauhc.scenario.random.RandomEventLang;
 import net.novaproject.novauhc.ui.config.Enchants;
 import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.ReconnectionManager;
@@ -161,6 +162,7 @@ public class Main extends JavaPlugin {
         langManager.register(SoulBrotherLang.values());
         langManager.register(TaupeGunLang.values());
         langManager.register(TrueLoveLang.values());
+        langManager.register(RandomEventLang.values());
         langManager.generateAndLoad();
 
 

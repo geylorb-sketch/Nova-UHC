@@ -20,7 +20,7 @@ public enum ConfigVarUiLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    ConfigVarUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    ConfigVarUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "ui.configvar." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

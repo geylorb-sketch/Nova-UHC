@@ -23,7 +23,7 @@ public enum TeamConfigUiLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    TeamConfigUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    TeamConfigUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "ui.teamconfig." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

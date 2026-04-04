@@ -24,7 +24,7 @@ public class LangCMD extends Command {
             uhcPlayer.setLocale("fr_FR");
             LangManager.get().send(CommonLang.SUCCESSFUL_MODIFICATION,player);
         } else if (lang.equalsIgnoreCase("en")) {
-            uhcPlayer.setLocale("en_US");
+            uhcPlayer.setLocale("en_EN");
             LangManager.get().send(CommonLang.SUCCESSFUL_MODIFICATION,player);
         } else {
             LangManager.get().send(CommonLang.ERROR_INVALID_ARGUMENT,player,Map.of("arg", lang));

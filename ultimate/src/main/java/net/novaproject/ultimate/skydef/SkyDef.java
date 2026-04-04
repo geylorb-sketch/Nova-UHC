@@ -64,6 +64,9 @@ public class SkyDef extends Scenario {
     @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_BOOK_AMOUNT_NAME", descKey = "VAR_BOOK_AMOUNT_DESC", type = VariableType.INTEGER)
     private int bookAmount = 7;
 
+    @ScenarioVariable(lang = SkyDefLang.class, nameKey = "VAR_START_INV_NAME", descKey = "VAR_START_INV_DESC", type = VariableType.BOOLEAN)
+    private boolean startinv = true;
+
     private UHCTeam defTeam;
     private World world;
     private boolean bannerBreak = false;
@@ -325,7 +328,7 @@ public class SkyDef extends Scenario {
         for (UHCPlayer pl : defTeam.getPlayers()) {
             Player p = pl.getPlayer();
             if (p == null) continue;
-
+            if(!startinv) continue;
             p.getInventory().setBoots(items[0].getItemstack());
             p.getInventory().setLeggings(items[1].getItemstack());
             p.getInventory().setChestplate(items[2].getItemstack());

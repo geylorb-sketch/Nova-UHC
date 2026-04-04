@@ -8,16 +8,16 @@ import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.Titles;
 import net.novauhc.dandadan.DanDaDan;
 import net.novauhc.dandadan.lang.DanDaDanLang;
+import net.novauhc.dandadan.utils.YokaiConfig;
+import net.novauhc.dandadan.utils.YokaiRegistry;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
-import java.awt.*;
 import java.awt.Color;
 import java.util.*;
 import java.util.List;
@@ -241,7 +241,7 @@ public class YokaiZoneManager {
         playerTrial.put(uuid, yokai);
         invoking.add(uuid);
 
-        int invocationSec = DanDaDan.get() != null ? DanDaDan.get().getInvocationTime() : 3;
+        int invocationSec = DanDaDan.get().getInvocationTime();
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, invocationSec * 20 + 20, 127, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, invocationSec * 20 + 20, 128, false, false));

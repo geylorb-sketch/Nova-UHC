@@ -31,7 +31,7 @@ public enum GameUiLang implements Lang {
     private final Map<String, String> translations;
 
     GameUiLang(String fr, String en) {
-        this.translations = Map.of("fr_FR", fr, "en_US", en);
+        this.translations = Map.of("fr_FR", fr, "en_EN", en);
     }
 
     @Override public String getKey() { return "ui.game." + name(); }

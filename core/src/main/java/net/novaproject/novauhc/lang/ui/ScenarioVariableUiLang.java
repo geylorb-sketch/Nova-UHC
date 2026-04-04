@@ -18,11 +18,16 @@ public enum ScenarioVariableUiLang implements Lang {
     CONFIG_TITLE        ("§8Config: §6%name%",                          "§8Config: §6%name%"),
     ROLE_CONFIG_TITLE   ("Configuration de %name%",                     "Configuration of %name%"),
     ROLE_UI_TITLE       ("§f§l | Rôles du camp : %camp%",              "§f§l | Camp roles: %camp%"),
-    CAMP_UI_TITLE       ("%scenario% §f§l| Choisir un Camp",            "%scenario% §f§l| Choose a Camp"),
+    CAMP_UI_TITLE          ("%scenario% §f§l| Choisir un Camp",            "%scenario% §f§l| Choose a Camp"),
+    DISPATCHER_TITLE       ("%scenario% §f§l| Configuration",              "%scenario% §f§l| Configuration"),
+    DISPATCHER_ROLES_NAME  ("§f§lConfig des Rôles",                        "§f§lRoles Config"),
+    DISPATCHER_ROLES_LORE  ("§7Configurer les rôles et leurs variables",   "§7Configure roles and their variables"),
+    DISPATCHER_VARS_NAME   ("§f§lConfig du Scénario",                      "§f§lScenario Config"),
+    DISPATCHER_VARS_LORE   ("§7Configurer les variables du scénario",      "§7Configure scenario variables"),
     ;
 
     private final Map<String, String> translations;
-    ScenarioVariableUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    ScenarioVariableUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "ui.scenarvar." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

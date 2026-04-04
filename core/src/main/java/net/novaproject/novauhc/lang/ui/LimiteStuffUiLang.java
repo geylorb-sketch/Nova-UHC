@@ -17,7 +17,7 @@ public enum LimiteStuffUiLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    LimiteStuffUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    LimiteStuffUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "ui.limitestuff." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

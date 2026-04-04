@@ -277,13 +277,46 @@ public enum CommonLang implements Lang {
     WHITELIST_DISABLE_BUTTON("§c✗ Désactiver la Whitelist", "§c✗ Disable Whitelist"),
     RANDOM_TEAMS_BUTTON("§f◆ Équipes aléatoires", "§f◆ Random Teams"),
 
+    ROLE_DEATH_MESSAGE(
+        "§c☠ §f%player% §cest mort ! Il était §e%role%§c !",
+        "§c☠ §f%player% §cdied! They were §e%role%§c!"
+    ),
+    REVIVE_PENDING_MSG(
+        "§c☠ §f%player% §cest en danger de mort ! ",
+        "§c☠ §f%player% §cis dying! "
+    ),
+    REVIVE_PENDING_BTN(
+        "§a§l[REVIVE]",
+        "§a§l[REVIVE]"
+    ),
+    REVIVE_PENDING_HOVER(
+        "§eCliquez pour reviver §f%player%§e !",
+        "§eClick to revive §f%player%§e!"
+    ),
+    REVIVE_SUCCESS(
+        "§a✦ §f%player% §aa été ressuscité par §6%reviver%§a !",
+        "§a✦ §f%player% §awas revived by §6%reviver%§a!"
+    ),
+    REVIVE_NO_PENDING(
+        "§c✗ §f%player% §cn'est pas en attente de revive",
+        "§c✗ §f%player% §chas no active revive window"
+    ),
+    REVIVE_NO_ABILITY(
+        "§c✗ Vous n'avez pas la capacité de reviver ce joueur",
+        "§c✗ You don't have the ability to revive this player"
+    ),
+    REVIVE_CMD_USAGE(
+        "§c✗ Usage: §f/revive <joueur>",
+        "§c✗ Usage: §f/revive <player>"
+    ),
+
     ;
 
 
     private final Map<String, String> translations;
 
     CommonLang(String fr, String en) {
-        this.translations = Map.of("fr_FR", fr, "en_US", en);
+        this.translations = Map.of("fr_FR", fr, "en_EN", en);
     }
 
     @Override

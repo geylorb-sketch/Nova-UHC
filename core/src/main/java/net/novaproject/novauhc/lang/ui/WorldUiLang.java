@@ -23,7 +23,7 @@ public enum WorldUiLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    WorldUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    WorldUiLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "ui.world." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

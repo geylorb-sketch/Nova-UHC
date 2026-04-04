@@ -11,6 +11,7 @@ import net.novaproject.novauhc.scenario.normal.TeamInv;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.uhcteam.UHCTeam;
+import net.novaproject.novauhc.ui.config.Enchants;
 import net.novaproject.novauhc.utils.ItemCreator;
 
 import net.novaproject.novauhc.utils.TeamsTagsManager;
@@ -136,17 +137,20 @@ public class TaupeCMD extends Command {
         switch (kit) {
             case 0:
                 inventory.addItem(
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, 3).getItemstack(),
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_KNOCKBACK, 1).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, uhcPlayer.getEnchantLimits().get(Enchants.POWER)).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_KNOCKBACK, uhcPlayer.getEnchantLimits().get(Enchants.KNOCKBACK)).getItemstack(),
                         new ItemCreator(Material.ARROW).setAmount(64).getItemstack(),
                         new ItemCreator(Material.STRING).setAmount(3).getItemstack()
                 );
+                uhcPlayer.setEnchantLimit(Enchants.POWER,uhcPlayer.getEnchantLimits().get(Enchants.POWER) + 1);
+                uhcPlayer.setEnchantLimit(Enchants.KNOCKBACK,uhcPlayer.getEnchantLimits().get(Enchants.KNOCKBACK) + 1);
                 break;
             case 1:
                 inventory.addItem(
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_FALL, 4).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_FALL, uhcPlayer.getEnchantLimits().get(Enchants.FEATHER_FALLING)).getItemstack(),
                         new ItemCreator(Material.ENDER_PEARL).setAmount(4).getItemstack()
                 );
+                uhcPlayer.setEnchantLimit(Enchants.FEATHER_FALLING, uhcPlayer.getEnchantLimits().get(Enchants.FEATHER_FALLING) + 1);
                 break;
             case 2:
                 inventory.addItem(
@@ -157,10 +161,13 @@ public class TaupeCMD extends Command {
                 break;
             case 3:
                 inventory.addItem(
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).getItemstack(),
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.DAMAGE_ALL, 3).getItemstack(),
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, 3).getItemstack()
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, uhcPlayer.getEnchantLimits().get(Enchants.PROTECTION_ENVIRONMENTAL)).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.DAMAGE_ALL, uhcPlayer.getEnchantLimits().get(Enchants.SHARPNESS)).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_DAMAGE, uhcPlayer.getEnchantLimits().get(Enchants.POWER)).getItemstack()
                 );
+                uhcPlayer.setEnchantLimit(Enchants.PROTECTION_ENVIRONMENTAL, uhcPlayer.getEnchantLimits().get(Enchants.PROTECTION_ENVIRONMENTAL) + 1);
+                uhcPlayer.setEnchantLimit(Enchants.SHARPNESS, uhcPlayer.getEnchantLimits().get(Enchants.SHARPNESS) + 1);
+                uhcPlayer.setEnchantLimit(Enchants.POWER, uhcPlayer.getEnchantLimits().get(Enchants.POWER) + 1);
                 break;
             case 4:
                 inventory.addItem(
@@ -172,9 +179,13 @@ public class TaupeCMD extends Command {
                 break;
             case 5:
                 inventory.addItem(
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.FIRE_ASPECT, 3).getItemstack(),
-                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_FIRE, 1).getItemstack()
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.FIRE_ASPECT, uhcPlayer.getEnchantLimits().get(Enchants.FIRE_ASPECT)).getItemstack(),
+                        new ItemCreator(Material.ENCHANTED_BOOK).addEnchantment(Enchantment.ARROW_FIRE, uhcPlayer.getEnchantLimits().get(Enchants.FLAME)).getItemstack()
                 );
+                uhcPlayer.setEnchantLimit(Enchants.FIRE_ASPECT, uhcPlayer.getEnchantLimits().get(Enchants.FIRE_ASPECT) + 1 );
+                uhcPlayer.setEnchantLimit(Enchants.FLAME, uhcPlayer.getEnchantLimits().get(Enchants.FLAME) + 1);
+
+
                 break;
             case 6:
                 inventory.addItem(

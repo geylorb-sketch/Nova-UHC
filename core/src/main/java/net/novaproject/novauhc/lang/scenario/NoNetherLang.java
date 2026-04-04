@@ -9,7 +9,7 @@ public enum NoNetherLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    NoNetherLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    NoNetherLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "nonether." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

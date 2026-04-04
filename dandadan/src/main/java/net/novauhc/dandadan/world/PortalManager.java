@@ -81,7 +81,7 @@ public class PortalManager {
                 if (player.getLocation().distance(portal) <= PORTAL_DETECT_RADIUS) {
                     if(DanDaDan.get().getRoleByUHCPlayer(uhc) != null){
                         LangManager.get().send(DanDaDanLang.YOKAI_ALREADY_HAVE,player);
-                        return;
+                        break;
                     }
                     teleportToDandadan(player, dandadanWorld);
                     break;
@@ -110,7 +110,10 @@ public class PortalManager {
         player.teleport(spawn);
 
         LangManager.get().send(DanDaDanLang.PORTAL_ENTER, player);
-        new Titles().sendTitle(player, "§5§lDanDaDan", "§dExplore et trouve ton Yokai !", 60);
+        new Titles().sendTitle(player,
+                LangManager.get().get(DanDaDanLang.PORTAL_TITLE, player),
+                LangManager.get().get(DanDaDanLang.PORTAL_SUBTITLE, player),
+                60);
     }
 
     /** Construit un cadre de portail simple en obsidienne */

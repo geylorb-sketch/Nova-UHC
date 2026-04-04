@@ -8,15 +8,12 @@ import net.novaproject.novauhc.scenario.role.Role;
 import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novauhc.dandadan.lang.DanDaDanLang;
-import net.novauhc.dandadan.world.YokaiConfig;
-import net.novauhc.dandadan.world.YokaiRegistry;
+import net.novauhc.dandadan.utils.YokaiRegistry;
 import net.novauhc.dandadan.world.YokaiZoneManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class DanDaDanCMD extends Command {
 
@@ -33,11 +30,12 @@ public class DanDaDanCMD extends Command {
         switch (arguments[0].toLowerCase()) {
             case "accept" -> handleAccept(player);
             case "yokai" -> handleYokaiList(player);
+
             default -> {
                 if (uhcPlayer != null) {
                     Role role = DanDaDan.get().getRoleByUHCPlayer(uhcPlayer);
                     if (role == null) {
-                        player.sendMessage("§cAucun Role!");
+                        player.sendMessage(LangManager.get().get(DanDaDanLang.CMD_NO_ROLE, player));
                         return;
                     }
                     role.getAbilities().stream()
@@ -47,7 +45,7 @@ public class DanDaDanCMD extends Command {
                             .findFirst()
                             .ifPresent(ability -> ability.tryCommandUse(player, java.util.Arrays.copyOfRange(arguments, 1, arguments.length)));
                 } else {
-                    player.sendMessage("§cCommande inconnue !");
+                    LangManager.get().send(DanDaDanLang.CMD_UNKNOWN, player);
                 }
             }
         }
@@ -77,17 +75,18 @@ public class DanDaDanCMD extends Command {
         }
     }
 
+
+
     private void sendHelp(Player player) {
-        player.sendMessage(LangManager.get().get(DanDaDanLang.CMD_HELP_HEADER));
-        player.sendMessage(LangManager.get().get(DanDaDanLang.CMD_HELP_ACCEPT));
-        player.sendMessage(LangManager.get().get(DanDaDanLang.CMD_HELP_YOKAI));
+        player.sendMessage(LangManager.get().get(DanDaDanLang.CMD_HELP_HEADER, player));
+        player.sendMessage(LangManager.get().get(DanDaDanLang.CMD_HELP_ACCEPT, player));
+        player.sendMessage(LangManager.get().get(DanDaDanLang.CMD_HELP_YOKAI, player));
     }
 
     @Override
     public List<String> tabComplete(CommandArguments args) {
         String[] a = args.getArguments();
 
-        // Premier argument → sous-commande
         if (a.length == 1) {
             List<String> subs = new ArrayList<>(List.of("accept", "yokai"));
             if (args.getSender().hasPermission("novauhc.host")) {

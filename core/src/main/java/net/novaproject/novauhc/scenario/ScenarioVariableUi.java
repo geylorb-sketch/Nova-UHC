@@ -4,6 +4,8 @@ import net.novaproject.novauhc.lang.lang.CommonLang;
 import net.novaproject.novauhc.lang.LangManager;
 import net.novaproject.novauhc.lang.LangResolver;
 import net.novaproject.novauhc.lang.ui.ScenarioVariableUiLang;
+import net.novaproject.novauhc.scenario.random.RandomEventConfigUi;
+import net.novaproject.novauhc.scenario.random.RandomGameEvent;
 import net.novaproject.novauhc.ui.ConfigVarUi;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.UHCUtils;
@@ -105,7 +107,13 @@ public class ScenarioVariableUi extends CustomInventory {
                         .addLore("")
                         .addLore(t(ScenarioVariableUiLang.CLICK_CHANGE));
 
-                if (rawValue instanceof Boolean) {
+                if (rawValue instanceof RandomGameEvent<?> gameEvent) {
+                    ItemCreator eventIcon = new ItemCreator(Material.PAPER)
+                            .setName(t(ScenarioVariableUiLang.CONFIG_BUTTON, Map.of("%name%", gameEvent.getName())))
+                            .addLore(t(ScenarioVariableUiLang.CONFIG_LORE));
+                    addMenu(page, slot, eventIcon, new RandomEventConfigUi(getPlayer(), gameEvent, ScenarioVariableUi.this));
+
+                } else if (rawValue instanceof Boolean) {
                     addItem(new ActionItem(page, slot, icon) {
                         @Override
                         public void onClick(InventoryClickEvent e) {

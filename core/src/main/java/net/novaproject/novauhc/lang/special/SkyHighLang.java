@@ -15,7 +15,7 @@ public enum SkyHighLang implements Lang {
 
     SkyHighLang(String fr, String en) {
         translations.put("fr_FR", fr);
-        translations.put("en_US", en);
+        translations.put("en_EN", en);
     }
 
     @Override

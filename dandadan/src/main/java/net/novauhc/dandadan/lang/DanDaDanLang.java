@@ -11,6 +11,8 @@ public enum DanDaDanLang implements Lang {
 
     // ── Portails ──
     PORTAL_ENTER("§5§l✦ §dVous entrez dans le DanDaDan ! Explorez et trouvez votre Yokai.", "§5§l✦ §dYou enter the DanDaDan! Explore and find your Yokai."),
+    PORTAL_TITLE("§5§lDanDaDan", "§5§lDanDaDan"),
+    PORTAL_SUBTITLE("§dExplore et trouve ton Yokai !", "§dExplore and find your Yokai!"),
 
     // ── Zones Yokai ──
     YOKAI_ZONE_ENTERED("§5§l✦ §dZone Yokai détectée : §f%yokai% §d— Invocation en cours...", "§5§l✦ §dYokai zone detected: §f%yokai% §d— Invoking..."),
@@ -60,6 +62,8 @@ public enum DanDaDanLang implements Lang {
     MOMO_SERVEUSE_TRIGGER("§d§l✦ Serveuse ! §r§dKB annulé !", "§d§l✦ Waitress! §r§dKB cancelled!"),
 
     // ── CMD / Config UI ──
+    CMD_NO_ROLE("§c✘ Tu n'as aucun Yokai.", "§c✘ You have no Yokai."),
+    CMD_UNKNOWN("§c✘ Commande inconnue. Tape /ddd pour l'aide.", "§c✘ Unknown command. Type /ddd for help."),
     CMD_PLAYERS_ONLY("§c✘ Joueurs uniquement.", "§c✘ Players only."),
     CMD_NOT_IN_TRIAL("§c✘ Tu n'es pas en épreuve Yokai.", "§c✘ You are not in a Yokai trial."),
     CMD_NO_PERMISSION("§c✘ Permission insuffisante.", "§c✘ Insufficient permission."),
@@ -78,10 +82,11 @@ public enum DanDaDanLang implements Lang {
     CMD_YOKAI_ENABLED("§aActivé", "§aEnabled"),
     CMD_YOKAI_DISABLED("§cDésactivé", "§cDisabled"),
     CMD_YOKAI_CLAIMED("§6Réclamé", "§6Claimed"),
-    CONFIG_ALL_ENABLED("§a✔ Tous les Yokai activés.", "§a✔ All Yokai enabled."),
-    CONFIG_SPECIAL_DISABLED("§c✔ Tous les Yokai spéciaux désactivés.", "§c✔ All special Yokai disabled."),
-    CONFIG_TYPE_ENABLED("§a✔ Tous les %type% activés.", "§a✔ All %type% enabled."),
-    CONFIG_TYPE_DISABLED("§c✔ Tous les %type% désactivés.", "§c✔ All %type% disabled."),
+    ADMIN_UI_TITLE("§5§lDanDaDan — Admin", "§5§lDanDaDan — Admin"),
+    ADMIN_VARIABLES_NAME("§dVariables du scénario", "§dScenario variables"),
+    ADMIN_VARIABLES_LORE("§7Portails, zones, invocation...", "§7Portals, zones, invocation..."),
+    ADMIN_ROLES_NAME("§dConfiguration des rôles", "§dRole configuration"),
+    ADMIN_ROLES_LORE("§7Distribution et paramètres des Yokai", "§7Yokai distribution and parameters"),
 
     // ── Bamora — Messages abilities ──
     BAMORA_PROJECTILE_TRIGGER("§e§l⚡ Projectile électrique ! §r§eRangée d'éclairs !", "§e§l⚡ Electric projectile! §r§eLightning row!"),
@@ -117,20 +122,7 @@ public enum DanDaDanLang implements Lang {
     KASHIMOTO_ESPRIT_ON("§e§l✦ Esprit Protecteur ! §r§e20%% force + PNJ.", "§e§l✦ Protective Spirit! §r§e20%% strength + NPC."),
     KASHIMOTO_APHOOM_ON("§9§l✦ Aphoom-Zhah ! §r§9Bloc de glace ! Joueurs attirés.", "§9§l✦ Aphoom-Zhah! §r§9Ice block! Players pulled."),
 
-    // ── Config UI (CustomInventory) ──
-    CONFIG_UI_TITLE("§5§lDanDaDan §8— Configuration", "§5§lDanDaDan §8— Configuration"),
-    CONFIG_NORMAL_TITLE("§5§lYokai §7— Normaux", "§5§lYokai §7— Normal"),
-    CONFIG_SPECIAL_TITLE("§6§lYokai §7— Spéciaux", "§6§lYokai §7— Special"),
-    CONFIG_ENABLED_COUNT("activés", "enabled"),
-    CONFIG_CLICK_TO_CONFIGURE("§eCliquez pour configurer", "§eClick to configure"),
-    CONFIG_CLICK_TO_TOGGLE("§eCliquez pour activer/désactiver", "§eClick to toggle"),
-    CONFIG_QUICK_ACTIONS("§a§lActions rapides", "§a§lQuick actions"),
-    CONFIG_LEFT_ENABLE_ALL("§7Clic gauche : §aActiver tous", "§7Left click: §aEnable all"),
-    CONFIG_RIGHT_DISABLE_SPECIAL("§7Clic droit : §cDésactiver spéciaux", "§7Right click: §cDisable special"),
-    CONFIG_ENABLE_ALL_TYPE("§a§lActiver tous", "§a§lEnable all"),
-    CONFIG_DISABLE_ALL_TYPE("§c§lDésactiver tous", "§c§lDisable all"),
-    CONFIG_YOKAI_CLAIMED("§6✦ Déjà réclamé", "§6✦ Already claimed"),
-    PACT_MENU_TITLE_SUFFIX("Pacte", "Pact"),
+PACT_MENU_TITLE_SUFFIX("Pacte", "Pact"),
 
     GENERIC_ABILITY_ON("§5§l✦ %name% activé !", "§5§l✦ %name% activated!"),
 
@@ -338,7 +330,7 @@ public enum DanDaDanLang implements Lang {
     private final Map<String, String> translations;
 
     DanDaDanLang(String fr, String en) {
-        this.translations = Map.of("fr_FR", fr, "en_US", en);
+        this.translations = Map.of("fr_FR", fr, "en_EN", en);
     }
 
     @Override public String getKey() { return "dandadan." + name(); }

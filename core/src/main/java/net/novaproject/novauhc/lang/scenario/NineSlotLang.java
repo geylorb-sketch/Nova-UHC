@@ -16,7 +16,7 @@ public enum NineSlotLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    NineSlotLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    NineSlotLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "nineslot." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

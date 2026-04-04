@@ -7,5 +7,6 @@ public enum VariableType {
     STRING,
     TIME,
     PERCENTAGE,
-    ABILITY
+    ABILITY,
+    RANDOM_EVENT
 }

@@ -14,7 +14,7 @@ public enum BlockRushLang implements Lang {
     ;
 
     private final Map<String, String> translations;
-    BlockRushLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_US", en); }
+    BlockRushLang(String fr, String en) { this.translations = Map.of("fr_FR", fr, "en_EN", en); }
     @Override public String getKey() { return "blockrush." + name(); }
     @Override public Map<String, String> getTranslations() { return translations; }
 }

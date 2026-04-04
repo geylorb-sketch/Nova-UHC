@@ -113,13 +113,13 @@ public class PreconfigUi extends CustomInventory {
                                 t(PreconfigUiLang.CONFIRM_DELETE, Map.of("%name%", configName)),
                                 () -> getPlayer().performCommand("config delete " + configName),
                                 () -> {},
-                                new PreconfigUi(getPlayer(), parent)).open();
+                                PreconfigUi.this).open();
                     } else {
                         new ConfirmMenu(getPlayer(),
                                 t(PreconfigUiLang.CONFIRM_LOAD, Map.of("%name%", configName)),
                                 () -> getPlayer().performCommand("config load " + configName),
                                 () -> {},
-                                new PreconfigUi(getPlayer(), parent)).open();
+                                PreconfigUi.this).open();
                     }
                 }
             });

@@ -26,7 +26,7 @@ public enum BeatTheSantaLang implements Lang {
     BeatTheSantaLang(String fr, String en) {
         this.translations = Map.of(
                 "fr_FR", fr,
-                "en_US", en
+                "en_EN", en
         );
     }
 

@@ -1,8 +1,0 @@
-name: JJK
-main: net.novaproject.jjk.Main
-version: 1.0
-authors:
-  - Lezombie3D
-  - Sithey
-depend:
-  - NovaUHC

@@ -19,7 +19,7 @@ public enum NinjaLang implements Lang {
     private final Map<String, String> translations;
 
     NinjaLang(String fr, String en) {
-        this.translations = Map.of("fr_FR", fr, "en_US", en);
+        this.translations = Map.of("fr_FR", fr, "en_EN", en);
     }
 
     @Override
