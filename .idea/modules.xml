@@ -6,8 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/UHC.core.test.iml" filepath="$PROJECT_DIR$/.idea/modules/core/UHC.core.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dandadan/UHC.dandadan.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dandadan/UHC.dandadan.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dandadan/UHC.dandadan.test.iml" filepath="$PROJECT_DIR$/.idea/modules/dandadan/UHC.dandadan.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jjk/UHC.jjk.main.iml" filepath="$PROJECT_DIR$/.idea/modules/jjk/UHC.jjk.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jjk/UHC.jjk.test.iml" filepath="$PROJECT_DIR$/.idea/modules/jjk/UHC.jjk.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/UHC.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UHC.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/monster/UHC.monster.main.iml" filepath="$PROJECT_DIR$/.idea/modules/monster/UHC.monster.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/monster/UHC.monster.test.iml" filepath="$PROJECT_DIR$/.idea/modules/monster/UHC.monster.test.iml" />
