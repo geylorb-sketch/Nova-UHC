@@ -22,6 +22,8 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import org.bukkit.ChatColor;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,8 @@ public class UHCPlayer {
     private int minedDiamond = 0;
     private int kill = 0;
     private String locale = null;
+    // Couleurs TAB personnelles par viewer (viewer UUID → couleur choisie pour ce UHCPlayer)
+    private final Map<UUID, ChatColor> tabColorPrefs = new HashMap<>();
 
     public UHCPlayer(Player player) {
         this.uuid = player.getUniqueId();

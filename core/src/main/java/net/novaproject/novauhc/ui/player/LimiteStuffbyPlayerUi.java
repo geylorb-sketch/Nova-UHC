@@ -38,8 +38,9 @@ public class  LimiteStuffbyPlayerUi extends CustomInventory {
         UHCPlayer targetPlayer = UHCPlayerManager.get().getPlayer(target);
         fillCorner(getConfig().getInt("menu.stuff.color"));
 
-        String clickGauche = LangManager.get().get(CommonLang.CLICK_GAUCHE, getPlayer());
-        String clickDroite = LangManager.get().get(CommonLang.CLICK_DROITE, getPlayer());
+        String clickGauche  = LangManager.get().get(CommonLang.CLICK_GAUCHE,          getPlayer());
+        String clickDroite  = LangManager.get().get(CommonLang.CLICK_DROITE,          getPlayer());
+        String clickAccess  = LangManager.get().get(CommonLang.CLICK_HERE_TO_ACCESS,  getPlayer());
 
         String diamondLimitValue = targetPlayer.getDimamondLimit() == 0
                 ? t(LimiteStuffUiLang.DISABLED_VALUE)
@@ -58,7 +59,8 @@ public class  LimiteStuffbyPlayerUi extends CustomInventory {
                 .addLore(clickDroite + t(LimiteStuffUiLang.MINUS_ONE))
                 .addLore("");
 
-        addItem(new ActionItem(3, diamond.setAmount(targetPlayer.getDiamondArmor())) {
+        // Row 0 — limites armure (gauche) et effets % (droite)
+        addItem(new ActionItem(1, diamond.setAmount(targetPlayer.getDiamondArmor())) {
             @Override
             public void onClick(InventoryClickEvent e) {
                 if (e.isLeftClick()  && targetPlayer.getDiamondArmor() < 4) targetPlayer.setDiamondArmor(targetPlayer.getDiamondArmor() + 1);
@@ -76,7 +78,7 @@ public class  LimiteStuffbyPlayerUi extends CustomInventory {
                 .addLore(clickDroite + t(LimiteStuffUiLang.MINUS_ONE))
                 .addLore("");
 
-        addItem(new ActionItem(5, protection.setAmount(targetPlayer.getProtectionMax())) {
+        addItem(new ActionItem(2, protection.setAmount(targetPlayer.getProtectionMax())) {
             @Override
             public void onClick(InventoryClickEvent e) {
                 if (e.isLeftClick()  && targetPlayer.getProtectionMax() < 4) targetPlayer.setProtectionMax(targetPlayer.getProtectionMax() + 1);
@@ -85,10 +87,55 @@ public class  LimiteStuffbyPlayerUi extends CustomInventory {
             }
         });
 
-        addMenu(49, diamondlimite, new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, getUHCPlayer().getDimamondLimit(), 0, 0, this) {
+        addMenu(3, diamondlimite, new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, getUHCPlayer().getDimamondLimit(), 0, 0, this) {
             @Override
             public void onChange(Number newValue) {
                 targetPlayer.setDimamondLimit((int) newValue);
+            }
+        });
+
+        int forceVal = (int) (targetPlayer.getForcePercent() * 100);
+        ItemCreator forceItem = new ItemCreator(Material.BLAZE_POWDER)
+                .setName(t(LimiteStuffUiLang.FORCE_ITEM_NAME, Map.of("%value%", forceVal)))
+                .addLore("")
+                .addLore(t(LimiteStuffUiLang.FORCE_ITEM_DESC))
+                .addLore("")
+                .addLore(clickAccess)
+                .addLore("");
+
+        addMenu(5, forceItem, new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, forceVal, 0, 200, this) {
+            @Override public void onChange(Number newValue) {
+                targetPlayer.setForcePercent(newValue.intValue() / 100.0);
+            }
+        });
+
+        int resiVal = (int) (targetPlayer.getResistancePercent() * 100);
+        ItemCreator resiItem = new ItemCreator(Material.IRON_CHESTPLATE)
+                .setName(t(LimiteStuffUiLang.RESI_ITEM_NAME, Map.of("%value%", resiVal)))
+                .addLore("")
+                .addLore(t(LimiteStuffUiLang.RESI_ITEM_DESC))
+                .addLore("")
+                .addLore(clickAccess)
+                .addLore("");
+
+        addMenu(6, resiItem, new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, resiVal, 0, 200, this) {
+            @Override public void onChange(Number newValue) {
+                targetPlayer.setResistancePercent(newValue.intValue() / 100.0);
+            }
+        });
+
+        int critVal = (int) (targetPlayer.getForceCriticPercent() * 100);
+        ItemCreator critItem = new ItemCreator(Material.NETHER_STAR)
+                .setName(t(LimiteStuffUiLang.CRIT_ITEM_NAME, Map.of("%value%", critVal)))
+                .addLore("")
+                .addLore(t(LimiteStuffUiLang.CRIT_ITEM_DESC))
+                .addLore("")
+                .addLore(clickAccess)
+                .addLore("");
+
+        addMenu(7, critItem, new ConfigVarUi(getPlayer(), 10, 5, 1, 10, 5, 1, critVal, 0, 200, this) {
+            @Override public void onChange(Number newValue) {
+                targetPlayer.setForceCriticPercent(newValue.intValue() / 100.0);
             }
         });
 

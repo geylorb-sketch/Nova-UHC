@@ -51,6 +51,7 @@ public class CommandManager implements CommandExecutor, TabExecutor {
         register("arena", new ArenaCommand(), "leave");
         register("lang",new LangCMD(),"l");
         register("revive", new ReviveCMD(), "rv");
+        register("color", new ColorCMD(), "couleur");
     }
 
     public void register(String name, Command command, String... aliases) {

@@ -11,19 +11,23 @@ import net.novaproject.novauhc.uhcplayer.UHCPlayer;
 import net.novaproject.novauhc.uhcplayer.UHCPlayerManager;
 import net.novaproject.novauhc.utils.ItemCreator;
 import net.novaproject.novauhc.utils.VariableType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.Random;
 
 public class TpMeetup extends Scenario {
 
     @ScenarioVariable(lang = net.novaproject.novauhc.lang.lang.ScenarioVarLang.class, nameKey = "TPMEETUP_VAR_TIMER_TP_NAME", descKey = "TPMEETUP_VAR_TIMER_TP_DESC", type = VariableType.TIME)
     private int timerTP = 3600;
 
+    @ScenarioVariable(lang = net.novaproject.novauhc.lang.lang.ScenarioVarLang.class, nameKey = "TPMEETUP_VAR_RADIUS_NAME", descKey = "TPMEETUP_VAR_RADIUS_DESC", type = VariableType.INTEGER)
+    private int radius = 250;
+
     private boolean tpDone = false;
+    private static final Random RANDOM = new Random();
 
     @Override
     public String getName() {
@@ -48,9 +52,11 @@ public class TpMeetup extends Scenario {
 
         if (timer == timerTP && !tpDone) {
             tpDone = true;
-            int y = Common.get().getArena().getHighestBlockYAt(0, 0);
-            Location loc = new Location(Common.get().getArena(), 0, y, 0);
             for (UHCPlayer uhcPlayer : UHCPlayerManager.get().getPlayingOnlineUHCPlayers()) {
+                int x = RANDOM.nextInt(radius * 2 + 1) - radius;
+                int z = RANDOM.nextInt(radius * 2 + 1) - radius;
+                int y = Common.get().getArena().getHighestBlockYAt(x, z);
+                Location loc = new Location(Common.get().getArena(), x + 0.5, y + 1, z + 0.5);
                 uhcPlayer.getPlayer().teleport(loc);
                 LangManager.get().sendAll(CommonLang.TP_MESSAGE, Map.of("%player%", uhcPlayer.getPlayer().getName()));
             }

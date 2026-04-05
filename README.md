@@ -1,8 +1,8 @@
 # NovaUHC
 
-NovaUHC is a comprehensive Minecraft UHC (Ultra Hardcore) plugin suite developed for Spigot 1.8.8. It is structured as a multi-module project consisting of a core API and an "Ultimate" module containing additional high-level scenarios and game modes.
+NovaUHC is a comprehensive Minecraft UHC (Ultra Hardcore) plugin suite developed for Spigot 1.8.8. It is structured as a multi-module project consisting of a core API and several scenario modules.
 
-It offers a rich set of features including numerous scenarios, custom UI configurations, and CloudNet integration for competitive Minecraft gameplay.
+It offers a rich set of features including numerous scenarios, role-based game modes, custom UI configurations, and CloudNet integration for competitive Minecraft gameplay.
 
 ## 🚀 Features
 
@@ -15,6 +15,15 @@ Over 50 scenarios are built-in, categorized to vary gameplay:
 - **Combat & PvP**: NoCleanUp, BloodLust, WeakestLink, Gladiator, Vampire, BuffKiller.
 - **Game Mechanics**: TimeBombe, WebCage, AcidRain, Blizzard, Fallout.
 - **Special Modes (Role-based)**: DragonFall, Werewolf (LoupGarou), FireForce, and DeathNote.
+
+### 🧩 Role Modules
+Separate plugin modules inject role-based scenarios into the core engine:
+
+| Module | Description |
+|--------|-------------|
+| **DanDaDan** | 30+ roles inspired by DanDaDan, JoJo's Bizarre Adventure, Chainsaw Man, Doom Slayer, and more — with a custom Yokai world dimension |
+| **Monster** | Monster UHC scenario with Trésor, Nocif/Passif/Boss roles and random events |
+| **Ultimate** | Advanced scenarios: Legend (class-based), SkyHigh, SkyDef, TaupeGun, FallenKingdom, BeatTheSanta |
 
 ### ⚙️ Advanced Game Lifecycle
 Automated management of the entire game flow:
@@ -30,10 +39,26 @@ Automated management of the entire game flow:
 A set of comprehensive menus allows hosts to configure the game in real-time:
 - **Main Config**: Central hub for all game settings.
 - **Scenario Manager**: Toggle and configure multiple scenarios simultaneously.
+- **Effects Config**: Per-player strength/resistance/crit percent tuning via `EffectsConfigUi`.
 - **Border Control**: Adjust initial size, final size, and shrink speed.
 - **Team Management**: Configure team sizes, friendly fire, and auto-filling.
 - **World Settings**: Manage map parameters and accessibility.
 - **Game Rules**: Toggle spectators, whitelist, and general UHC rules.
+
+### 🎨 Per-Viewer TAB Color System
+Hosts can colorize player names in the TAB list for specific viewers only (NMS packet-based, no global scoreboard pollution). Managed by `PlayerColorManager` with `/color` command support.
+
+### 🛠️ Ability Templates
+Les classes de base sont organisées dans le package `ability/template/` :
+- `PassiveAbility` — passif déclenché chaque seconde via `onSec()`
+- `MeleeAbility` — déclenché sur attaque au corps à corps
+- `UseAbility` — déclenché au clic droit avec un item spécifique
+- `BowAbility` — déclenché au tir à l'arc
+- `CommandAbility` — déclenché via commande slash
+- `ReviveAbility` — base pour les mécaniques de résurrection
+
+### 💀 Revive System
+New `ReviveAbility` base class and `/revive` command allow role scenarios to implement resurrection mechanics with full UI and cooldown integration.
 
 ### 📊 Robust Backend & Persistence
 - **MongoDB Integration**: Persistent storage for player statistics, including Wins, Kills, Deaths, and a custom Coin reward system.
@@ -52,7 +77,7 @@ A set of comprehensive menus allows hosts to configure the game in real-time:
 
 ## 📋 Requirements
 
-- **Java**: JDK 8 (Targeting Spigot 1.8.8 compatibility).
+- **Java**: JDK 25 
 - **Server**: Spigot 1.8.8 (or compatible forks like Paper).
 - **Database**: MongoDB (Required for data persistence).
 - **Optional**: CloudNet 4 (For automated server scaling).
@@ -66,11 +91,16 @@ A set of comprehensive menus allows hosts to configure the game in real-time:
     ```
 
 2.  **Configuration**:
-    *   **Main Config**: Edit `core/src/main/resources/config.yml` to set up your MongoDB connection:
+    *   **Main Config**: Edit `core/src/main/resources/config.yml` :
         ```yaml
-        mongodb:
-          connectionString: "mongodb:
-          name: "novauhc"
+        api:
+          url: "https://api.nova-code.fr"
+          key: "TA CLEF API ICI"
+          server-name: "Nova-UHC"
+        serverinfo:
+          ip: "play.novauhc.fr"
+          servername: "§cSERVER"
+        discord: "https://discord.gg/..."
         ```
     *   **Advanced Configs**: Explore `core/src/main/resources/api/` for detailed settings:
         - `generalconfig.yml`: Core game rules and timers.
@@ -80,26 +110,18 @@ A set of comprehensive menus allows hosts to configure the game in real-time:
 
 3.  **Build the plugin**:
     ```bash
-    ./gradlew build
+    ./gradlew.bat build
     ```
-    The compiled `.jar` files will be generated in their respective module folders:
-    - Core: `core/build/libs/API.jar`
-    - Ultimate: `ultimate/build/libs/Ultimate.jar`
+    The compiled `.jar` files are automatically copied to `F:\plugin\serv\plugins`.
 
-    *Note: The `jar` task in both `core/build.gradle` and `ultimate/build.gradle` is currently configured to also copy the output to `F:\plugin\Plugin`. Update this path if needed.*
+## 📜 Commands
 
-## 📜 Scripts & Commands
-
-### Gradle Tasks
-- `./gradlew build`: Compiles the project and generates the plugin JAR.
-- `./gradlew clean`: Deletes the build directory.
-- `./gradlew jar`: Generates the JAR and copies it to the hardcoded output directory.
-
-### In-Game Commands
 | Command | Aliases | Description |
 | :--- | :--- | :--- |
 | `/h` | `/host` | Main host command for managing the game. |
 | `/config` | `/preconfig` | Opens the game configuration menu. |
+| `/color` | | Opens the TAB color picker for per-viewer coloring. |
+| `/revive` | | Revive a player (if the active scenario supports it). |
 | `/teamco` | `/tc`, `/tcoo` | Team coordination tools. |
 | `/teaminventory` | `/ti`, `/tinv` | Access the shared team inventory. |
 | `/helpop` | | Contact host for assistance. |
@@ -113,38 +135,32 @@ A set of comprehensive menus allows hosts to configure the game in real-time:
 API/
 ├── core/                 # Core UHC engine and API
 │   ├── src/main/java/net/novaproject/novauhc/
-│   │   ├── ability/      # Player abilities and special powers
+│   │   ├── ability/      # Ability base classes and templates (Passive, Melee, Use, Bow, Command, Revive)
 │   │   ├── arena/        # Arena and lobby logic
 │   │   ├── cloudnet/     # CloudNet 4 integration
 │   │   ├── command/      # Command registration and handling
 │   │   ├── database/     # MongoDB interactions and managers
 │   │   ├── listener/     # Event listeners (Player, Entity, etc.)
-│   │   ├── scenario/     # Large collection of UHC scenarios
+│   │   ├── scenario/     # Scenarios + ScenarioBuilder + RandomGameEvent system
 │   │   ├── task/         # Scheduled Bukkit tasks (Scatter, Timers)
 │   │   ├── uhcplayer/    # Player data and session management
 │   │   ├── uhcteam/      # Team logic and management
-│   │   ├── ui/           # GUI menu implementations
-│   │   ├── utils/        # Utility classes (NMS, Config, Items)
+│   │   ├── ui/           # GUI menus (config, effects, color picker, etc.)
+│   │   ├── utils/        # Utility classes (NMS, Config, Items, PlayerColorManager)
 │   │   └── world/        # World generation and population
 │   └── src/main/resources/ # Core assets and config files
-├── ultimate/             # Advanced scenarios and game modes
-│   ├── src/main/java/net/novaproject/ultimate/
-│   │   ├── beatthesanta/ # Beat the Santa game mode
-│   │   ├── fallenkigdom/ # Fallen Kingdom game mode
-│   │   ├── flowerpower/  # Flower Power scenario
-│   │   ├── legend/       # Legend scenario
-│   │   ├── skyhigt/      # Sky High scenario
-│   │   ├── taupegun/     # Taupe Gun scenario
-│   │   └── ...           # Many more unique scenarios
-│   └── src/main/resources/ # Ultimate module resources
+├── dandadan/             # DanDaDan role-based scenario module (30+ roles)
+├── monster/              # Monster UHC scenario module
+├── ultimate/             # Advanced scenarios (Legend, SkyHigh, FallenKingdom, etc.)
+├── templates/            # Ready-to-use skeletons to create a new module from scratch
+│   ├── HOWTO.md          #   Generation guide + quality checklist
+│   ├── classic/          #   Classic scenario template (no roles)
+│   └── role/             #   Full role-based module template (Main, ScenarioUHC, Role, Camps, Lang, plugin.yml, build.gradle)
 └── build.gradle          # Root build configuration
 ```
 
-## ⚙️ Environment Variables
-- TODO: Add support for environment variables to override `config.yml` settings (e.g., `MONGO_URI`).
-
 ## 🧪 Tests
-- TODO: Implement unit and integration tests (none currently detected).
+- TODO: Implement unit and integration tests.
 
 ## 📄 License
 

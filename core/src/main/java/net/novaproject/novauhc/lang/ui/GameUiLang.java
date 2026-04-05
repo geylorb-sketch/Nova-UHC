@@ -26,6 +26,14 @@ public enum GameUiLang implements Lang {
     DROP_ITEM_DESC("  §8┃ §fModifier les taux de drop de certains objets.", "  §8┃ §fModify drop rates of certain items."),
     VERIF_START_DESC("  §8┃ §fVous permet de §5vérifier§f l'inventaire par défaut donné en début de partie.", "  §8┃ §f§5Verify§f the default inventory given at game start."),
     VERIF_DEATH_DESC("  §8┃ §fVous permet de §5vérifier§f l'inventaire de %main_color%mort§f donné lors d'une %main_color%mort§f.", "  §8┃ §f§5Verify§f the %main_color%death§f inventory given on %main_color%death§f."),
+    EFFETS_ITEM_NAME("§8┃ §fEffets §7(F:§e%force%%§7 R:§b%resi%%§7 C:§c%crit%%§7)", "§8┃ §fEffects §7(S:§e%force%%§7 R:§b%resi%%§7 C:§c%crit%%§7)"),
+    EFFETS_ITEM_DESC("  §8┃ §fConfigurer les multiplicateurs globaux de §6force§f, §brésistance§f et §ccritiques§f.", "  §8┃ §fConfigure global §6strength§f, §bresistance§f and §ccritical§f multipliers."),
+    FORCE_ITEM_NAME("§8┃ §fForce §7(global: §e%value%%§7)", "§8┃ §fStrength §7(global: §e%value%%§7)"),
+    FORCE_ITEM_DESC("  §8┃ §fMultiplicateur global de §6force§f appliqué à tous les joueurs.", "  §8┃ §fGlobal §6strength§f multiplier applied to all players."),
+    RESI_ITEM_NAME("§8┃ §fRésistance §7(global: §e%value%%§7)", "§8┃ §fResistance §7(global: §e%value%%§7)"),
+    RESI_ITEM_DESC("  §8┃ §fMultiplicateur global de §brésistance§f appliqué à tous les joueurs.", "  §8┃ §fGlobal §bresistance§f multiplier applied to all players."),
+    CRIT_ITEM_NAME("§8┃ §fCritiques §7(global: §e%value%%§7)", "§8┃ §fCriticals §7(global: §e%value%%§7)"),
+    CRIT_ITEM_DESC("  §8┃ §fMultiplicateur global des §ccritiques§f appliqué à tous les joueurs.", "  §8┃ §fGlobal §ccritical§f multiplier applied to all players."),
     ;
 
     private final Map<String, String> translations;

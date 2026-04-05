@@ -1,0 +1,9 @@
+# TODO: remplacer TODO_ModuleName par le nom exact du module (ex: MonsterUHC, NinjaUHC)
+# TODO: remplacer TODO_package par le package Java (ex: net.novaproject.ninjaufhc)
+name: TODO_ModuleName
+main: net.novaproject.TODO_package.Main
+version: 1.0
+authors:
+  - Lezombie3D
+depend:
+  - NovaUHC

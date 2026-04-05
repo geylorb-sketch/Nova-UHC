@@ -146,6 +146,20 @@ public class GameUi extends CustomInventory {
             @Override public void onChange(Number newValue) { UHCManager.get().setTimerborder((int) newValue * 60); }
         });
         addMenu(16, enchant, new LimiteStuffUi(getPlayer()));
+
+        int forceVal = (int) (UHCManager.get().getGlobalForcePercent() * 100);
+        ItemCreator effetsBtn = new ItemCreator(Material.BLAZE_POWDER)
+                .setName(t(GameUiLang.EFFETS_ITEM_NAME, Map.of("%force%", forceVal,
+                        "%resi%", (int)(UHCManager.get().getGlobalResistancePercent() * 100),
+                        "%crit%", (int)(UHCManager.get().getGlobalForceCriticPercent() * 100))))
+                .addLore("")
+                .addLore(t(GameUiLang.EFFETS_ITEM_DESC))
+                .addLore("")
+                .addLore(clickAccess)
+                .addLore("");
+
+        addMenu(13, effetsBtn, new EffectsConfigUi(getPlayer()));
+
         addReturn(36, new DefaultUi(getPlayer()));
     }
 

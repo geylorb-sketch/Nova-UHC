@@ -158,6 +158,41 @@ public class UHCUtils {
         }.runTaskLater(Main.get(), 10L);
     }
 
+    public static void showHealthAboveHead(Player viewer, Player target) {
+        if (!viewer.isOnline() || !target.isOnline()) return;
+        if (viewer.equals(target)) return;
+
+        double pct = (target.getHealth() / target.getMaxHealth()) * 100.0;
+        String color = pct > 75 ? "§a" : pct > 50 ? "§e" : pct > 25 ? "§6" : "§c";
+        // Afficher uniquement le % (pas le pseudo, déjà affiché par le nametag vanilla)
+        String text = color + String.format("%.0f%%", pct);
+
+        Location loc = target.getLocation().clone().add(0, 2.3, 0);
+        WorldServer nmsWorld = ((CraftWorld) loc.getWorld()).getHandle();
+        EntityArmorStand armorStand = new EntityArmorStand(nmsWorld, loc.getX(), loc.getY(), loc.getZ());
+
+        armorStand.setCustomName(text);
+        armorStand.setCustomNameVisible(true);
+        armorStand.setInvisible(true);
+        armorStand.setSmall(true);
+        armorStand.setBasePlate(false);
+        armorStand.setArms(false);
+        armorStand.setHealth(0.5f);
+        armorStand.n(true);
+
+        PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(armorStand);
+        ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(spawnPacket);
+
+        int entityId = armorStand.getId();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                PacketPlayOutEntityDestroy destroyPacket = new PacketPlayOutEntityDestroy(entityId);
+                ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(destroyPacket);
+            }
+        }.runTaskLater(Main.get(), 6L);
+    }
+
     public static void setRealHealth(int maxHealth, int currentHealth, Player player, int abso) {
         if (maxHealth <= 0) return;
 

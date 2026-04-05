@@ -1,0 +1,27 @@
+// TODO: remplacer TODO_ModuleName par le nom du JAR (ex: NinjaUHC.jar)
+// TODO: si des particules sont nécessaires → décommenter extraLibs particle
+
+configurations {
+    extraLibs
+    implementation.extendsFrom(extraLibs)
+}
+
+dependencies {
+    implementation project(':core')
+    implementation group: 'com.github.azbh111', name: 'spigot-1.8.8', version: 'R'
+
+    // Décommenter si le module utilise des particules :
+    // extraLibs 'xyz.xenondevs:particle:1.8.1'
+
+    compileOnly 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+}
+
+jar {
+    archiveFileName.set("TODO_ModuleName.jar")
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    destinationDirectory.set(file("F:\\plugin\\serv\\plugins"))
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

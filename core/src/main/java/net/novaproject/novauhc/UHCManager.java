@@ -69,6 +69,14 @@ public class UHCManager {
     private boolean started = false;
     private boolean chatdisbale = false;
     private boolean canceled = false;
+    // Feature A — effets % global
+    private double globalForcePercent = 0.5;
+    private double globalResistancePercent = 1.0;
+    private double globalForceCriticPercent = 1.0;
+    // Feature B — vie au-dessus de la tête
+    private boolean showHealthPercent = false;
+    // Feature C — scoreboard kills
+    private boolean showKillScoreboard = false;
 
     public void setup() {
         uhcPlayerManager = new UHCPlayerManager();

@@ -38,6 +38,12 @@ public enum DefaultUiLang implements Lang {
     SLOT_ITEM_DESC("  §8┃ §fVous permet de %main_color%modifier§fle nombre de %main_color%joueurs§f autorisés.", "  §8┃ §f%main_color%Modify§fthe number of %main_color%players§f allowed."),
 
     
+    HEALTH_ITEM_NAME("§8┃ §fVie au-dessus des têtes", "§8┃ §fHealth above heads"),
+    HEALTH_ITEM_STATUS(" §8» §fStatut §f: ", " §8» §fStatus §f: "),
+    HEALTH_ITEM_DESC("  §8┃ §fAffiche la §cvie§f de chaque joueur en §e%§f au-dessus de sa tête.", "  §8┃ §fDisplays each player's §chealth§f as a §e%§f above their head."),
+    KILLBOARD_ITEM_NAME("§8┃ §fClassement §6kills", "§8┃ §f§6Kill§f leaderboard"),
+    KILLBOARD_ITEM_STATUS(" §8» §fStatut §f: ", " §8» §fStatus §f: "),
+    KILLBOARD_ITEM_DESC("  §8┃ §fAlterne le scoreboard avec le §6classement§f des kills en temps réel.", "  §8┃ §fAlternates the scoreboard with the §6kill§f ranking in real time."),
     STOP_CONFIRM("Etes-vous sûr de vouloir stopper le serveur ?", "Are you sure you want to stop the server?"),
     SLOT_ITEM_DESC2("  §8┃ §fà se §aconnecter§f à la %main_color%partie§f.", "  §8┃ §fto §aconnect§f to the %main_color%game§f."),
     START_READY_NAME("§aLancer la partie", "§aStart the game"),

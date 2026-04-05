@@ -90,7 +90,9 @@
       "Bash([ -d \"/c/Users/mathy/Desktop/plugin/API/monster/src/main/java\" ])",
       "Bash(find:*)",
       "Bash(sed 's/\\\\.values\\(\\)//')",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(grep -l \"Team\" \"/c/Users/mathy/Desktop/plugin/API/core/src/main/java/net/novaproject/novauhc/scenario/normal\"/*.java)",
+      "Bash(grep \"\\\\.java$\")"
     ]
   }
 }

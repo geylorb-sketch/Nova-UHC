@@ -31,6 +31,8 @@ public enum ScenarioVarLang implements Lang {
     BESTPVE_VAR_TIMER_NAME("Temps entre les gains de cœur", "Time between heart gains"),
     TPMEETUP_VAR_TIMER_TP_NAME("Temps avant TP","Time before TP"),
     TPMEETUP_VAR_TIMER_TP_DESC("Definit le temps avant le Tp Global","Set the time before the global TP"),
+    TPMEETUP_VAR_RADIUS_NAME("Rayon de TP","TP Radius"),
+    TPMEETUP_VAR_RADIUS_DESC("Rayon maximum autour du centre (0,0) dans lequel les joueurs sont téléportés aléatoirement","Maximum radius around center (0,0) in which players are randomly teleported"),
     BLIZZARD_VAR_BLIND_EFFECT_LEVEL_DESC("Niveau de l'effet Blindness lors de froid", "Blindness effect level during cold"),
     BLIZZARD_VAR_BLIND_EFFECT_LEVEL_NAME("Niveau Blindness", "Blindness Level"),
     BLIZZARD_VAR_COLD_DAMAGE_INTERVAL_DESC("Intervalle de tick pour appliquer les effets de froid (en secondes)", "Tick interval to apply cold effects (in seconds)"),

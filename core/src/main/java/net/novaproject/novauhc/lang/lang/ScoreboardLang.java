@@ -78,6 +78,10 @@ public enum ScoreboardLang implements Lang {
     SB_END_L7("§f  §8● §fKill : %main_color%%kills%", "§f  §8● §fKills: %main_color%%kills%"),
     SB_END_L8("", ""),
     SB_END_L9("<ip>", "<ip>"),
+
+    // Kill scoreboard
+    SB_KILLS_TITLE("§6§lClassement Kills", "§6§lKill Leaderboard"),
+    SB_KILLS_EMPTY("§8Aucun kill pour l'instant", "§8No kills yet"),
     ;
 
     private final Map<String, String> translations;

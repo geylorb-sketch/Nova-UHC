@@ -144,6 +144,42 @@ public class DefaultUi extends CustomInventory {
                         ""
                 ));
 
+        String healthStatus = UHCManager.get().isShowHealthPercent()
+                ? t(DefaultUiLang.SPEC_ENABLED) : t(DefaultUiLang.SPEC_DISABLED);
+        ItemCreator healthToggle = new ItemCreator(Material.REDSTONE)
+                .setName(t(DefaultUiLang.HEALTH_ITEM_NAME))
+                .addLore("").addLore(accessHost)
+                .addLore(t(DefaultUiLang.HEALTH_ITEM_STATUS) + healthStatus)
+                .addLore("")
+                .addLore(t(DefaultUiLang.HEALTH_ITEM_DESC))
+                .addLore("").addLore(clickModify).addLore("");
+
+        String killboardStatus = UHCManager.get().isShowKillScoreboard()
+                ? t(DefaultUiLang.SPEC_ENABLED) : t(DefaultUiLang.SPEC_DISABLED);
+        ItemCreator killboardToggle = new ItemCreator(Material.SKULL_ITEM).setDurability((short) 1)
+                .setName(t(DefaultUiLang.KILLBOARD_ITEM_NAME))
+                .addLore("").addLore(accessHost)
+                .addLore(t(DefaultUiLang.KILLBOARD_ITEM_STATUS) + killboardStatus)
+                .addLore("")
+                .addLore(t(DefaultUiLang.KILLBOARD_ITEM_DESC))
+                .addLore("").addLore(clickModify).addLore("");
+
+        addItem(new ActionItem(20, healthToggle) {
+            @Override
+            public void onClick(InventoryClickEvent e) {
+                UHCManager.get().setShowHealthPercent(!UHCManager.get().isShowHealthPercent());
+                openAll();
+            }
+        });
+
+        addItem(new ActionItem(24, killboardToggle) {
+            @Override
+            public void onClick(InventoryClickEvent e) {
+                UHCManager.get().setShowKillScoreboard(!UHCManager.get().isShowKillScoreboard());
+                openAll();
+            }
+        });
+
         addMenu(16, world, new WorldUi(getPlayer()));
         addItem(new ActionItem(6, regles) {
             @Override

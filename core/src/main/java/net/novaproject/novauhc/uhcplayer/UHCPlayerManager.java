@@ -10,6 +10,10 @@ import net.novaproject.novauhc.scenario.ScenarioManager;
 import net.novaproject.novauhc.scenario.role.ScenarioRole;
 import net.novaproject.novauhc.utils.ConfigUtils;
 import net.novaproject.novauhc.utils.TabListManager;
+import net.novaproject.novauhc.utils.PlayerColorManager;
+import net.novaproject.novauhc.utils.TeamsTagsManager;
+import net.novaproject.novauhc.utils.UHCUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 public class UHCPlayerManager {
 
     private boolean tasks = false;
+    private int sbCycle = 0;
+    private int healthCycle = 0;
 
     public static UHCPlayerManager get() {
         return UHCManager.get().getUhcPlayerManager();
@@ -50,11 +56,41 @@ public class UHCPlayerManager {
         FastBoard board = new FastBoard(player);
         boards.put(player.getUniqueId(), board);
 
+        // Réappliquer les couleurs TAB
+        Bukkit.getScheduler().runTaskLater(Main.get(), () -> {
+            PlayerColorManager.reapplyColorsForViewer(player);
+            PlayerColorManager.reapplyColorsForTarget(player);
+        }, 5L);
+
         if (!tasks) {
             tasks = true;
             player.getServer().getScheduler().runTaskTimerAsynchronously(
                     Main.get(),
-                    () -> boards.values().forEach(this::updateBoard),
+                    () -> {
+                        sbCycle++;
+                        healthCycle++;
+                        boards.values().forEach(this::updateBoard);
+                        if (healthCycle >= 5) {
+                            healthCycle = 0;
+                            Bukkit.getScheduler().runTask(Main.get(), () -> {
+                                boolean show = UHCManager.get().isShowHealthPercent() && UHCManager.get().isGame();
+                                if (TeamsTagsManager.scoreboard == null) return;
+                                for (UHCPlayer uhcTarget : getPlayingOnlineUHCPlayers()) {
+                                    Player tp = uhcTarget.getPlayer();
+                                    if (tp == null) continue;
+                                    org.bukkit.scoreboard.Team team = TeamsTagsManager.scoreboard.getPlayerTeam(tp);
+                                    if (team == null) continue;
+                                    if (show) {
+                                        double pct = (tp.getHealth() / tp.getMaxHealth()) * 100;
+                                        String color = pct > 75 ? "§a" : pct > 50 ? "§e" : pct > 25 ? "§6" : "§c";
+                                        team.setSuffix(" " + color + String.format("%.0f%%", pct));
+                                    } else {
+                                        team.setSuffix("");
+                                    }
+                                }
+                            });
+                        }
+                    },
                     0, 1L
             );
         }
@@ -64,11 +100,40 @@ public class UHCPlayerManager {
         UHCPlayer uhcPlayer = getPlayer(player);
         uhcPlayer.disconnect(player);
 
+        PlayerColorManager.removeTeamForTarget(player);
+        PlayerColorManager.cleanupViewer(player.getUniqueId());
+
         if (UHCManager.get().isLobby()) {
             players.remove(player.getUniqueId());
         }
         FastBoard board = boards.remove(player.getUniqueId());
         if (board != null) board.delete();
+    }
+
+    private void updateBoardKills(FastBoard board, Player player) {
+        LangManager lm = LangManager.get();
+        board.updateTitle(lm.get(ScoreboardLang.SB_KILLS_TITLE, player));
+
+        List<UHCPlayer> sorted = players.values().stream()
+                .filter(UHCPlayer::isOnline)
+                .sorted(Comparator.comparingInt(UHCPlayer::getKill).reversed())
+                .limit(10)
+                .collect(Collectors.toList());
+
+        List<String> lines = new ArrayList<>();
+        lines.add("");
+        if (sorted.isEmpty()) {
+            lines.add(lm.get(ScoreboardLang.SB_KILLS_EMPTY, player));
+        } else {
+            String[] medals = {"§6⭐", "§7✦", "§c✦"};
+            for (int rank = 0; rank < sorted.size(); rank++) {
+                UHCPlayer p = sorted.get(rank);
+                String prefix = rank < medals.length ? medals[rank] : "§8" + (rank + 1) + ".";
+                lines.add(prefix + " §f" + p.getPlayer().getName() + " §8- §e" + p.getKill() + " kill" + (p.getKill() > 1 ? "s" : ""));
+            }
+        }
+        lines.add("");
+        board.updateLines(lines);
     }
 
     private void updateBoard(FastBoard board) {
@@ -77,6 +142,18 @@ public class UHCPlayerManager {
 
         UHCPlayer uhcPlayer = UHCPlayerManager.get().getPlayer(player);
         if (uhcPlayer == null) return;
+
+        // Kill scoreboard — fin de game : toujours ; en game : alterner toutes les ~5s
+        if (uhcManager.isShowKillScoreboard()) {
+            if (!uhcManager.isLobby() && !uhcManager.isGame()) {
+                updateBoardKills(board, player);
+                return;
+            }
+            if (uhcManager.isGame() && sbCycle % 200 >= 100) {
+                updateBoardKills(board, player);
+                return;
+            }
+        }
 
         LangManager lm = LangManager.get();
         boolean showTab = ConfigUtils.getGeneralConfig().getBoolean("message.tab.show", true);
